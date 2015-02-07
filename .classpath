@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="/home/workuser/apachehttpcomponents/httpcomponents-client-4.4/lib/httpcore-4.4.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/slf4j/slf4j-1.7.10/slf4j-jdk14-1.7.10.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/slf4j/slf4j-1.7.10/slf4j-api-1.7.10.jar"/>
+	<classpathentry kind="lib" path="/home/workuser/apachecommonslogging/commons-logging-1.2/commons-logging-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
