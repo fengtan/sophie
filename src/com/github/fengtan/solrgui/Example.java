@@ -22,21 +22,15 @@ public class Example {
 	
 	public static void main(String[] args) throws MalformedURLException {
 
-		URL server = new URL("http", "localhost", 8983, "/solr/collection1");
+		URL url = new URL("http", "localhost", 8983, "/solr/collection1");
 		
-		SolrServer solr = new HttpSolrServer(server.toExternalForm());
+		SolrQuery params = new SolrQuery();
+		params.set("q", "*:*");
 		
-		SolrQuery parameters = new SolrQuery();
-		parameters.set("q", "*:*");
-
-		try {
-			QueryResponse response = solr.query(parameters);
-			SolrDocumentList list = response.getResults();
-			System.out.println(list.getNumFound());
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		SolrGUIServer server = new SolrGUIServer(url);
+		SolrDocumentList list = server.getDocumentsList(params);
+		
+		System.out.println(list.getNumFound());
 		
 		Dashboard db = new Dashboard();
 		db.paint();
