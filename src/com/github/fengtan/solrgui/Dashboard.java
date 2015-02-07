@@ -13,13 +13,6 @@ import org.eclipse.swt.widgets.TableItem;
 public class Dashboard {
 
 	public void displayDocuments(SolrDocumentList list) {
-		
-		for (SolrDocument doc: list) {
-			for(String name:doc.getFieldNames()) {
-				System.out.println(name);
-			}
-		}
-		
 	    Display display = new Display();
 	    Shell shell = new Shell(display);
 	    Table table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION); // TODO
@@ -49,28 +42,13 @@ public class Dashboard {
 	      TableColumn column = new TableColumn(table, SWT.NONE);
 	      column.setText(title);
 	    }
-	    int count = 128;
-	    for (int i = 0; i < count; i++) {
+
+	    for (SolrDocument document:list) {
 	      TableItem item = new TableItem(table, SWT.NONE);
-	      item.setText(0, "x");
-	      item.setText(1, "y");
-	      item.setText(2, "!");
-	      item.setText(3, "this stuff behaves the way I expect");
-	      item.setText(4, "almost everywhere");
-	      item.setText(5, "some.folder");
-	      item.setText(6, "line " + i + " in nowhere");
-	      item.setText(7, "line " + i + " in nowhere");
-	      item.setText(8, "line " + i + " in nowhere");
-	      item.setText(9, "line " + i + " in nowhere");
-	      item.setText(10, "line " + i + " in nowhere");
-	      item.setText(11, "line " + i + " in nowhere");
-	      item.setText(12, "line " + i + " in nowhere");
-	      item.setText(13, "line " + i + " in nowhere");
-	      item.setText(14, "line " + i + " in nowhere");
-	      item.setText(15, "line " + i + " in nowhere");
-	      item.setText(16, "line " + i + " in nowhere");
-	      item.setText(17, "line " + i + " in nowhere");
-	      item.setText(18, "line " + i + " in nowhere");
+	      int count = 0;
+	      for (Object value: document.values()) {
+	    	  item.setText(count++, value.toString());
+	      }
 	    }
 	    for (int i = 0; i < titles.length; i++) {
 	      table.getColumn(i).pack();
