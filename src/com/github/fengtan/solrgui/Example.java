@@ -1,5 +1,11 @@
 package com.github.fengtan.solrgui;
 
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocumentList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -16,6 +22,23 @@ import org.eclipse.swt.widgets.Text;
 public class Example {
 
 	public static void main(String[] args) {
+
+		SolrServer solr = new HttpSolrServer("http://localhost:8983/solr/collection1");
+		
+		SolrQuery parameters = new SolrQuery();
+		parameters.set("q", "my query string");
+
+		try {
+			QueryResponse response = solr.query(parameters);
+			SolrDocumentList list = response.getResults();
+			System.out.println(list.getNumFound());
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		/*
 		Display display = new Display();
 	    Shell shell = new Shell(display);
 
@@ -98,6 +121,7 @@ public class Example {
 	      }
 	    }
 	    display.dispose();
+*/	    
 	}
 	
 }
