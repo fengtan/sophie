@@ -11,13 +11,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 
 
 public class SolrGUIDisplay {
@@ -42,14 +42,17 @@ public class SolrGUIDisplay {
 	    shell = new Shell(display);
 	    	    
 	    shell.setText("Solr GUI");
-	    shell.setSize(450, 250);
+	    shell.setMaximized(true);
 
 	    final TabFolder tabFolder = new TabFolder(shell, SWT.BORDER);
 
-	    TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
-	    tabItem.setText(name);
+	    TabItem serverItem = new TabItem(tabFolder, SWT.NULL);
+	    serverItem.setText(name);
+	    
+	    TabItem addItem = new TabItem(tabFolder, SWT.NULL);
+	    addItem.setText("+");
 
-	    tabFolder.setSize(1200, 300); // TODO set max size of  window
+	    tabFolder.setSize(1300, 700); // TODO set max size of  window
 	    
 	    updateTable(tabFolder);
 	    
@@ -103,6 +106,21 @@ public class SolrGUIDisplay {
         Menu fileMenu = new Menu(shell, SWT.DROP_DOWN);
         fileMenuItem.setMenu(fileMenu);
 
+        MenuItem newItem = new MenuItem(fileMenu, SWT.PUSH);
+        newItem.setText("&New Solr server");
+        shell.setMenuBar(menuBar);
+        newItem.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                openDialogs(shell);
+            }
+            
+            private void openDialogs(Shell shell) {
+                NewServerDialog dialog = new NewServerDialog(shell);
+                dialog.open();
+              }
+		});
+        
         MenuItem exitItem = new MenuItem(fileMenu, SWT.PUSH);
         exitItem.setText("&Exit");
         shell.setMenuBar(menuBar);
