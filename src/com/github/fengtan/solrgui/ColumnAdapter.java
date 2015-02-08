@@ -11,9 +11,9 @@ public class ColumnAdapter extends SelectionAdapter {
 
 	private Table table;
 	private String title;
-	private SolrGUIColumnList columns;
+	private ColumnList columns;
 	
-	public ColumnAdapter(Table table, String title, SolrGUIColumnList columns) {
+	public ColumnAdapter(Table table, String title, ColumnList columns) {
 		this.table = table;
 		this.title = title;
 		this.columns = columns;

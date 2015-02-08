@@ -9,16 +9,16 @@ import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 
-public class SolrGUIServer {
+public class Server {
 	
 	private SolrServer server;
 	private String name;
 	
-	public SolrGUIServer(URL url) {
+	public Server(URL url) {
 		this(url, url.toExternalForm());
 	}
 	
-	public SolrGUIServer(URL url, String name) {
+	public Server(URL url, String name) {
 		this.name = name;
 		this.server = new HttpSolrServer(url.toExternalForm());
 	}

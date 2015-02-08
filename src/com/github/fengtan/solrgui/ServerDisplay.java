@@ -19,14 +19,14 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 
-public class SolrGUIDisplay {
+public class ServerDisplay {
 	
 	private SolrDocumentList docs;
-	private SolrGUIColumnList columns = new SolrGUIColumnList();
+	private ColumnList columns = new ColumnList();
 	private Table table;
 	private Shell shell;
 	
-	public SolrGUIDisplay(String name, SolrDocumentList docs) {
+	public ServerDisplay(String name, SolrDocumentList docs) {
 	    this.docs = docs;
 	    
 	    for (SolrDocument document:docs) {

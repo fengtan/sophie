@@ -9,7 +9,7 @@ import java.util.ListIterator;
 /**
  * Maintain 2 lists: 1 for column titles + 1 for display status (displayed/hidden).
  */
-public class SolrGUIColumnList implements List<String> {
+public class ColumnList implements List<String> {
 
 	private List<String> titles = new ArrayList<String>();
 	private List<Boolean> displayed = new ArrayList<Boolean>();
