@@ -7,13 +7,17 @@ import org.apache.solr.common.SolrDocumentList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 
 
 public class SolrGUIDisplay {
@@ -37,9 +41,36 @@ public class SolrGUIDisplay {
 	    Display display = new Display();
 	    shell = new Shell(display);
 	    	    
-	    updateTable();
-	    updateMenus();
+
                 
+	    
+	    
+	    
+	    
+	    
+
+	    shell.setText("Solr GUI");
+	    shell.setSize(450, 250);
+
+	    final TabFolder tabFolder = new TabFolder(shell, SWT.BORDER);
+
+	    for (int loopIndex = 0; loopIndex < 10; loopIndex++) {
+	      TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
+	      tabItem.setText("Tab " + loopIndex);
+
+	      Text text = new Text(tabFolder, SWT.BORDER);
+	      text.setText("This is page " + loopIndex);
+	    }
+	    tabFolder.setSize(1200, 300); // TODO set max size of  window
+	    
+	    updateTable(tabFolder);
+	    
+	    tabFolder.getItem(0).setControl(table);
+	    
+	    updateMenus();
+	    
+	    
+	    
 	    shell.pack();
 	    shell.open();
 	    while (!shell.isDisposed()) {
@@ -49,8 +80,8 @@ public class SolrGUIDisplay {
 	    display.dispose();
 	}
 		
-	public void updateTable() { // TODO might be worth to move 'new Table()' in the constructor
-	    table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION); // TODO
+	public void updateTable(Composite parent) { // TODO might be worth to move 'new Table()' in the constructor
+	    table = new Table(parent, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION); // TODO
 	    table.setLinesVisible(true);
 	    table.setHeaderVisible(true);
 
