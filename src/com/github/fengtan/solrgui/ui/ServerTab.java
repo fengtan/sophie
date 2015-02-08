@@ -8,7 +8,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
@@ -20,21 +19,15 @@ import org.eclipse.swt.widgets.TableItem;
 
 import com.github.fengtan.solrgui.solr.Server;
 
+public class ServerTab {
 
-public class ServersDisplay {
-	
-	private SolrDocumentList docs;
-	private ColumnList columns = new ColumnList();
-	private Table table;
-	private Shell shell;
-	
-	public ServersDisplay() {
-		
-	}
-	
-	public void addServer(Server server) {
-	    this.docs = server.getAllDocuments();
-	    
+    private SolrDocumentList docs;
+    private ColumnList columns = new ColumnList();
+    private Table table;
+    
+    public ServerTab(Server server, TabFolder tabFolder) {
+    	docs = server.getAllDocuments();
+    	
 	    for (SolrDocument document:docs) {
 	    	for (String title:document.keySet()) {
 	    		if (!columns.contains(title)) {
@@ -42,37 +35,13 @@ public class ServersDisplay {
 	    		}
 	    	}
 	    }
-		
-	    Display display = new Display();
-	    shell = new Shell(display);
-	    	    
-	    shell.setText("Solr GUI");
-	    shell.setMaximized(true);
-
-	    final TabFolder tabFolder = new TabFolder(shell, SWT.BORDER);
-
+	    
 	    TabItem serverItem = new TabItem(tabFolder, SWT.NULL);
 	    serverItem.setText(server.getName());
-
-	    tabFolder.setSize(1300, 700); // TODO set max size of  window
-	    
-	    updateTable(tabFolder);
-	    
-	    tabFolder.getItem(0).setControl(table);
-	    
-	    updateMenus();
-	    
-	    
-	    shell.pack();
-	    shell.open();
-	    while (!shell.isDisposed()) {
-	      if (!display.readAndDispatch())
-	        display.sleep();
-	    }
-	    display.dispose();
-	}
-	
-	private void updateTable(Composite parent) { // TODO might be worth to move 'new Table()' in the constructor
+	    serverItem.setControl(table); // TODO null pointer exception ?
+    }
+    
+	public void updateTable(Composite parent) {
 	    table = new Table(parent, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION); // TODO
 	    table.setLinesVisible(true);
 	    table.setHeaderVisible(true);
@@ -97,12 +66,11 @@ public class ServersDisplay {
 	    
 	    table.setSize(table.computeSize(SWT.DEFAULT, 200)); // TODO
 	}
+
 	
-	private void updateMenus() {
-        Menu menuBar = new Menu(shell, SWT.BAR);
-        
+	public void updateMenu(Menu menu, final Shell shell) { // TODO drop shell argument ?
         // File menu.
-        MenuItem fileMenuItem = new MenuItem(menuBar, SWT.CASCADE);
+        MenuItem fileMenuItem = new MenuItem(menu, SWT.CASCADE);
         fileMenuItem.setText("&File");
         
         Menu fileMenu = new Menu(shell, SWT.DROP_DOWN);
@@ -110,22 +78,15 @@ public class ServersDisplay {
 
         MenuItem newItem = new MenuItem(fileMenu, SWT.PUSH);
         newItem.setText("Add &server");
-        shell.setMenuBar(menuBar);
         newItem.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                openDialogs(shell);
-            }
-            
-            private void openDialogs(Shell shell) {
-                NewServerDialog dialog = new NewServerDialog(shell);
-                dialog.open();
+                new NewServerDialog(shell).open();
               }
 		});
         
         MenuItem exitItem = new MenuItem(fileMenu, SWT.PUSH);
         exitItem.setText("&Exit");
-        shell.setMenuBar(menuBar);
 
         exitItem.addSelectionListener(new SelectionAdapter() {
             @Override
@@ -136,7 +97,7 @@ public class ServersDisplay {
         });
         
         // Columns menu.
-        MenuItem columnsMenuItem = new MenuItem(menuBar, SWT.CASCADE);
+        MenuItem columnsMenuItem = new MenuItem(menu, SWT.CASCADE);
         columnsMenuItem.setText("&Columns");
 
         Menu columnsMenu = new Menu(shell, SWT.DROP_DOWN);
@@ -146,10 +107,9 @@ public class ServersDisplay {
             MenuItem columnItem = new MenuItem(columnsMenu, SWT.CHECK);
             columnItem.setText(title);
             columnItem.setSelection(true);
-            shell.setMenuBar(menuBar);            
+            shell.setMenuBar(menu);            
             columnItem.addSelectionListener(new ColumnAdapter(table, title, columns));
         }
         
 	}
-	
 }
