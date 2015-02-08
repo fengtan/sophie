@@ -24,6 +24,7 @@ public class ServerTab {
     private SolrDocumentList docs;
     private ColumnList columns = new ColumnList();
     private Table table;
+    private TabItem tabItem;
     
     public ServerTab(Server server, TabFolder tabFolder) {
     	docs = server.getAllDocuments();
@@ -36,9 +37,8 @@ public class ServerTab {
 	    	}
 	    }
 	    
-	    TabItem serverItem = new TabItem(tabFolder, SWT.NULL);
-	    serverItem.setText(server.getName());
-	    serverItem.setControl(table); // TODO null pointer exception ?
+	    tabItem = new TabItem(tabFolder, SWT.NULL);
+	    tabItem.setText(server.getName());
     }
     
 	public void updateTable(Composite parent) {
@@ -64,6 +64,7 @@ public class ServerTab {
 	      table.getColumn(i).pack();
 	    }
 	    
+	    tabItem.setControl(table);
 	    table.setSize(table.computeSize(SWT.DEFAULT, 200)); // TODO
 	}
 
