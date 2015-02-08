@@ -20,7 +20,7 @@ public class Example {
 			SolrGUIServer server = new SolrGUIServer(url);
 			SolrDocumentList list = server.getDocumentsList(params);
 			
-			new Dashboard().displayDocuments(list);
+			new Dashboard(list);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

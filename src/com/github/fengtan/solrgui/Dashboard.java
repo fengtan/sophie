@@ -15,30 +15,19 @@ import org.eclipse.swt.widgets.TableItem;
 
 
 public class Dashboard {
-
-	public void displayDocuments(SolrDocumentList list) {
+	
+	private SolrDocumentList list;
+	private Table table;
+	
+	public Dashboard(SolrDocumentList list) {
+		this.list = list;
 	    Display display = new Display();
 	    Shell shell = new Shell(display);
-	    Table table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION); // TODO
-	    table.setLinesVisible(true);
-	    table.setHeaderVisible(true);
-	    	    
-	    List<String> titles = new ArrayList<String>(); // TODO hashed ? use of indexOf  
-	    for (SolrDocument document:list) {
-	    	TableItem item = new TableItem(table, SWT.NONE);
-	    	for (Map.Entry<String, Object> field:document.entrySet()) { // TODO is there a utility function to do that quikly
-	    		if (!titles.contains(field.getKey())) {
-	  		      	new TableColumn(table, SWT.NONE).setText(field.getKey());
-	    			titles.add(field.getKey());
-	    		}
-	    		item.setText(titles.indexOf(field.getKey()), field.getValue().toString());
-	    	}
-	    }
-	    
-	    for (int i = 0; i < titles.size(); i++) {
-	      table.getColumn(i).pack();
-	    }
-	    table.setSize(table.computeSize(SWT.DEFAULT, 200));
+	    this.table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION); // TODO
+	    this.table.setLinesVisible(true);
+	    this.table.setHeaderVisible(true);
+	    this.updateTable();
+	    this.table.setSize(this.table.computeSize(SWT.DEFAULT, 200));
 	    shell.pack();
 	    shell.open();
 	    while (!shell.isDisposed()) {
@@ -46,6 +35,23 @@ public class Dashboard {
 	        display.sleep();
 	    }
 	    display.dispose();
+	}
+	
+	private void updateTable() {
+	    List<String> titles = new ArrayList<String>(); // TODO hashed ? use of indexOf  
+	    for (SolrDocument document:this.list) {
+	    	TableItem item = new TableItem(this.table, SWT.NONE);
+	    	for (Map.Entry<String, Object> field:document.entrySet()) {
+	    		if (!titles.contains(field.getKey())) {
+	  		      	new TableColumn(this.table, SWT.NONE).setText(field.getKey());
+	    			titles.add(field.getKey());
+	    		}
+	    		item.setText(titles.indexOf(field.getKey()), field.getValue().toString());
+	    	}
+	    }
+	    for (int i = 0; i < titles.size(); i++) {
+	      this.table.getColumn(i).pack();
+	    }
 	}
 	
 }
