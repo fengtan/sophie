@@ -7,9 +7,11 @@ import java.util.Map;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -21,21 +23,7 @@ public class SolrGUIDisplay {
 	private SolrDocumentList docs;
 	private List<String> titles = new ArrayList<String>(); // TODO hashed ? use of indexOf
 	private Table table;
-	
-	private Listener sortListener = new Listener() {
-        public void handleEvent(Event e) {
-        	/*
-            TableColumn column = (TableColumn) e.widget;
-            /*
-            if (column == intColumn) Arrays.sort(rows, BY_VAL);
-            if (column == strColumn) Arrays.sort(rows, BY_STR);
-            if (column == dateColumn) Arrays.sort(rows, BY_DATE);
-            */
-            //table.setSortColumn(column);
-            updateDocuments();
-
-        }
-    };
+	private Shell shell;
 	
 	public SolrGUIDisplay(SolrDocumentList docs) {
 	    this.docs = docs;
@@ -49,15 +37,11 @@ public class SolrGUIDisplay {
 	    }
 		
 	    Display display = new Display();
-	    Shell shell = new Shell(display);
-	    table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION); // TODO
-	    table.setLinesVisible(true);
-	    table.setHeaderVisible(true);
+	    shell = new Shell(display);
 	    	    
-	    updateTitles();
-	    updateDocuments();
+	    setTable();
+	    setMenus();
                 
-	    table.setSize(table.computeSize(SWT.DEFAULT, 200)); // TODO
 	    shell.pack();
 	    shell.open();
 	    while (!shell.isDisposed()) {
@@ -66,17 +50,16 @@ public class SolrGUIDisplay {
 	    }
 	    display.dispose();
 	}
-	
-	private void updateTitles() {
+		
+	private void setTable() {
+	    table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION); // TODO
+	    table.setLinesVisible(true);
+	    table.setHeaderVisible(true);
+	    
 		for (String title:titles) {
 			TableColumn column = new TableColumn(table, SWT.NONE);
 	      	column.setText(title);
-	      	column.addListener(SWT.Selection, sortListener);
 		}
-	}
-	
-	private void updateDocuments() {
-		table.removeAll();
 
 		for(SolrDocument doc:docs) {
 	    	TableItem item = new TableItem(table, SWT.NONE);
@@ -88,6 +71,29 @@ public class SolrGUIDisplay {
 	    for (int i = 0; i < titles.size(); i++) {
 	      table.getColumn(i).pack();
 	    }
+	    
+	    table.setSize(table.computeSize(SWT.DEFAULT, 200)); // TODO
+	}
+	
+	private void setMenus() {
+        Menu menuBar = new Menu(shell, SWT.BAR);
+        MenuItem cascadeFileMenu = new MenuItem(menuBar, SWT.CASCADE);
+        cascadeFileMenu.setText("&File");
+        
+        Menu fileMenu = new Menu(shell, SWT.DROP_DOWN);
+        cascadeFileMenu.setMenu(fileMenu);
+
+        MenuItem exitItem = new MenuItem(fileMenu, SWT.PUSH);
+        exitItem.setText("&Exit");
+        shell.setMenuBar(menuBar);
+
+        exitItem.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                shell.getDisplay().dispose();
+                System.exit(0);
+            }
+        });
 	}
 	
 }
