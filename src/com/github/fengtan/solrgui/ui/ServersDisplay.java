@@ -18,16 +18,22 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.github.fengtan.solrgui.solr.Server;
 
-public class ServerDisplay {
+
+public class ServersDisplay {
 	
 	private SolrDocumentList docs;
 	private ColumnList columns = new ColumnList();
 	private Table table;
 	private Shell shell;
 	
-	public ServerDisplay(String name, SolrDocumentList docs) {
-	    this.docs = docs;
+	public ServersDisplay() {
+		
+	}
+	
+	public void addServer(Server server) {
+	    this.docs = server.getAllDocuments();
 	    
 	    for (SolrDocument document:docs) {
 	    	for (String title:document.keySet()) {
@@ -46,7 +52,7 @@ public class ServerDisplay {
 	    final TabFolder tabFolder = new TabFolder(shell, SWT.BORDER);
 
 	    TabItem serverItem = new TabItem(tabFolder, SWT.NULL);
-	    serverItem.setText(name);
+	    serverItem.setText(server.getName());
 
 	    tabFolder.setSize(1300, 700); // TODO set max size of  window
 	    
@@ -65,8 +71,8 @@ public class ServerDisplay {
 	    }
 	    display.dispose();
 	}
-		
-	public void updateTable(Composite parent) { // TODO might be worth to move 'new Table()' in the constructor
+	
+	private void updateTable(Composite parent) { // TODO might be worth to move 'new Table()' in the constructor
 	    table = new Table(parent, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION); // TODO
 	    table.setLinesVisible(true);
 	    table.setHeaderVisible(true);
