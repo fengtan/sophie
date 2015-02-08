@@ -107,7 +107,7 @@ public class SolrGUIDisplay {
         fileMenuItem.setMenu(fileMenu);
 
         MenuItem newItem = new MenuItem(fileMenu, SWT.PUSH);
-        newItem.setText("&New Solr server");
+        newItem.setText("Add &server");
         shell.setMenuBar(menuBar);
         newItem.addSelectionListener(new SelectionAdapter() {
             @Override
