@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="/home/workuser/apachecommonslogging/commons-logging-1.2/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/noggit/noggit-noggit-0.7/target/noggit-0.7.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/apachecommonslang/commons-lang3-3.3.2/commons-lang3-3.3.2.jar"/>
+	<classpathentry kind="lib" path="/home/workuser/ini4j-0.5.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

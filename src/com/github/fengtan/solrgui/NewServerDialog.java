@@ -2,6 +2,8 @@ package com.github.fengtan.solrgui;
 
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
@@ -40,6 +42,12 @@ public class NewServerDialog {
         
         Button button = new Button(dialog, SWT.PUSH);
         button.setText("Add server");
+        button.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                System.out.println("Called!");
+            }
+		});
         
         dialog.pack();
 	}
