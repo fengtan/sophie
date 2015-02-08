@@ -27,9 +27,11 @@ public class NewServerDialog {
         
         dialog.setLayout(new GridLayout(2, false));
 
+        new Label(dialog, SWT.NULL).setText("Name");
+        new Text(dialog, SWT.BORDER).setText("My Solr Server");
+        
         new Label(dialog, SWT.NULL).setText("Protocol");
-        Text protocol = new Text(dialog, SWT.BORDER);
-        protocol.setText("http://");
+        new Text(dialog, SWT.BORDER).setText("http");
 
         new Label(dialog, SWT.NULL).setText("Host");
         new Text(dialog, SWT.BORDER).setText("localhost");
@@ -46,6 +48,7 @@ public class NewServerDialog {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 System.out.println("Called!");
+                
             }
 		});
         

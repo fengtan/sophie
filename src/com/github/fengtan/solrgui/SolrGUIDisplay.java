@@ -47,9 +47,6 @@ public class SolrGUIDisplay {
 
 	    TabItem serverItem = new TabItem(tabFolder, SWT.NULL);
 	    serverItem.setText(name);
-	    
-	    TabItem addItem = new TabItem(tabFolder, SWT.NULL);
-	    addItem.setText("+");
 
 	    tabFolder.setSize(1300, 700); // TODO set max size of  window
 	    
