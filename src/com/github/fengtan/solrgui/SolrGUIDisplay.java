@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.TableItem;
 public class SolrGUIDisplay {
 	
 	private SolrDocumentList docs;
-	private List<String> titles = new ArrayList<String>(); // TODO hashed ? use of indexOf
+	private List<SolrGUIColumn> columns = new ArrayList<SolrGUIColumn>();
 	private Table table;
 	private Shell shell;
 	
@@ -30,8 +30,9 @@ public class SolrGUIDisplay {
 	    
 	    for (SolrDocument document:docs) {
 	    	for (String title:document.keySet()) {
-	    		if (!titles.contains(title)) {
-	    			titles.add(title);
+	    		SolrGUIColumn column = new SolrGUIColumn(title); // TODO might be inefficient
+	    		if (!columns.contains(column)) {
+	    			columns.add(column);
 	    		}
 	    	}
 	    }
@@ -39,8 +40,8 @@ public class SolrGUIDisplay {
 	    Display display = new Display();
 	    shell = new Shell(display);
 	    	    
-	    setTable();
-	    setMenus();
+	    updateTable();
+	    updateMenus();
                 
 	    shell.pack();
 	    shell.open();
@@ -51,31 +52,36 @@ public class SolrGUIDisplay {
 	    display.dispose();
 	}
 		
-	private void setTable() {
+	public void updateTable() { // TODO might be worth to move 'new Table()' in the constructor
 	    table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION); // TODO
 	    table.setLinesVisible(true);
 	    table.setHeaderVisible(true);
-	    
-		for (String title:titles) {
-			TableColumn column = new TableColumn(table, SWT.NONE);
-	      	column.setText(title);
+
+		for (SolrGUIColumn column:columns) {
+			if (column.isDisplayed()) {
+				TableColumn tableColumn = new TableColumn(table, SWT.NONE);
+		      	tableColumn.setText(column.getTitle());	
+			};
 		}
 
 		for(SolrDocument doc:docs) {
 	    	TableItem item = new TableItem(table, SWT.NONE);
 	    	for (Map.Entry<String, Object> field:doc.entrySet()) {
-	    		item.setText(titles.indexOf(field.getKey()), field.getValue().toString());	
+	    		int index = columns.indexOf(new SolrGUIColumn(field.getKey()));  // TODO not efficient
+	    		if (columns.get(index).isDisplayed()) {
+		    		item.setText(index, field.getValue().toString());	
+	    		}
 	    	}
 		}
 
-	    for (int i = 0; i < titles.size(); i++) {
+	    for (int i = 0; i < table.getColumnCount(); i++) {
 	      table.getColumn(i).pack();
 	    }
 	    
 	    table.setSize(table.computeSize(SWT.DEFAULT, 200)); // TODO
 	}
 	
-	private void setMenus() {
+	private void updateMenus() {
         Menu menuBar = new Menu(shell, SWT.BAR);
         
         // File menu.
@@ -100,14 +106,18 @@ public class SolrGUIDisplay {
         // Columns menu.
         MenuItem columnsMenuItem = new MenuItem(menuBar, SWT.CASCADE);
         columnsMenuItem.setText("&Columns");
-        
+
         Menu columnsMenu = new Menu(shell, SWT.DROP_DOWN);
         columnsMenuItem.setMenu(columnsMenu);
 
-        for (String title:titles) {
-            MenuItem columnItem = new MenuItem(columnsMenu, SWT.PUSH);
-            columnItem.setText(title);
-            shell.setMenuBar(menuBar);	
+        for (SolrGUIColumn column:columns) {
+            MenuItem columnItem = new MenuItem(columnsMenu, SWT.CHECK);
+            columnItem.setText(column.getTitle());
+            columnItem.setSelection(true);
+            shell.setMenuBar(menuBar);
+            
+            int index = columns.indexOf(new SolrGUIColumn(column.getTitle()));  // TODO not efficient
+            columnItem.addSelectionListener(new ColumnAdapter(table, index, column, this));
         }
         
 	}
