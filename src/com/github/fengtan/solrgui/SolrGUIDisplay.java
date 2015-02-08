@@ -77,11 +77,13 @@ public class SolrGUIDisplay {
 	
 	private void setMenus() {
         Menu menuBar = new Menu(shell, SWT.BAR);
-        MenuItem cascadeFileMenu = new MenuItem(menuBar, SWT.CASCADE);
-        cascadeFileMenu.setText("&File");
+        
+        // File menu.
+        MenuItem fileMenuItem = new MenuItem(menuBar, SWT.CASCADE);
+        fileMenuItem.setText("&File");
         
         Menu fileMenu = new Menu(shell, SWT.DROP_DOWN);
-        cascadeFileMenu.setMenu(fileMenu);
+        fileMenuItem.setMenu(fileMenu);
 
         MenuItem exitItem = new MenuItem(fileMenu, SWT.PUSH);
         exitItem.setText("&Exit");
@@ -94,6 +96,20 @@ public class SolrGUIDisplay {
                 System.exit(0);
             }
         });
+        
+        // Columns menu.
+        MenuItem columnsMenuItem = new MenuItem(menuBar, SWT.CASCADE);
+        columnsMenuItem.setText("&Columns");
+        
+        Menu columnsMenu = new Menu(shell, SWT.DROP_DOWN);
+        columnsMenuItem.setMenu(columnsMenu);
+
+        for (String title:titles) {
+            MenuItem columnItem = new MenuItem(columnsMenu, SWT.PUSH);
+            columnItem.setText(title);
+            shell.setMenuBar(menuBar);	
+        }
+        
 	}
 	
 }
