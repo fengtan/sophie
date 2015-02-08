@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui;
+package com.github.fengtan.solrgui.ui;
 
 import java.util.ArrayList;
 import java.util.Collection;

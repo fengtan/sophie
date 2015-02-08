@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui;
+package com.github.fengtan.solrgui.solr;
 
 import java.net.URL;
 
@@ -12,6 +12,7 @@ import org.apache.solr.common.SolrDocumentList;
 public class Server {
 	
 	private SolrServer server;
+	private URL url;
 	private String name;
 	
 	public Server(URL url) {
@@ -19,8 +20,13 @@ public class Server {
 	}
 	
 	public Server(URL url, String name) {
+		this.url = url;
 		this.name = name;
 		this.server = new HttpSolrServer(url.toExternalForm());
+	}
+	
+	public URL getURL() {
+		return url;
 	}
 	
 	public String getName() {
