@@ -12,15 +12,19 @@ import org.apache.solr.common.SolrDocumentList;
 public class SolrGUIServer {
 	
 	private SolrServer server;
-	private URL url;
+	private String name;
 	
 	public SolrGUIServer(URL url) {
-		this.url = url;
+		this(url, url.toExternalForm());
+	}
+	
+	public SolrGUIServer(URL url, String name) {
+		this.name = name;
 		this.server = new HttpSolrServer(url.toExternalForm());
 	}
 	
 	public String getName() {
-		return url.toExternalForm();
+		return name;
 	}
 	
 	public SolrDocumentList getAllDocuments() {
