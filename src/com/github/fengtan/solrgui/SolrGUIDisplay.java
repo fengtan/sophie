@@ -27,7 +27,7 @@ public class SolrGUIDisplay {
 	private Table table;
 	private Shell shell;
 	
-	public SolrGUIDisplay(SolrDocumentList docs) {
+	public SolrGUIDisplay(String name, SolrDocumentList docs) {
 	    this.docs = docs;
 	    
 	    for (SolrDocument document:docs) {
@@ -41,26 +41,14 @@ public class SolrGUIDisplay {
 	    Display display = new Display();
 	    shell = new Shell(display);
 	    	    
-
-                
-	    
-	    
-	    
-	    
-	    
-
 	    shell.setText("Solr GUI");
 	    shell.setSize(450, 250);
 
 	    final TabFolder tabFolder = new TabFolder(shell, SWT.BORDER);
 
-	    for (int loopIndex = 0; loopIndex < 10; loopIndex++) {
-	      TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
-	      tabItem.setText("Tab " + loopIndex);
+	    TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
+	    tabItem.setText(name);
 
-	      Text text = new Text(tabFolder, SWT.BORDER);
-	      text.setText("This is page " + loopIndex);
-	    }
 	    tabFolder.setSize(1200, 300); // TODO set max size of  window
 	    
 	    updateTable(tabFolder);
@@ -68,7 +56,6 @@ public class SolrGUIDisplay {
 	    tabFolder.getItem(0).setControl(table);
 	    
 	    updateMenus();
-	    
 	    
 	    
 	    shell.pack();

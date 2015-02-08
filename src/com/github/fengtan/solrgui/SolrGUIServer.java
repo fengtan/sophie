@@ -11,13 +11,25 @@ import org.apache.solr.common.SolrDocumentList;
 
 public class SolrGUIServer {
 	
-	protected SolrServer server;
+	private SolrServer server;
+	private URL url;
 	
 	public SolrGUIServer(URL url) {
+		this.url = url;
 		this.server = new HttpSolrServer(url.toExternalForm());
 	}
 	
-	public SolrDocumentList getDocumentsList(SolrQuery query) {
+	public String getName() {
+		return url.toExternalForm();
+	}
+	
+	public SolrDocumentList getAllDocuments() {
+		SolrQuery query = new SolrQuery();
+		query.set("q", "*:*");
+		return getDocumentList(query);
+	}
+	
+	public SolrDocumentList getDocumentList(SolrQuery query) {
 		QueryResponse response;
 		try {
 			response = server.query(query);

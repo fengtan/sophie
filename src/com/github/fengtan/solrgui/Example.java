@@ -14,13 +14,10 @@ public class Example {
 		try {
 			url = new URL("http", "localhost", 8983, "/solr/collection1");
 			
-			SolrQuery params = new SolrQuery();
-			params.set("q", "*:*");
-			
 			SolrGUIServer server = new SolrGUIServer(url);
-			SolrDocumentList list = server.getDocumentsList(params);
+			SolrDocumentList list = server.getAllDocuments();
 			
-			new SolrGUIDisplay(list);
+			new SolrGUIDisplay(server.getName(), list);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
