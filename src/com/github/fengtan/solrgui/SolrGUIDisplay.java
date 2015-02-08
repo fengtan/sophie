@@ -1,7 +1,5 @@
 package com.github.fengtan.solrgui;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.solr.common.SolrDocument;
@@ -21,7 +19,7 @@ import org.eclipse.swt.widgets.TableItem;
 public class SolrGUIDisplay {
 	
 	private SolrDocumentList docs;
-	private List<SolrGUIColumn> columns = new ArrayList<SolrGUIColumn>();
+	private SolrGUIColumnList columns = new SolrGUIColumnList();
 	private Table table;
 	private Shell shell;
 	
@@ -30,9 +28,8 @@ public class SolrGUIDisplay {
 	    
 	    for (SolrDocument document:docs) {
 	    	for (String title:document.keySet()) {
-	    		SolrGUIColumn column = new SolrGUIColumn(title); // TODO might be inefficient
-	    		if (!columns.contains(column)) {
-	    			columns.add(column);
+	    		if (!columns.contains(title)) {
+	    			columns.add(title);
 	    		}
 	    	}
 	    }
@@ -57,20 +54,17 @@ public class SolrGUIDisplay {
 	    table.setLinesVisible(true);
 	    table.setHeaderVisible(true);
 
-		for (SolrGUIColumn column:columns) {
-			if (column.isDisplayed()) {
-				TableColumn tableColumn = new TableColumn(table, SWT.NONE);
-		      	tableColumn.setText(column.getTitle());	
-			};
+		for (String title:columns.getItemsDisplayed()) {
+			TableColumn tableColumn = new TableColumn(table, SWT.NONE);
+		    tableColumn.setText(title);
 		}
 
 		for(SolrDocument doc:docs) {
 	    	TableItem item = new TableItem(table, SWT.NONE);
 	    	for (Map.Entry<String, Object> field:doc.entrySet()) {
-	    		int index = columns.indexOf(new SolrGUIColumn(field.getKey()));  // TODO not efficient
-	    		if (columns.get(index).isDisplayed()) {
-		    		item.setText(index, field.getValue().toString());	
-	    		}
+	    		if (columns.isItemDisplayed(field.getKey())) {
+	    			item.setText(columns.indexOf(field.getKey()), field.getValue().toString());
+	    		}	
 	    	}
 		}
 
@@ -110,14 +104,12 @@ public class SolrGUIDisplay {
         Menu columnsMenu = new Menu(shell, SWT.DROP_DOWN);
         columnsMenuItem.setMenu(columnsMenu);
 
-        for (SolrGUIColumn column:columns) {
+        for (String title:columns) {
             MenuItem columnItem = new MenuItem(columnsMenu, SWT.CHECK);
-            columnItem.setText(column.getTitle());
+            columnItem.setText(title);
             columnItem.setSelection(true);
-            shell.setMenuBar(menuBar);
-            
-            int index = columns.indexOf(new SolrGUIColumn(column.getTitle()));  // TODO not efficient
-            columnItem.addSelectionListener(new ColumnAdapter(table, index, column, this));
+            shell.setMenuBar(menuBar);            
+            columnItem.addSelectionListener(new ColumnAdapter(table, title, columns));
         }
         
 	}
