@@ -10,8 +10,11 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
@@ -78,31 +81,38 @@ public class ServerTab {
         //The editor must have the same size as the cell and must
         //not be any smaller than 50 pixels.
         editor.horizontalAlignment = SWT.LEFT;
-        editor.grabHorizontal = true;
-        editor.minimumWidth = 50;
-        final int EDITABLECOLUMN = 1;
-        table.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
-            	// Clean up any previous editor control
-                Control oldEditor = editor.getEditor();
-                if (oldEditor != null) oldEditor.dispose();
-    
-                // Identify the selected row
-                TableItem item = (TableItem)e.item;
-                if (item == null) return;
-    
-                // The control that will be the editor must be a child of the Table
-                Text newEditor = new Text(table, SWT.NONE);
-                newEditor.setText(item.getText(EDITABLECOLUMN));
-                newEditor.addModifyListener(new ModifyListener() {
-                	public void modifyText(ModifyEvent e) {
-                		Text text = (Text)editor.getEditor();
-                        editor.getItem().setText(EDITABLECOLUMN, text.getText());
-                    }
-                });
-                newEditor.selectAll();
-                newEditor.setFocus();
-                editor.setEditor(newEditor, item, EDITABLECOLUMN);
+        editor.grabHorizontal = true; // TODO wtf
+        editor.minimumWidth = 50; // TODO needed ?
+
+        table.addListener(SWT.MouseDown, new Listener() {
+        	@Override
+        	public void handleEvent(Event e) {
+        		Point point = new Point(e.x, e.y);
+    			TableItem item = table.getItem(point);
+    			if (item == null) return;
+    			for (int column = 0; column < columns.size(); column++) { // TODO columnsDisplayed instead of columns ?
+    				Rectangle rect = item.getBounds(column);
+    				if (rect.contains(point)) {
+    					int row = table.indexOf(item);
+    	    			Text editable = new Text(table, SWT.NONE);
+String abcd = item.getText(column);
+System.out.println(abcd);
+    	                editable.setText(abcd);
+final int tmp = column;
+    	                editable.addModifyListener(new ModifyListener() {
+    	                	public void modifyText(ModifyEvent e) {
+    	                		Text text = (Text)editor.getEditor();
+    	                        editor.getItem().setText(tmp, text.getText());
+    	                    }
+    	                });
+
+    	                editable.selectAll();
+    	                editable.setFocus();
+    	                
+    	                
+    	                editor.setEditor(editable, item, column);
+    				}
+    			}
             }
         });
 	    
