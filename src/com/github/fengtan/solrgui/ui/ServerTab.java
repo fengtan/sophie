@@ -6,8 +6,8 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -112,11 +112,12 @@ public class ServerTab {
 	    		editor.setEditor(text, item, column);
 
 	    		final int col = column;
-	    		text.addModifyListener(new ModifyListener() {
-	    			public void modifyText(ModifyEvent event) {
-	    				item.setText(col, text.getText());
-	    			}
-	    		});
+	    		text.addFocusListener(new FocusAdapter() {
+					@Override
+					public void focusLost(FocusEvent e) {
+	    				item.setText(col, text.getText());	
+					}
+				});
 	    	}
 	    });
 	    
