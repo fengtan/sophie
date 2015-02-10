@@ -84,7 +84,7 @@ public class ServerTab {
 	    editor.grabHorizontal = true;
 
 	    table.addMouseListener(new MouseAdapter() {
-	    	public void mouseDown(MouseEvent event) {
+	    	public void mouseDown(MouseEvent event) {   		
 	    		Control old = editor.getEditor();
 	    		if (old != null) old.dispose();
 
@@ -101,6 +101,8 @@ public class ServerTab {
 	    				break;
 	    			}
 	    		}
+	    		
+	    		if (columns.get(column).isFixed()) return; // Fixed columns are not editable.
 
 	    		final Text text = new Text(table, SWT.NONE);
 	    		text.setForeground(item.getForeground());

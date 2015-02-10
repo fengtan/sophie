@@ -22,7 +22,10 @@ public class Column {
 	public String getTitle() {
 		return title;
 	}
-
+	
+	public boolean isFixed() {
+		return fixed;
+	}
 
 	public boolean isDisplayed() {
 		return fixed ? true : displayed;
