@@ -1,6 +1,5 @@
 package com.github.fengtan.solrgui.solr;
 
-import java.io.IOException;
 import java.net.URL;
 
 import org.apache.solr.client.solrj.SolrQuery;
