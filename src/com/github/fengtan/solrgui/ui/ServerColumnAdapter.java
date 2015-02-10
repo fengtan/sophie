@@ -11,9 +11,9 @@ public class ServerColumnAdapter extends SelectionAdapter {
 
 	private Table table;
 	private String title;
-	private ServerColumnList columns;
+	private ColumnList columns;
 	
-	public ServerColumnAdapter(Table table, String title, ServerColumnList columns) {
+	public ServerColumnAdapter(Table table, String title, ColumnList columns) {
 		this.table = table;
 		this.title = title;
 		this.columns = columns;
@@ -21,14 +21,14 @@ public class ServerColumnAdapter extends SelectionAdapter {
 	
     @Override
     public void widgetSelected(SelectionEvent e) {
-    	if (columns.isItemDisplayed(title)) {
+    	if (columns.isColumnDisplayed(title)) {
     		// Drop column.
     		int index = columns.getIndexDisplayed(title);
     		table.getColumn(index).dispose();
-    		columns.setItemDisplayed(title, false);
+    		columns.setColumnDisplayed(title, false);
     	} else {
     		// Add column.
-    		columns.setItemDisplayed(title, true);
+    		columns.setColumnDisplayed(title, true);
     		int index = columns.getIndexDisplayed(title);
 			TableColumn tableColumn = new TableColumn(table, SWT.NONE, index);
 		    tableColumn.setText(title);

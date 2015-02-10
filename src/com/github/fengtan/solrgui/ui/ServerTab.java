@@ -31,7 +31,7 @@ import com.github.fengtan.solrgui.solr.Server;
 public class ServerTab {
 
     private SolrDocumentList docs;
-    private ServerColumnList columns = new ServerColumnList();
+    private ColumnList columns = new ColumnList();
     private Table table;
     private TabItem tabItem;
     
@@ -41,7 +41,7 @@ public class ServerTab {
 	    for (SolrDocument document:docs) {
 	    	for (String title:document.keySet()) {
 	    		if (!columns.contains(title)) {
-	    			columns.add(title);
+	    			columns.add(new Column(title));
 	    		}
 	    	}
 	    }
@@ -55,14 +55,14 @@ public class ServerTab {
 	    table.setLinesVisible(true);
 	    table.setHeaderVisible(true);
 	    
-	    for (String title:columns.getItemsDisplayed()) {
-			new TableColumn(table, SWT.NONE).setText(title);
+	    for (Column column:columns.getColumnsDisplayed()) {
+			new TableColumn(table, SWT.NONE).setText(column.getTitle());
 		}
 	    
 		for(SolrDocument doc:docs) {
 	    	TableItem item = new TableItem(table, SWT.NONE);
 	    	for (Map.Entry<String, Object> field:doc.entrySet()) {
-	    		if (columns.isItemDisplayed(field.getKey())) {
+	    		if (columns.isColumnDisplayed(field.getKey())) {
 	    			item.setText(columns.indexOf(field.getKey()), field.getValue().toString());
 	    		}	
 	    	}
@@ -158,12 +158,12 @@ public class ServerTab {
         Menu columnsMenu = new Menu(shell, SWT.DROP_DOWN);
         columnsMenuItem.setMenu(columnsMenu);
 
-        for (String title:columns) {
+        for (Column column:columns) {
             MenuItem columnItem = new MenuItem(columnsMenu, SWT.CHECK);
-            columnItem.setText(title);
+            columnItem.setText(column.getTitle());
             columnItem.setSelection(true);
             shell.setMenuBar(menu);            
-            columnItem.addSelectionListener(new ServerColumnAdapter(table, title, columns));
+            columnItem.addSelectionListener(new ServerColumnAdapter(table, column.getTitle(), columns));
         }
         
 	}
