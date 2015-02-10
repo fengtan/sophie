@@ -6,8 +6,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class Column {
 
 	private String title;
+	private boolean fixed; // Whether the column cannot be hidden (e.g. edit/delete columns).
 	private boolean displayed; // Whether the column is displayed / hidden.
-	private boolean fixed; // Whether the column can be hidden (false for edit/delete columns). 
 
 	public Column(String title) {
 		this(title, false);
@@ -18,25 +18,24 @@ public class Column {
 		this.fixed = fixed;
 		this.displayed = true;
 	}
-	
+		
 	public String getTitle() {
 		return title;
 	}
 
+
 	public boolean isDisplayed() {
-		return displayed;
+		return fixed ? true : displayed;
 	}
 
 	public void setDisplayed(boolean displayed) {
-		this.displayed = displayed;
-	}
-
-	public boolean isFixed() {
-		return fixed;
+		if (!fixed) {
+			this.displayed = displayed;
+		}
 	}
 	
 	public int hashcode() {
-		return new HashCodeBuilder().append(title).toHashCode();
+		return new HashCodeBuilder(53, 11).append(title).toHashCode();
 	}
 	
 	public boolean equals(Object o) {

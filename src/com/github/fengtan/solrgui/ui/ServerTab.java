@@ -31,12 +31,16 @@ import com.github.fengtan.solrgui.solr.Server;
 public class ServerTab {
 
     private SolrDocumentList docs;
-    private ColumnList columns = new ColumnList();
+    private ColumnList columns;
     private Table table;
     private TabItem tabItem;
     
     public ServerTab(Server server, TabFolder tabFolder) {
     	docs = server.getAllDocuments();
+    	
+    	columns = new ColumnList();
+    	columns.add(new Column("Edit", true));
+    	columns.add(new Column("Delete", true));
     	
 	    for (SolrDocument document:docs) {
 	    	for (String title:document.keySet()) {
