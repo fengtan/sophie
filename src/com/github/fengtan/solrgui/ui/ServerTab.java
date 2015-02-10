@@ -27,6 +27,9 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.solr.Server;
+import com.github.fengtan.solrgui.ui.column.ActionColumn;
+import com.github.fengtan.solrgui.ui.column.Column;
+import com.github.fengtan.solrgui.ui.column.ColumnList;
 
 public class ServerTab {
 
@@ -39,8 +42,8 @@ public class ServerTab {
     	docs = server.getAllDocuments();
     	
     	columns = new ColumnList();
-    	columns.add(new Column("Edit", true));
-    	columns.add(new Column("Delete", true));
+    	columns.add(new ActionColumn("Edit"));
+    	columns.add(new ActionColumn("Delete"));
     	
 	    for (SolrDocument document:docs) {
 	    	for (String title:document.keySet()) {
@@ -102,7 +105,7 @@ public class ServerTab {
 	    			}
 	    		}
 	    		
-	    		if (columns.get(column).isFixed()) return; // Fixed columns are not editable.
+	    		if (!columns.get(column).isEditable()) return;
 
 	    		final Text text = new Text(table, SWT.NONE);
 	    		text.setForeground(item.getForeground());

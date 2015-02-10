@@ -6,6 +6,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
+import com.github.fengtan.solrgui.ui.column.ColumnList;
+
 // TODO too much coupled with SolrGUIDisplay.
 public class ServerColumnAdapter extends SelectionAdapter {
 

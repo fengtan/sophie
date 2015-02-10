@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.ui;
+package com.github.fengtan.solrgui.ui.column;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -6,35 +6,29 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class Column {
 
 	private String title;
-	private boolean fixed; // Whether the column cannot be hidden (e.g. edit/delete columns).
 	private boolean displayed; // Whether the column is displayed / hidden.
-
-	public Column(String title) {
-		this(title, false);
-	}
+	private boolean editable; // Whether the column can be edited.
 	
-	public Column(String title, boolean fixed) {
+	public Column(String title) {
 		this.title = title;
-		this.fixed = fixed;
 		this.displayed = true;
+		this.editable = true;
 	}
 		
 	public String getTitle() {
 		return title;
 	}
 	
-	public boolean isFixed() {
-		return fixed;
-	}
-
 	public boolean isDisplayed() {
-		return fixed ? true : displayed;
+		return displayed;
 	}
 
 	public void setDisplayed(boolean displayed) {
-		if (!fixed) {
-			this.displayed = displayed;
-		}
+		this.displayed = displayed;
+	}
+	
+	public boolean isEditable() {
+		return editable;
 	}
 	
 	public int hashcode() {
