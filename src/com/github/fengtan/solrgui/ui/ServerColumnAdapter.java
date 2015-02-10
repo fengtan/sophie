@@ -7,13 +7,13 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
 // TODO too much coupled with SolrGUIDisplay.
-public class ColumnAdapter extends SelectionAdapter {
+public class ServerColumnAdapter extends SelectionAdapter {
 
 	private Table table;
 	private String title;
-	private ColumnList columns;
+	private ServerColumnList columns;
 	
-	public ColumnAdapter(Table table, String title, ColumnList columns) {
+	public ServerColumnAdapter(Table table, String title, ServerColumnList columns) {
 		this.table = table;
 		this.title = title;
 		this.columns = columns;

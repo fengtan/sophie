@@ -31,7 +31,7 @@ import com.github.fengtan.solrgui.solr.Server;
 public class ServerTab {
 
     private SolrDocumentList docs;
-    private ColumnList columns = new ColumnList();
+    private ServerColumnList columns = new ServerColumnList();
     private Table table;
     private TabItem tabItem;
     
@@ -54,12 +54,11 @@ public class ServerTab {
 	    table = new Table(parent, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION); // TODO
 	    table.setLinesVisible(true);
 	    table.setHeaderVisible(true);
-
-		for (String title:columns.getItemsDisplayed()) {
-			TableColumn tableColumn = new TableColumn(table, SWT.NONE);
-		    tableColumn.setText(title);
+	    
+	    for (String title:columns.getItemsDisplayed()) {
+			new TableColumn(table, SWT.NONE).setText(title);
 		}
-
+	    
 		for(SolrDocument doc:docs) {
 	    	TableItem item = new TableItem(table, SWT.NONE);
 	    	for (Map.Entry<String, Object> field:doc.entrySet()) {
@@ -115,7 +114,8 @@ public class ServerTab {
 	    		text.addFocusListener(new FocusAdapter() {
 					@Override
 					public void focusLost(FocusEvent e) {
-	    				item.setText(col, text.getText());	
+	    				item.setText(col, text.getText());
+	    				// TODO update document on Solr
 					}
 				});
 	    	}
@@ -163,7 +163,7 @@ public class ServerTab {
             columnItem.setText(title);
             columnItem.setSelection(true);
             shell.setMenuBar(menu);            
-            columnItem.addSelectionListener(new ColumnAdapter(table, title, columns));
+            columnItem.addSelectionListener(new ServerColumnAdapter(table, title, columns));
         }
         
 	}

@@ -1,5 +1,6 @@
 package com.github.fengtan.solrgui.solr;
 
+import java.io.IOException;
 import java.net.URL;
 
 import org.apache.solr.client.solrj.SolrQuery;
@@ -44,9 +45,23 @@ public class Server {
 		try {
 			response = server.query(query);
 		} catch (SolrServerException e) {
+			// TODO log error
 			return new SolrDocumentList();
 		}
 		return response.getResults();
 	}
+	/*TODO uncomment
+	public void deleteDocument(String id) {
+		try {
+			server.deleteById(id);
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	*/
 	
 }
