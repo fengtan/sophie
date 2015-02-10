@@ -8,13 +8,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
@@ -69,55 +70,57 @@ public class ServerTab {
 		}
 
 	    for (int i = 0; i < table.getColumnCount(); i++) {
-	      table.getColumn(i).pack();
+	    	table.getColumn(i).pack();
 	    }
 	    
 	    tabItem.setControl(table);
 	    table.setSize(table.computeSize(SWT.DEFAULT, 200)); // TODO
-	    
-	    
-	    
-        final TableEditor editor = new TableEditor(table);
-        //The editor must have the same size as the cell and must
-        //not be any smaller than 50 pixels.
-        editor.horizontalAlignment = SWT.LEFT;
-        editor.grabHorizontal = true; // TODO wtf
-        editor.minimumWidth = 50; // TODO needed ?
+	    	    
+	    final TableEditor editor = new TableEditor(table);
+	    editor.horizontalAlignment = SWT.LEFT;
+	    editor.grabHorizontal = true;
 
-        table.addListener(SWT.MouseDown, new Listener() {
-        	@Override
-        	public void handleEvent(Event e) {
-        		Point point = new Point(e.x, e.y);
-    			TableItem item = table.getItem(point);
-    			if (item == null) return;
-    			for (int column = 0; column < columns.size(); column++) { // TODO columnsDisplayed instead of columns ?
-    				Rectangle rect = item.getBounds(column);
-    				if (rect.contains(point)) {
-    					int row = table.indexOf(item);
-    	    			Text editable = new Text(table, SWT.NONE);
-String abcd = item.getText(column);
-System.out.println(abcd);
-    	                editable.setText(abcd);
-final int tmp = column;
-    	                editable.addModifyListener(new ModifyListener() {
-    	                	public void modifyText(ModifyEvent e) {
-    	                		Text text = (Text)editor.getEditor();
-    	                        editor.getItem().setText(tmp, text.getText());
-    	                    }
-    	                });
+	    table.addMouseListener(new MouseAdapter() {
+	    	public void mouseDown(MouseEvent event) {
+	    		Control old = editor.getEditor();
+	    		if (old != null) old.dispose();
 
-    	                editable.selectAll();
-    	                editable.setFocus();
-    	                
-    	                
-    	                editor.setEditor(editable, item, column);
-    				}
-    			}
-            }
-        });
+	    		Point pt = new Point(event.x, event.y);
+
+	    		final TableItem item = table.getItem(pt);
+	    		if (item == null) return;
+
+	    		int column = -1;
+	    		for (int i = 0, n = table.getColumnCount(); i < n; i++) {
+	    			Rectangle rect = item.getBounds(i);
+	    			if (rect.contains(pt)) {
+	    				column = i;
+	    				break;
+	    			}
+	    		}
+
+	    		final Text text = new Text(table, SWT.NONE);
+	    		text.setForeground(item.getForeground());
+
+	    		text.setText(item.getText(column));
+	    		text.setForeground(item.getForeground());
+	    		text.selectAll();
+	    		text.setFocus();
+
+	    		editor.minimumWidth = text.getBounds().width;
+
+	    		editor.setEditor(text, item, column);
+
+	    		final int col = column;
+	    		text.addModifyListener(new ModifyListener() {
+	    			public void modifyText(ModifyEvent event) {
+	    				item.setText(col, text.getText());
+	    			}
+	    		});
+	    	}
+	    });
 	    
 	}
-
 	
 	public void updateMenu(Menu menu, final Shell shell) { // TODO drop shell argument ?
         // File menu.
