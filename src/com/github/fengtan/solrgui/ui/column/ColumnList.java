@@ -5,6 +5,8 @@ import java.util.List;
 
 public class ColumnList extends ArrayList<Column> {
 		
+	private static final long serialVersionUID = 1025568180709782265L; // TODO
+
 	public List<Column> getColumnsDisplayed() {
 		List<Column> columns = new ArrayList<Column>();
 		for (Column column: this) {
@@ -18,7 +20,7 @@ public class ColumnList extends ArrayList<Column> {
 	public boolean isColumnDisplayed(String columnTitle) {
 		for (Column column: this) {
 			if (column.getTitle().equals(columnTitle) && column.isDisplayed()) {
-				return true;
+				return true;  // We assume column titles are unique.
 			}
 		}
 		return false;

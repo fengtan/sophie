@@ -67,10 +67,10 @@ public class ServerTab {
 		}
 	    
 		for(SolrDocument doc:docs) {
-	    	TableItem item = new TableItem(table, SWT.NONE);
+	    	TableItem row = new TableItem(table, SWT.NONE);
 	    	for (Map.Entry<String, Object> field:doc.entrySet()) {
 	    		if (columns.isColumnDisplayed(field.getKey())) {
-	    			item.setText(columns.indexOf(field.getKey()), field.getValue().toString());
+	    			row.setText(columns.indexOf(field.getKey()), field.getValue().toString());
 	    		}	
 	    	}
 		}
