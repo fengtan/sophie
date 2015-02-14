@@ -19,8 +19,8 @@ import java.util.Vector;
 public class SolrGUIServerList {
 
 	private final int COUNT = 10;
-	private Vector tasks = new Vector(COUNT);
-	private Set changeListeners = new HashSet();
+	private Vector<SolrGUIServer> tasks = new Vector<SolrGUIServer>(COUNT);
+	private Set<ISolrGUIServerListViewer> changeListeners = new HashSet<ISolrGUIServerListViewer>();
 
 	// Combo box choices
 	static final String[] OWNERS_ARRAY = { "?", "Nancy", "Larry", "Joe" };
@@ -57,7 +57,7 @@ public class SolrGUIServerList {
 	/**
 	 * Return the collection of tasks
 	 */
-	public Vector getTasks() {
+	public Vector<SolrGUIServer> getTasks() {
 		return tasks;
 	}
 	
@@ -67,7 +67,7 @@ public class SolrGUIServerList {
 	public void addTask() {
 		SolrGUIServer task = new SolrGUIServer("New task");
 		tasks.add(tasks.size(), task);
-		Iterator iterator = changeListeners.iterator();
+		Iterator<ISolrGUIServerListViewer> iterator = changeListeners.iterator();
 		while (iterator.hasNext())
 			((ISolrGUIServerListViewer) iterator.next()).addTask(task);
 	}
@@ -77,7 +77,7 @@ public class SolrGUIServerList {
 	 */
 	public void removeTask(SolrGUIServer task) {
 		tasks.remove(task);
-		Iterator iterator = changeListeners.iterator();
+		Iterator<ISolrGUIServerListViewer> iterator = changeListeners.iterator();
 		while (iterator.hasNext())
 			((ISolrGUIServerListViewer) iterator.next()).removeTask(task);
 	}
@@ -86,7 +86,7 @@ public class SolrGUIServerList {
 	 * @param task
 	 */
 	public void taskChanged(SolrGUIServer task) {
-		Iterator iterator = changeListeners.iterator();
+		Iterator<ISolrGUIServerListViewer> iterator = changeListeners.iterator();
 		while (iterator.hasNext())
 			((ISolrGUIServerListViewer) iterator.next()).updateTask(task);
 	}
