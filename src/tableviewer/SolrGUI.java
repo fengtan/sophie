@@ -310,13 +310,10 @@ public class SolrGUI {
 		// Create and configure the "Add" button
 		Button add = new Button(parent, SWT.PUSH | SWT.CENTER);
 		add.setText("Add");
-		
 		GridData gridData = new GridData (GridData.HORIZONTAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
 		add.setLayoutData(gridData);
 		add.addSelectionListener(new SelectionAdapter() {
-       	
-       		// Add a task to the ExampleTaskList and refresh the view
 			public void widgetSelected(SelectionEvent e) {
 				taskList.addTask();
 			}
@@ -328,18 +325,26 @@ public class SolrGUI {
 		gridData = new GridData (GridData.HORIZONTAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80; 
 		delete.setLayoutData(gridData); 
-
 		delete.addSelectionListener(new SelectionAdapter() {
-       	
-			//	Remove the selection and refresh the view
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUIServer task = (SolrGUIServer) ((IStructuredSelection) 
-						tableViewer.getSelection()).getFirstElement();
+				SolrGUIServer task = (SolrGUIServer) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
 				if (task != null) {
 					taskList.removeTask(task);
 				} 				
 			}
 		});
+
+		//	Create and configure the "Commit" button.
+		Button commit = new Button(parent, SWT.PUSH | SWT.CENTER);
+		commit.setText("Commit");
+		gridData = new GridData (GridData.HORIZONTAL_ALIGN_BEGINNING);
+		gridData.widthHint = 80; 
+		commit.setLayoutData(gridData); 
+		commit.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				// TODO 				
+			}
+		});	
 		
 		//	Create and configure the "Close" button.
 		closeButton = new Button(parent, SWT.PUSH | SWT.CENTER);
