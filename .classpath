@@ -44,37 +44,7 @@
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.runtime.compatibility_3.2.200.v20140128-0851.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.runtime_3.10.0.v20140318-2214.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.variables_3.2.800.v20130819-1716.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.gef_3.9.100.201408150207.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.help.base_4.0.200.v20140925-0400.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.help.ui_4.0.100.v20140401-0608.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.help.webapp_3.6.300.v20140407-1855.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.help_3.6.0.v20130326-1254.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.annotation_1.1.0.v20140129-1625.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.annotation_2.0.0.v20140415-1436.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.apt.core_3.3.600.v20140311-1758.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.apt.pluggable.core_1.0.400.v20131113-0353.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.apt.ui_3.3.400.v20140311-1758.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.compiler.apt_1.1.0.v20140509-1235.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.compiler.tool_1.0.300.v20140311-1758.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.core.manipulation_1.5.0.v20130605-1748.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.core_3.10.0.v20140902-0626.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.debug.ui_3.6.300.v20140512-1926.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.doc.user_3.10.1.v20140827-1504.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.junit.core_3.7.300.v20140409-1618.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.junit.runtime_3.4.500.v20140527-1138.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.junit4.runtime_1.1.400.v20140314-0036.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.junit_3.7.300.v20140418-0836.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.launching_3.7.101.v20140825-1922.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt.ui_3.10.1.v20140817-1500.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jdt_3.10.0.v20140925-0400.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jem.util_2.1.200.v201404021757.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jetty.continuation_8.1.14.v20131031.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jetty.http_8.1.14.v20131031.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jetty.io_8.1.14.v20131031.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jetty.security_8.1.14.v20131031.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jetty.server_8.1.14.v20131031.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jetty.servlet_8.1.14.v20131031.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jetty.util_8.1.14.v20131031.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface.databinding_1.6.200.v20140528-1422.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface.text_3.9.1.v20140827-1810.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface_3.10.1.v20140813-1009.jar"/>
