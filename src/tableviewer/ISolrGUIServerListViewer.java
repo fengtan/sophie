@@ -6,7 +6,7 @@ package tableviewer;
  *
  */
 
-public interface ITaskListViewer {
+public interface ISolrGUIServerListViewer {
 	
 	/**
 	 * Update the view to reflect the fact that a task was added 
@@ -14,7 +14,7 @@ public interface ITaskListViewer {
 	 * 
 	 * @param task
 	 */
-	public void addTask(ExampleTask task);
+	public void addTask(SolrGUIServer task);
 	
 	/**
 	 * Update the view to reflect the fact that a task was removed 
@@ -22,7 +22,7 @@ public interface ITaskListViewer {
 	 * 
 	 * @param task
 	 */
-	public void removeTask(ExampleTask task);
+	public void removeTask(SolrGUIServer task);
 	
 	/**
 	 * Update the view to reflect the fact that one of the tasks
@@ -30,5 +30,5 @@ public interface ITaskListViewer {
 	 * 
 	 * @param task
 	 */
-	public void updateTask(ExampleTask task);
+	public void updateTask(SolrGUIServer task);
 }

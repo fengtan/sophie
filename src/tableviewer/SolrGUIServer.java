@@ -1,23 +1,6 @@
 package tableviewer;
-/**
- * (c) Copyright Mirasol Op'nWorks Inc. 2002, 2003. 
- * http://www.opnworks.com
- * Created on Apr 2, 2003 by lgauthier@opnworks.com
- * 
- */
 
-/**
- * Class used as a trivial case of a Task 
- * Serves as the business object for the TableViewer Example.
- * 
- * A Task has the following properties: completed, description,
- * owner and percentComplete 
- * 
- * @author Laurent
- *
- * 
- */
-public class ExampleTask {
+public class SolrGUIServer {
 
 	private boolean completed 	= false;
 	private String description 	= "";
@@ -29,7 +12,7 @@ public class ExampleTask {
 	 * 
 	 * @param string
 	 */
-	public ExampleTask(String string) {
+	public SolrGUIServer(String string) {
 		
 		super();
 		setDescription(string);

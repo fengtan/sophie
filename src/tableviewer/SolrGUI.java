@@ -1,12 +1,7 @@
-/**
- * (c) Copyright Mirasol Op'nWorks Inc. 2002, 2003. 
- * http://www.opnworks.com
- * Created on Apr 2, 2003 by lgauthier@opnworks.com
- * 
- */
-
 package tableviewer;
+
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
@@ -35,83 +30,42 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-/**
- * The TableViewerExample class is meant to be a fairly complete example
- * of the use of the org.eclipse.jface.viewers.TableViewer class to 
- * implement an editable table with text, combobox and image 
- * editors. 
- * 
- * The example application metaphor consists of a table to view and 
- * edit tasks in a task list. It is by no means a complete or truly 
- * usable application.
- * 
- * This example draws from sample code in the Eclipse
- * org.eclipse.ui.views.tasklist.TaskList class and some sample code 
- * in SWT fragments from the eclipse.org web site. 
- * 
- * Known issue: We were not able to get the images to be center aligned
- * in the checkbox column. 
- * 
- * @author Laurent Gauthier
- * @created Apr 2, 2003  
- */
+public class SolrGUI {
 
-public class TableViewerExample {
-/**
-	 * @param parent
-	 */
-	public TableViewerExample(Composite parent) {
-		
+	public SolrGUI(Composite parent) {
 		this.addChildControls(parent);
 	}
 
-	//	private Shell shell;
 	private Table table;
 	private TableViewer tableViewer;
 	private Button closeButton;
 	
-	// Create a ExampleTaskList and assign it to an instance variable
-	private ExampleTaskList taskList = new ExampleTaskList(); 
+	private SolrGUIServerList taskList = new SolrGUIServerList(); 
 
-	// Set the table column property names
-	private final String COMPLETED_COLUMN 		= "completed";
-	private final String DESCRIPTION_COLUMN 	= "description";
-	private final String OWNER_COLUMN 			= "owner";
-	private final String PERCENT_COLUMN 		= "percent";
-
-	// Set column names
-	private String[] columnNames = new String[] { 
-			COMPLETED_COLUMN, 
-			DESCRIPTION_COLUMN,
-			OWNER_COLUMN,
-			PERCENT_COLUMN
-			};
+	private String[] columnNames = new String[] {"completed", "description", "owner", "percent"};
 
 	/**
-	 * Main method to launch the window 
+	 * Launch the window.
 	 */
 	public static void main(String[] args) {
-
 		Shell shell = new Shell();
-		shell.setText("Task List - TableViewer Example");
+		shell.setText("Solr GUI");
 
-		// Set layout for shell
+		// Set layout for shell.
 		GridLayout layout = new GridLayout();
 		shell.setLayout(layout);
 		
-		// Create a composite to hold the children
+		// Create a composite to hold the children.
 		Composite composite = new Composite(shell, SWT.NONE);
-		final TableViewerExample tableViewerExample = new TableViewerExample(composite);
+		final SolrGUI tableViewerExample = new SolrGUI(composite);
 		
 		tableViewerExample.getControl().addDisposeListener(new DisposeListener() {
-
 			public void widgetDisposed(DisposeEvent e) {
 				tableViewerExample.dispose();			
 			}
-			
 		});
 
-		// Ask the shell to display its content
+		// Make the shell to display its content.
 		shell.open();
 		tableViewerExample.run(shell);
 	}
@@ -168,9 +122,9 @@ public class TableViewerExample {
 		// Create and setup the TableViewer
 		createTableViewer();
 		tableViewer.setContentProvider(new ExampleContentProvider());
-		tableViewer.setLabelProvider(new ExampleLabelProvider());
+		tableViewer.setLabelProvider(new SolrGUILabelProvider());
 		// The input for the table viewer is the instance of ExampleTaskList
-		taskList = new ExampleTaskList();
+		taskList = new SolrGUIServerList();
 		tableViewer.setInput(taskList);
 
 		// Add the buttons
@@ -207,7 +161,7 @@ public class TableViewerExample {
 		column.addSelectionListener(new SelectionAdapter() {
        	
 			public void widgetSelected(SelectionEvent e) {
-				tableViewer.setSorter(new ExampleTaskSorter(ExampleTaskSorter.DESCRIPTION));
+				tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.DESCRIPTION));
 			}
 		});
 
@@ -220,7 +174,7 @@ public class TableViewerExample {
 		column.addSelectionListener(new SelectionAdapter() {
        	
 			public void widgetSelected(SelectionEvent e) {
-				tableViewer.setSorter(new ExampleTaskSorter(ExampleTaskSorter.OWNER));
+				tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.OWNER));
 			}
 		});
 
@@ -232,7 +186,7 @@ public class TableViewerExample {
 		column.addSelectionListener(new SelectionAdapter() {
        	
 			public void widgetSelected(SelectionEvent e) {
-				tableViewer.setSorter(new ExampleTaskSorter(ExampleTaskSorter.PERCENT_COMPLETE));
+				tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.PERCENT_COMPLETE));
 			}
 		});
 	}
@@ -277,9 +231,9 @@ public class TableViewerExample {
 		// Assign the cell editors to the viewer 
 		tableViewer.setCellEditors(editors);
 		// Set the cell modifier for the viewer
-		tableViewer.setCellModifier(new ExampleCellModifier(this));
+		tableViewer.setCellModifier(new SolrGUICellModifier(this));
 		// Set the default sorter for the viewer 
-		tableViewer.setSorter(new ExampleTaskSorter(ExampleTaskSorter.DESCRIPTION));
+		tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.DESCRIPTION));
 	}
 
 	/*
@@ -299,12 +253,12 @@ public class TableViewerExample {
 	 * interface since it must register changeListeners with the 
 	 * ExampleTaskList 
 	 */
-	class ExampleContentProvider implements IStructuredContentProvider, ITaskListViewer {
+	class ExampleContentProvider implements IStructuredContentProvider, ISolrGUIServerListViewer {
 		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
 			if (newInput != null)
-				((ExampleTaskList) newInput).addChangeListener(this);
+				((SolrGUIServerList) newInput).addChangeListener(this);
 			if (oldInput != null)
-				((ExampleTaskList) oldInput).removeChangeListener(this);
+				((SolrGUIServerList) oldInput).removeChangeListener(this);
 		}
 
 		public void dispose() {
@@ -319,21 +273,21 @@ public class TableViewerExample {
 		/* (non-Javadoc)
 		 * @see ITaskListViewer#addTask(ExampleTask)
 		 */
-		public void addTask(ExampleTask task) {
+		public void addTask(SolrGUIServer task) {
 			tableViewer.add(task);
 		}
 
 		/* (non-Javadoc)
 		 * @see ITaskListViewer#removeTask(ExampleTask)
 		 */
-		public void removeTask(ExampleTask task) {
+		public void removeTask(SolrGUIServer task) {
 			tableViewer.remove(task);			
 		}
 
 		/* (non-Javadoc)
 		 * @see ITaskListViewer#updateTask(ExampleTask)
 		 */
-		public void updateTask(ExampleTask task) {
+		public void updateTask(SolrGUIServer task) {
 			tableViewer.update(task, null);	
 		}
 	}
@@ -342,7 +296,7 @@ public class TableViewerExample {
 	 * Return the array of choices for a multiple choice cell
 	 */
 	public String[] getChoices(String property) {
-		if (OWNER_COLUMN.equals(property))
+		if ("owner".equals(property))
 			return taskList.getOwners();  // The ExampleTaskList knows about the choice of owners
 		else
 			return new String[]{};
@@ -380,7 +334,7 @@ public class TableViewerExample {
        	
 			//	Remove the selection and refresh the view
 			public void widgetSelected(SelectionEvent e) {
-				ExampleTask task = (ExampleTask) ((IStructuredSelection) 
+				SolrGUIServer task = (SolrGUIServer) ((IStructuredSelection) 
 						tableViewer.getSelection()).getFirstElement();
 				if (task != null) {
 					taskList.removeTask(task);
@@ -401,7 +355,7 @@ public class TableViewerExample {
 	 * 
 	 * @return List  containing column names
 	 */
-	public java.util.List getColumnNames() {
+	public List<String> getColumnNames() {
 		return Arrays.asList(columnNames);
 	}
 
@@ -415,7 +369,7 @@ public class TableViewerExample {
 	/**
 	 * Return the ExampleTaskList
 	 */
-	public ExampleTaskList getTaskList() {
+	public SolrGUIServerList getTaskList() {
 		return taskList;	
 	}
 

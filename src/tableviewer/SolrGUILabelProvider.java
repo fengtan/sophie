@@ -1,9 +1,3 @@
-/**
- * (c) Copyright Mirasol Op'nWorks Inc. 2002, 2003. 
- * http://www.opnworks.com
- * Created on Apr 2, 2003 by lgauthier@opnworks.com
- */
-
 package tableviewer;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -19,9 +13,7 @@ import org.eclipse.swt.graphics.Image;
  * 
  * @see org.eclipse.jface.viewers.LabelProvider 
  */
-public class ExampleLabelProvider 
-	extends LabelProvider
-	implements ITableLabelProvider {
+public class SolrGUILabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	// Names of images used to represent checkboxes
 	public static final String CHECKED_IMAGE 	= "checked";
@@ -37,12 +29,12 @@ public class ExampleLabelProvider
 	static {
 		String iconPath = "icons/"; 
 		imageRegistry.put(CHECKED_IMAGE, ImageDescriptor.createFromFile(
-				TableViewerExample.class, 
+				SolrGUI.class, 
 				iconPath + CHECKED_IMAGE + ".gif"
 				)
 			);
 		imageRegistry.put(UNCHECKED_IMAGE, ImageDescriptor.createFromFile(
-				TableViewerExample.class, 
+				SolrGUI.class, 
 				iconPath + UNCHECKED_IMAGE + ".gif"
 				)
 			);	
@@ -61,7 +53,7 @@ public class ExampleLabelProvider
 	 */
 	public String getColumnText(Object element, int columnIndex) {
 		String result = "";
-		ExampleTask task = (ExampleTask) element;
+		SolrGUIServer task = (SolrGUIServer) element;
 		switch (columnIndex) {
 			case 0:  // COMPLETED_COLUMN
 				break;
@@ -85,7 +77,7 @@ public class ExampleLabelProvider
 	 */
 	public Image getColumnImage(Object element, int columnIndex) {
 		return (columnIndex == 0) ?   // COMPLETED_COLUMN?
-			getImage(((ExampleTask) element).isCompleted()) :
+			getImage(((SolrGUIServer) element).isCompleted()) :
 			null;
 	}
 

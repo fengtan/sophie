@@ -1,10 +1,3 @@
-/**
- * (c) Copyright Mirasol Op'nWorks Inc. 2002, 2003. 
- * http://www.opnworks.com
- * Created on Apr 2, 2003 by lgauthier@opnworks.com
- * 
- */
-
 package tableviewer;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.swt.widgets.TableItem;
@@ -15,14 +8,14 @@ import org.eclipse.swt.widgets.TableItem;
  * tableViewer
  */
 
-public class ExampleCellModifier implements ICellModifier {
-	private TableViewerExample tableViewerExample;
+public class SolrGUICellModifier implements ICellModifier {
+	private SolrGUI tableViewerExample;
 	
 	/**
 	 * Constructor 
-	 * @param TableViewerExample an instance of a TableViewerExample 
+	 * @param SolrGUI an instance of a TableViewerExample 
 	 */
-	public ExampleCellModifier(TableViewerExample tableViewerExample) {
+	public SolrGUICellModifier(SolrGUI tableViewerExample) {
 		super();
 		this.tableViewerExample = tableViewerExample;
 	}
@@ -43,7 +36,7 @@ public class ExampleCellModifier implements ICellModifier {
 		int columnIndex = tableViewerExample.getColumnNames().indexOf(property);
 
 		Object result = null;
-		ExampleTask task = (ExampleTask) element;
+		SolrGUIServer task = (SolrGUIServer) element;
 
 		switch (columnIndex) {
 			case 0 : // COMPLETED_COLUMN 
@@ -78,7 +71,7 @@ public class ExampleCellModifier implements ICellModifier {
 		int columnIndex	= tableViewerExample.getColumnNames().indexOf(property);
 			
 		TableItem item = (TableItem) element;
-		ExampleTask task = (ExampleTask) item.getData();
+		SolrGUIServer task = (SolrGUIServer) item.getData();
 		String valueString;
 
 		switch (columnIndex) {

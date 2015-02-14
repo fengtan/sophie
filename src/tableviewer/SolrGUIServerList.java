@@ -16,8 +16,7 @@ import java.util.Vector;
  * In real life, this class would access a persistent store of some kind.
  * 
  */
-
-public class ExampleTaskList {
+public class SolrGUIServerList {
 
 	private final int COUNT = 10;
 	private Vector tasks = new Vector(COUNT);
@@ -29,7 +28,7 @@ public class ExampleTaskList {
 	/**
 	 * Constructor
 	 */
-	public ExampleTaskList() {
+	public SolrGUIServerList() {
 		super();
 		this.initData();
 	}
@@ -40,9 +39,9 @@ public class ExampleTaskList {
 	 * collection of tasks
 	 */
 	private void initData() {
-		ExampleTask task;
+		SolrGUIServer task;
 		for (int i = 0; i < COUNT; i++) {
-			task = new ExampleTask("Task "  + i);
+			task = new SolrGUIServer("Task "  + i);
 			task.setOwner(OWNERS_ARRAY[i % 3]);
 			tasks.add(task);
 		}
@@ -66,43 +65,43 @@ public class ExampleTaskList {
 	 * Add a new task to the collection of tasks
 	 */
 	public void addTask() {
-		ExampleTask task = new ExampleTask("New task");
+		SolrGUIServer task = new SolrGUIServer("New task");
 		tasks.add(tasks.size(), task);
 		Iterator iterator = changeListeners.iterator();
 		while (iterator.hasNext())
-			((ITaskListViewer) iterator.next()).addTask(task);
+			((ISolrGUIServerListViewer) iterator.next()).addTask(task);
 	}
 
 	/**
 	 * @param task
 	 */
-	public void removeTask(ExampleTask task) {
+	public void removeTask(SolrGUIServer task) {
 		tasks.remove(task);
 		Iterator iterator = changeListeners.iterator();
 		while (iterator.hasNext())
-			((ITaskListViewer) iterator.next()).removeTask(task);
+			((ISolrGUIServerListViewer) iterator.next()).removeTask(task);
 	}
 
 	/**
 	 * @param task
 	 */
-	public void taskChanged(ExampleTask task) {
+	public void taskChanged(SolrGUIServer task) {
 		Iterator iterator = changeListeners.iterator();
 		while (iterator.hasNext())
-			((ITaskListViewer) iterator.next()).updateTask(task);
+			((ISolrGUIServerListViewer) iterator.next()).updateTask(task);
 	}
 
 	/**
 	 * @param viewer
 	 */
-	public void removeChangeListener(ITaskListViewer viewer) {
+	public void removeChangeListener(ISolrGUIServerListViewer viewer) {
 		changeListeners.remove(viewer);
 	}
 
 	/**
 	 * @param viewer
 	 */
-	public void addChangeListener(ITaskListViewer viewer) {
+	public void addChangeListener(ISolrGUIServerListViewer viewer) {
 		changeListeners.add(viewer);
 	}
 

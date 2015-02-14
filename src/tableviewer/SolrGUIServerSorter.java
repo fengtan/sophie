@@ -1,29 +1,8 @@
-/**
- * (c) Copyright Mirasol Op'nWorks Inc. 2002, 2003. 
- * http://www.opnworks.com
- * Created on Apr 2, 2003 by lgauthier@opnworks.com
- * 
- */
-
 package tableviewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 
-/**
- * Sorter for the TableViewerExample that displays items of type 
- * <code>ExampleTask</code>.
- * The sorter supports three sort criteria:
- * <p>
- * <code>DESCRIPTION</code>: Task description (String)
- * </p>
- * <p>
- * <code>OWNER</code>: Task Owner (String)
- * </p>
- * <p>
- * <code>PERCENT_COMPLETE</code>: Task percent completed (int).
- * </p>
- */
-public class ExampleTaskSorter extends ViewerSorter {
+public class SolrGUIServerSorter extends ViewerSorter {
 
 	/**
 	 * Constructor argument values that indicate to sort items by 
@@ -42,7 +21,7 @@ public class ExampleTaskSorter extends ViewerSorter {
 	 * @param criteria the sort criterion to use: one of <code>NAME</code> or 
 	 *   <code>TYPE</code>
 	 */
-	public ExampleTaskSorter(int criteria) {
+	public SolrGUIServerSorter(int criteria) {
 		super();
 		this.criteria = criteria;
 	}
@@ -52,8 +31,8 @@ public class ExampleTaskSorter extends ViewerSorter {
 	 */
 	public int compare(Viewer viewer, Object o1, Object o2) {
 
-		ExampleTask task1 = (ExampleTask) o1;
-		ExampleTask task2 = (ExampleTask) o2;
+		SolrGUIServer task1 = (SolrGUIServer) o1;
+		SolrGUIServer task2 = (SolrGUIServer) o2;
 
 		switch (criteria) {
 			case DESCRIPTION :
@@ -78,7 +57,7 @@ public class ExampleTaskSorter extends ViewerSorter {
 	 *  equal to the second element; and a positive number if the first
 	 *  element is greater than the second element
 	 */
-	private int comparePercentComplete(ExampleTask task1, ExampleTask task2) {
+	private int comparePercentComplete(SolrGUIServer task1, SolrGUIServer task2) {
 		int result = task1.getPercentComplete() - task2.getPercentComplete();
 		result = result < 0 ? -1 : (result > 0) ? 1 : 0;  
 		return result;
@@ -95,7 +74,7 @@ public class ExampleTaskSorter extends ViewerSorter {
 	 *  equal to the second element; and a positive number if the first
 	 *  element is greater than the second element
 	 */
-	protected int compareDescriptions(ExampleTask task1, ExampleTask task2) {
+	protected int compareDescriptions(SolrGUIServer task1, SolrGUIServer task2) {
 		return collator.compare(task1.getDescription(), task2.getDescription());
 	}
 
@@ -110,7 +89,7 @@ public class ExampleTaskSorter extends ViewerSorter {
 	 *  equal to the second element; and a positive number if the first
 	 *  element is greater than the second element
 	 */
-	protected int compareOwners(ExampleTask task1, ExampleTask task2) {
+	protected int compareOwners(SolrGUIServer task1, SolrGUIServer task2) {
 		return collator.compare(task1.getOwner(), task2.getOwner());
 	}
 
