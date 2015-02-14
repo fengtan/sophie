@@ -14,12 +14,6 @@
 	<classpathentry kind="lib" path="/home/workuser/apachecommonslang/commons-lang3-3.3.2/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/ini4j-0.5.2.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.commands_3.6.100.v20140528-1422.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.contenttype_3.4.200.v20140207-1251.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.databinding.beans_1.2.200.v20140214-0004.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.databinding.observable_1.4.1.v20140210-1835.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.databinding.property_1.4.200.v20140214-0004.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.databinding_1.4.2.v20140729-1044.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.expressions_3.4.600.v20140128-0851.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface.databinding_1.6.200.v20140528-1422.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface.text_3.9.1.v20140827-1810.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface_3.10.1.v20140813-1009.jar"/>
