@@ -31,16 +31,16 @@ public class SolrGUIServerSorter extends ViewerSorter {
 	 */
 	public int compare(Viewer viewer, Object o1, Object o2) {
 
-		SolrGUIServer task1 = (SolrGUIServer) o1;
-		SolrGUIServer task2 = (SolrGUIServer) o2;
+		SolrGUIDocument document1 = (SolrGUIDocument) o1;
+		SolrGUIDocument document2 = (SolrGUIDocument) o2;
 
 		switch (criteria) {
 			case DESCRIPTION :
-				return compareDescriptions(task1, task2);
+				return compareDescriptions(document1, document2);
 			case OWNER :
-				return compareOwners(task1, task2);
+				return compareOwners(document1, document2);
 			case PERCENT_COMPLETE :
-				return comparePercentComplete(task1, task2);
+				return comparePercentComplete(document1, document2);
 			default:
 				return 0;
 		}
@@ -50,15 +50,15 @@ public class SolrGUIServerSorter extends ViewerSorter {
 	 * Returns a number reflecting the collation order of the given tasks
 	 * based on the percent completed.
 	 *
-	 * @param task1
-	 * @param task2
+	 * @param document1
+	 * @param document2
 	 * @return a negative number if the first element is less  than the 
 	 *  second element; the value <code>0</code> if the first element is
 	 *  equal to the second element; and a positive number if the first
 	 *  element is greater than the second element
 	 */
-	private int comparePercentComplete(SolrGUIServer task1, SolrGUIServer task2) {
-		int result = task1.getPercentComplete() - task2.getPercentComplete();
+	private int comparePercentComplete(SolrGUIDocument document1, SolrGUIDocument document2) {
+		int result = document1.getPercentComplete() - document2.getPercentComplete();
 		result = result < 0 ? -1 : (result > 0) ? 1 : 0;  
 		return result;
 	}
@@ -67,15 +67,15 @@ public class SolrGUIServerSorter extends ViewerSorter {
 	 * Returns a number reflecting the collation order of the given tasks
 	 * based on the description.
 	 *
-	 * @param task1 the first task element to be ordered
+	 * @param document1 the first task element to be ordered
 	 * @param resource2 the second task element to be ordered
 	 * @return a negative number if the first element is less  than the 
 	 *  second element; the value <code>0</code> if the first element is
 	 *  equal to the second element; and a positive number if the first
 	 *  element is greater than the second element
 	 */
-	protected int compareDescriptions(SolrGUIServer task1, SolrGUIServer task2) {
-		return collator.compare(task1.getDescription(), task2.getDescription());
+	protected int compareDescriptions(SolrGUIDocument document1, SolrGUIDocument document2) {
+		return collator.compare(document1.getDescription(), document2.getDescription());
 	}
 
 	/**
@@ -89,8 +89,8 @@ public class SolrGUIServerSorter extends ViewerSorter {
 	 *  equal to the second element; and a positive number if the first
 	 *  element is greater than the second element
 	 */
-	protected int compareOwners(SolrGUIServer task1, SolrGUIServer task2) {
-		return collator.compare(task1.getOwner(), task2.getOwner());
+	protected int compareOwners(SolrGUIDocument document1, SolrGUIDocument document2) {
+		return collator.compare(document1.getOwner(), document2.getOwner());
 	}
 
 	/**

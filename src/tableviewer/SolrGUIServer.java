@@ -1,86 +1,108 @@
-package tableviewer;
+/**
+ * (c) Copyright Mirasol Op'nWorks Inc. 2002, 2003. 
+ * http://www.opnworks.com
+ * Created on Apr 2, 2003 by lgauthier@opnworks.com
+ * 
+ */
 
+package tableviewer;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Vector;
+
+/**
+ * Class that plays the role of the domain model in the TableViewerExample
+ * In real life, this class would access a persistent store of some kind.
+ * 
+ */
 public class SolrGUIServer {
 
-	private boolean completed 	= false;
-	private String description 	= "";
-	private String owner 		= "?";
-	private int percentComplete = 0;  
+	private final int COUNT = 10;
+	private Vector<SolrGUIDocument> documents = new Vector<SolrGUIDocument>(COUNT);
+	private Set<ISolrGUIServerViewer> changeListeners = new HashSet<ISolrGUIServerViewer>();
 
+	// Combo box choices
+	static final String[] OWNERS_ARRAY = { "?", "Nancy", "Larry", "Joe" };
+	
 	/**
-	 * Create a task with an initial description
-	 * 
-	 * @param string
+	 * Constructor
 	 */
-	public SolrGUIServer(String string) {
-		
+	public SolrGUIServer() {
 		super();
-		setDescription(string);
+		this.initData();
+	}
+	
+	/*
+	 * Initialize the table data.
+	 * Create COUNT tasks and add them them to the 
+	 * collection of tasks
+	 */
+	private void initData() {
+		SolrGUIDocument document;
+		for (int i = 0; i < COUNT; i++) {
+			document = new SolrGUIDocument("Document "  + i);
+			document.setOwner(OWNERS_ARRAY[i % 3]);
+			documents.add(document);
+		}
+	};
+
+	/**
+	 * Return the array of owners   
+	 */
+	public String[] getOwners() {
+		return OWNERS_ARRAY;
+	}
+	
+	/**
+	 * Return the collection of tasks
+	 */
+	public Vector<SolrGUIDocument> getDocuments() {
+		return documents;
+	}
+	
+	/**
+	 * Add a new task to the collection of tasks
+	 */
+	public void addDocument() {
+		SolrGUIDocument document = new SolrGUIDocument("New document");
+		documents.add(documents.size(), document);
+		Iterator<ISolrGUIServerViewer> iterator = changeListeners.iterator();
+		while (iterator.hasNext())
+			((ISolrGUIServerViewer) iterator.next()).addDocument(document);
 	}
 
 	/**
-	 * @return true if completed, false otherwise
+	 * @param document
 	 */
-	public boolean isCompleted() {
-		return completed;
+	public void removeDocument(SolrGUIDocument document) {
+		documents.remove(document);
+		Iterator<ISolrGUIServerViewer> iterator = changeListeners.iterator();
+		while (iterator.hasNext())
+			((ISolrGUIServerViewer) iterator.next()).removeDocument(document);
 	}
 
 	/**
-	 * @return String task description
+	 * @param document
 	 */
-	public String getDescription() {
-		return description;
+	public void documentChanged(SolrGUIDocument document) {
+		Iterator<ISolrGUIServerViewer> iterator = changeListeners.iterator();
+		while (iterator.hasNext())
+			((ISolrGUIServerViewer) iterator.next()).updateDocument(document);
 	}
 
 	/**
-	 * @return String task owner
+	 * @param viewer
 	 */
-	public String getOwner() {
-		return owner;
+	public void removeChangeListener(ISolrGUIServerViewer viewer) {
+		changeListeners.remove(viewer);
 	}
 
 	/**
-	 * @return int percent completed
-	 * 
+	 * @param viewer
 	 */
-	public int getPercentComplete() {
-		return percentComplete;
-	}
-
-	/**
-	 * Set the 'completed' property
-	 * 
-	 * @param b
-	 */
-	public void setCompleted(boolean b) {
-		completed = b;
-	}
-
-	/**
-	 * Set the 'description' property
-	 * 
-	 * @param string
-	 */
-	public void setDescription(String string) {
-		description = string;
-	}
-
-	/**
-	 * Set the 'owner' property
-	 * 
-	 * @param string
-	 */
-	public void setOwner(String string) {
-		owner = string;
-	}
-
-	/**
-	 * Set the 'percentComplete' property
-	 * 
-	 * @param i
-	 */
-	public void setPercentComplete(int i) {
-		percentComplete = i;
+	public void addChangeListener(ISolrGUIServerViewer viewer) {
+		changeListeners.add(viewer);
 	}
 
 }

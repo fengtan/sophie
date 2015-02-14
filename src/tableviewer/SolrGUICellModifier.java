@@ -26,17 +26,17 @@ public class SolrGUICellModifier implements ICellModifier {
 		int columnIndex = solrGUI.getColumnNames().indexOf(property);
 
 		Object result = null;
-		SolrGUIServer task = (SolrGUIServer) element;
+		SolrGUIDocument document = (SolrGUIDocument) element;
 
 		switch (columnIndex) {
-			case 0 : // COMPLETED_COLUMN 
-				result = new Boolean(task.isCompleted());
+			case 0 :
+				result = new Boolean(document.isModified());
 				break;
 			case 1 : // DESCRIPTION_COLUMN 
-				result = task.getDescription();
+				result = document.getDescription();
 				break;
 			case 2 : // OWNER_COLUMN 
-				String stringValue = task.getOwner();
+				String stringValue = document.getOwner();
 				String[] choices = solrGUI.getChoices(property);
 				int i = choices.length - 1;
 				while (!stringValue.equals(choices[i]) && i > 0)
@@ -44,7 +44,7 @@ public class SolrGUICellModifier implements ICellModifier {
 				result = new Integer(i);					
 				break;
 			case 3 : // PERCENT_COLUMN 
-				result = task.getPercentComplete() + "";
+				result = document.getPercentComplete() + "";
 				break;
 			default :
 				result = "";
@@ -61,31 +61,31 @@ public class SolrGUICellModifier implements ICellModifier {
 		int columnIndex	= solrGUI.getColumnNames().indexOf(property);
 			
 		TableItem item = (TableItem) element;
-		SolrGUIServer task = (SolrGUIServer) item.getData();
+		SolrGUIDocument document = (SolrGUIDocument) item.getData();
 		String valueString;
 
 		switch (columnIndex) {
-			case 0 : // COMPLETED_COLUMN 
-			    task.setCompleted(((Boolean) value).booleanValue());
+			case 0 : 
+			    document.setModified(((Boolean) value).booleanValue());
 				break;
 			case 1 : // DESCRIPTION_COLUMN 
 				valueString = ((String) value).trim();
-				task.setDescription(valueString);
+				document.setDescription(valueString);
 				break;
 			case 2 : // OWNER_COLUMN 
 				valueString = solrGUI.getChoices(property)[((Integer) value).intValue()].trim();
-				if (!task.getOwner().equals(valueString)) {
-					task.setOwner(valueString);
+				if (!document.getOwner().equals(valueString)) {
+					document.setOwner(valueString);
 				}
 				break;
 			case 3 : // PERCENT_COLUMN
 				valueString = ((String) value).trim();
 				if (valueString.length() == 0)
 					valueString = "0";
-				task.setPercentComplete(Integer.parseInt(valueString));
+				document.setPercentComplete(Integer.parseInt(valueString));
 				break;
 			default :
 			}
-		solrGUI.getTaskList().taskChanged(task);
+		solrGUI.getTaskList().documentChanged(document);
 	}
 }

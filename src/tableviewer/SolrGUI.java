@@ -32,15 +32,11 @@ import org.eclipse.swt.widgets.Text;
 
 public class SolrGUI {
 
-	public SolrGUI(Composite parent) {
-		this.addChildControls(parent);
-	}
-
 	private Table table;
 	private TableViewer tableViewer;
 	private Button closeButton;
 	
-	private SolrGUIServerList taskList = new SolrGUIServerList(); 
+	private SolrGUIServer server = new SolrGUIServer(); 
 
 	private String[] columnNames = new String[] {"completed", "description", "owner", "percent"};
 
@@ -57,17 +53,20 @@ public class SolrGUI {
 		
 		// Create a composite to hold the children.
 		Composite composite = new Composite(shell, SWT.NONE);
-		final SolrGUI tableViewerExample = new SolrGUI(composite);
-		
-		tableViewerExample.getControl().addDisposeListener(new DisposeListener() {
+		final SolrGUI solrGUI = new SolrGUI(composite);
+		solrGUI.getControl().addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
-				tableViewerExample.dispose();			
+				solrGUI.dispose();			
 			}
 		});
 
 		// Make the shell to display its content.
 		shell.open();
-		tableViewerExample.run(shell);
+		solrGUI.run(shell);
+	}
+	
+	public SolrGUI(Composite parent) {
+		this.addChildControls(parent);
 	}
 
 	/**
@@ -75,12 +74,10 @@ public class SolrGUI {
 	 * @param shell Instance of Shell
 	 */
 	private void run(Shell shell) {
-		
 		// Add a listener for the close button
 		closeButton.addSelectionListener(new SelectionAdapter() {
-       	
-			// Close the view i.e. dispose of the composite's parent
 			public void widgetSelected(SelectionEvent e) {
+				// Close the view i.e. dispose of the composite's parent.
 				table.getParent().getParent().dispose();
 			}
 		});
@@ -96,8 +93,7 @@ public class SolrGUI {
 	 * Release resources
 	 */
 	public void dispose() {
-		
-		// Tell the label provider to release its ressources
+		// Tell the label provider to release its resources.
 		tableViewer.getLabelProvider().dispose();
 	}
 
@@ -121,11 +117,11 @@ public class SolrGUI {
 		
 		// Create and setup the TableViewer
 		createTableViewer();
-		tableViewer.setContentProvider(new ExampleContentProvider());
+		tableViewer.setContentProvider(new SolrGUIContentProvider());
 		tableViewer.setLabelProvider(new SolrGUILabelProvider());
 		// The input for the table viewer is the instance of ExampleTaskList
-		taskList = new SolrGUIServerList();
-		tableViewer.setInput(taskList);
+		server = new SolrGUIServer();
+		tableViewer.setInput(server);
 
 		// Add the buttons
 		createButtons(composite);
@@ -135,8 +131,7 @@ public class SolrGUI {
 	 * Create the Table
 	 */
 	private void createTable(Composite parent) {
-		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | 
-					SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
+		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
 
 		table = new Table(parent, style);
 		
@@ -150,7 +145,7 @@ public class SolrGUI {
 
 		// 1st column with image/checkboxes - NOTE: The SWT.CENTER has no effect!!
 		TableColumn column = new TableColumn(table, SWT.CENTER, 0);		
-		column.setText("!");
+		column.setText("Modified");
 		column.setWidth(20);
 		
 		// 2nd column with task Description
@@ -163,7 +158,6 @@ public class SolrGUI {
 				tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.DESCRIPTION));
 			}
 		});
-
 
 		// 3rd column with task Owner
 		column = new TableColumn(table, SWT.LEFT, 2);
@@ -203,7 +197,7 @@ public class SolrGUI {
 		// Create the cell editors
 		CellEditor[] editors = new CellEditor[columnNames.length];
 
-		// Column 1 : Completed (Checkbox)
+		// Column 1 : Modified (Checkbox)
 		editors[0] = new CheckboxCellEditor(table);
 
 		// Column 2 : Description (Free text)
@@ -212,7 +206,7 @@ public class SolrGUI {
 		editors[1] = textEditor;
 
 		// Column 3 : Owner (Combo Box) 
-		editors[2] = new ComboBoxCellEditor(table, taskList.getOwners(), SWT.READ_ONLY);
+		editors[2] = new ComboBoxCellEditor(table, server.getOwners(), SWT.READ_ONLY);
 
 		// Column 4 : Percent complete (Text with digits only)
 		textEditor = new TextCellEditor(table);
@@ -240,7 +234,6 @@ public class SolrGUI {
 	 */
 	public void close() {
 		Shell shell = table.getShell();
-
 		if (shell != null && !shell.isDisposed())
 			shell.dispose();
 	}
@@ -252,41 +245,32 @@ public class SolrGUI {
 	 * interface since it must register changeListeners with the 
 	 * ExampleTaskList 
 	 */
-	class ExampleContentProvider implements IStructuredContentProvider, ISolrGUIServerListViewer {
+	class SolrGUIContentProvider implements IStructuredContentProvider, ISolrGUIServerViewer {
 		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
 			if (newInput != null)
-				((SolrGUIServerList) newInput).addChangeListener(this);
+				((SolrGUIServer) newInput).addChangeListener(this);
 			if (oldInput != null)
-				((SolrGUIServerList) oldInput).removeChangeListener(this);
+				((SolrGUIServer) oldInput).removeChangeListener(this);
 		}
 
 		public void dispose() {
-			taskList.removeChangeListener(this);
+			server.removeChangeListener(this);
 		}
 
 		// Return the tasks as an array of Objects
 		public Object[] getElements(Object parent) {
-			return taskList.getTasks().toArray();
+			return server.getDocuments().toArray();
 		}
 
-		/* (non-Javadoc)
-		 * @see ITaskListViewer#addTask(ExampleTask)
-		 */
-		public void addTask(SolrGUIServer task) {
+		public void addDocument(SolrGUIDocument task) {
 			tableViewer.add(task);
 		}
 
-		/* (non-Javadoc)
-		 * @see ITaskListViewer#removeTask(ExampleTask)
-		 */
-		public void removeTask(SolrGUIServer task) {
+		public void removeDocument(SolrGUIDocument task) {
 			tableViewer.remove(task);			
 		}
 
-		/* (non-Javadoc)
-		 * @see ITaskListViewer#updateTask(ExampleTask)
-		 */
-		public void updateTask(SolrGUIServer task) {
+		public void updateDocument(SolrGUIDocument task) {
 			tableViewer.update(task, null);	
 		}
 	}
@@ -296,7 +280,7 @@ public class SolrGUI {
 	 */
 	public String[] getChoices(String property) {
 		if ("owner".equals(property))
-			return taskList.getOwners();  // The ExampleTaskList knows about the choice of owners
+			return server.getOwners();  // The ExampleTaskList knows about the choice of owners
 		else
 			return new String[]{};
 	}
@@ -315,7 +299,7 @@ public class SolrGUI {
 		add.setLayoutData(gridData);
 		add.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				taskList.addTask();
+				server.addDocument();
 			}
 		});
 
@@ -327,9 +311,9 @@ public class SolrGUI {
 		delete.setLayoutData(gridData); 
 		delete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUIServer task = (SolrGUIServer) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
+				SolrGUIDocument task = (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
 				if (task != null) {
-					taskList.removeTask(task);
+					server.removeDocument(task);
 				} 				
 			}
 		});
@@ -373,8 +357,8 @@ public class SolrGUI {
 	/**
 	 * Return the ExampleTaskList
 	 */
-	public SolrGUIServerList getTaskList() {
-		return taskList;	
+	public SolrGUIServer getTaskList() {
+		return server;	
 	}
 
 	/**

@@ -20,7 +20,7 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 	public static final String UNCHECKED_IMAGE  = "unchecked";
 
 	// For the checkbox images
-	private static ImageRegistry imageRegistry = new ImageRegistry();
+	private static ImageRegistry imageRegistry = new ImageRegistry(); // TODO
 
 	/**
 	 * Note: An image registry owns all of the image objects registered with it,
@@ -39,25 +39,26 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 				)
 			);	
 	}
+	
 
 	/**
 	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
 	 */
 	public String getColumnText(Object element, int columnIndex) {
 		String result = "";
-		SolrGUIServer task = (SolrGUIServer) element;
+		SolrGUIDocument document = (SolrGUIDocument) element;
 		switch (columnIndex) {
 			case 0:
 				result = "blah";
 				break;
 			case 1 :
-				result = task.getDescription();
+				result = document.getDescription();
 				break;
 			case 2 :
-				result = task.getOwner();
+				result = document.getOwner();
 				break;
 			case 3 :
-				result = task.getPercentComplete() + "";
+				result = document.getPercentComplete() + "";
 				break;
 			default :
 				break; 	
