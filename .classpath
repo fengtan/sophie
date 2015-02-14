@@ -20,14 +20,6 @@
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.databinding.property_1.4.200.v20140214-0004.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.databinding_1.4.2.v20140729-1044.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.expressions_3.4.600.v20140128-0851.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.externaltools_1.0.300.v20140219-0051.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.filebuffers_3.5.400.v20140127-1516.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.filesystem.java7_1.0.0.v20140429-1531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.filesystem.linux.x86_64_1.2.200.v20140124-1940.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.filesystem_1.4.100.v20140514-1614.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.jobs_3.6.0.v20140424-0053.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.net.linux.x86_64_1.1.100.v20140124-2013.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.net_1.2.200.v20140124-2013.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface.databinding_1.6.200.v20140528-1422.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface.text_3.9.1.v20140827-1810.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface_3.10.1.v20140813-1009.jar"/>
@@ -37,7 +29,6 @@
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui.cheatsheets_3.4.200.v20131227-1524.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui.console_3.5.300.v20140424-1437.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui.editors_3.8.200.v20140401-1310.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui.externaltools_3.2.300.v20140327-1949.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui.forms_3.6.100.v20140422-1825.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui.ide.application_1.0.500.v20140514-2033.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui.ide_3.10.1.v20140828-0944.jar"/>
@@ -51,6 +42,5 @@
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui.workbench.texteditor_3.9.0.v20140411-1521.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui.workbench_3.106.1.v20140827-1737.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui_3.106.0.v20140812-1751.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.slf4j.api_1.7.2.v20121108-1250.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
