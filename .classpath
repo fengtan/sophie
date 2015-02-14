@@ -13,30 +13,6 @@
 	<classpathentry kind="lib" path="/home/workuser/noggit/noggit-noggit-0.7/target/noggit-0.7.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/apachecommonslang/commons-lang3-3.3.2/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/ini4j-0.5.2.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/ch.qos.logback.classic_1.0.7.v20121108-1250.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/ch.qos.logback.core_1.0.7.v20121108-1250.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/ch.qos.logback.slf4j_1.0.7.v20121108-1250.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/com.android.ide.eclipse.adt_23.0.4.1468518.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/com.android.ide.eclipse.base_23.0.4.1468518.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/com.android.ide.eclipse.ddms_23.0.4.1468518.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/com.android.ide.eclipse.gldebugger_23.0.4.1468518.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/com.android.ide.eclipse.hierarchyviewer_23.0.4.1468518.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/com.android.ide.eclipse.ndk_23.0.4.1468518.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/com.android.ide.eclipse.traceview_23.0.4.1468518.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/com.google.gson_2.2.4.v201311231704.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/com.google.guava_15.0.0.v201403281430.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/com.google.inject.multibindings_3.0.0.v201402270930.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/com.google.inject_3.0.0.v201312141243.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/com.ibm.icu_52.1.0.v201404241930.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/com.jcraft.jsch_0.1.50.v201403120620.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/com.sun.el_2.2.0.v201303151357.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/javaewah_0.7.9.v201401101600.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/javax.annotation_1.2.0.v201401042248.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/javax.el_2.2.0.v201303151357.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/javax.inject_1.0.0.v20091030.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/javax.servlet.jsp_2.2.0.v201112011158.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/javax.servlet_3.0.0.v201112011016.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/javax.xml_1.3.4.v201005080400.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.batik.css_1.7.0.v201011041433.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.batik.util.gui_1.7.0.v200903091627.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.batik.util_1.7.0.v201011041433.jar"/>
