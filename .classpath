@@ -221,26 +221,6 @@
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui.workbench.texteditor_3.9.0.v20140411-1521.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui.workbench_3.106.1.v20140827-1737.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui_3.106.0.v20140812-1751.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.update.configurator_3.3.300.v20140518-1928.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.core.databinding_1.7.0.r44x201405021448.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.core.java_1.7.0.r44x201405021448.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.core.ui_1.7.0.r44x201405021455.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.core_1.7.0.r44x201405021445.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.layout.group_1.7.0.r44x201405021517.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.os.linux_1.7.0.r44x201405021445.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.os_1.7.0.r44x201405021445.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.runtime_1.7.0.r44x201405021445.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.swing.databinding_1.7.0.r44x201405021531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.swing.FormLayout_1.7.0.r44x201405021531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.swing.java6_1.7.0.r44x201405021531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.swing.jsr296_1.7.0.r44x201405021531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.swing.MigLayout.lib_1.7.0.r44x201405021531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.swing.MigLayout_1.7.0.r44x201405021531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.swing_1.7.0.r44x201405021531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.jsoup_1.7.2.v201304221138.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.sat4j.core_2.3.5.v201308161310.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.sat4j.pb_2.3.5.v201404071733.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.slf4j.api_1.7.2.v20121108-1250.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
