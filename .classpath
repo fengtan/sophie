@@ -59,54 +59,6 @@
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.debug.core_3.9.1.v20140805-1629.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.debug.ui_3.10.1.v20140822-1408.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.draw2d_3.9.101.201408150207.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.core.commands_0.10.2.v20140424-2344.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.core.contexts_1.3.100.v20140407-1019.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.core.di.extensions_0.12.0.v20140417-2033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.core.di_1.4.0.v20140414-1837.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.core.services_1.2.1.v20140808-1251.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.ui.bindings_0.10.200.v20140424-2042.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.ui.css.core_0.10.100.v20140424-2042.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.ui.css.swt.theme_0.9.300.v20140424-2042.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.ui.css.swt_0.11.101.v20140818-1343.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.ui.di_1.0.0.v20140328-2112.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.ui.model.workbench_1.1.0.v20140512-1820.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.ui.services_1.1.0.v20140328-1925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.ui.widgets_1.0.0.v20140514-1823.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.ui.workbench.addons.swt_1.1.1.v20140903-0821.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.ui.workbench.renderers.swt_0.12.1.v20140903-1023.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.ui.workbench.swt_0.12.100.v20140530-1436.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.ui.workbench3_0.12.0.v20140227-2118.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.e4.ui.workbench_1.2.1.v20140901-1244.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ecf.filetransfer_5.0.0.v20140827-1444.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ecf.identity_3.4.0.v20140827-1444.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ecf.provider.filetransfer.httpclient4.ssl_1.0.0.v20140827-1444.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ecf.provider.filetransfer.httpclient4_1.0.800.v20140827-1444.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ecf.provider.filetransfer.ssl_1.0.0.v20140827-1444.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ecf.provider.filetransfer_3.2.200.v20140827-1444.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ecf.ssl_1.1.0.v20140827-1444.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ecf_3.4.0.v20140827-1444.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.egit.core_3.4.1.201406201815-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.egit.core_3.6.2.201501210735-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.egit.doc_3.4.1.201406201815-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.egit.doc_3.6.2.201501210735-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.egit.mylyn.ui_3.4.1.201406201815-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.egit.mylyn.ui_3.6.2.201501210735-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.egit.ui_3.4.1.201406201815-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.egit.ui_3.6.2.201501210735-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.egit_3.4.1.201406201815-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.egit_3.6.2.201501210735-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.emf.common.ui_2.9.0.v20140901-1055.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.emf.common_2.10.1.v20140901-1043.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.emf.databinding_1.3.0.v20140901-1055.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.emf.ecore.change_2.10.0.v20140901-1043.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.emf.ecore.edit_2.9.0.v20140901-1055.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.emf.ecore.xmi_2.10.1.v20140901-1043.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.emf.ecore_2.10.1.v20140901-1043.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.emf.edit.ui_2.10.1.v20140901-1055.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.emf.edit_2.10.1.v20140901-1055.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.epp.mpc.core_1.3.1.v20140820-1706.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.epp.mpc.help.ui_1.3.1.v20140820-1706.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.epp.mpc.ui_1.3.1.v20140908-1651.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.app_1.3.200.v20130910-1609.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.bidi_0.10.0.v20130327-1442.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar"/>
