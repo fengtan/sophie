@@ -1,5 +1,6 @@
 package com.github.fengtan.solrgui.ui;
 
+import java.awt.Button;
 import java.util.Map;
 
 import org.apache.solr.common.SolrDocument;
@@ -63,16 +64,11 @@ public class ServerTab {
 	    table.setHeaderVisible(true);
 	    
 	    for (Column column:columns.getColumnsDisplayed()) {
-			new TableColumn(table, SWT.NONE).setText(column.getTitle());
+			addTableColumn(column);
 		}
 	    
 		for(SolrDocument doc:docs) {
-	    	TableItem row = new TableItem(table, SWT.NONE);
-	    	for (Map.Entry<String, Object> field:doc.entrySet()) {
-	    		if (columns.isColumnDisplayed(field.getKey())) {
-	    			row.setText(columns.indexOf(field.getKey()), field.getValue().toString());
-	    		}	
-	    	}
+			addTableRow(doc);
 		}
 
 	    for (int i = 0; i < table.getColumnCount(); i++) {
@@ -132,6 +128,19 @@ public class ServerTab {
 	    
 	}
 	
+	private void addTableColumn(Column column) {
+		new TableColumn(table, SWT.NONE).setText(column.getTitle());
+	}
+	
+	private void addTableRow(SolrDocument doc) {
+    	TableItem row = new TableItem(table, SWT.NONE);
+    	for (Map.Entry<String, Object> field:doc.entrySet()) {
+    		if (columns.isColumnDisplayed(field.getKey())) {
+    			row.setText(columns.indexOf(field.getKey()), field.getValue().toString());
+    		}	
+    	}
+	}
+	
 	public void updateMenu(Menu menu, final Shell shell) { // TODO drop shell argument ?
         // File menu.
         MenuItem fileMenuItem = new MenuItem(menu, SWT.CASCADE);
@@ -167,11 +176,11 @@ public class ServerTab {
         Menu columnsMenu = new Menu(shell, SWT.DROP_DOWN);
         columnsMenuItem.setMenu(columnsMenu);
 
-        for (Column column:columns) {
+        for (Column column:columns) { // TODO edit & delete should not show up in menu
             MenuItem columnItem = new MenuItem(columnsMenu, SWT.CHECK);
             columnItem.setText(column.getTitle());
             columnItem.setSelection(true);
-            shell.setMenuBar(menu);            
+            shell.setMenuBar(menu);
             columnItem.addSelectionListener(new ServerColumnAdapter(table, column.getTitle(), columns));
         }
         
