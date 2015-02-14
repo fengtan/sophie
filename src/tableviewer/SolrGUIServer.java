@@ -35,8 +35,7 @@ public class SolrGUIServer {
 	
 	/*
 	 * Initialize the table data.
-	 * Create COUNT tasks and add them them to the 
-	 * collection of tasks
+	 * Create COUNT documents and add them them to the collection of documents.
 	 */
 	private void initData() {
 		SolrGUIDocument document;
@@ -55,14 +54,14 @@ public class SolrGUIServer {
 	}
 	
 	/**
-	 * Return the collection of tasks
+	 * Return the collection of documents
 	 */
 	public Vector<SolrGUIDocument> getDocuments() {
 		return documents;
 	}
 	
 	/**
-	 * Add a new task to the collection of tasks
+	 * Add a new document to the collection of documents
 	 */
 	public void addDocument() {
 		SolrGUIDocument document = new SolrGUIDocument("New document");

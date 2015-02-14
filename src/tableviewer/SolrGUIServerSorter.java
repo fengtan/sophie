@@ -47,7 +47,7 @@ public class SolrGUIServerSorter extends ViewerSorter {
 	}
 
 	/**
-	 * Returns a number reflecting the collation order of the given tasks
+	 * Returns a number reflecting the collation order of the given documents
 	 * based on the percent completed.
 	 *
 	 * @param document1
@@ -64,11 +64,11 @@ public class SolrGUIServerSorter extends ViewerSorter {
 	}
 
 	/**
-	 * Returns a number reflecting the collation order of the given tasks
+	 * Returns a number reflecting the collation order of the given documents
 	 * based on the description.
 	 *
-	 * @param document1 the first task element to be ordered
-	 * @param resource2 the second task element to be ordered
+	 * @param document1 the first document element to be ordered
+	 * @param resource2 the second document element to be ordered
 	 * @return a negative number if the first element is less  than the 
 	 *  second element; the value <code>0</code> if the first element is
 	 *  equal to the second element; and a positive number if the first
@@ -79,7 +79,7 @@ public class SolrGUIServerSorter extends ViewerSorter {
 	}
 
 	/**
-	 * Returns a number reflecting the collation order of the given tasks
+	 * Returns a number reflecting the collation order of the given documents
 	 * based on their owner.
 	 *
 	 * @param resource1 the first resource element to be ordered

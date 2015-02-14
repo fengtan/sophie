@@ -86,6 +86,6 @@ public class SolrGUICellModifier implements ICellModifier {
 				break;
 			default :
 			}
-		solrGUI.getTaskList().documentChanged(document);
+		solrGUI.getServer().documentChanged(document);
 	}
 }

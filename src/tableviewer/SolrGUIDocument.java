@@ -27,7 +27,7 @@ public class SolrGUIDocument {
 	}
 
 	/**
-	 * @return String task owner
+	 * @return String document owner
 	 */
 	public String getOwner() {
 		return owner;

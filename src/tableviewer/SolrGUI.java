@@ -119,7 +119,6 @@ public class SolrGUI {
 		createTableViewer();
 		tableViewer.setContentProvider(new SolrGUIContentProvider());
 		tableViewer.setLabelProvider(new SolrGUILabelProvider());
-		// The input for the table viewer is the instance of ExampleTaskList
 		server = new SolrGUIServer();
 		tableViewer.setInput(server);
 
@@ -148,22 +147,22 @@ public class SolrGUI {
 		column.setText("Modified");
 		column.setWidth(20);
 		
-		// 2nd column with task Description
+		// 2nd column with document Description
 		column = new TableColumn(table, SWT.LEFT, 1);
 		column.setText("Description");
 		column.setWidth(400);
-		// Add listener to column so tasks are sorted by description when clicked 
+		// Add listener to column so documents are sorted by description when clicked 
 		column.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.DESCRIPTION));
 			}
 		});
 
-		// 3rd column with task Owner
+		// 3rd column with document Owner
 		column = new TableColumn(table, SWT.LEFT, 2);
 		column.setText("Owner");
 		column.setWidth(100);
-		// Add listener to column so tasks are sorted by owner when clicked
+		// Add listener to column so documents are sorted by owner when clicked
 		column.addSelectionListener(new SelectionAdapter() {
        	
 			public void widgetSelected(SelectionEvent e) {
@@ -171,13 +170,12 @@ public class SolrGUI {
 			}
 		});
 
-		// 4th column with task PercentComplete 
+		// 4th column with document PercentComplete 
 		column = new TableColumn(table, SWT.CENTER, 3);
 		column.setText("% Complete");
 		column.setWidth(80);
-		//  Add listener to column so tasks are sorted by percent when clicked
+		//  Add listener to column so documents are sorted by percent when clicked
 		column.addSelectionListener(new SelectionAdapter() {
-       	
 			public void widgetSelected(SelectionEvent e) {
 				tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.PERCENT_COMPLETE));
 			}
@@ -240,10 +238,10 @@ public class SolrGUI {
 
 
 	/**
-	 * InnerClass that acts as a proxy for the ExampleTaskList 
-	 * providing content for the Table. It implements the ITaskListViewer 
+	 * InnerClass that acts as a proxy for the SolrGUIServer
+	 * providing content for the Table. It implements the ISolrGUIServerViewer 
 	 * interface since it must register changeListeners with the 
-	 * ExampleTaskList 
+	 * SolrGUIServer
 	 */
 	class SolrGUIContentProvider implements IStructuredContentProvider, ISolrGUIServerViewer {
 		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
@@ -257,21 +255,21 @@ public class SolrGUI {
 			server.removeChangeListener(this);
 		}
 
-		// Return the tasks as an array of Objects
+		// Return the documents as an array of Objects
 		public Object[] getElements(Object parent) {
 			return server.getDocuments().toArray();
 		}
 
-		public void addDocument(SolrGUIDocument task) {
-			tableViewer.add(task);
+		public void addDocument(SolrGUIDocument document) {
+			tableViewer.add(document);
 		}
 
-		public void removeDocument(SolrGUIDocument task) {
-			tableViewer.remove(task);			
+		public void removeDocument(SolrGUIDocument document) {
+			tableViewer.remove(document);			
 		}
 
-		public void updateDocument(SolrGUIDocument task) {
-			tableViewer.update(task, null);	
+		public void updateDocument(SolrGUIDocument document) {
+			tableViewer.update(document, null);	
 		}
 	}
 	
@@ -280,7 +278,7 @@ public class SolrGUI {
 	 */
 	public String[] getChoices(String property) {
 		if ("owner".equals(property))
-			return server.getOwners();  // The ExampleTaskList knows about the choice of owners
+			return server.getOwners();  // The SolrGUIServer knows about the choice of owners
 		else
 			return new String[]{};
 	}
@@ -311,9 +309,9 @@ public class SolrGUI {
 		delete.setLayoutData(gridData); 
 		delete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUIDocument task = (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
-				if (task != null) {
-					server.removeDocument(task);
+				SolrGUIDocument document = (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
+				if (document != null) {
+					server.removeDocument(document);
 				} 				
 			}
 		});
@@ -355,9 +353,9 @@ public class SolrGUI {
 	}
 
 	/**
-	 * Return the ExampleTaskList
+	 * Return the SolrGUIServer
 	 */
-	public SolrGUIServer getTaskList() {
+	public SolrGUIServer getServer() {
 		return server;	
 	}
 
