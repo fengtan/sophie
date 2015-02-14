@@ -171,73 +171,6 @@
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.profiles.ui_1.5.0.20140606-0033.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.refactoring_1.5.0.20140606-0033.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.scm_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.bugzilla.core_3.13.0.v20140830-0030.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.bugzilla.ide_3.13.0.v20140702-2225.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.bugzilla.ui_3.13.0.v20140809-1218.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.builds.core_1.5.0.v20140702-2228.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.builds.ui_1.5.0.v20140830-1416.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.commons.core_3.13.0.v20140704-2323.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.commons.identity.core_1.5.0.v20140702-2248.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.commons.net_3.13.0.v20140702-2155.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.commons.notifications.core_1.5.0.v20140702-2248.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.commons.notifications.feed_1.5.0.v20140702-2248.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.commons.notifications.ui_1.5.0.v20140702-2248.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.commons.repositories.core_1.5.0.v20140905-0008.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.commons.repositories.http.core_1.5.0.v20140702-2248.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.commons.repositories.ui_1.5.0.v20140826-1731.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.commons.screenshots_3.13.0.v20140702-2155.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.commons.ui_3.13.0.v20140704-2323.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.commons.workbench_3.13.0.v20140702-2155.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.commons.xmlrpc_3.13.0.v20140702-2155.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.context.core_3.13.0.v20140702-2225.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.context.tasks.ui_3.13.0.v20140819-2236.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.context.ui_3.13.0.v20140702-2225.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.cvs.core_1.5.0.v20140702-2223.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.debug.ui_3.13.0.v20140814-1721.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.discovery.core_3.13.0.v20140702-2155.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.discovery.ui_3.13.0.v20140820-1854.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.git.core_1.5.0.v20140702-2223.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.git.ui_1.5.0.v20140702-2223.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.help.ui_3.13.0.v20140704-0050.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.hudson.core_1.5.0.v20140702-2228.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.hudson.ui_1.5.0.v20140702-2228.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.ide.ant_3.13.0.v20140702-2225.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.ide.ui_3.13.0.v20140702-2225.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.java.tasks_3.13.0.v20140819-2236.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.java.ui_3.13.0.v20140702-2225.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.monitor.core_3.13.0.v20140702-2155.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.monitor.ui_3.13.0.v20140702-2155.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.resources.ui_3.13.0.v20140702-2225.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.tasks.bugs_3.13.0.v20140704-0050.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.tasks.core_3.13.0.v20140704-0050.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.tasks.index.core_3.13.0.v20140704-0050.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.tasks.index.ui_3.13.0.v20140704-0050.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.tasks.search_3.13.0.v20140704-0050.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.tasks.ui_3.13.0.v20140826-1734.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.team.cvs_3.13.0.v20140702-2225.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.team.ui_3.13.0.v20140702-2225.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.versions.core_1.5.0.v20140702-2223.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.versions.ui_1.5.0.v20140702-2223.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.confluence.core_2.2.0.v20140905-1454.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.confluence.ui_2.2.0.v20140702-2138.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.context.ui_2.2.0.v20140902-2320.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.core.ant_2.2.0.v20140902-2320.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.core.osgi_2.2.0.v20140902-2320.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.core_2.2.0.v20140905-1515.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.help.ui_2.2.0.v20140902-2320.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.html.core_2.2.0.v20140905-1515.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.markdown.core_2.2.0.v20140903-1442.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.markdown.ui_2.2.0.v20140902-2320.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.mediawiki.core_2.2.0.v20140902-2320.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.mediawiki.ui_2.2.0.v20140702-2138.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.tasks.ui_2.2.0.v20140902-2320.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.textile.core_2.2.0.v20140905-1454.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.textile.ui_2.2.0.v20140702-2138.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.tracwiki.core_2.2.0.v20140902-2320.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.tracwiki.ui_2.2.0.v20140702-2138.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.twiki.core_2.2.0.v20140902-2320.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.twiki.ui_2.2.0.v20140702-2138.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.mylyn.wikitext.ui_2.2.0.v20140902-2320.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.osgi.compatibility.state_1.0.1.v20140709-1414.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.osgi.services_3.4.0.v20140312-2051.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.osgi.util_3.3.0.v20131023-1243.jar"/>
@@ -304,51 +237,10 @@
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.swing.MigLayout.lib_1.7.0.r44x201405021531.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.swing.MigLayout_1.7.0.r44x201405021531.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wb.swing_1.7.0.r44x201405021531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.common.core_1.2.0.v200908251833.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.common.emf_1.2.200.v201301161645.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.common.emfworkbench.integration_1.2.101.v201107081800.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.common.environment_1.0.400.v200912181831.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.common.frameworks.ui_1.2.300.v201401292051.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.common.frameworks_1.2.200.v201304241450.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.common.infopop_1.0.300.v201309101952.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.common.modulecore.ui_1.0.201.v201208241542.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.common.modulecore_1.2.401.v201408132036.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.common.project.facet.core_1.4.300.v201111030423.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.common.snippets_1.2.200.v201208080420.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.common.ui_1.1.500.v200911182011.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.common.uriresolver_1.2.100.v201305141634.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.dtd.core_1.1.700.v201211012112.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.dtd.ui.infopop_1.0.400.v201309112106.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.dtd.ui_1.0.801.v201308100602.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.dtdeditor.doc.user_1.0.700.v201208081537.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.internet.cache_1.0.700.v201211211430.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.server.core_1.6.0.v201404282151.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.sse.core_1.1.900.v201401092025.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.sse.doc.user_1.1.100.v201208081537.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.sse.ui.infopop_1.0.300.v201309112106.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.sse.ui_1.3.300.v201406172023.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.standard.schemas_1.0.700.v201304171715.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.validation.infopop_1.0.300.v201309101952.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.validation.ui_1.2.500.v201310231452.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.validation_1.2.501.v201304022101.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.xml.core_1.1.901.v201408131505.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.xml.ui.infopop_1.0.400.v201309112106.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.xml.ui_1.1.500.v201403122203.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.xmleditor.doc.user_1.0.700.v201208081537.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.xsd.core_1.1.900.v201401141857.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.xsd.ui_1.2.500.v201208081537.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.wst.xsdeditor.doc.user_1.0.800.v201208081537.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.xsd.edit_2.7.0.v20140901-1055.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.xsd_2.10.0.v20140901-1055.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.jsoup_1.7.2.v201304221138.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.sat4j.core_2.3.5.v201308161310.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.sat4j.pb_2.3.5.v201404071733.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.slf4j.api_1.7.2.v20121108-1250.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.w3c.css.sac_1.3.1.v200903091627.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.w3c.dom.events_3.0.0.draft20060413_v201105210656.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.w3c.dom.smil_1.0.0.v200806040011.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.w3c.dom.svg_1.1.0.v201011041433.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/overlay.com.android.ide.eclipse.adt.overlay_23.0.4.1468518.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
