@@ -13,9 +13,6 @@
 	<classpathentry kind="lib" path="/home/workuser/noggit/noggit-noggit-0.7/target/noggit-0.7.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/apachecommonslang/commons-lang3-3.3.2/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/ini4j-0.5.2.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.batik.css_1.7.0.v201011041433.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.batik.util.gui_1.7.0.v200903091627.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.batik.util_1.7.0.v201011041433.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.codec_1.6.0.v201305230611.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.compress_1.6.0.v201310281400.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.httpclient_3.1.0.v201012070820.jar"/>
@@ -25,20 +22,9 @@
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.logging_1.1.1.v201101211721.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.math_2.1.0.v201105210652.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.pool_1.6.0.v201204271246.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.felix.gogo.command_0.10.0.v201209301215.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.felix.gogo.runtime_0.10.0.v201209301036.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.felix.gogo.shell_0.10.0.v201212101605.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.httpcomponents.httpclient_4.2.6.v201311072007.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.httpcomponents.httpcore_4.2.5.v201311072007.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.jasper.glassfish_2.2.2.v201205150955.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.lucene.analysis_3.5.0.v20120725-1805.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.lucene.core_3.5.0.v20120725-1805.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.solr.client.solrj_3.5.0.v20120530-0900.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.ws.commons.util_1.0.1.v20100518-1140.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.xerces_2.9.0.v201101211617.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.xml.resolver_1.2.0.v201005080400.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.xml.serializer_2.7.1.v201005080400.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.xmlrpc_3.0.0.v20100427-1100.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.aether.api_1.0.0.v20140518.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.aether.connector.basic_1.0.0.v20140518.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.aether.impl_1.0.0.v20140518.jar"/>
@@ -50,36 +36,6 @@
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ant.core_3.3.0.v20140518-0042.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ant.launching_1.0.400.v20140518-0030.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ant.ui_3.5.500.v20140521-1557.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.codan.checkers.ui_1.0.0.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.codan.checkers_1.0.1.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.codan.core.cxx_1.0.0.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.codan.core_2.0.0.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.codan.ui.cxx_2.0.0.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.codan.ui_2.0.1.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.core.linux.x86_64_5.2.0.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.core.linux_5.2.0.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.core_5.3.2.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.debug.core_7.1.0.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.debug.mi.core_7.1.1.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.debug.mi.ui_6.1.1.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.debug.ui_7.1.2.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.doc.user_5.1.1.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.dsf.gdb.ui_2.2.1.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.dsf.gdb_4.0.2.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.dsf.ui_2.2.1.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.dsf_2.2.0.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.gdb.ui_7.0.0.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.gdb_7.0.0.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.launch_7.0.0.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.make.core_7.1.2.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.make.ui_7.1.2.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.managedbuilder.core_8.0.2.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.managedbuilder.gnu.ui_8.0.2.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.managedbuilder.ui_8.0.2.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt.ui_5.3.2.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cdt_8.0.2.201202111925.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.compare.core_3.5.400.v20130903-0736.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.compare_3.5.501.v20140817-1445.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.commands_3.6.100.v20140528-1422.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.contenttype_3.4.200.v20140207-1251.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.databinding.beans_1.2.200.v20140214-0004.jar"/>
