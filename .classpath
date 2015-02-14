@@ -14,13 +14,10 @@
 	<classpathentry kind="lib" path="/home/workuser/apachecommonslang/commons-lang3-3.3.2/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/ini4j-0.5.2.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.commands_3.6.100.v20140528-1422.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface.databinding_1.6.200.v20140528-1422.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface.text_3.9.1.v20140827-1810.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface_3.10.1.v20140813-1009.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.swt.gtk.linux.x86_64_3.103.1.v20140903-1947.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.swt_3.103.1.v20140903-1938.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui.net_1.2.200.v20120807-0927.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui.views_3.7.0.v20140408-0703.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ui_3.106.0.v20140812-1751.jar"/>
+	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
