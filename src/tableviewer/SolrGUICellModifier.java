@@ -2,22 +2,12 @@ package tableviewer;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.swt.widgets.TableItem;
 
-/**
- * This class implements an ICellModifier
- * An ICellModifier is called when the user modifes a cell in the 
- * tableViewer
- */
-
 public class SolrGUICellModifier implements ICellModifier {
-	private SolrGUI tableViewerExample;
+	private SolrGUI solrGUI;
 	
-	/**
-	 * Constructor 
-	 * @param SolrGUI an instance of a TableViewerExample 
-	 */
-	public SolrGUICellModifier(SolrGUI tableViewerExample) {
+	public SolrGUICellModifier(SolrGUI solrGUI) {
 		super();
-		this.tableViewerExample = tableViewerExample;
+		this.solrGUI = solrGUI;
 	}
 
 	/**
@@ -33,7 +23,7 @@ public class SolrGUICellModifier implements ICellModifier {
 	public Object getValue(Object element, String property) {
 
 		// Find the index of the column
-		int columnIndex = tableViewerExample.getColumnNames().indexOf(property);
+		int columnIndex = solrGUI.getColumnNames().indexOf(property);
 
 		Object result = null;
 		SolrGUIServer task = (SolrGUIServer) element;
@@ -47,7 +37,7 @@ public class SolrGUICellModifier implements ICellModifier {
 				break;
 			case 2 : // OWNER_COLUMN 
 				String stringValue = task.getOwner();
-				String[] choices = tableViewerExample.getChoices(property);
+				String[] choices = solrGUI.getChoices(property);
 				int i = choices.length - 1;
 				while (!stringValue.equals(choices[i]) && i > 0)
 					--i;
@@ -68,7 +58,7 @@ public class SolrGUICellModifier implements ICellModifier {
 	public void modify(Object element, String property, Object value) {	
 
 		// Find the index of the column 
-		int columnIndex	= tableViewerExample.getColumnNames().indexOf(property);
+		int columnIndex	= solrGUI.getColumnNames().indexOf(property);
 			
 		TableItem item = (TableItem) element;
 		SolrGUIServer task = (SolrGUIServer) item.getData();
@@ -83,7 +73,7 @@ public class SolrGUICellModifier implements ICellModifier {
 				task.setDescription(valueString);
 				break;
 			case 2 : // OWNER_COLUMN 
-				valueString = tableViewerExample.getChoices(property)[((Integer) value).intValue()].trim();
+				valueString = solrGUI.getChoices(property)[((Integer) value).intValue()].trim();
 				if (!task.getOwner().equals(valueString)) {
 					task.setOwner(valueString);
 				}
@@ -96,6 +86,6 @@ public class SolrGUICellModifier implements ICellModifier {
 				break;
 			default :
 			}
-		tableViewerExample.getTaskList().taskChanged(task);
+		solrGUI.getTaskList().taskChanged(task);
 	}
 }

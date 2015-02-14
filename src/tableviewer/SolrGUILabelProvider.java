@@ -39,14 +39,6 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 				)
 			);	
 	}
-	
-	/**
-	 * Returns the image with the given key, or <code>null</code> if not found.
-	 */
-	private Image getImage(boolean isSelected) {
-		String key = isSelected ? CHECKED_IMAGE : UNCHECKED_IMAGE;
-		return  imageRegistry.get(key);
-	}
 
 	/**
 	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
@@ -55,7 +47,8 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 		String result = "";
 		SolrGUIServer task = (SolrGUIServer) element;
 		switch (columnIndex) {
-			case 0:  // COMPLETED_COLUMN
+			case 0:
+				result = "blah";
 				break;
 			case 1 :
 				result = task.getDescription();
@@ -76,9 +69,7 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.Object, int)
 	 */
 	public Image getColumnImage(Object element, int columnIndex) {
-		return (columnIndex == 0) ?   // COMPLETED_COLUMN?
-			getImage(((SolrGUIServer) element).isCompleted()) :
-			null;
+		return null;
 	}
 
 }

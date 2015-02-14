@@ -159,7 +159,6 @@ public class SolrGUI {
 		column.setWidth(400);
 		// Add listener to column so tasks are sorted by description when clicked 
 		column.addSelectionListener(new SelectionAdapter() {
-       	
 			public void widgetSelected(SelectionEvent e) {
 				tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.DESCRIPTION));
 			}
@@ -342,7 +341,7 @@ public class SolrGUI {
 			}
 		});
 		
-		//	Create and configure the "Close" button
+		//	Create and configure the "Close" button.
 		closeButton = new Button(parent, SWT.PUSH | SWT.CENTER);
 		closeButton.setText("Close");
 		gridData = new GridData (GridData.HORIZONTAL_ALIGN_END);
