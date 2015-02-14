@@ -25,17 +25,6 @@
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.lucene.analysis_3.5.0.v20120725-1805.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.lucene.core_3.5.0.v20120725-1805.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.solr.client.solrj_3.5.0.v20120530-0900.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.aether.api_1.0.0.v20140518.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.aether.connector.basic_1.0.0.v20140518.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.aether.impl_1.0.0.v20140518.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.aether.maven_3.1.0.v20140706-2237.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.aether.spi_1.0.0.v20140518.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.aether.transport.file_1.0.0.v20140518.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.aether.transport.http_1.0.0.v20140518.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.aether.util_1.0.0.v20140518.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ant.core_3.3.0.v20140518-0042.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ant.launching_1.0.400.v20140518-0030.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ant.ui_3.5.500.v20140521-1557.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.commands_3.6.100.v20140528-1422.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.contenttype_3.4.200.v20140207-1251.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.databinding.beans_1.2.200.v20140214-0004.jar"/>
@@ -56,9 +45,6 @@
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.runtime_3.10.0.v20140318-2214.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.variables_3.2.800.v20130819-1716.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cvs_1.4.100.v20140925-0400.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.debug.core_3.9.1.v20140805-1629.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.debug.ui_3.10.1.v20140822-1408.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.draw2d_3.9.101.201408150207.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.app_1.3.200.v20130910-1609.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.bidi_0.10.0.v20130327-1442.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar"/>
