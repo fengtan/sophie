@@ -44,60 +44,6 @@
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.runtime.compatibility_3.2.200.v20140128-0851.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.runtime_3.10.0.v20140318-2214.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.variables_3.2.800.v20130819-1716.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.cvs_1.4.100.v20140925-0400.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.app_1.3.200.v20130910-1609.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.bidi_0.10.0.v20130327-1442.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.concurrent_1.1.0.v20130327-1442.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.console_1.1.0.v20140131-1639.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.ds_1.4.200.v20131126-2331.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.event_1.3.100.v20140115-1647.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.frameworkadmin.equinox_1.0.500.v20131211-1531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.frameworkadmin_2.0.100.v20131209-2144.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.http.jetty_3.0.200.v20131021-1843.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.http.registry_1.1.300.v20130402-1529.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.http.servlet_1.1.500.v20140318-1755.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.jsp.jasper.registry_1.0.300.v20130327-1442.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.jsp.jasper_1.0.400.v20130327-1442.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.launcher_1.3.0.v20140415-2008.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.artifact.repository_1.1.300.v20131211-1531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.console_1.0.300.v20131113-1212.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.core_2.3.0.v20131211-1531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.director.app_1.0.300.v20140228-1829.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.director_2.3.100.v20140224-1921.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.directorywatcher_1.1.0.v20131211-1531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.discovery.compatibility_1.0.200.v20131211-1531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.discovery_1.0.300.v20131210-1027.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.engine_2.3.0.v20140506-1720.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.extensionlocation_1.2.100.v20131119-0908.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.garbagecollector_1.0.200.v20131115-1210.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.jarprocessor_1.0.300.v20131211-1531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.metadata.repository_1.2.100.v20131209-2144.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.metadata_2.2.0.v20131211-1531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.operations_2.4.0.v20131119-0908.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.publisher.eclipse_1.1.200.v20140414-0825.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.publisher_1.3.0.v20140911-0143.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.ql_2.0.100.v20131211-1531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.reconciler.dropins_1.1.200.v20131119-0908.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.repository.tools_2.1.0.v20131211-1531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.repository_2.3.0.v20131211-1531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.touchpoint.eclipse_2.1.200.v20140512-1650.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.touchpoint.natives_1.1.100.v20140523-0116.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.transport.ecf_1.1.0.v20140408-1354.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.ui.discovery_1.0.100.v20131210-1027.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.ui.importexport_1.1.0.v20131210-1027.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.ui.sdk.scheduler_1.2.0.v20140422-1847.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.ui.sdk_1.0.300.v20140407-1803.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.ui_2.3.0.v20140404-1657.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.updatechecker_1.1.200.v20131119-0908.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.p2.updatesite_1.0.400.v20131211-1531.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.preferences_3.5.200.v20140224-1527.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.registry_3.5.400.v20140428-1507.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.security.ui_1.1.200.v20130626-2037.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.security_1.2.0.v20130424-1801.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.simpleconfigurator.manipulator_2.0.0.v20131217-1203.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.simpleconfigurator_1.1.0.v20131217-1203.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.equinox.util_1.0.500.v20130404-1337.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.gef_3.9.100.201408150207.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.help.base_4.0.200.v20140925-0400.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.help.ui_4.0.100.v20140401-0608.jar"/>
