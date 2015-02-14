@@ -146,31 +146,6 @@
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface.databinding_1.6.200.v20140528-1422.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface.text_3.9.1.v20140827-1810.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jface_3.10.1.v20140813-1009.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jgit.archive_3.4.1.201406201815-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jgit.archive_3.6.2.201501210735-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jgit.java7_3.6.2.201501210735-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jgit_3.4.1.201406201815-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jgit_3.6.2.201501210735-r.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jsch.core_1.1.500.v20131112-1442.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.jsch.ui_1.1.500.v20131112-1442.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ltk.core.refactoring_3.6.101.v20140817-1500.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.ltk.ui.refactoring_3.7.100.v20140324-1358.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.core.ui_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.core_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.discovery_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.editor.xml_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.editor_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.jdt.ui_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.jdt_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.launching_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.lifecyclemapping.defaults_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.logback.appender_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.logback.configuration_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.model.edit_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.profiles.core_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.profiles.ui_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.refactoring_1.5.0.20140606-0033.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.m2e.scm_1.5.0.20140606-0033.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.osgi.compatibility.state_1.0.1.v20140709-1414.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.osgi.services_3.4.0.v20140312-2051.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.osgi.util_3.3.0.v20131023-1243.jar"/>
