@@ -13,18 +13,6 @@
 	<classpathentry kind="lib" path="/home/workuser/noggit/noggit-noggit-0.7/target/noggit-0.7.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/apachecommonslang/commons-lang3-3.3.2/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/ini4j-0.5.2.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.codec_1.6.0.v201305230611.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.compress_1.6.0.v201310281400.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.httpclient_3.1.0.v201012070820.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.io_2.0.1.v201105210651.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.lang3_3.1.0.v201403281430.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.lang_2.6.0.v201404270220.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.logging_1.1.1.v201101211721.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.math_2.1.0.v201105210652.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.commons.pool_1.6.0.v201204271246.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.lucene.analysis_3.5.0.v20120725-1805.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.lucene.core_3.5.0.v20120725-1805.jar"/>
-	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.apache.solr.client.solrj_3.5.0.v20120530-0900.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.commands_3.6.100.v20140528-1422.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.contenttype_3.4.200.v20140207-1251.jar"/>
 	<classpathentry kind="lib" path="/home/workuser/eclipse/plugins/org.eclipse.core.databinding.beans_1.2.200.v20140214-0004.jar"/>
