@@ -41,9 +41,15 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 				// TODO result = document.isModified() ? "X" : "";
 				return "";
 			default:
-				// TODO Objects.toString(myvalue, "") ? null safe
-				String field = getFields(document).get(columnIndex-1);
-				return document.getFieldValue(field).toString();
+				int fieldIndex = columnIndex-1;
+				List<String> fields = getFields(document);
+				if (fieldIndex < fields.size()) {
+					String field = fields.get(fieldIndex);
+					// TODO Objects.toString(myvalue, "") ? null safe
+					return document.getFieldValue(field).toString();
+				} else {
+					return "";	
+				}
 		}
 	}
 	
