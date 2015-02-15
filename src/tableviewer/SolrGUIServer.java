@@ -1,15 +1,7 @@
-/**
- * (c) Copyright Mirasol Op'nWorks Inc. 2002, 2003. 
- * http://www.opnworks.com
- * Created on Apr 2, 2003 by lgauthier@opnworks.com
- * 
- */
-
 package tableviewer;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -28,20 +20,16 @@ import org.apache.solr.common.SolrDocumentList;
  */
 public class SolrGUIServer {
 
+	private SolrServer server;
 	private List<SolrGUIDocument> documents = new ArrayList<SolrGUIDocument>();
 	private Set<ISolrGUIServerViewer> changeListeners = new HashSet<ISolrGUIServerViewer>();
-	private SolrServer server;
 
 	static final String[] OWNERS_ARRAY = { "?", "Nancy", "Larry", "Joe" };
 
-	/**
-	 * Initialize the table data.
-	 * Create COUNT documents and add them them to the collection of documents.
-	 */
 	public SolrGUIServer(URL url) {
 		server = new HttpSolrServer(url.toExternalForm());
 		for (SolrDocument document:getAllDocuments()) {
-			documents.add(new SolrGUIDocument(document.getFieldNames().toString()));
+			documents.add(new SolrGUIDocument(document.getFieldValue("item_id").toString()));
 		}
 	}
 	
@@ -82,9 +70,9 @@ public class SolrGUIServer {
 	public void addDocument() {
 		SolrGUIDocument document = new SolrGUIDocument("New document");
 		documents.add(documents.size(), document);
-		Iterator<ISolrGUIServerViewer> iterator = changeListeners.iterator();
-		while (iterator.hasNext())
-			((ISolrGUIServerViewer) iterator.next()).addDocument(document);
+		for (ISolrGUIServerViewer viewer:changeListeners) {
+			viewer.addDocument(document);
+		}
 	}
 
 	/**
@@ -92,18 +80,18 @@ public class SolrGUIServer {
 	 */
 	public void removeDocument(SolrGUIDocument document) {
 		documents.remove(document);
-		Iterator<ISolrGUIServerViewer> iterator = changeListeners.iterator();
-		while (iterator.hasNext())
-			((ISolrGUIServerViewer) iterator.next()).removeDocument(document);
+		for (ISolrGUIServerViewer viewer:changeListeners) {
+			viewer.removeDocument(document);
+		}
 	}
 
 	/**
 	 * @param document
 	 */
 	public void documentChanged(SolrGUIDocument document) {
-		Iterator<ISolrGUIServerViewer> iterator = changeListeners.iterator();
-		while (iterator.hasNext())
-			((ISolrGUIServerViewer) iterator.next()).updateDocument(document);
+		for (ISolrGUIServerViewer viewer:changeListeners) {
+			viewer.updateDocument(document);
+		}
 	}
 
 	/**
