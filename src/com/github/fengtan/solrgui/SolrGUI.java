@@ -33,7 +33,6 @@ public class SolrGUI {
 
 	private Table table;
 	private TableViewer tableViewer;
-	private Button closeButton;
 	
 	private SolrGUIServer server;
 
@@ -75,14 +74,6 @@ public class SolrGUI {
 	 * @param shell Instance of Shell
 	 */
 	private void run(Shell shell) {
-		// Add a listener for the close button
-		closeButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				// Close the view i.e. dispose of the composite's parent.
-				table.getParent().getParent().dispose();
-			}
-		});
-		
 		Display display = shell.getDisplay();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
@@ -143,7 +134,6 @@ public class SolrGUI {
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 
-		// 1st column with image/checkboxes - NOTE: The SWT.CENTER has no effect!!
 		TableColumn column = new TableColumn(table, SWT.CENTER, 0);		
 		column.setText("Modified");
 		column.setWidth(20);
@@ -159,31 +149,6 @@ public class SolrGUI {
 			});
 			column.pack();
 		}
-		
-/* TODO drop
-		// 3rd column with document Owner
-		column = new TableColumn(table, SWT.LEFT, 2);
-		column.setText("Owner");
-		column.setWidth(100);
-		// Add listener to column so documents are sorted by owner when clicked
-		column.addSelectionListener(new SelectionAdapter() {
-       	
-			public void widgetSelected(SelectionEvent e) {
-				tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.OWNER));
-			}
-		});
-
-		// 4th column with document PercentComplete 
-		column = new TableColumn(table, SWT.CENTER, 3);
-		column.setText("% Complete");
-		column.setWidth(80);
-		//  Add listener to column so documents are sorted by percent when clicked
-		column.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.PERCENT_COMPLETE));
-			}
-		});
-		*/
 	}
 
 	/**
@@ -295,21 +260,26 @@ public class SolrGUI {
 		//	Create and configure the "Commit" button.
 		Button commit = new Button(parent, SWT.PUSH | SWT.CENTER);
 		commit.setText("Commit");
-		gridData = new GridData (GridData.HORIZONTAL_ALIGN_BEGINNING);
+		gridData = new GridData (GridData.HORIZONTAL_ALIGN_END);
 		gridData.widthHint = 80; 
-		commit.setLayoutData(gridData); 
+		commit.setLayoutData(gridData);
 		commit.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				// TODO 				
 			}
-		});	
+		});
 		
-		//	Create and configure the "Close" button.
-		closeButton = new Button(parent, SWT.PUSH | SWT.CENTER);
-		closeButton.setText("Close");
+		//	Create and configure the "Revert" button.
+		Button revert = new Button(parent, SWT.PUSH | SWT.CENTER);
+		revert.setText("Revert");
 		gridData = new GridData (GridData.HORIZONTAL_ALIGN_END);
 		gridData.widthHint = 80; 
-		closeButton.setLayoutData(gridData); 		
+		revert.setLayoutData(gridData);
+		revert.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				// TODO 				
+			}
+		});	
 	}
 
 	/**
@@ -341,11 +311,5 @@ public class SolrGUI {
 	public Control getControl() {
 		return table.getParent();
 	}
-
-	/**
-	 * Return the 'close' Button
-	 */
-	public Button getCloseButton() {
-		return closeButton;
-	}
+	
 }
