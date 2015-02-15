@@ -7,16 +7,18 @@
 
 package tableviewer;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
 /**
@@ -26,7 +28,7 @@ import org.apache.solr.common.SolrDocumentList;
  */
 public class SolrGUIServer {
 
-	private Vector<SolrGUIDocument> documents = new Vector<SolrGUIDocument>();
+	private List<SolrGUIDocument> documents = new ArrayList<SolrGUIDocument>();
 	private Set<ISolrGUIServerViewer> changeListeners = new HashSet<ISolrGUIServerViewer>();
 	private SolrServer server;
 
@@ -38,12 +40,9 @@ public class SolrGUIServer {
 	 */
 	public SolrGUIServer(URL url) {
 		server = new HttpSolrServer(url.toExternalForm());
-		
-		
-			SolrGUIDocument document = new SolrGUIDocument("Document");
-			document.setOwner(OWNERS_ARRAY[0]);
-			documents.add(document);
-		
+		for (SolrDocument document:getAllDocuments()) {
+			documents.add(new SolrGUIDocument(document.getFieldNames().toString()));
+		}
 	}
 	
 	private SolrDocumentList getAllDocuments() {
@@ -73,7 +72,7 @@ public class SolrGUIServer {
 	/**
 	 * Return the collection of documents
 	 */
-	public Vector<SolrGUIDocument> getDocuments() {
+	public List<SolrGUIDocument> getDocuments() {
 		return documents;
 	}
 	
