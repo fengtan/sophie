@@ -61,6 +61,9 @@ public class SolrGUIServer {
 	 */
 	public void addDocument() {
 		SolrDocument document = new SolrDocument();
+		for(String field:getFields()) {
+			document.setField(field, "");
+		}
 		documents.add(documents.size(), document);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.addDocument(document);
@@ -100,7 +103,7 @@ public class SolrGUIServer {
 		changeListeners.add(viewer);
 	}
 	
-	// TODO is there a better way to get the list of fields ? e.g. SolrQuery
+	// TODO is there a better way to get the list of fields ? e.g. SolrQuery with only 1 document (not q *:*)
 	// TODO what if there is no document in the server ?
 	public String[] getFields() {
 		Collection<String> fields = getAllDocuments().get(0).getFieldNames();
