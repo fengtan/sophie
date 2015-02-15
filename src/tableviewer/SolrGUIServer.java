@@ -13,24 +13,15 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
-/**
- * Class that plays the role of the domain model in the TableViewerExample
- * In real life, this class would access a persistent store of some kind.
- * 
- */
 public class SolrGUIServer {
 
 	private SolrServer server;
-	private List<SolrGUIDocument> documents = new ArrayList<SolrGUIDocument>();
+	private List<SolrDocument> documents;
 	private Set<ISolrGUIServerViewer> changeListeners = new HashSet<ISolrGUIServerViewer>();
-
-	static final String[] OWNERS_ARRAY = { "?", "Nancy", "Larry", "Joe" };
 
 	public SolrGUIServer(URL url) {
 		server = new HttpSolrServer(url.toExternalForm());
-		for (SolrDocument document:getAllDocuments()) {
-			documents.add(new SolrGUIDocument(document.getFieldValue("item_id").toString()));
-		}
+		documents = getAllDocuments();
 	}
 	
 	private SolrDocumentList getAllDocuments() {
@@ -54,13 +45,13 @@ public class SolrGUIServer {
 	 * Return the array of owners   
 	 */
 	public String[] getOwners() {
-		return OWNERS_ARRAY;
+		return new String[] { "?", "Nancy", "Larry", "Joe" };
 	}
 	
 	/**
 	 * Return the collection of documents
 	 */
-	public List<SolrGUIDocument> getDocuments() {
+	public List<SolrDocument> getDocuments() {
 		return documents;
 	}
 	
@@ -68,7 +59,7 @@ public class SolrGUIServer {
 	 * Add a new document to the collection of documents
 	 */
 	public void addDocument() {
-		SolrGUIDocument document = new SolrGUIDocument("New document");
+		SolrDocument document = new SolrDocument();
 		documents.add(documents.size(), document);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.addDocument(document);
@@ -78,7 +69,7 @@ public class SolrGUIServer {
 	/**
 	 * @param document
 	 */
-	public void removeDocument(SolrGUIDocument document) {
+	public void removeDocument(SolrDocument document) {
 		documents.remove(document);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.removeDocument(document);
@@ -88,7 +79,7 @@ public class SolrGUIServer {
 	/**
 	 * @param document
 	 */
-	public void documentChanged(SolrGUIDocument document) {
+	public void documentChanged(SolrDocument document) {
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.updateDocument(document);
 		}

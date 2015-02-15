@@ -1,17 +1,12 @@
 package tableviewer;
 
+import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-
-/**
- * Label provider for the TableViewerExample
- * 
- * @see org.eclipse.jface.viewers.LabelProvider 
- */
 public class SolrGUILabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	// Names of images used to represent checkboxes
@@ -37,7 +32,8 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 	 */
 	public String getColumnText(Object element, int columnIndex) {
 		String result = "";
-		SolrGUIDocument document = (SolrGUIDocument) element;
+		SolrDocument document = (SolrDocument) element;
+		/* TODO drop
 		switch (columnIndex) {
 			case 0:
 				result = document.isModified() ? "X" : "";
@@ -54,6 +50,8 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 			default :
 				break; 	
 		}
+		*/
+		result = document.getFieldValue("item_id").toString();
 		return result;
 	}
 

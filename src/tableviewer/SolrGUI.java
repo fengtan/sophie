@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -166,10 +167,10 @@ public class SolrGUI {
 		// Add listener to column so documents are sorted by description when clicked 
 		column.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.DESCRIPTION));
+				// TODO tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.DESCRIPTION));
 			}
 		});
-
+/* TODO drop
 		// 3rd column with document Owner
 		column = new TableColumn(table, SWT.LEFT, 2);
 		column.setText("Owner");
@@ -192,6 +193,7 @@ public class SolrGUI {
 				tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.PERCENT_COMPLETE));
 			}
 		});
+		*/
 	}
 
 	/**
@@ -235,7 +237,7 @@ public class SolrGUI {
 		// Set the cell modifier for the viewer
 		tableViewer.setCellModifier(new SolrGUICellModifier(this));
 		// Set the default sorter for the viewer 
-		tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.DESCRIPTION));
+		// TODO tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.DESCRIPTION));
 	}
 
 	/*
@@ -271,15 +273,15 @@ public class SolrGUI {
 			return server.getDocuments().toArray();
 		}
 
-		public void addDocument(SolrGUIDocument document) {
+		public void addDocument(SolrDocument document) {
 			tableViewer.add(document);
 		}
 
-		public void removeDocument(SolrGUIDocument document) {
+		public void removeDocument(SolrDocument document) {
 			tableViewer.remove(document);			
 		}
 
-		public void updateDocument(SolrGUIDocument document) {
+		public void updateDocument(SolrDocument document) {
 			tableViewer.update(document, null);	
 		}
 	}
@@ -320,7 +322,7 @@ public class SolrGUI {
 		delete.setLayoutData(gridData); 
 		delete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUIDocument document = (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
+				SolrDocument document = (SolrDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
 				if (document != null) {
 					server.removeDocument(document);
 				} 				

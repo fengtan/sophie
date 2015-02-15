@@ -1,6 +1,5 @@
 package com.github.fengtan.solrgui.ui;
 
-import java.awt.Button;
 import java.util.Map;
 
 import org.apache.solr.common.SolrDocument;

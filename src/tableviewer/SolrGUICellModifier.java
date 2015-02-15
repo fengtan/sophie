@@ -1,4 +1,5 @@
 package tableviewer;
+import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -26,8 +27,8 @@ public class SolrGUICellModifier implements ICellModifier {
 		int columnIndex = solrGUI.getColumnNames().indexOf(property);
 
 		Object result = null;
-		SolrGUIDocument document = (SolrGUIDocument) element;
-
+		SolrDocument document = (SolrDocument) element;
+/* TODO drop
 		switch (columnIndex) {
 			case 0 :
 				result = new Boolean(document.isModified());
@@ -49,6 +50,8 @@ public class SolrGUICellModifier implements ICellModifier {
 			default :
 				result = "";
 		}
+*/
+		result = document.getFieldValue("item_id");
 		return result;	
 	}
 
@@ -61,9 +64,9 @@ public class SolrGUICellModifier implements ICellModifier {
 		int columnIndex	= solrGUI.getColumnNames().indexOf(property);
 			
 		TableItem item = (TableItem) element;
-		SolrGUIDocument document = (SolrGUIDocument) item.getData();
+		SolrDocument document = (SolrDocument) item.getData();
 		String valueString;
-
+/* TODO 
 		switch (columnIndex) {
 			case 0 : 
 			    document.setModified(((Boolean) value).booleanValue());
@@ -86,6 +89,8 @@ public class SolrGUICellModifier implements ICellModifier {
 				break;
 			default :
 			}
+			*/
+		document.setField("item_id", value.toString());
 		solrGUI.getServer().documentChanged(document);
 	}
 }
