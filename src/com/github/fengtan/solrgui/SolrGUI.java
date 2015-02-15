@@ -40,8 +40,6 @@ public class SolrGUI {
 	
 	private SolrGUIServer server;
 
-	private String[] columnNames = new String[] {"completed", "description", "owner", "percent"};
-
 	/**
 	 * Launch the window.
 	 */
@@ -153,16 +151,18 @@ public class SolrGUI {
 		column.setText("Modified");
 		column.setWidth(20);
 		
-		// 2nd column with document Description
-		column = new TableColumn(table, SWT.LEFT, 1);
-		column.setText("Description");
-		column.setWidth(400);
-		// Add listener to column so documents are sorted by description when clicked 
-		column.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				// TODO tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.DESCRIPTION));
-			}
-		});
+		for (String field:server.getFields()) {
+			column = new TableColumn(table, SWT.LEFT);
+			column.setText(field);
+			// Add listener to column so documents are sorted when clicked. 
+			column.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					// TODO tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.DESCRIPTION));
+				}
+			});
+			column.pack();
+		}
+		
 /* TODO drop
 		// 3rd column with document Owner
 		column = new TableColumn(table, SWT.LEFT, 2);
@@ -197,10 +197,10 @@ public class SolrGUI {
 		tableViewer = new TableViewer(table);
 		tableViewer.setUseHashlookup(true);
 		
-		tableViewer.setColumnProperties(columnNames);
+		tableViewer.setColumnProperties(server.getFields());
 
 		// Create the cell editors
-		CellEditor[] editors = new CellEditor[columnNames.length];
+		CellEditor[] editors = new CellEditor[server.getFields().length]; // TODO call server.getFields() once instead of twice
 
 		// Column 1 : Modified (Checkbox)
 		// TODO dropeditors[0] = new CheckboxCellEditor(table);
@@ -349,7 +349,7 @@ public class SolrGUI {
 	 * @return List  containing column names
 	 */
 	public List<String> getColumnNames() {
-		return Arrays.asList(columnNames);
+		return Arrays.asList(server.getFields());
 	}
 
 	/**

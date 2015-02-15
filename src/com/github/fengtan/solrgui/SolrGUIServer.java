@@ -1,6 +1,6 @@
 package com.github.fengtan.solrgui;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +24,7 @@ public class SolrGUIServer {
 		documents = getAllDocuments();
 	}
 	
+	// TODO cache ? use transactions ?
 	private SolrDocumentList getAllDocuments() {
 		SolrQuery query = new SolrQuery();
 		query.set("q", "*:*");
@@ -98,6 +99,13 @@ public class SolrGUIServer {
 	 */
 	public void addChangeListener(ISolrGUIServerViewer viewer) {
 		changeListeners.add(viewer);
+	}
+	
+	// TODO is there a better way to get the list of fields ? e.g. SolrQuery
+	// TODO what if there is no document in the server ?
+	public String[] getFields() {
+		Collection<String> fields = getAllDocuments().get(0).getFieldNames();
+		return fields.toArray(new String[fields.size()]);
 	}
 
 }
