@@ -142,7 +142,7 @@ public class SolrGUI {
 			column = new TableColumn(table, SWT.LEFT);
 			column.setText(field);
 			// Add listener to column so documents are sorted when clicked. 
-			column.addSelectionListener(new SelectionAdapter() {
+			column.addSelectionListener(new SelectionAdapter() { 
 				public void widgetSelected(SelectionEvent e) {
 					tableViewer.setSorter(new SolrGUIServerSorter(field)); // TODO does sorting scale ?
 				}

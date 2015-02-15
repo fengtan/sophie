@@ -6,10 +6,20 @@ import org.eclipse.jface.viewers.ViewerSorter;
 public class SolrGUIServerSorter extends ViewerSorter {
 
 	private String field;
+	private static boolean ascending;
+	private static String currentField = null; // Data are currently sorted by this field
 
 	public SolrGUIServerSorter(String field) {
 		super();
 		this.field = field;
+		// If click on new field, then sort ascending.
+		// Otherwise, toggle sort.
+		if (!field.equals(currentField)) {
+			ascending = true;
+		} else {
+			ascending = !ascending;
+		}
+		currentField = field;
 	}
 
 	public int compare(Viewer viewer, Object o1, Object o2) {
@@ -17,7 +27,8 @@ public class SolrGUIServerSorter extends ViewerSorter {
 		SolrDocument document2 = (SolrDocument) o2;
 		String value1 = document1.getFieldValue(field).toString();
 		String value2 = document2.getFieldValue(field).toString();
-		return value1.compareTo(value2); // TODO null safe
+		// TODO null safe
+		return ascending ? value1.compareTo(value2) : value2.compareTo(value1); 
 	}
 
 }
