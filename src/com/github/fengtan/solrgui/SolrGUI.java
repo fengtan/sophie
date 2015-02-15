@@ -1,4 +1,4 @@
-package tableviewer;
+package com.github.fengtan.solrgui;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -31,8 +31,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-
-import com.github.fengtan.solrgui.solr.Config;
 
 public class SolrGUI {
 

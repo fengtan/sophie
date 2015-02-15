@@ -1,6 +1,12 @@
-package com.github.fengtan.solrgui.ui;
+package incorporate;
 
 import java.util.Map;
+
+import obsolete.ActionColumn;
+import obsolete.Column;
+import obsolete.ColumnList;
+import obsolete.Server;
+import obsolete.ServerColumnAdapter;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -25,11 +31,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-
-import com.github.fengtan.solrgui.solr.Server;
-import com.github.fengtan.solrgui.ui.column.ActionColumn;
-import com.github.fengtan.solrgui.ui.column.Column;
-import com.github.fengtan.solrgui.ui.column.ColumnList;
 
 public class ServerTab {
 

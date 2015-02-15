@@ -1,8 +1,10 @@
-package com.github.fengtan.solrgui.ui;
+package incorporate;
 
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import obsolete.Server;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -13,8 +15,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.solr.Config;
-import com.github.fengtan.solrgui.solr.Server;
+import com.github.fengtan.solrgui.Config;
 
 public class NewServerDialog {
 

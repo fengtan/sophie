@@ -1,4 +1,5 @@
-package com.github.fengtan.solrgui.ui.column;
+package obsolete;
+
 
 // Column that cannot be hidden (e.g. edit/delete columns).
 public class ActionColumn extends Column {

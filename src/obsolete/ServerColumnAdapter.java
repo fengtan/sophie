@@ -1,12 +1,10 @@
-package com.github.fengtan.solrgui.ui;
+package obsolete;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-
-import com.github.fengtan.solrgui.ui.column.ColumnList;
 
 // TODO too much coupled with SolrGUIDisplay.
 public class ServerColumnAdapter extends SelectionAdapter {

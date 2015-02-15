@@ -1,12 +1,12 @@
-package com.github.fengtan.solrgui.ui;
+package obsolete;
+
+import incorporate.ServerTab;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
-
-import com.github.fengtan.solrgui.solr.Server;
 
 
 public class Dashboard {

@@ -1,4 +1,4 @@
-package tableviewer;
+package com.github.fengtan.solrgui;
 
 import java.util.Objects;
 

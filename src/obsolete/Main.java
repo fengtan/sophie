@@ -1,8 +1,6 @@
-package com.github.fengtan.solrgui;
+package obsolete;
 
-import com.github.fengtan.solrgui.solr.Config;
-import com.github.fengtan.solrgui.solr.Server;
-import com.github.fengtan.solrgui.ui.Dashboard;
+import com.github.fengtan.solrgui.Config;
 
 
 public class Main {

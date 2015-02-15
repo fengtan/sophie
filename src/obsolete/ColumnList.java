@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.ui.column;
+package obsolete;
 
 import java.util.ArrayList;
 import java.util.List;

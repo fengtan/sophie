@@ -1,4 +1,4 @@
-package tableviewer;
+package com.github.fengtan.solrgui;
 import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.swt.widgets.TableItem;

@@ -1,4 +1,4 @@
-package tableviewer;
+package com.github.fengtan.solrgui;
 import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;

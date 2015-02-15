@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.solr;
+package com.github.fengtan.solrgui;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +7,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import obsolete.Server;
 
 import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;

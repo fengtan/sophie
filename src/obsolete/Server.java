@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.solr;
+package obsolete;
 
 import java.net.URL;
 

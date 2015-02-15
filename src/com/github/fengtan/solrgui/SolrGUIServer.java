@@ -1,4 +1,4 @@
-package tableviewer;
+package com.github.fengtan.solrgui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -60,6 +60,7 @@ public class SolrGUIServer {
 	 */
 	public void addDocument() {
 		SolrDocument document = new SolrDocument();
+		document.setField("item_id", "plop");
 		documents.add(documents.size(), document);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.addDocument(document);
