@@ -27,16 +27,8 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 	 */ 
 	static {
 		String iconPath = "icons/"; 
-		imageRegistry.put(CHECKED_IMAGE, ImageDescriptor.createFromFile(
-				SolrGUI.class, 
-				iconPath + CHECKED_IMAGE + ".gif"
-				)
-			);
-		imageRegistry.put(UNCHECKED_IMAGE, ImageDescriptor.createFromFile(
-				SolrGUI.class, 
-				iconPath + UNCHECKED_IMAGE + ".gif"
-				)
-			);	
+		imageRegistry.put(CHECKED_IMAGE, ImageDescriptor.createFromFile(SolrGUI.class, iconPath + CHECKED_IMAGE + ".gif"));
+		imageRegistry.put(UNCHECKED_IMAGE, ImageDescriptor.createFromFile(SolrGUI.class, iconPath + UNCHECKED_IMAGE + ".gif"));	
 	}
 	
 
@@ -48,7 +40,7 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 		SolrGUIDocument document = (SolrGUIDocument) element;
 		switch (columnIndex) {
 			case 0:
-				result = "blah";
+				result = document.isModified() ? "X" : "";
 				break;
 			case 1 :
 				result = document.getDescription();

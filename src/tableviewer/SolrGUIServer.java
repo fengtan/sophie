@@ -24,27 +24,18 @@ public class SolrGUIServer {
 
 	// Combo box choices
 	static final String[] OWNERS_ARRAY = { "?", "Nancy", "Larry", "Joe" };
-	
+
 	/**
-	 * Constructor
-	 */
-	public SolrGUIServer() {
-		super();
-		this.initData();
-	}
-	
-	/*
 	 * Initialize the table data.
 	 * Create COUNT documents and add them them to the collection of documents.
 	 */
-	private void initData() {
-		SolrGUIDocument document;
+	public SolrGUIServer() {
 		for (int i = 0; i < COUNT; i++) {
-			document = new SolrGUIDocument("Document "  + i);
+			SolrGUIDocument document = new SolrGUIDocument("Document "  + i);
 			document.setOwner(OWNERS_ARRAY[i % 3]);
 			documents.add(document);
 		}
-	};
+	}
 
 	/**
 	 * Return the array of owners   
