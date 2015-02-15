@@ -1,5 +1,8 @@
 package tableviewer;
 
+import java.util.Objects;
+
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -51,7 +54,7 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 				break; 	
 		}
 		*/
-		result = document.getFieldValue("item_id").toString();
+		result = Objects.toString(document.getFieldValue("item_id"), "");
 		return result;
 	}
 

@@ -33,7 +33,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.solr.Config;
-import com.github.fengtan.solrgui.solr.Server;
 
 public class SolrGUI {
 
@@ -55,13 +54,9 @@ public class SolrGUI {
 		// Set layout for shell.
 		GridLayout layout = new GridLayout();
 		shell.setLayout(layout);
-		
 
 		// TODO loop over servers.
-		URL url = null;
-		for (Server server: Config.getServers()) {
-			url = server.getURL();
-		}
+		URL url = Config.getServers().get(0).getURL();
 		
 		// Create a composite to hold the children.
 		Composite composite = new Composite(shell, SWT.NONE);
@@ -78,8 +73,8 @@ public class SolrGUI {
 	}
 	
 	public SolrGUI(Composite parent, URL url) {
-		this.server = new SolrGUIServer(url);
-		this.addChildControls(parent);
+		server = new SolrGUIServer(url);
+		addChildControls(parent);
 	}
 
 	/**
@@ -210,13 +205,13 @@ public class SolrGUI {
 		CellEditor[] editors = new CellEditor[columnNames.length];
 
 		// Column 1 : Modified (Checkbox)
-		editors[0] = new CheckboxCellEditor(table);
+		// TODO dropeditors[0] = new CheckboxCellEditor(table);
 
 		// Column 2 : Description (Free text)
 		TextCellEditor textEditor = new TextCellEditor(table);
 		((Text) textEditor.getControl()).setTextLimit(60);
 		editors[1] = textEditor;
-
+/* TODO drop
 		// Column 3 : Owner (Combo Box) 
 		editors[2] = new ComboBoxCellEditor(table, server.getOwners(), SWT.READ_ONLY);
 
@@ -231,6 +226,7 @@ public class SolrGUI {
 				}
 			});
 		editors[3] = textEditor;
+		*/
 
 		// Assign the cell editors to the viewer 
 		tableViewer.setCellEditors(editors);
