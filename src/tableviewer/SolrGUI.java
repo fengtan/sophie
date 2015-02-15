@@ -1,5 +1,6 @@
 package tableviewer;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,13 +31,16 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
+import com.github.fengtan.solrgui.solr.Config;
+import com.github.fengtan.solrgui.solr.Server;
+
 public class SolrGUI {
 
 	private Table table;
 	private TableViewer tableViewer;
 	private Button closeButton;
 	
-	private SolrGUIServer server = new SolrGUIServer(); 
+	private SolrGUIServer server;
 
 	private String[] columnNames = new String[] {"completed", "description", "owner", "percent"};
 
@@ -51,9 +55,16 @@ public class SolrGUI {
 		GridLayout layout = new GridLayout();
 		shell.setLayout(layout);
 		
+
+		// TODO loop over servers.
+		URL url = null;
+		for (Server server: Config.getServers()) {
+			url = server.getURL();
+		}
+		
 		// Create a composite to hold the children.
 		Composite composite = new Composite(shell, SWT.NONE);
-		final SolrGUI solrGUI = new SolrGUI(composite);
+		final SolrGUI solrGUI = new SolrGUI(composite, url);
 		solrGUI.getControl().addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
 				solrGUI.dispose();			
@@ -65,7 +76,8 @@ public class SolrGUI {
 		solrGUI.run(shell);
 	}
 	
-	public SolrGUI(Composite parent) {
+	public SolrGUI(Composite parent, URL url) {
+		this.server = new SolrGUIServer(url);
 		this.addChildControls(parent);
 	}
 
@@ -119,7 +131,7 @@ public class SolrGUI {
 		createTableViewer();
 		tableViewer.setContentProvider(new SolrGUIContentProvider());
 		tableViewer.setLabelProvider(new SolrGUILabelProvider());
-		server = new SolrGUIServer();
+		// server = new SolrGUIServer(url); TODO drop
 		tableViewer.setInput(server);
 
 		// Add the buttons
@@ -209,7 +221,6 @@ public class SolrGUI {
 		// Column 4 : Percent complete (Text with digits only)
 		textEditor = new TextCellEditor(table);
 		((Text) textEditor.getControl()).addVerifyListener(
-		
 			new VerifyListener() {
 				public void verifyText(VerifyEvent e) {
 					// Here, we could use a RegExp such as the following 

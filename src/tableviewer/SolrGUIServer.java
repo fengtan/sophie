@@ -6,10 +6,18 @@
  */
 
 package tableviewer;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
+
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocumentList;
 
 /**
  * Class that plays the role of the domain model in the TableViewerExample
@@ -18,23 +26,41 @@ import java.util.Vector;
  */
 public class SolrGUIServer {
 
-	private final int COUNT = 10;
-	private Vector<SolrGUIDocument> documents = new Vector<SolrGUIDocument>(COUNT);
+	private Vector<SolrGUIDocument> documents = new Vector<SolrGUIDocument>();
 	private Set<ISolrGUIServerViewer> changeListeners = new HashSet<ISolrGUIServerViewer>();
+	private SolrServer server;
 
-	// Combo box choices
 	static final String[] OWNERS_ARRAY = { "?", "Nancy", "Larry", "Joe" };
 
 	/**
 	 * Initialize the table data.
 	 * Create COUNT documents and add them them to the collection of documents.
 	 */
-	public SolrGUIServer() {
-		for (int i = 0; i < COUNT; i++) {
-			SolrGUIDocument document = new SolrGUIDocument("Document "  + i);
-			document.setOwner(OWNERS_ARRAY[i % 3]);
+	public SolrGUIServer(URL url) {
+		server = new HttpSolrServer(url.toExternalForm());
+		
+		
+			SolrGUIDocument document = new SolrGUIDocument("Document");
+			document.setOwner(OWNERS_ARRAY[0]);
 			documents.add(document);
+		
+	}
+	
+	private SolrDocumentList getAllDocuments() {
+		SolrQuery query = new SolrQuery();
+		query.set("q", "*:*");
+		return getDocumentList(query);
+	}
+	
+	private SolrDocumentList getDocumentList(SolrQuery query) {
+		QueryResponse response;
+		try {
+			response = server.query(query);
+		} catch (SolrServerException e) {
+			// TODO log error
+			return new SolrDocumentList();
 		}
+		return response.getResults();
 	}
 
 	/**

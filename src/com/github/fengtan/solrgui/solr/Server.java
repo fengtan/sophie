@@ -39,7 +39,7 @@ public class Server {
 		return getDocumentList(query);
 	}
 	
-	public SolrDocumentList getDocumentList(SolrQuery query) {
+	private SolrDocumentList getDocumentList(SolrQuery query) {
 		QueryResponse response;
 		try {
 			response = server.query(query);
