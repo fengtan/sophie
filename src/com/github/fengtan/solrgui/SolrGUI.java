@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.CheckboxCellEditor;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -19,8 +17,6 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -197,18 +193,23 @@ public class SolrGUI {
 		tableViewer = new TableViewer(table);
 		tableViewer.setUseHashlookup(true);
 		
-		tableViewer.setColumnProperties(server.getFields());
+		String[] fields = server.getFields();
+		
+		tableViewer.setColumnProperties(fields);
 
 		// Create the cell editors
-		CellEditor[] editors = new CellEditor[server.getFields().length]; // TODO call server.getFields() once instead of twice
+		CellEditor[] editors = new CellEditor[fields.length];
 
 		// Column 1 : Modified (Checkbox)
 		// TODO dropeditors[0] = new CheckboxCellEditor(table);
 
 		// Column 2 : Description (Free text)
-		TextCellEditor textEditor = new TextCellEditor(table);
-		((Text) textEditor.getControl()).setTextLimit(60);
-		editors[1] = textEditor;
+		TextCellEditor textEditor;
+		for (int i=1; i<fields.length; i++) { // TODO pb: last column not editable.
+			textEditor = new TextCellEditor(table);
+			((Text) textEditor.getControl()).setTextLimit(60);
+			editors[i] = textEditor;
+		}
 /* TODO drop
 		// Column 3 : Owner (Combo Box) 
 		editors[2] = new ComboBoxCellEditor(table, server.getOwners(), SWT.READ_ONLY);
@@ -282,6 +283,7 @@ public class SolrGUI {
 	
 	/**
 	 * Return the array of choices for a multiple choice cell
+	 * TODO drop
 	 */
 	public String[] getChoices(String property) {
 		if ("owner".equals(property))
