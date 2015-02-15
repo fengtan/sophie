@@ -1,8 +1,9 @@
 package com.github.fengtan.solrgui;
 
-import java.util.Objects;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -34,28 +35,22 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
 	 */
 	public String getColumnText(Object element, int columnIndex) {
-		String result = "";
 		SolrDocument document = (SolrDocument) element;
-		/* TODO drop
 		switch (columnIndex) {
-			case 0:
-				result = document.isModified() ? "X" : "";
-				break;
-			case 1 :
-				result = document.getDescription();
-				break;
-			case 2 :
-				result = document.getOwner();
-				break;
-			case 3 :
-				result = document.getPercentComplete() + "";
-				break;
-			default :
-				break; 	
+			case 0: // Modified
+				// TODO result = document.isModified() ? "X" : "";
+				return "";
+			default:
+				// TODO Objects.toString(myvalue, "") ? null safe
+				String field = getFields(document).get(columnIndex-1);
+				return document.getFieldValue(field).toString();
 		}
-		*/
-		result = Objects.toString(document.getFieldValue("item_id"), "");
-		return result;
+	}
+	
+	// TODO re-use server.getFields() + SolrGUI.getColumnNames() ?
+	public List<String> getFields(SolrDocument document) {
+		Collection<String> fields = document.getFieldNames();
+		return Arrays.asList(fields.toArray(new String[fields.size()]));	
 	}
 
 	/**
