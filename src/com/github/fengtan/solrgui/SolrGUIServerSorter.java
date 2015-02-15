@@ -5,16 +5,6 @@ import org.eclipse.jface.viewers.ViewerSorter;
 
 public class SolrGUIServerSorter extends ViewerSorter {
 
-	/**
-	 * Constructor argument values that indicate to sort items by 
-	 * description, owner or percent complete.
-	 */
-	/* TODO drop
-	public final static int DESCRIPTION 		= 1;
-	public final static int OWNER 				= 2;
-	public final static int PERCENT_COMPLETE 	= 3;
-	*/
-
 	// Criteria that the instance uses 
 	private int criteria;
 

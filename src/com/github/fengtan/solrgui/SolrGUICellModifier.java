@@ -1,4 +1,6 @@
 package com.github.fengtan.solrgui;
+import java.util.Arrays;
+
 import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.swt.widgets.TableItem;
@@ -13,9 +15,11 @@ public class SolrGUICellModifier implements ICellModifier {
 
 	/**
 	 * @see org.eclipse.jface.viewers.ICellModifier#canModify(java.lang.Object, java.lang.String)
+	 * 
+	 * All Solr fields can be modified. The others cannot.
 	 */
-	public boolean canModify(Object element, String property) {
-		return true;
+	public boolean canModify(Object element, String columnName) {
+		return Arrays.asList(solrGUI.getServer().getFields()).contains(columnName);
 	}
 
 	/**

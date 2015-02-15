@@ -43,13 +43,6 @@ public class SolrGUIServer {
 	}
 
 	/**
-	 * Return the array of owners   
-	 */
-	public String[] getOwners() {
-		return new String[] { "?", "Nancy", "Larry", "Joe" };
-	}
-	
-	/**
 	 * Return the collection of documents
 	 */
 	public List<SolrDocument> getDocuments() {

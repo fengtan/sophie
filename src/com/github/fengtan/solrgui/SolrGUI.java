@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ISelection;
@@ -193,41 +194,18 @@ public class SolrGUI {
 		tableViewer = new TableViewer(table);
 		tableViewer.setUseHashlookup(true);
 		
-		String[] fields = server.getFields();
-		
-		tableViewer.setColumnProperties(fields);
+		String[] columns = ArrayUtils.addAll(new String[]{"Status"}, server.getFields());
+		tableViewer.setColumnProperties(columns);
 
 		// Create the cell editors
-		CellEditor[] editors = new CellEditor[fields.length];
-
-		// Column 1 : Modified (Checkbox)
-		// TODO dropeditors[0] = new CheckboxCellEditor(table);
-
-		// Column 2 : Description (Free text)
+		CellEditor[] editors = new CellEditor[tableViewer.getColumnProperties().length];
 		TextCellEditor textEditor;
-		for (int i=1; i<fields.length; i++) { // TODO pb: last column not editable.
+		for (int i=0; i<editors.length; i++) { // TODO pb: last column not editable.
 			textEditor = new TextCellEditor(table);
 			((Text) textEditor.getControl()).setTextLimit(60);
 			editors[i] = textEditor;
 		}
-/* TODO drop
-		// Column 3 : Owner (Combo Box) 
-		editors[2] = new ComboBoxCellEditor(table, server.getOwners(), SWT.READ_ONLY);
 
-		// Column 4 : Percent complete (Text with digits only)
-		textEditor = new TextCellEditor(table);
-		((Text) textEditor.getControl()).addVerifyListener(
-			new VerifyListener() {
-				public void verifyText(VerifyEvent e) {
-					// Here, we could use a RegExp such as the following 
-					// if using JRE1.4 such as  e.doit = e.text.matches("[\\-0-9]*");
-					e.doit = "0123456789".indexOf(e.text) >= 0 ;
-				}
-			});
-		editors[3] = textEditor;
-		*/
-
-		// Assign the cell editors to the viewer 
 		tableViewer.setCellEditors(editors);
 		// Set the cell modifier for the viewer
 		tableViewer.setCellModifier(new SolrGUICellModifier(this));
@@ -281,17 +259,6 @@ public class SolrGUI {
 		}
 	}
 	
-	/**
-	 * Return the array of choices for a multiple choice cell
-	 * TODO drop
-	 */
-	public String[] getChoices(String property) {
-		if ("owner".equals(property))
-			return server.getOwners();  // The SolrGUIServer knows about the choice of owners
-		else
-			return new String[]{};
-	}
-
 	/**
 	 * Add the "Add", "Delete" and "Close" buttons
 	 * @param parent the parent composite
