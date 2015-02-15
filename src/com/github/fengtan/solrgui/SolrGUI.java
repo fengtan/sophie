@@ -148,13 +148,13 @@ public class SolrGUI {
 		column.setText("Modified");
 		column.setWidth(20);
 		
-		for (String field:server.getFields()) {
+		for (final String field:server.getFields()) {
 			column = new TableColumn(table, SWT.LEFT);
 			column.setText(field);
 			// Add listener to column so documents are sorted when clicked. 
 			column.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
-					// TODO tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.DESCRIPTION));
+					tableViewer.setSorter(new SolrGUIServerSorter(field)); // TODO does sorting scale ?
 				}
 			});
 			column.pack();
@@ -210,7 +210,7 @@ public class SolrGUI {
 		// Set the cell modifier for the viewer
 		tableViewer.setCellModifier(new SolrGUICellModifier(this));
 		// Set the default sorter for the viewer 
-		// TODO tableViewer.setSorter(new SolrGUIServerSorter(SolrGUIServerSorter.DESCRIPTION));
+		tableViewer.setSorter(new SolrGUIServerSorter(server.getFields()[0])); // TODO what if there is no field
 	}
 
 	/*
