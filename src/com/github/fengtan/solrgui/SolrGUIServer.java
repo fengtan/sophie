@@ -1,5 +1,6 @@
 package com.github.fengtan.solrgui;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -16,7 +17,7 @@ import org.apache.solr.common.SolrDocumentList;
 public class SolrGUIServer {
 
 	private SolrServer server;
-	private List<SolrDocument> documents;
+	private List<SolrGUIDocument> documents;
 	private Set<ISolrGUIServerViewer> changeListeners = new HashSet<ISolrGUIServerViewer>();
 
 	public SolrGUIServer(URL url) {
@@ -25,27 +26,31 @@ public class SolrGUIServer {
 	}
 	
 	// TODO cache ? use transactions ?
-	private SolrDocumentList getAllDocuments() {
+	private List<SolrGUIDocument> getAllDocuments() {
 		SolrQuery query = new SolrQuery();
 		query.set("q", "*:*");
 		return getDocumentList(query);
 	}
 	
-	private SolrDocumentList getDocumentList(SolrQuery query) {
+	private List<SolrGUIDocument> getDocumentList(SolrQuery query) {
+		List<SolrGUIDocument> list = new ArrayList<SolrGUIDocument>();
 		QueryResponse response;
 		try {
 			response = server.query(query);
 		} catch (SolrServerException e) {
 			// TODO log error
-			return new SolrDocumentList();
+			return list;
 		}
-		return response.getResults();
+		for (SolrDocument document:response.getResults()) {
+			list.add(new SolrGUIDocument(document));
+		}
+		return list;
 	}
 
 	/**
 	 * Return the collection of documents
 	 */
-	public List<SolrDocument> getDocuments() {
+	public List<SolrGUIDocument> getDocuments() {
 		return documents;
 	}
 	
@@ -53,10 +58,7 @@ public class SolrGUIServer {
 	 * Add a new document to the collection of documents
 	 */
 	public void addDocument() {
-		SolrDocument document = new SolrDocument();
-		for(String field:getFields()) {
-			document.setField(field, "");
-		}
+		SolrGUIDocument document = new SolrGUIDocument(getFields());
 		documents.add(documents.size(), document);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.addDocument(document);
@@ -66,7 +68,7 @@ public class SolrGUIServer {
 	/**
 	 * @param document
 	 */
-	public void removeDocument(SolrDocument document) {
+	public void removeDocument(SolrGUIDocument document) {
 		documents.remove(document);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.removeDocument(document);
@@ -76,7 +78,7 @@ public class SolrGUIServer {
 	/**
 	 * @param document
 	 */
-	public void documentChanged(SolrDocument document) {
+	public void documentChanged(SolrGUIDocument document) {
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.updateDocument(document);
 		}

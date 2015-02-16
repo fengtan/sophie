@@ -15,7 +15,7 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
 	 */
 	public String getColumnText(Object element, int columnIndex) {
-		SolrDocument document = (SolrDocument) element;
+		SolrGUIDocument document = (SolrGUIDocument) element;
 		switch (columnIndex) {
 			case 0: // Commit.
 				// TODO result = document.isModified() ? "X" : "";
@@ -34,7 +34,7 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 	}
 	
 	// TODO re-use server.getFields() + SolrGUI.getColumnNames() ?
-	public List<String> getFields(SolrDocument document) {
+	public List<String> getFields(SolrGUIDocument document) {
 		Collection<String> fields = document.getFieldNames();
 		return Arrays.asList(fields.toArray(new String[fields.size()]));	
 	}

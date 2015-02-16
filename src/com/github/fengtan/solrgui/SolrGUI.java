@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -215,15 +214,15 @@ public class SolrGUI {
 			return server.getDocuments().toArray();
 		}
 
-		public void addDocument(SolrDocument document) {
+		public void addDocument(SolrGUIDocument document) {
 			tableViewer.add(document);
 		}
 
-		public void removeDocument(SolrDocument document) {
+		public void removeDocument(SolrGUIDocument document) {
 			tableViewer.remove(document);			
 		}
 
-		public void updateDocument(SolrDocument document) {
+		public void updateDocument(SolrGUIDocument document) {
 			tableViewer.update(document, null);	
 		}
 	}
@@ -254,7 +253,7 @@ public class SolrGUI {
 		delete.setLayoutData(gridData); 
 		delete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrDocument document = (SolrDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
+				SolrGUIDocument document = (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
 				if (document != null) {
 					server.removeDocument(document);
 				} 				
