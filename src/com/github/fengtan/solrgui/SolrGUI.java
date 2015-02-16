@@ -48,7 +48,7 @@ public class SolrGUI {
 		shell.setLayout(layout);
 
 		// TODO loop over servers.
-		URL url = Config.getServers().get(0).getURL();
+		URL url = SolrGUIConfig.getServers().get(0).getURL();
 		
 		// Create a composite to hold the children.
 		Composite composite = new Composite(shell, SWT.NONE);
@@ -135,7 +135,8 @@ public class SolrGUI {
 		table.setHeaderVisible(true);
 
 		TableColumn column = new TableColumn(table, SWT.CENTER, 0);		
-		column.setText("Modified");
+		column.setText("Changes");
+		column.setToolTipText("Pending changes:\nClick on \"Commit\" to push to Solr\nClick on \"Revert\" to cancel changes");
 		column.setWidth(20);
 		
 		for (final String field:server.getFields()) {
@@ -183,8 +184,9 @@ public class SolrGUI {
 	 */
 	public void close() {
 		Shell shell = table.getShell();
-		if (shell != null && !shell.isDisposed())
-			shell.dispose();
+		if (shell != null && !shell.isDisposed()) {
+			shell.dispose();	
+		}
 	}
 
 
@@ -196,10 +198,12 @@ public class SolrGUI {
 	 */
 	class SolrGUIContentProvider implements IStructuredContentProvider, ISolrGUIServerViewer {
 		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-			if (newInput != null)
+			if (newInput != null) {
 				((SolrGUIServer) newInput).addChangeListener(this);
-			if (oldInput != null)
+			}
+			if (oldInput != null) {
 				((SolrGUIServer) oldInput).removeChangeListener(this);
+			}
 		}
 
 		public void dispose() {

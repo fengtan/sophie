@@ -2,7 +2,6 @@ package incorporate;
 
 import java.util.Map;
 
-import obsolete.ActionColumn;
 import obsolete.Column;
 import obsolete.ColumnList;
 import obsolete.Server;
@@ -41,10 +40,6 @@ public class ServerTab {
     
     public ServerTab(Server server, TabFolder tabFolder) {
     	docs = server.getAllDocuments();
-    	
-    	columns = new ColumnList();
-    	columns.add(new ActionColumn("Edit"));
-    	columns.add(new ActionColumn("Delete"));
     	
 	    for (SolrDocument document:docs) {
 	    	for (String title:document.keySet()) {

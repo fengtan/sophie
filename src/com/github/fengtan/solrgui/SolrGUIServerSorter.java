@@ -7,7 +7,7 @@ public class SolrGUIServerSorter extends ViewerSorter {
 
 	private String field;
 	private static boolean ascending;
-	private static String currentField = null; // Data are currently sorted by this field
+	private static String currentField = null; // Data are currently sorted by this field.
 
 	public SolrGUIServerSorter(String field) {
 		super();

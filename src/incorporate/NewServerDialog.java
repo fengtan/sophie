@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.Config;
+import com.github.fengtan.solrgui.SolrGUIConfig;
 
 public class NewServerDialog {
 
@@ -56,7 +56,7 @@ public class NewServerDialog {
             public void widgetSelected(SelectionEvent e) {
 				try {
 					Server server = new Server(new URL("http", "localhost", "path"), "plop");
-	                Config.addServer(server);
+	                SolrGUIConfig.addServer(server);
 				} catch (MalformedURLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

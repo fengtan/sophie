@@ -14,7 +14,7 @@ import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
 import org.ini4j.Profile.Section;
 
-public class Config {
+public class SolrGUIConfig {
 
 	// TODO make path configurable (or in .properties)
 	private static final String path = "conf/servers.ini"; 
