@@ -1,4 +1,6 @@
 package com.github.fengtan.solrgui;
+import java.util.Objects;
+
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 
@@ -24,9 +26,8 @@ public class SolrGUIServerSorter extends ViewerSorter {
 	public int compare(Viewer viewer, Object o1, Object o2) {
 		SolrGUIDocument document1 = (SolrGUIDocument) o1;
 		SolrGUIDocument document2 = (SolrGUIDocument) o2;
-		String value1 = document1.getFieldValue(field).toString();
-		String value2 = document2.getFieldValue(field).toString();
-		// TODO null safe
+		String value1 = Objects.toString(document1.getFieldValue(field), "");
+		String value2 = Objects.toString(document2.getFieldValue(field), "");
 		return ascending ? value1.compareTo(value2) : value2.compareTo(value1); 
 	}
 

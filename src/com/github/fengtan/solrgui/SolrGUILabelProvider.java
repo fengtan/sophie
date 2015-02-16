@@ -3,6 +3,7 @@ package com.github.fengtan.solrgui;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -33,8 +34,7 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 				List<String> fields = getFields(document);
 				if (fieldIndex < fields.size()) {
 					String field = fields.get(fieldIndex);
-					// TODO Objects.toString(myvalue, "") ? null safe
-					return document.getFieldValue(field).toString();	
+					return Objects.toString(document.getFieldValue(field), "");	
 				} else {
 					return "";
 				}

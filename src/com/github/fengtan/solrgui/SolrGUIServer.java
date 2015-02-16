@@ -135,7 +135,7 @@ public class SolrGUIServer {
 					input = ClientUtils.toSolrInputDocument(document.getDocument());
 					try {
 						server.add(input); // Returned object seems to have no relevant information.
-					} catch(SolrServerException e ) {
+					} catch(SolrServerException e) {
 						// TODO
 						e.printStackTrace();
 					} catch(IOException e) {
@@ -147,12 +147,12 @@ public class SolrGUIServer {
 					String id = document.getDocument().getFieldValue("id").toString(); // TODO what if no field named "id"
 					try {
 						server.deleteById(id);
-					} catch (SolrServerException e1) {
+					} catch (SolrServerException e) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e1) {
+						e.printStackTrace();
+					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						e.printStackTrace();
 					}
 					break;
 				case NONE:
@@ -173,7 +173,7 @@ public class SolrGUIServer {
 			}
 		}
 		try {
-			server.commit();
+			server.commit(); 
 			refreshDocuments();  // Returned object seems to have no relevant information.
 			// TODO popup to confirm commit is successful ?
 			// TODO allow to revert a specific document

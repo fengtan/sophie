@@ -18,7 +18,7 @@ public class SolrGUIDocument {
 	public SolrGUIDocument(String[] fields) {
 		document = new SolrDocument();
 		for (String field:fields) {
-			document.setField(field, "");
+			document.setField(field, null);
 		}
 	}
 	

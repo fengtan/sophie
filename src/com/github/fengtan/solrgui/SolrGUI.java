@@ -56,7 +56,7 @@ public class SolrGUI {
 
 		// Make the shell to display its content.
 		shell.open();
-		solrGUI.run(shell);
+		solrGUI.run(shell);	
 	}
 	
 	public SolrGUI(Composite parent, SolrGUIServer server) {
