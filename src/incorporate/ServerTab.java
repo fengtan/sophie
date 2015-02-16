@@ -1,7 +1,5 @@
 package incorporate;
 
-import obsolete.Server;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.FocusAdapter;
@@ -23,16 +21,17 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.github.fengtan.solrgui.SolrGUIServer;
+
 public class ServerTab {
 
     private Table table;
     private TabItem tabItem;
     
-    public ServerTab(Server server, TabFolder tabFolder) {
+    public ServerTab(SolrGUIServer server, TabFolder tabFolder) {
     	
 	    
 	    tabItem = new TabItem(tabFolder, SWT.NULL);
-	    tabItem.setText(server.getName());
     }
     
 	public void updateTable(Composite parent) {

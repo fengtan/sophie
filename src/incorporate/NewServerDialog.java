@@ -4,8 +4,6 @@ package incorporate;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import obsolete.Server;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -16,6 +14,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.SolrGUIConfig;
+import com.github.fengtan.solrgui.SolrGUIServer;
 
 public class NewServerDialog {
 
@@ -55,7 +54,7 @@ public class NewServerDialog {
             @Override
             public void widgetSelected(SelectionEvent e) {
 				try {
-					Server server = new Server(new URL("http", "localhost", "path"), "plop");
+					SolrGUIServer server = new SolrGUIServer(new URL("http", "localhost", "path"), "plop");
 	                SolrGUIConfig.addServer(server);
 				} catch (MalformedURLException e1) {
 					// TODO Auto-generated catch block

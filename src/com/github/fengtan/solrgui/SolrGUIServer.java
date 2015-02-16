@@ -15,13 +15,25 @@ import org.apache.solr.common.SolrDocument;
 
 public class SolrGUIServer {
 
+	private URL url;
+	private String name;
 	private SolrServer server;
 	private List<SolrGUIDocument> documents;
 	private Set<ISolrGUIServerViewer> changeListeners = new HashSet<ISolrGUIServerViewer>();
 
-	public SolrGUIServer(URL url) {
-		server = new HttpSolrServer(url.toExternalForm());
-		documents = getAllDocuments();
+	public SolrGUIServer(URL url, String name) {
+		this.url = url;
+		this.name = name;
+		this.server = new HttpSolrServer(url.toExternalForm());
+		this.documents = getAllDocuments();
+	}
+	
+	public URL getURL() {
+		return url;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	// TODO cache ? use transactions ?

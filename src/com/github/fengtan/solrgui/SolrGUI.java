@@ -1,6 +1,5 @@
 package com.github.fengtan.solrgui;
 
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,12 +45,9 @@ public class SolrGUI {
 		GridLayout layout = new GridLayout();
 		shell.setLayout(layout);
 
-		// TODO loop over servers.
-		URL url = SolrGUIConfig.getServers().get(0).getURL();
-		
 		// Create a composite to hold the children.
 		Composite composite = new Composite(shell, SWT.NONE);
-		final SolrGUI solrGUI = new SolrGUI(composite, url);
+		final SolrGUI solrGUI = new SolrGUI(composite, SolrGUIConfig.getServers().get(0)); // TODO loop over servers.
 		solrGUI.getControl().addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
 				solrGUI.dispose();			
@@ -63,8 +59,8 @@ public class SolrGUI {
 		solrGUI.run(shell);
 	}
 	
-	public SolrGUI(Composite parent, URL url) {
-		server = new SolrGUIServer(url);
+	public SolrGUI(Composite parent, SolrGUIServer server) {
+		this.server = server;
 		addChildControls(parent);
 	}
 
