@@ -216,7 +216,7 @@ public class SolrGUI {
 		}
 
 		public void removeDocument(SolrGUIDocument document) {
-			tableViewer.remove(document);			
+			tableViewer.remove(document);
 		}
 
 		public void updateDocument(SolrGUIDocument document) {

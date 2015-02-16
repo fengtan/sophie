@@ -89,9 +89,9 @@ public class SolrGUIServer {
 	 * @param document
 	 */
 	public void removeDocument(SolrGUIDocument document) {
-		documents.remove(document);
+		document.setChange(SolrGUIChange.DELETED);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
-			viewer.removeDocument(document);
+			viewer.updateDocument(document);
 		}
 	}
 
