@@ -1,6 +1,7 @@
 package com.github.fengtan.solrgui;
 
 import java.util.Collection;
+import java.util.Random;
 
 import org.apache.solr.common.SolrDocument;
 
@@ -20,6 +21,9 @@ public class SolrGUIDocument {
 		for (String field:fields) {
 			document.setField(field, null);
 		}
+		// TODO can we assume the id field always exists ?
+		// TODO use something else than random
+		document.setField("id", new Random().nextInt(1000));
 	}
 	
 	public SolrGUIChange getChange() {
