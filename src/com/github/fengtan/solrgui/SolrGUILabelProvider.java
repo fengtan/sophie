@@ -17,21 +17,27 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 		SolrGUIDocument document = (SolrGUIDocument) element;
 		switch (columnIndex) {
 			case 0: // Change status.
+				// TODO tooltips A/D/M
 				switch(document.getChange()) {
 					case ADDED:
-						return "Added";
+						return "A";
 					case DELETED:
-						return "Deleted";
+						return "D";
 					case NONE:
 						return "";
 					case UPDATED:
-						return "Updated";
+						return "M";
 				}
 			default: // Solr fields.
 				int fieldIndex = columnIndex-1;
-				String field = getFields(document).get(fieldIndex);
-				// TODO Objects.toString(myvalue, "") ? null safe
-				return document.getFieldValue(field).toString();
+				List<String> fields = getFields(document);
+				if (fieldIndex < fields.size()) {
+					String field = fields.get(fieldIndex);
+					// TODO Objects.toString(myvalue, "") ? null safe
+					return document.getFieldValue(field).toString();	
+				} else {
+					return "";
+				}
 		}
 	}
 	

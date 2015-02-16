@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.apache.solr.common.SolrDocument;
 
+// TODO extend SolrDocument ? might simplify the code
 public class SolrGUIDocument {
 
 	private SolrGUIChange change = SolrGUIChange.NONE;
@@ -27,6 +28,10 @@ public class SolrGUIDocument {
 	
 	public void setChange(SolrGUIChange change) {
 		this.change = change;
+	}
+	
+	public SolrDocument getDocument() {
+		return document;
 	}
 	
 	public void setField(String name, Object value) {

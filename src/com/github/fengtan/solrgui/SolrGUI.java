@@ -82,6 +82,7 @@ public class SolrGUI {
 	public void dispose() {
 		// Tell the label provider to release its resources.
 		tableViewer.getLabelProvider().dispose();
+		server.dispose();
 	}
 
 	/**
@@ -264,10 +265,14 @@ public class SolrGUI {
 		commit.setLayoutData(gridData);
 		commit.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				// TODO 				
+				server.commit();
+				tableViewer.refresh(); // TODO useless ?
 			}
 		});
 		
+		// TODO ability to clone a document
+		
+		/* TODO
 		//	Create and configure the "Revert" button.
 		Button revert = new Button(parent, SWT.PUSH | SWT.CENTER);
 		revert.setText("Revert");
@@ -279,13 +284,14 @@ public class SolrGUI {
 				// TODO 				
 			}
 		});	
+		*/
 	}
 
 	/**
 	 * Return the column names in a collection
 	 * 
 	 * @return List  containing column names
-	 */
+	 */GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
 	public List<String> getColumnNames() {
 		return Arrays.asList(server.getFields());
 	}

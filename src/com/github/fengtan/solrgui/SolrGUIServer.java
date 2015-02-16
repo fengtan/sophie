@@ -1,4 +1,5 @@
 package com.github.fengtan.solrgui;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,8 +12,11 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
 
+// TODO test with Solr < 4.
 public class SolrGUIServer {
 
 	private URL url;
@@ -25,7 +29,7 @@ public class SolrGUIServer {
 		this.url = url;
 		this.name = name;
 		this.server = new HttpSolrServer(url.toExternalForm());
-		this.documents = getAllDocuments();
+		refresh();
 	}
 	
 	public URL getURL() {
@@ -34,6 +38,10 @@ public class SolrGUIServer {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public void refresh() {
+		documents = getAllDocuments();
 	}
 	
 	// TODO cache ? use transactions ?
@@ -91,6 +99,7 @@ public class SolrGUIServer {
 	 * @param document
 	 */
 	public void documentChanged(SolrGUIDocument document) {
+		document.setChange(SolrGUIChange.UPDATED);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.updateDocument(document);
 		}
@@ -115,6 +124,64 @@ public class SolrGUIServer {
 	public String[] getFields() {
 		Collection<String> fields = getAllDocuments().get(0).getFieldNames();
 		return fields.toArray(new String[fields.size()]);
+	}
+	
+	public void commit() {
+		// TODO could use CollectionUtils.filter().
+		SolrInputDocument input;
+		for (SolrGUIDocument document:documents) {
+			switch (document.getChange()) {
+				case ADDED:
+					input = ClientUtils.toSolrInputDocument(document.getDocument());
+					try {
+						server.add(input); // Returned object seems to have no relevant information.
+					} catch(SolrServerException e ) {
+						// TODO
+						e.printStackTrace();
+					} catch(IOException e) {
+						// TODO
+						e.printStackTrace();
+					}
+					break;
+				case DELETED:
+					break;
+				case NONE:
+					// Nothing to do.
+					break;
+				case UPDATED:
+					input = ClientUtils.toSolrInputDocument(document.getDocument());
+					try {
+						server.add(input); // Returned object seems to have no relevant information.
+					} catch (SolrServerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
+			}
+		}
+		try {
+			server.commit();
+			refresh();  // Returned object seems to have no relevant information.
+			// TODO popup to confirm commit is successful ?
+			// TODO allow to revert a specific document
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// TODO reload data
+	}
+	
+	/*
+	 * Release resources.
+	 */
+	public void dispose() {
+		server.shutdown();
 	}
 
 }

@@ -32,10 +32,11 @@ public class SolrGUICellModifier implements ICellModifier {
 	/**
 	 * @see org.eclipse.jface.viewers.ICellModifier#modify(java.lang.Object, java.lang.String, java.lang.Object)
 	 */
-	public void modify(Object element, String columnName, Object value) {	
+	public void modify(Object element, String columnName, Object value) {
 		TableItem item = (TableItem) element;
 		SolrGUIDocument document = (SolrGUIDocument) item.getData();
 		document.setField(columnName, value.toString());
 		solrGUI.getServer().documentChanged(document);
+		// TODO do not mark as Modified if new value = old value
 	}
 }
