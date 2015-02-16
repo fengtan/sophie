@@ -1,14 +1,8 @@
 package incorporate;
 
-import java.util.Map;
-
 import obsolete.Column;
-import obsolete.ColumnList;
 import obsolete.Server;
-import obsolete.ServerColumnAdapter;
 
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.FocusAdapter;
@@ -27,27 +21,16 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 public class ServerTab {
 
-    private SolrDocumentList docs;
-    private ColumnList columns;
     private Table table;
     private TabItem tabItem;
     
     public ServerTab(Server server, TabFolder tabFolder) {
-    	docs = server.getAllDocuments();
     	
-	    for (SolrDocument document:docs) {
-	    	for (String title:document.keySet()) {
-	    		if (!columns.contains(title)) {
-	    			columns.add(new Column(title));
-	    		}
-	    	}
-	    }
 	    
 	    tabItem = new TabItem(tabFolder, SWT.NULL);
 	    tabItem.setText(server.getName());
@@ -57,14 +40,7 @@ public class ServerTab {
 	    table = new Table(parent, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION); // TODO
 	    table.setLinesVisible(true);
 	    table.setHeaderVisible(true);
-	    
-	    for (Column column:columns.getColumnsDisplayed()) {
-			addTableColumn(column);
-		}
-	    
-		for(SolrDocument doc:docs) {
-			addTableRow(doc);
-		}
+
 
 	    for (int i = 0; i < table.getColumnCount(); i++) {
 	    	table.getColumn(i).pack();
@@ -95,9 +71,7 @@ public class ServerTab {
 	    				break;
 	    			}
 	    		}
-	    		
-	    		if (!columns.get(column).isEditable()) return;
-
+	    
 	    		final Text text = new Text(table, SWT.NONE);
 	    		text.setForeground(item.getForeground());
 
@@ -121,19 +95,6 @@ public class ServerTab {
 	    	}
 	    });
 	    
-	}
-	
-	private void addTableColumn(Column column) {
-		new TableColumn(table, SWT.NONE).setText(column.getTitle());
-	}
-	
-	private void addTableRow(SolrDocument doc) {
-    	TableItem row = new TableItem(table, SWT.NONE);
-    	for (Map.Entry<String, Object> field:doc.entrySet()) {
-    		if (columns.isColumnDisplayed(field.getKey())) {
-    			row.setText(columns.indexOf(field.getKey()), field.getValue().toString());
-    		}	
-    	}
 	}
 	
 	public void updateMenu(Menu menu, final Shell shell) { // TODO drop shell argument ?
@@ -171,12 +132,12 @@ public class ServerTab {
         Menu columnsMenu = new Menu(shell, SWT.DROP_DOWN);
         columnsMenuItem.setMenu(columnsMenu);
 
-        for (Column column:columns) { // TODO edit & delete should not show up in menu
+        for (Column column:new Column[]{}) { // TODO edit & delete should not show up in menu
             MenuItem columnItem = new MenuItem(columnsMenu, SWT.CHECK);
             columnItem.setText(column.getTitle());
             columnItem.setSelection(true);
             shell.setMenuBar(menu);
-            columnItem.addSelectionListener(new ServerColumnAdapter(table, column.getTitle(), columns));
+
         }
         
 	}
