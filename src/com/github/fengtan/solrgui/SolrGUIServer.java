@@ -29,7 +29,7 @@ public class SolrGUIServer {
 		this.url = url;
 		this.name = name;
 		this.server = new HttpSolrServer(url.toExternalForm());
-		refresh();
+		refreshDocuments();
 	}
 	
 	public URL getURL() {
@@ -40,7 +40,7 @@ public class SolrGUIServer {
 		return name;
 	}
 	
-	public void refresh() {
+	public void refreshDocuments() {
 		documents = getAllDocuments();
 	}
 	
@@ -144,6 +144,16 @@ public class SolrGUIServer {
 					}
 					break;
 				case DELETED:
+					String id = document.getDocument().getFieldValue("id").toString(); // TODO what if no field named "id"
+					try {
+						server.deleteById(id);
+					} catch (SolrServerException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					break;
 				case NONE:
 					// Nothing to do.
@@ -164,7 +174,7 @@ public class SolrGUIServer {
 		}
 		try {
 			server.commit();
-			refresh();  // Returned object seems to have no relevant information.
+			refreshDocuments();  // Returned object seems to have no relevant information.
 			// TODO popup to confirm commit is successful ?
 			// TODO allow to revert a specific document
 		} catch (SolrServerException e) {

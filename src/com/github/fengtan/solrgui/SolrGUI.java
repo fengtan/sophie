@@ -271,20 +271,6 @@ public class SolrGUI {
 		});
 		
 		// TODO ability to clone a document
-		
-		/* TODO
-		//	Create and configure the "Revert" button.
-		Button revert = new Button(parent, SWT.PUSH | SWT.CENTER);
-		revert.setText("Revert");
-		gridData = new GridData (GridData.HORIZONTAL_ALIGN_END);
-		gridData.widthHint = 80; 
-		revert.setLayoutData(gridData);
-		revert.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				// TODO 				
-			}
-		});	
-		*/
 	}
 
 	/**
