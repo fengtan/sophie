@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -17,19 +16,22 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 	public String getColumnText(Object element, int columnIndex) {
 		SolrGUIDocument document = (SolrGUIDocument) element;
 		switch (columnIndex) {
-			case 0: // Commit.
-				// TODO result = document.isModified() ? "X" : "";
-				return "";
+			case 0: // Change status.
+				switch(document.getChange()) {
+					case ADDED:
+						return "Added";
+					case DELETED:
+						return "Deleted";
+					case NONE:
+						return "";
+					case UPDATED:
+						return "Updated";
+				}
 			default: // Solr fields.
 				int fieldIndex = columnIndex-1;
-				List<String> fields = getFields(document);
-				if (fieldIndex < fields.size()) {
-					String field = fields.get(fieldIndex);
-					// TODO Objects.toString(myvalue, "") ? null safe
-					return document.getFieldValue(field).toString();
-				} else {
-					return "";	
-				}
+				String field = getFields(document).get(fieldIndex);
+				// TODO Objects.toString(myvalue, "") ? null safe
+				return document.getFieldValue(field).toString();
 		}
 	}
 	

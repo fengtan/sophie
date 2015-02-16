@@ -6,7 +6,7 @@ import org.apache.solr.common.SolrDocument;
 
 public class SolrGUIDocument {
 
-	private SolrGUIChange changes = SolrGUIChange.NONE;
+	private SolrGUIChange change = SolrGUIChange.NONE;
 	private SolrDocument document;
 	
 	// TODO drop ?
@@ -19,6 +19,14 @@ public class SolrGUIDocument {
 		for (String field:fields) {
 			document.setField(field, "");
 		}
+	}
+	
+	public SolrGUIChange getChange() {
+		return change;
+	}
+	
+	public void setChange(SolrGUIChange change) {
+		this.change = change;
 	}
 	
 	public void setField(String name, Object value) {

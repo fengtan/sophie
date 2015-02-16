@@ -12,7 +12,6 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
 
 public class SolrGUIServer {
 
@@ -59,6 +58,7 @@ public class SolrGUIServer {
 	 */
 	public void addDocument() {
 		SolrGUIDocument document = new SolrGUIDocument(getFields());
+		document.setChange(SolrGUIChange.ADDED);
 		documents.add(documents.size(), document);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.addDocument(document);
