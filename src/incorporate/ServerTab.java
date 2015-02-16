@@ -1,6 +1,5 @@
 package incorporate;
 
-import obsolete.Column;
 import obsolete.Server;
 
 import org.eclipse.swt.SWT;
@@ -132,13 +131,6 @@ public class ServerTab {
         Menu columnsMenu = new Menu(shell, SWT.DROP_DOWN);
         columnsMenuItem.setMenu(columnsMenu);
 
-        for (Column column:new Column[]{}) { // TODO edit & delete should not show up in menu
-            MenuItem columnItem = new MenuItem(columnsMenu, SWT.CHECK);
-            columnItem.setText(column.getTitle());
-            columnItem.setSelection(true);
-            shell.setMenuBar(menu);
-
-        }
         
 	}
 }

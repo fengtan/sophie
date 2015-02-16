@@ -49,18 +49,5 @@ public class Server {
 		}
 		return response.getResults();
 	}
-	/*TODO uncomment
-	public void deleteDocument(String id) {
-		try {
-			server.deleteById(id);
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	*/
 	
 }
