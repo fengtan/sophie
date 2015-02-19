@@ -106,7 +106,7 @@ public class SolrGUI {
 		// Create and setup the TableViewer
 		createTableViewer();
 		tableViewer.setContentProvider(new SolrGUIContentProvider());
-		tableViewer.setLabelProvider(new SolrGUILabelProvider());
+		tableViewer.setLabelProvider(new SolrGUILabelProvider(server));
 		// server = new SolrGUIServer(url); TODO drop
 		tableViewer.setInput(server);
 

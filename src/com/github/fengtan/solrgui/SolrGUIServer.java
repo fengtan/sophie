@@ -128,12 +128,15 @@ public class SolrGUIServer {
 	
 	public void commit() {
 		// TODO could use CollectionUtils.filter().
+		// TODO graceful degradation if Luke handlers not provided by server
+		// TODO clean up libraries
 		SolrInputDocument input;
 		for (SolrGUIDocument document:documents) {
 			switch (document.getChange()) {
 				case ADDED:
 					input = ClientUtils.toSolrInputDocument(document.getDocument());
 					try {
+						// TODO use LukeRequest ?
 						server.add(input); // Returned object seems to have no relevant information.
 					} catch(SolrServerException e) {
 						// TODO
@@ -144,6 +147,7 @@ public class SolrGUIServer {
 					}
 					break;
 				case DELETED:
+					// TODO use LukeRequest ?
 					String id = document.getDocument().getFieldValue("id").toString(); // TODO what if no field named "id"
 					try {
 						server.deleteById(id);
@@ -159,6 +163,7 @@ public class SolrGUIServer {
 					// Nothing to do.
 					break;
 				case UPDATED:
+					// TODO use LukeRequest ?
 					input = ClientUtils.toSolrInputDocument(document.getDocument());
 					try {
 						server.add(input); // Returned object seems to have no relevant information.
