@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -133,6 +134,7 @@ public class SolrGUIServer {
 			for (FieldInfo fieldInfo:fieldsInfo) {
 				fields.add(fieldInfo.getName());
 			}
+			Collections.sort(fields);
 			return fields.toArray(new String[fields.size()]);
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
