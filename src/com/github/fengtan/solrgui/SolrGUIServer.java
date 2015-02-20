@@ -11,6 +11,9 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.request.LukeRequest;
+import org.apache.solr.client.solrj.response.LukeResponse;
+import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
@@ -122,8 +125,28 @@ public class SolrGUIServer {
 	// TODO is there a better way to get the list of fields ? e.g. SolrQuery with only 1 document (not q *:*)
 	// TODO what if there is no document in the server ?
 	public String[] getFields() {
+		LukeRequest request = new LukeRequest();
+		try {
+			LukeResponse response = request.process(server);
+			Collection<FieldInfo> fieldsInfo = response.getFieldInfo().values();
+			List<String> fields = new ArrayList<String>();
+			for (FieldInfo fieldInfo:fieldsInfo) {
+				fields.add(fieldInfo.getName());
+			}
+			return fields.toArray(new String[fields.size()]);
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new String[]{};
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new String[]{};
+		}
+		/* TODO provide option to use this in case Luke handler is not available?
 		Collection<String> fields = getAllDocuments().get(0).getFieldNames();
 		return fields.toArray(new String[fields.size()]);
+		*/
 	}
 	
 	public void commit() {
