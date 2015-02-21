@@ -1,5 +1,6 @@
 package com.github.fengtan.solrgui;
 import java.util.Arrays;
+import java.util.Objects;
 
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.swt.widgets.TableItem;
@@ -26,7 +27,7 @@ public class SolrGUICellModifier implements ICellModifier {
 	 */
 	public Object getValue(Object element, String columnName) {
 		SolrGUIDocument document = (SolrGUIDocument) element;
-		return document.getFieldValue(columnName).toString();	
+		return Objects.toString(document.getFieldValue(columnName), "");
 	}
 
 	/**
