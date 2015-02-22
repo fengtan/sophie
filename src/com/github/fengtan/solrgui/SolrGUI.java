@@ -50,7 +50,7 @@ public class SolrGUI {
 		final SolrGUI solrGUI = new SolrGUI(composite, SolrGUIConfig.getServers().get(0)); // TODO loop over servers.
 		solrGUI.getControl().addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
-				solrGUI.dispose();			
+				solrGUI.dispose();
 			}
 		});
 
