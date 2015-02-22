@@ -14,8 +14,9 @@ import org.ini4j.Profile.Section;
 
 public class SolrGUIConfig {
 
-	// TODO make path configurable (or in .properties)
-	private static final String path = "conf/servers.ini"; 
+	private static final String filename = ".solrgui";
+	// TODO make it work on windows (hidden file)
+	private static final String path = System.getProperty("user.home") + File.separator + filename;
 
 	public static List<SolrGUIServer> getServers() {
 		// TODO make sure file is writable + create file if does not exist
