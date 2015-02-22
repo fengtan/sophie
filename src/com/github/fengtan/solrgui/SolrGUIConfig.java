@@ -14,16 +14,24 @@ import org.ini4j.Profile.Section;
 
 public class SolrGUIConfig {
 
+	// TODO make sure hidden file works on windows
 	private static final String filename = ".solrgui";
-	// TODO make it work on windows (hidden file)
-	private static final String path = System.getProperty("user.home") + File.separator + filename;
 
-	public static List<SolrGUIServer> getServers() {
-		// TODO make sure file is writable + create file if does not exist
+	public static Ini getIni() throws IOException {
+		// TODO make sure file is writable
 		// TODO what if 2 servers with same config ? mess up ini file ?
+		String path = System.getProperty("user.home") + File.separator + filename;
+		File file = new File(path);
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		return new Ini(file);
+	}
+	
+	public static List<SolrGUIServer> getServers() {
 		List<SolrGUIServer> servers = new ArrayList<SolrGUIServer>();
 		try {
-			Ini ini = new Ini(new File(path));
+			Ini ini = getIni();
 			for (Map.Entry<String, Section> entry:ini.entrySet()) {
 				Section section = entry.getValue();
 				try {
@@ -37,16 +45,17 @@ public class SolrGUIConfig {
 					e.printStackTrace();					
 				}
 			}
-		} catch (IOException e1) {
+			return servers;
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e.printStackTrace();
+			return new ArrayList<SolrGUIServer>();
 		}
-		return servers;
 	}
 
 	public static void addServer(SolrGUIServer server) {
 		try {
-			Ini ini = new Ini(new File(path));
+			Ini ini = getIni();
 			ini.add(server.getName(), "protocol", server.getURL().getProtocol());
 			ini.add(server.getName(), "host", server.getURL().getHost());
 			ini.add(server.getName(), "port", server.getURL().getPort());
