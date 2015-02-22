@@ -12,12 +12,14 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -31,13 +33,14 @@ public class SolrGUI {
 
 	private Table table;
 	private TableViewer tableViewer;
-	
+	private CTabFolder tabFolder;
 	private SolrGUIServer server;
 
-	/**
-	 * Launch the window.
-	 */
 	public static void main(String[] args) {
+		new SolrGUI().run();
+	}
+	
+	public void run() {
 		Shell shell = new Shell();
 		shell.setText("Solr GUI");
 
@@ -45,35 +48,69 @@ public class SolrGUI {
 		GridLayout layout = new GridLayout();
 		shell.setLayout(layout);
 
-		// Create a composite to hold the children.
-		Composite composite = new Composite(shell, SWT.NONE);
-		final SolrGUI solrGUI = new SolrGUI(composite, SolrGUIConfig.getServers().get(0)); // TODO loop over servers.
-		solrGUI.getControl().addDisposeListener(new DisposeListener() {
-			public void widgetDisposed(DisposeEvent e) {
-				solrGUI.dispose();
-			}
-		});
+		// Fill up shell.
+		createContents(shell);
 
 		// Make the shell to display its content.
 		shell.open();
-		solrGUI.run(shell);	
-	}
-	
-	public SolrGUI(Composite parent, SolrGUIServer server) {
-		this.server = server;
-		addChildControls(parent);
-	}
-
-	/**
-	 * Run and wait for a close event
-	 * @param shell Instance of Shell
-	 */
-	private void run(Shell shell) {
 		Display display = shell.getDisplay();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
 				display.sleep();
 		}
+		display.dispose();	
+	}
+	
+
+	
+	private void createContents(Shell shell) {
+		/*
+		Composite composite = new Composite(shell, SWT.NONE);
+		this.server = SolrGUIConfig.getServers().get(0); // TODO loop over servers.
+		addChildControls(composite);
+		
+		getControl().addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent e) {
+				solrGUI.dispose();
+			}
+		});
+		*/
+		
+		shell.setLayout(new GridLayout(1, true));
+
+		// Create the buttons to create tabs
+		Composite composite = new Composite(shell, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		composite.setLayout(new RowLayout());
+		  
+		// Add server button
+		Button button = new Button(composite, SWT.PUSH);
+		button.setText("Add Server");
+		button.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				CTabItem item = new CTabItem(tabFolder, SWT.NONE, 0);
+				item.setText("Tab");
+		    }
+		});
+
+		// Create the tabs
+		tabFolder = new CTabFolder(shell, SWT.TOP | SWT.CLOSE | SWT.BORDER);
+		tabFolder.setBorderVisible(true);
+		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+		tabFolder.setSimple(false);
+		tabFolder.setTabHeight(25);
+		
+		// Set up a gradient background for the selected tab
+		Display display = shell.getDisplay();
+		Color titleForeColor = display.getSystemColor(SWT.COLOR_TITLE_FOREGROUND);
+		Color titleBackColor1 = display.getSystemColor(SWT.COLOR_TITLE_BACKGROUND);
+		Color titleBackColor2 = display.getSystemColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT);
+		tabFolder.setSelectionForeground(titleForeColor);
+		tabFolder.setSelectionBackground(
+		    new Color[] {titleBackColor1, titleBackColor2},
+			new int[] {100},
+			true
+		);
 	}
 
 	/**
