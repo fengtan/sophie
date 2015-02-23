@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
-public class ServerTab {
+public class ServerMenu {
 
 	
 	public void updateMenu(Menu menu, final Shell shell) { // TODO drop shell argument ?

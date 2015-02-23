@@ -6,11 +6,11 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.swt.widgets.TableItem;
 
 public class SolrGUICellModifier implements ICellModifier {
-	private SolrGUI solrGUI;
+	private SolrGUIServer server;
 	
-	public SolrGUICellModifier(SolrGUI solrGUI) {
+	public SolrGUICellModifier(SolrGUIServer server) {
 		super();
-		this.solrGUI = solrGUI;
+		this.server = server;
 	}
 
 	/**
@@ -19,7 +19,7 @@ public class SolrGUICellModifier implements ICellModifier {
 	 * All Solr fields can be modified. The others cannot.
 	 */
 	public boolean canModify(Object element, String columnName) {
-		return Arrays.asList(solrGUI.getServer().getFields()).contains(columnName);
+		return Arrays.asList(server.getFields()).contains(columnName);
 	}
 
 	/**
@@ -37,7 +37,7 @@ public class SolrGUICellModifier implements ICellModifier {
 		TableItem item = (TableItem) element;
 		SolrGUIDocument document = (SolrGUIDocument) item.getData();
 		document.setField(columnName, value.toString());
-		solrGUI.getServer().documentChanged(document);
+		server.documentChanged(document);
 		// TODO do not mark as Modified if new value = old value
 	}
 }
