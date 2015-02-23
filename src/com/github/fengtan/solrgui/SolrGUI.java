@@ -58,38 +58,37 @@ public class SolrGUI {
 			if (!display.readAndDispatch())
 				display.sleep();
 		}
-		display.dispose();	
+		display.dispose();
 	}
 	
-
+	// TODO separate Table & Tab in 2 classes
 	
 	private void createContents(Shell shell) {
-		/*
-		Composite composite = new Composite(shell, SWT.NONE);
-		this.server = SolrGUIConfig.getServers().get(0); // TODO loop over servers.
-		addChildControls(composite);
-		
-		getControl().addDisposeListener(new DisposeListener() {
-			public void widgetDisposed(DisposeEvent e) {
-				solrGUI.dispose();
-			}
-		});
-		*/
-		
 		shell.setLayout(new GridLayout(1, true));
 
 		// Create the buttons to create tabs
-		Composite composite = new Composite(shell, SWT.NONE);
+		final Composite composite = new Composite(shell, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		composite.setLayout(new RowLayout());
-		  
+
 		// Add server button
 		Button button = new Button(composite, SWT.PUSH);
 		button.setText("Add Server");
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				CTabItem item = new CTabItem(tabFolder, SWT.NONE, 0);
-				item.setText("Tab");
+				server = SolrGUIConfig.getServers().get(0); // TODO loop over servers.
+				CTabItem tab = new CTabItem(tabFolder, SWT.NONE, 0);
+				tab.setText(server.getName());
+				addChildControls(tab.getParent());
+				tab.setControl(table);
+				// TODO set focus on new tab
+				/* TODO
+				getControl().addDisposeListener(new DisposeListener() {
+					public void widgetDisposed(DisposeEvent e) {
+						solrGUI.dispose();
+					}
+				});
+				*/
 		    }
 		});
 
@@ -99,7 +98,7 @@ public class SolrGUI {
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tabFolder.setSimple(false);
 		tabFolder.setTabHeight(25);
-		
+
 		// Set up a gradient background for the selected tab
 		Display display = shell.getDisplay();
 		Color titleForeColor = display.getSystemColor(SWT.COLOR_TITLE_FOREGROUND);
@@ -127,7 +126,6 @@ public class SolrGUI {
 	 * @return the shell that was created	 
 	 */
 	private void addChildControls(Composite composite) {
-
 		// Create a composite to hold the children
 		GridData gridData = new GridData (GridData.HORIZONTAL_ALIGN_FILL | GridData.FILL_BOTH);
 		composite.setLayoutData (gridData);
@@ -137,9 +135,9 @@ public class SolrGUI {
 		layout.marginWidth = 4;
 		composite.setLayout (layout);
 
-		// Create the table 
+		// Create the table
 		createTable(composite);
-		
+
 		// Create and setup the TableViewer
 		createTableViewer();
 		tableViewer.setContentProvider(new SolrGUIContentProvider());
@@ -158,7 +156,7 @@ public class SolrGUI {
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
 
 		table = new Table(parent, style);
-		
+
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
 		gridData.horizontalSpan = 3;
@@ -167,7 +165,8 @@ public class SolrGUI {
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 
-		TableColumn column = new TableColumn(table, SWT.CENTER, 0);		
+		TableColumn column = new TableColumn(table, SWT.CENTER, 0);
+		// TODO Review tooltip + Changes vs Status (Ctrl+F) should be consistent 
 		column.setText("Changes");
 		column.setToolTipText("Pending changes:\nClick on \"Commit\" to push to Solr\nClick on \"Revert\" to cancel changes");
 		column.setWidth(20);
@@ -183,6 +182,7 @@ public class SolrGUI {
 			});
 			column.pack();
 		}
+
 	}
 
 	/**
@@ -199,7 +199,7 @@ public class SolrGUI {
 		// Create the cell editors
 		CellEditor[] editors = new CellEditor[tableViewer.getColumnProperties().length];
 		TextCellEditor textEditor;
-		for (int i=0; i<editors.length; i++) { // TODO pb: last column not editable.
+		for (int i=0; i<editors.length; i++) {
 			textEditor = new TextCellEditor(table);
 			((Text) textEditor.getControl()).setTextLimit(60);
 			editors[i] = textEditor;
