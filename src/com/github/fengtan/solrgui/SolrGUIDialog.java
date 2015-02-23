@@ -1,4 +1,4 @@
-package incorporate;
+package com.github.fengtan.solrgui;
 
 
 import java.net.MalformedURLException;
@@ -13,14 +13,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.SolrGUIConfig;
-import com.github.fengtan.solrgui.SolrGUIServer;
-
-public class NewServerDialog {
+public class SolrGUIDialog {
 
 	private Shell dialog;
 	
-	public NewServerDialog(Shell parent) {
+	public SolrGUIDialog(Shell parent) {
 		dialog = new Shell(parent);
         dialog.setText("Add server");
         dialog.setSize(500, 400);
@@ -46,7 +43,7 @@ public class NewServerDialog {
         new Text(dialog, SWT.BORDER).setText("8983");
         
         new Label(dialog, SWT.NULL).setText("Path");
-        new Text(dialog, SWT.BORDER).setText("/solr/mycollection");
+        new Text(dialog, SWT.BORDER).setText("/solr/collection1");
         
         Button button = new Button(dialog, SWT.PUSH);
         button.setText("Add server");
@@ -54,7 +51,7 @@ public class NewServerDialog {
             @Override
             public void widgetSelected(SelectionEvent e) {
 				try {
-					SolrGUIServer server = new SolrGUIServer(new URL("http", "localhost", "path"), "plop");
+					SolrGUIServer server = new SolrGUIServer(new URL("http", "localhost", 8983, "/solr/collection1"), "plop");
 	                SolrGUIConfig.addServer(server);
 				} catch (MalformedURLException e1) {
 					// TODO Auto-generated catch block

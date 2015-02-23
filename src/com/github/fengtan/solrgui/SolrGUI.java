@@ -44,7 +44,7 @@ public class SolrGUI {
 	
 	// TODO separate Table & Tab in 2 classes
 	
-	private void createContents(Shell shell) {
+	private void createContents(final Shell shell) {
 		shell.setLayout(new GridLayout(1, true));
 
 		final Composite composite = new Composite(shell, SWT.NONE);
@@ -75,7 +75,7 @@ public class SolrGUI {
 		button.setText("Add Server");
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				new SolrGUITab(tabFolder, SolrGUIConfig.getServers().get(0)); // TODO loop over servers.
+				new SolrGUIDialog(shell).open();
 				/* TODO
 				getControl().addDisposeListener(new DisposeListener() {
 					public void widgetDisposed(DisposeEvent e) {

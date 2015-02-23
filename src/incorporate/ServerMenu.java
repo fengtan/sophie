@@ -7,6 +7,8 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
+import com.github.fengtan.solrgui.SolrGUIDialog;
+
 public class ServerMenu {
 
 	
@@ -23,7 +25,7 @@ public class ServerMenu {
         newItem.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                new NewServerDialog(shell).open();
+                new SolrGUIDialog(shell).open();
               }
 		});
         

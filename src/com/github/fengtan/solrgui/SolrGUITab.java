@@ -35,6 +35,7 @@ public class SolrGUITab extends CTabItem {
 		super(tabFolder, SWT.NONE, 0); // TODO 0 -> size -1 ? so tab opens at the right
 		this.server = server;
 		setText(server.getName());
+		setToolTipText(server.getURL().toString());
 		addChildControls(getParent());
 		setControl(table);
 		// Set focus on this tab.
@@ -45,7 +46,6 @@ public class SolrGUITab extends CTabItem {
 
 	/**
 	 * Create a new shell, add the widgets, open the shell
-	 * @return the shell that was created	 
 	 */
 	private void addChildControls(Composite composite) {
 		// Create a composite to hold the children
@@ -64,7 +64,6 @@ public class SolrGUITab extends CTabItem {
 		createTableViewer();
 		tableViewer.setContentProvider(new SolrGUIContentProvider());
 		tableViewer.setLabelProvider(new SolrGUILabelProvider(server));
-		// server = new SolrGUIServer(url); TODO drop
 		tableViewer.setInput(server);
 
 		// Add the buttons
