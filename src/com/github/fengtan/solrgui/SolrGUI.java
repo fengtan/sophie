@@ -47,27 +47,9 @@ public class SolrGUI {
 	private void createContents(Shell shell) {
 		shell.setLayout(new GridLayout(1, true));
 
-		// Create the buttons to create tabs
 		final Composite composite = new Composite(shell, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		composite.setLayout(new RowLayout());
-
-		// Add server button
-		Button button = new Button(composite, SWT.PUSH);
-		button.setText("Add Server");
-		button.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				new SolrGUITab(tabFolder, SolrGUIConfig.getServers().get(0)); // TODO loop over servers.
-				// TODO set focus on new tab
-				/* TODO
-				getControl().addDisposeListener(new DisposeListener() {
-					public void widgetDisposed(DisposeEvent e) {
-						solrGUI.dispose();
-					}
-				});
-				*/
-		    }
-		});
 
 		// Create the tabs
 		tabFolder = new CTabFolder(shell, SWT.TOP | SWT.CLOSE | SWT.BORDER);
@@ -87,12 +69,34 @@ public class SolrGUI {
 			new int[] {100},
 			true
 		);
+
+		// Add server button
+		Button button = new Button(composite, SWT.PUSH);
+		button.setText("Add Server");
+		button.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				new SolrGUITab(tabFolder, SolrGUIConfig.getServers().get(0)); // TODO loop over servers.
+				/* TODO
+				getControl().addDisposeListener(new DisposeListener() {
+					public void widgetDisposed(DisposeEvent e) {
+						solrGUI.dispose();
+					}
+				});
+				*/
+		    }
+		});
+		
+		// Initialize tabs from config file.
+		for (SolrGUIServer server: SolrGUIConfig.getServers()) {
+			new SolrGUITab(tabFolder, server);
+		}
+
 	}
 
 	/*
 	 * Close the window and dispose of resources
 	 */
-	public void close() {
+	public void close() { // TODO does this get called ? 
 		Shell shell = tabFolder.getShell();
 		if (shell != null && !shell.isDisposed()) {
 			shell.dispose();	

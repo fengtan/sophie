@@ -31,12 +31,15 @@ public class SolrGUITab extends CTabItem {
 	private TableViewer tableViewer;
 	private SolrGUIServer server;
 	
-	public SolrGUITab(CTabFolder folder, SolrGUIServer server) {
-		super(folder, SWT.NONE, 0); // TODO 0 -> size -1 ? so tab opens at the right
+	public SolrGUITab(CTabFolder tabFolder, SolrGUIServer server) {
+		super(tabFolder, SWT.NONE, 0); // TODO 0 -> size -1 ? so tab opens at the right
 		this.server = server;
 		setText(server.getName());
 		addChildControls(getParent());
 		setControl(table);
+		// Set focus on this tab.
+		tabFolder.setSelection(this);
+		tabFolder.forceFocus();
 	}
 	
 
