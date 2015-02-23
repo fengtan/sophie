@@ -32,7 +32,7 @@ public class SolrGUITab extends CTabItem {
 	private SolrGUIServer server;
 	
 	public SolrGUITab(CTabFolder tabFolder, SolrGUIServer server) {
-		super(tabFolder, SWT.NONE, 0); // TODO 0 -> size -1 ? so tab opens at the right
+		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
 		this.server = server;
 		setText(server.getName());
 		setToolTipText(server.getURL().toString());

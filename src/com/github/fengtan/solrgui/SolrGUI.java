@@ -79,6 +79,7 @@ public class SolrGUI {
     	// TODO validate connection before saving
     	// TODO onfocus, drop default values
         // TODO size of text fields
+		// TODO possibility to reduce/expand toolbar
         new Label(composite, SWT.NULL).setText("Name");
         final Text name = new Text(composite, SWT.BORDER); // TODO border
         name.setText("collection1@localhost");
@@ -90,11 +91,12 @@ public class SolrGUI {
 		button.setText("Add Server");
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				// TODO get dynamic values from text fields.
 				// TODO open new tab.
+				// TODO do not create if server already exists.
 				try {
 					SolrGUIServer server = new SolrGUIServer(new URL(url.getText()), name.getText());
 	                SolrGUIConfig.addServer(server);
+	                new SolrGUITab(tabFolder, server);
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
