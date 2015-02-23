@@ -1,5 +1,8 @@
 package com.github.fengtan.solrgui;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -11,7 +14,9 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
 public class SolrGUI {
 
@@ -70,12 +75,30 @@ public class SolrGUI {
 			true
 		);
 
-		// Add server button
+		// 'Add server' UI.
+    	// TODO validate connection before saving
+    	// TODO onfocus, drop default values
+        // TODO size of text fields
+        new Label(composite, SWT.NULL).setText("Name");
+        final Text name = new Text(composite, SWT.BORDER); // TODO border
+        name.setText("collection1@localhost");
+        new Label(composite, SWT.NULL).setText("URL");
+        final Text url = new Text(composite, SWT.BORDER); // TODO border
+        url.setText("http://localhost:8983/solr/collection1");
+        
 		Button button = new Button(composite, SWT.PUSH);
 		button.setText("Add Server");
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				new SolrGUIDialog(shell).open();
+				// TODO get dynamic values from text fields.
+				// TODO open new tab.
+				try {
+					SolrGUIServer server = new SolrGUIServer(new URL(url.getText()), name.getText());
+	                SolrGUIConfig.addServer(server);
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				/* TODO
 				getControl().addDisposeListener(new DisposeListener() {
 					public void widgetDisposed(DisposeEvent e) {
