@@ -35,7 +35,9 @@ public class SolrGUI {
 		shell.setLayout(layout);
 
 		// Fill up shell.
-		createContents(shell);
+		Composite composite = createComposite(shell);
+		createTabFolder(composite, shell);
+		createToolbar(composite);
 
 		// Make the shell to display its content.
 		shell.open();
@@ -47,15 +49,15 @@ public class SolrGUI {
 		display.dispose();
 	}
 	
-	// TODO separate Table & Tab in 2 classes
-	
-	private void createContents(final Shell shell) {
+	private Composite createComposite(Shell shell) {
 		shell.setLayout(new GridLayout(1, true));
-
-		final Composite composite = new Composite(shell, SWT.NONE);
+		Composite composite = new Composite(shell, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		composite.setLayout(new RowLayout());
-
+		return composite;
+	}
+	
+	private void createTabFolder(Composite composite, final Shell shell) {
 		// Create the tabs
 		tabFolder = new CTabFolder(shell, SWT.TOP | SWT.CLOSE | SWT.BORDER);
 		tabFolder.setBorderVisible(true);
@@ -74,7 +76,15 @@ public class SolrGUI {
 			new int[] {100},
 			true
 		);
-
+		
+		// Initialize tabs from config file.
+		for (SolrGUIServer server: SolrGUIConfig.getServers()) {
+			new SolrGUITab(tabFolder, server);
+		}
+		
+	}
+	
+	private void createToolbar(Composite composite) {
 		// 'Add server' UI.
     	// TODO validate connection before saving
     	// TODO onfocus, drop default values
@@ -110,11 +120,6 @@ public class SolrGUI {
 				*/
 		    }
 		});
-		
-		// Initialize tabs from config file.
-		for (SolrGUIServer server: SolrGUIConfig.getServers()) {
-			new SolrGUITab(tabFolder, server);
-		}
 
 	}
 
