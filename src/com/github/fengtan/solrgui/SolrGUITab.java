@@ -32,12 +32,12 @@ public class SolrGUITab extends CTabItem {
 		setText(server.getName());
 		setToolTipText(server.getURL().toString());
 		// Fill up tab.
-		Composite composite = getParent();
+		Composite composite = new Composite(getParent(), SWT.BORDER);
 		createLayout(composite);
 		createTable(composite);
 		createTableViewer();
 		createButtons(composite);
-		setControl(table);
+		setControl(composite);
 		// Set focus on this tab.
 		tabFolder.setSelection(this);
 		tabFolder.forceFocus();
@@ -92,7 +92,6 @@ public class SolrGUITab extends CTabItem {
 	 * Create the TableViewer 
 	 */
 	private void createTableViewer() {
-
 		tableViewer = new TableViewer(table);
 		tableViewer.setUseHashlookup(true);
 		
