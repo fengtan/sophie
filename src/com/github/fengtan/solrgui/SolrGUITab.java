@@ -31,40 +31,27 @@ public class SolrGUITab extends CTabItem {
 		this.server = server;
 		setText(server.getName());
 		setToolTipText(server.getURL().toString());
-		addChildControls(getParent());
+		// Fill up tab.
+		Composite composite = getParent();
+		createLayout(composite);
+		createTable(composite);
+		createTableViewer();
+		createButtons(composite);
 		setControl(table);
 		// Set focus on this tab.
 		tabFolder.setSelection(this);
 		tabFolder.forceFocus();
 	}
 
-	/**
-	 * Create a new shell, add the widgets, open the shell
-	 */
-	private void addChildControls(Composite composite) {
-		// Create a composite to hold the children
+	private void createLayout(Composite composite) {
 		GridData gridData = new GridData (GridData.HORIZONTAL_ALIGN_FILL | GridData.FILL_BOTH);
 		composite.setLayoutData (gridData);
-
 		// Set numColumns to 3 for the buttons 
 		GridLayout layout = new GridLayout(3, false);
 		layout.marginWidth = 4;
 		composite.setLayout (layout);
-
-		// Create the table
-		createTable(composite);
-
-		// Create and setup the TableViewer
-		createTableViewer();
-		tableViewer.setContentProvider(new SolrGUIContentProvider());
-		tableViewer.setLabelProvider(new SolrGUILabelProvider(server));
-		tableViewer.setInput(server);
-
-		// Add the buttons
-		createButtons(composite);
 	}
 	
-
 	/**
 	 * Create the Table
 	 */
@@ -126,6 +113,10 @@ public class SolrGUITab extends CTabItem {
 		tableViewer.setCellModifier(new SolrGUICellModifier(server));
 		// Set the default sorter for the viewer 
 		tableViewer.setSorter(new SolrGUIServerSorter(server.getFields()[0])); // TODO what if there is no field
+		
+		tableViewer.setContentProvider(new SolrGUIContentProvider());
+		tableViewer.setLabelProvider(new SolrGUILabelProvider(server));
+		tableViewer.setInput(server);
 	}
 
 	@Override
@@ -175,13 +166,14 @@ public class SolrGUITab extends CTabItem {
 	}
 	
 	/**
-	 * Add the "Add", "Delete" and "Close" buttons
-	 * @param parent the parent composite
+	 * Add the "Add", "Delete" and "Commit" buttons
+	 * 
+	 * @param composite the parent composite
 	 */
-	private void createButtons(Composite parent) {
+	private void createButtons(Composite composite) {
 		
 		// Create and configure the "Add" button
-		Button add = new Button(parent, SWT.PUSH | SWT.CENTER);
+		Button add = new Button(composite, SWT.PUSH | SWT.CENTER);
 		add.setText("Add");
 		GridData gridData = new GridData (GridData.HORIZONTAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80;
@@ -193,7 +185,7 @@ public class SolrGUITab extends CTabItem {
 		});
 
 		//	Create and configure the "Delete" button
-		Button delete = new Button(parent, SWT.PUSH | SWT.CENTER);
+		Button delete = new Button(composite, SWT.PUSH | SWT.CENTER);
 		delete.setText("Delete");
 		gridData = new GridData (GridData.HORIZONTAL_ALIGN_BEGINNING);
 		gridData.widthHint = 80; 
@@ -208,7 +200,7 @@ public class SolrGUITab extends CTabItem {
 		});
 
 		//	Create and configure the "Commit" button.
-		Button commit = new Button(parent, SWT.PUSH | SWT.CENTER);
+		Button commit = new Button(composite, SWT.PUSH | SWT.CENTER);
 		commit.setText("Commit");
 		gridData = new GridData (GridData.HORIZONTAL_ALIGN_END);
 		gridData.widthHint = 80; 
@@ -219,7 +211,6 @@ public class SolrGUITab extends CTabItem {
 				tableViewer.refresh(); // TODO useless ?
 			}
 		});
-		
 		// TODO ability to clone a document
 	}
 
