@@ -1,11 +1,7 @@
 package com.github.fengtan.solrgui;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -20,7 +16,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
@@ -42,7 +37,6 @@ public class SolrGUITab extends CTabItem {
 		tabFolder.setSelection(this);
 		tabFolder.forceFocus();
 	}
-	
 
 	/**
 	 * Create a new shell, add the widgets, open the shell
@@ -227,29 +221,6 @@ public class SolrGUITab extends CTabItem {
 		});
 		
 		// TODO ability to clone a document
-	}
-
-	/**
-	 * Return the column names in a collection TODO needed ?
-	 * 
-	 * @return List  containing column names
-	 */
-	public List<String> getColumnNames() {
-		return Arrays.asList(server.getFields());
-	}
-
-	/**
-	 * @return currently selected item TODO needed ?
-	 */
-	public ISelection getSelection() {
-		return tableViewer.getSelection();
-	}
-
-	/**
-	 * Return the parent composite TODO needed ?
-	 */
-	public Control getControl() {
-		return table.getParent();
 	}
 
 }
