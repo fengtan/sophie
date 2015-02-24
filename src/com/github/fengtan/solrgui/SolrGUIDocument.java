@@ -4,13 +4,11 @@ import java.util.Random;
 
 import org.apache.solr.common.SolrDocument;
 
-// TODO extend SolrDocument ? might simplify the code
 public class SolrGUIDocument {
 
 	private SolrGUIChange change = SolrGUIChange.NONE;
 	private SolrDocument document;
 	
-	// TODO drop ?
 	public SolrGUIDocument(SolrDocument document) {
 		this.document = document;
 	}
