@@ -197,6 +197,22 @@ public class SolrGUITab extends CTabItem {
 				} 				
 			}
 		});
+		
+		//	Create and configure the "Clone" button
+		Button clone = new Button(composite, SWT.PUSH | SWT.CENTER);
+		clone.setText("Clone");
+		gridData = new GridData (GridData.HORIZONTAL_ALIGN_BEGINNING);
+		gridData.widthHint = 80; 
+		clone.setLayoutData(gridData);
+		clone.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				SolrGUIDocument document = (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
+				if (document != null) {
+					// TODO Cloning generate remote exception
+					server.addDocument(document);
+				} 				
+			}
+		});
 
 		//	Create and configure the "Commit" button.
 		Button commit = new Button(composite, SWT.PUSH | SWT.CENTER);
@@ -210,7 +226,6 @@ public class SolrGUITab extends CTabItem {
 				tableViewer.refresh();
 			}
 		});
-		// TODO ability to clone a document
 	}
 
 }

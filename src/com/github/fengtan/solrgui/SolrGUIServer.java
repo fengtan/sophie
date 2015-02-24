@@ -21,6 +21,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
 // TODO test with Solr < 4.
+// TODO test 2 servers with different fields/schema.
 public class SolrGUIServer {
 
 	private URL url;
@@ -78,10 +79,16 @@ public class SolrGUIServer {
 	}
 	
 	/**
-	 * Add a new document to the collection of documents
+	 * Add a blank document to the collection of documents
 	 */
 	public void addDocument() {
-		SolrGUIDocument document = new SolrGUIDocument(getFields());
+		addDocument(new SolrGUIDocument(getFields()));
+	}
+
+	/**
+	 * Add a new document to the collection of documents
+	 */
+	public void addDocument(SolrGUIDocument document) {
 		document.setChange(SolrGUIChange.ADDED);
 		documents.add(documents.size(), document);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
