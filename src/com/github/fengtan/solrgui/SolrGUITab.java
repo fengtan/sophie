@@ -47,9 +47,9 @@ public class SolrGUITab extends CTabItem {
 		GridData gridData = new GridData (GridData.HORIZONTAL_ALIGN_FILL | GridData.FILL_BOTH);
 		composite.setLayoutData (gridData);
 		// Set numColumns to 3 for the buttons 
-		GridLayout layout = new GridLayout(3, false);
+		GridLayout layout = new GridLayout(4, false);
 		layout.marginWidth = 4;
-		composite.setLayout (layout);
+		composite.setLayout(layout);
 	}
 	
 	/**
@@ -62,7 +62,7 @@ public class SolrGUITab extends CTabItem {
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
-		gridData.horizontalSpan = 3;
+		gridData.horizontalSpan = 4;
 		table.setLayoutData(gridData);
 					
 		table.setLinesVisible(true);
@@ -124,7 +124,6 @@ public class SolrGUITab extends CTabItem {
 		server.dispose();
 		super.dispose();
 	}
-	
 
 	/**
 	 * InnerClass that acts as a proxy for the SolrGUIServer
@@ -163,14 +162,14 @@ public class SolrGUITab extends CTabItem {
 			tableViewer.update(document, null);	
 		}
 	}
-	
+
 	/**
 	 * Add the "Add", "Delete" and "Commit" buttons
 	 * 
 	 * @param composite the parent composite
 	 */
 	private void createButtons(Composite composite) {
-		
+
 		// Create and configure the "Add" button
 		Button add = new Button(composite, SWT.PUSH | SWT.CENTER);
 		add.setText("Add");
@@ -197,7 +196,7 @@ public class SolrGUITab extends CTabItem {
 				} 				
 			}
 		});
-		
+
 		//	Create and configure the "Clone" button
 		Button clone = new Button(composite, SWT.PUSH | SWT.CENTER);
 		clone.setText("Clone");
@@ -209,7 +208,7 @@ public class SolrGUITab extends CTabItem {
 				SolrGUIDocument document = (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
 				if (document != null) {
 					// TODO Cloning generate remote exception
-					server.addDocument(document);
+					server.addDocument(document); // TODO clone item multiple times + modify it = pb -- implements Cloneable
 				} 				
 			}
 		});
