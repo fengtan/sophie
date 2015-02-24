@@ -6,6 +6,7 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.swt.widgets.TableItem;
 
 public class SolrGUICellModifier implements ICellModifier {
+
 	private SolrGUIServer server;
 	
 	public SolrGUICellModifier(SolrGUIServer server) {

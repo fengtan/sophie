@@ -47,6 +47,7 @@ public class SolrGUI {
 				display.sleep();
 		}
 		display.dispose();
+		shell.dispose();
 	}
 	
 	private Composite createComposite(Shell shell) {
@@ -101,7 +102,6 @@ public class SolrGUI {
 		button.setText("Add Server");
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				// TODO open new tab.
 				// TODO do not create if server already exists.
 				try {
 					SolrGUIServer server = new SolrGUIServer(new URL(url.getText()), name.getText());
@@ -121,16 +121,6 @@ public class SolrGUI {
 		    }
 		});
 
-	}
-
-	/*
-	 * Close the window and dispose of resources
-	 */
-	public void close() { // TODO does this get called ? 
-		Shell shell = tabFolder.getShell();
-		if (shell != null && !shell.isDisposed()) {
-			shell.dispose();	
-		}
 	}
 
 }

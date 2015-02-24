@@ -63,7 +63,7 @@ public class SolrGUITab extends CTabItem {
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
 		gridData.horizontalSpan = 3;
-		table.setLayoutData(gridData);		
+		table.setLayoutData(gridData);
 					
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
@@ -121,7 +121,7 @@ public class SolrGUITab extends CTabItem {
 	@Override
 	public void dispose() {
 		tableViewer.getLabelProvider().dispose();
-		server.dispose(); // TODO is this method called ? if not, call it from SolrGUI.dispose()
+		server.dispose();
 		super.dispose();
 	}
 	
@@ -207,7 +207,7 @@ public class SolrGUITab extends CTabItem {
 		commit.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				server.commit();
-				tableViewer.refresh(); // TODO useless ?
+				tableViewer.refresh();
 			}
 		});
 		// TODO ability to clone a document

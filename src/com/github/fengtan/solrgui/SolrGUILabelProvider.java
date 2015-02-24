@@ -8,7 +8,6 @@ import org.eclipse.swt.graphics.Image;
 
 public class SolrGUILabelProvider extends LabelProvider implements ITableLabelProvider {
 
-	// TODO ideally we should not need this in a LabelProvider.
 	private SolrGUIServer server;
 	
 	public SolrGUILabelProvider(SolrGUIServer server) {

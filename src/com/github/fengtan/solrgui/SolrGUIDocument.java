@@ -1,6 +1,5 @@
 package com.github.fengtan.solrgui;
 
-import java.util.Collection;
 import java.util.Random;
 
 import org.apache.solr.common.SolrDocument;
@@ -40,10 +39,6 @@ public class SolrGUIDocument {
 	
 	public void setField(String name, Object value) {
 		document.setField(name, value);
-	}
-	
-	public Collection<String> getFieldNames() {
-		return document.getFieldNames();
 	}
 	
 	public Object getFieldValue(String name) {

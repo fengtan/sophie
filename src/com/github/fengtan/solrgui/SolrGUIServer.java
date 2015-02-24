@@ -123,8 +123,6 @@ public class SolrGUIServer {
 		changeListeners.add(viewer);
 	}
 	
-	// TODO is there a better way to get the list of fields ? e.g. SolrQuery with only 1 document (not q *:*)
-	// TODO what if there is no document in the server ?
 	public String[] getFields() {
 		LukeRequest request = new LukeRequest();
 		try {
@@ -145,7 +143,7 @@ public class SolrGUIServer {
 			e.printStackTrace();
 			return new String[]{};
 		}
-		/* TODO provide option to use this in case Luke handler is not available?
+		/* TODO provide option to use this in case Luke handler is not available? requires at least 1 document in the server
 		Collection<String> fields = getAllDocuments().get(0).getFieldNames();
 		return fields.toArray(new String[fields.size()]);
 		*/
@@ -154,7 +152,7 @@ public class SolrGUIServer {
 	public void commit() {
 		// TODO could use CollectionUtils.filter().
 		// TODO graceful degradation if Luke handlers not provided by server
-		// TODO clean up libraries
+		// TODO are all jars required ?
 		SolrInputDocument input;
 		for (SolrGUIDocument document:documents) {
 			switch (document.getChange()) {
@@ -205,7 +203,6 @@ public class SolrGUIServer {
 		try {
 			server.commit(); 
 			refreshDocuments();  // Returned object seems to have no relevant information.
-			// TODO popup to confirm commit is successful ?
 			// TODO allow to revert a specific document
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
