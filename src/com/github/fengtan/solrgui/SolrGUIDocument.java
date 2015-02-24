@@ -23,6 +23,10 @@ public class SolrGUIDocument {
 		document.setField("id", new Random().nextInt(1000));
 	}
 	
+	public SolrGUIDocument clone() {
+		return new SolrGUIDocument(document);
+	}
+	
 	public SolrGUIChange getChange() {
 		return change;
 	}

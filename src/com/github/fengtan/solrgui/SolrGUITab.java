@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
+// TODO mechanism to load / delete servers from config file.
 public class SolrGUITab extends CTabItem {
 
 	private Table table;
@@ -94,7 +95,7 @@ public class SolrGUITab extends CTabItem {
 	private void createTableViewer() {
 		tableViewer = new TableViewer(table);
 		tableViewer.setUseHashlookup(true);
-		
+
 		String[] columns = ArrayUtils.addAll(new String[]{"Status"}, server.getFields());
 		tableViewer.setColumnProperties(columns);
 
@@ -112,7 +113,7 @@ public class SolrGUITab extends CTabItem {
 		tableViewer.setCellModifier(new SolrGUICellModifier(server));
 		// Set the default sorter for the viewer 
 		tableViewer.setSorter(new SolrGUIServerSorter(server.getFields()[0])); // TODO what if there is no field
-		
+
 		tableViewer.setContentProvider(new SolrGUIContentProvider());
 		tableViewer.setLabelProvider(new SolrGUILabelProvider(server));
 		tableViewer.setInput(server);
@@ -208,7 +209,7 @@ public class SolrGUITab extends CTabItem {
 				SolrGUIDocument document = (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
 				if (document != null) {
 					// TODO Cloning generate remote exception
-					server.addDocument(document); // TODO clone item multiple times + modify it = pb -- implements Cloneable
+					server.addDocument(document.clone());
 				} 				
 			}
 		});
