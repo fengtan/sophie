@@ -26,6 +26,7 @@ public class SolrGUITab extends CTabItem {
 	private Table table;
 	private TableViewer tableViewer;
 	private SolrGUIServer server;
+	private SolrGUIServerSorter sorter;
 	
 	public SolrGUITab(CTabFolder tabFolder, SolrGUIServer server) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
@@ -78,10 +79,11 @@ public class SolrGUITab extends CTabItem {
 		for (final String field:server.getFields()) {
 			column = new TableColumn(table, SWT.LEFT);
 			column.setText(field);
-			// Add listener to column so documents are sorted when clicked. 
+			// Add listener to column so documents are sorted when clicked.
 			column.addSelectionListener(new SelectionAdapter() { 
 				public void widgetSelected(SelectionEvent e) {
-					tableViewer.setSorter(new SolrGUIServerSorter(field)); // TODO does sorting scale ?
+					sorter = new SolrGUIServerSorter(field);
+					tableViewer.setSorter(sorter); // TODO does sorting scale ?
 				}
 			});
 			column.pack();
@@ -111,8 +113,8 @@ public class SolrGUITab extends CTabItem {
 		tableViewer.setCellEditors(editors);
 		// Set the cell modifier for the viewer
 		tableViewer.setCellModifier(new SolrGUICellModifier(server));
-		// Set the default sorter for the viewer 
-		tableViewer.setSorter(new SolrGUIServerSorter(server.getFields()[0])); // TODO what if there is no field
+		// Set the default sorter for the viewer.
+		tableViewer.setSorter(sorter); // null-safe.
 
 		tableViewer.setContentProvider(new SolrGUIContentProvider());
 		tableViewer.setLabelProvider(new SolrGUILabelProvider(server));
