@@ -52,9 +52,9 @@
   		<version>0.5.2</version>
   	</dependency>
   	<dependency>
-  		<groupId>org.eclipse</groupId>
+  		<groupId>swt</groupId>
   		<artifactId>jface</artifactId>
-  		<version>3.3.0-I20070606-0010</version>
+      <version>3.0.1</version>
   	</dependency>
   	<dependency>
   		<groupId>org.eclipse.swt.gtk.linux</groupId>
