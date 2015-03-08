@@ -17,36 +17,29 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SolrGUI {
 
 	private CTabFolder tabFolder;
-	private Logger logger = LoggerFactory.getLogger(SolrGUI.class);
 
 	public static void main(String[] args) {
 		new SolrGUI().run();
 	}
 	
 	public void run() {
-		logger.debug("Building window");
 		Shell shell = new Shell();
 		shell.setText("Solr GUI");
 
 		// Set layout for shell.
-		logger.debug("Building layout");
 		GridLayout layout = new GridLayout();
 		shell.setLayout(layout);
 
 		// Fill up shell.
-		logger.debug("Building composite");
 		Composite composite = createComposite(shell);
 		createTabFolder(composite, shell);
 		createToolbar(composite);
 
 		// Make the shell to display its content.
-		logger.debug("Displaying content");
 		shell.open();
 		Display display = shell.getDisplay();
 		while (!shell.isDisposed()) {

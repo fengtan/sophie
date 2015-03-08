@@ -19,6 +19,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO mechanism to load / delete servers from config file.
 public class SolrGUITab extends CTabItem {
@@ -27,9 +29,14 @@ public class SolrGUITab extends CTabItem {
 	private TableViewer tableViewer;
 	private SolrGUIServer server;
 	private SolrGUIServerSorter sorter;
+	private Logger logger = LoggerFactory.getLogger(SolrGUITab.class);
+
 	
 	public SolrGUITab(CTabFolder tabFolder, SolrGUIServer server) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
+		
+		logger.debug("Creating tab " + server.getName());
+		
 		this.server = server;
 		setText(server.getName());
 		setToolTipText(server.getURL().toString());
@@ -104,6 +111,7 @@ public class SolrGUITab extends CTabItem {
 		// Create the cell editors
 		CellEditor[] editors = new CellEditor[tableViewer.getColumnProperties().length];
 		TextCellEditor textEditor;
+
 		for (int i=0; i<editors.length; i++) {
 			textEditor = new TextCellEditor(table);
 			((Text) textEditor.getControl()).setTextLimit(60);
@@ -115,7 +123,6 @@ public class SolrGUITab extends CTabItem {
 		tableViewer.setCellModifier(new SolrGUICellModifier(server));
 		// Set the default sorter for the viewer.
 		// tableViewer.setSorter(sorter); // null-safe. TODO uncomment ?
-
 		tableViewer.setContentProvider(new SolrGUIContentProvider());
 		tableViewer.setLabelProvider(new SolrGUILabelProvider(server));
 		tableViewer.setInput(server);
