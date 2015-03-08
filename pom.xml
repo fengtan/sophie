@@ -67,16 +67,6 @@
   		<version>1.1.2</version>
   	</dependency>
   	<dependency>
-  		<groupId>commons-logging</groupId>
-  		<artifactId>commons-logging</artifactId>
-  		<version>1.2</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.noggit</groupId>
-  		<artifactId>noggit</artifactId>
-  		<version>0.7</version>
-  	</dependency>
-  	<dependency>
   		<groupId>org.apache.commons</groupId>
   		<artifactId>commons-lang3</artifactId>
   		<version>3.3.2</version>
@@ -91,7 +81,7 @@
   		<artifactId>jface</artifactId>
       <version>3.0.1</version>
   	</dependency>
-  	<dependency>
+  	<dependency><!-- TODO linux -->
   		<groupId>org.eclipse.swt.gtk.linux</groupId>
   		<artifactId>x86_64</artifactId>
   		<version>3.3.0-v3346</version>
