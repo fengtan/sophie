@@ -30,23 +30,23 @@ public class SolrGUI {
 	}
 	
 	public void run() {
-		logger.info("Building window");
+		logger.debug("Building window");
 		Shell shell = new Shell();
 		shell.setText("Solr GUI");
 
 		// Set layout for shell.
-		logger.info("Building layout");
+		logger.debug("Building layout");
 		GridLayout layout = new GridLayout();
 		shell.setLayout(layout);
 
 		// Fill up shell.
-		logger.info("Building composite");
+		logger.debug("Building composite");
 		Composite composite = createComposite(shell);
 		createTabFolder(composite, shell);
 		createToolbar(composite);
 
 		// Make the shell to display its content.
-		logger.info("Displaying content");
+		logger.debug("Displaying content");
 		shell.open();
 		Display display = shell.getDisplay();
 		while (!shell.isDisposed()) {
