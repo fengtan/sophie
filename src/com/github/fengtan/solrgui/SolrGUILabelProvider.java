@@ -8,10 +8,10 @@ import org.eclipse.swt.graphics.Image;
 
 public class SolrGUILabelProvider extends LabelProvider implements ITableLabelProvider {
 
-	private SolrGUIServer server;
+	String[] fields;
 	
 	public SolrGUILabelProvider(SolrGUIServer server) {
-		this.server = server;
+		this.fields = server.getFields();
 	}
 	
 	/**
@@ -34,7 +34,6 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 				}
 			default: // Solr fields.
 				int fieldIndex = columnIndex-1;
-				String[] fields = server.getFields();
 				if (fieldIndex < fields.length) {
 					String field = fields[fieldIndex];
 					return Objects.toString(document.getFieldValue(field), "");	

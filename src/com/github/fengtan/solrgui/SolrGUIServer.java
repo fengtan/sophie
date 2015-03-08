@@ -38,7 +38,7 @@ public class SolrGUIServer {
 		this.name = name;
 		this.server = new HttpSolrServer(url.toExternalForm());
 		this.parameters.put("q", "*:*"); // TODO allow user to alter / add default params.
-		this.parameters.put("rows", "50"); // TODO idem
+		this.parameters.put("rows", "100"); // TODO idem
 		refreshDocuments();
 	}
 	
