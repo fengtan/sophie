@@ -46,29 +46,21 @@ public class SolrGUIServer {
 	}
 	
 	public void refreshDocuments() {
-		documents = getAllDocuments();
-	}
-	
-	// TODO cache ? use transactions ?
-	private List<SolrGUIDocument> getAllDocuments() {
+		// TODO cache ? use transactions ?
+		// TODO allow not to use the default request handler + allow to configure req params => advanded "Add Server" in menus
 		SolrQuery query = new SolrQuery();
 		query.set("q", "*:*");
-		return getDocumentList(query);
-	}
-	
-	private List<SolrGUIDocument> getDocumentList(SolrQuery query) {
-		List<SolrGUIDocument> list = new ArrayList<SolrGUIDocument>();
+		documents = new ArrayList<SolrGUIDocument>();
 		QueryResponse response;
 		try {
 			response = server.query(query);
+			for (SolrDocument document:response.getResults()) {
+				documents.add(new SolrGUIDocument(document));
+			}
 		} catch (SolrServerException e) {
 			// TODO log error
-			return list;
+			e.printStackTrace();
 		}
-		for (SolrDocument document:response.getResults()) {
-			list.add(new SolrGUIDocument(document));
-		}
-		return list;
 	}
 
 	/**
