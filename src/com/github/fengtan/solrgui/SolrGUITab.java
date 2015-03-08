@@ -114,7 +114,7 @@ public class SolrGUITab extends CTabItem {
 		// Set the cell modifier for the viewer
 		tableViewer.setCellModifier(new SolrGUICellModifier(server));
 		// Set the default sorter for the viewer.
-		tableViewer.setSorter(sorter); // null-safe.
+		// tableViewer.setSorter(sorter); // null-safe. TODO uncomment ?
 
 		tableViewer.setContentProvider(new SolrGUIContentProvider());
 		tableViewer.setLabelProvider(new SolrGUILabelProvider(server));
