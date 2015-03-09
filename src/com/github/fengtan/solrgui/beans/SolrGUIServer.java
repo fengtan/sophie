@@ -92,7 +92,7 @@ public class SolrGUIServer {
 	 * Add a new document to the collection of documents
 	 */
 	public void addDocument(SolrGUIDocument document) {
-		document.setChange(SolrGUIStatus.ADDED);
+		document.setStatus(SolrGUIStatus.ADDED);
 		documents.add(documents.size(), document);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.addDocument(document);
@@ -103,7 +103,7 @@ public class SolrGUIServer {
 	 * @param document
 	 */
 	public void removeDocument(SolrGUIDocument document) {
-		document.setChange(SolrGUIStatus.DELETED);
+		document.setStatus(SolrGUIStatus.DELETED);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.updateDocument(document);
 		}
@@ -113,7 +113,7 @@ public class SolrGUIServer {
 	 * @param document
 	 */
 	public void documentChanged(SolrGUIDocument document) {
-		document.setChange(SolrGUIStatus.UPDATED);
+		document.setStatus(SolrGUIStatus.UPDATED);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.updateDocument(document);
 		}
@@ -165,7 +165,7 @@ public class SolrGUIServer {
 		// TODO are all jars required ?
 		SolrInputDocument input;
 		for (SolrGUIDocument document:documents) {
-			switch (document.getChange()) {
+			switch (document.getStatus()) {
 				case ADDED:
 					input = ClientUtils.toSolrInputDocument(document.getDocument());
 					try {

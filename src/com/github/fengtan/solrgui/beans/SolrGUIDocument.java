@@ -6,7 +6,7 @@ import org.apache.solr.common.SolrDocument;
 
 public class SolrGUIDocument {
 
-	private SolrGUIStatus change = SolrGUIStatus.NONE;
+	private SolrGUIStatus status = SolrGUIStatus.NONE;
 	private SolrDocument document;
 	
 	public SolrGUIDocument(SolrDocument document) {
@@ -27,12 +27,12 @@ public class SolrGUIDocument {
 		return new SolrGUIDocument(document);
 	}
 	
-	public SolrGUIStatus getChange() {
-		return change;
+	public SolrGUIStatus getStatus() {
+		return status;
 	}
 	
-	public void setChange(SolrGUIStatus change) {
-		this.change = change;
+	public void setStatus(SolrGUIStatus status) {
+		this.status = status;
 	}
 	
 	public SolrDocument getDocument() {

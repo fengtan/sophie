@@ -43,7 +43,7 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 	@Override
 	public Color getBackground(Object element) {
 		SolrGUIDocument document = (SolrGUIDocument) element;
-		switch (document.getChange()) {
+		switch (document.getStatus()) {
 			case ADDED:
 				return GREEN;
 			case DELETED:
