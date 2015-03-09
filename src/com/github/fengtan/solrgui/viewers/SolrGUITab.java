@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui;
+package com.github.fengtan.solrgui.viewers;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.jface.viewers.CellEditor;
@@ -19,24 +19,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import com.github.fengtan.solrgui.beans.SolrGUIDocument;
+import com.github.fengtan.solrgui.beans.SolrGUIServer;
 
 // TODO mechanism to load / delete servers from config file.
+// TODO sort by ID field by default ? so rows remain the same when modify one
 public class SolrGUITab extends CTabItem {
 
 	private Table table;
 	private TableViewer tableViewer;
 	private SolrGUIServer server;
 	private SolrGUIServerSorter sorter;
-	private Logger logger = LoggerFactory.getLogger(SolrGUITab.class);
-
 	
 	public SolrGUITab(CTabFolder tabFolder, SolrGUIServer server) {
-		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
-		
-		logger.debug("Creating tab " + server.getName());
-		
+		super(tabFolder, SWT.NONE, tabFolder.getItemCount());		
 		this.server = server;
 		setText(server.getName());
 		setToolTipText(server.getURL().toString());
@@ -122,7 +119,7 @@ public class SolrGUITab extends CTabItem {
 		// Set the cell modifier for the viewer
 		tableViewer.setCellModifier(new SolrGUICellModifier(server));
 		// Set the default sorter for the viewer.
-		// tableViewer.setSorter(sorter); // null-safe. TODO uncomment ?
+		tableViewer.setSorter(sorter); // null-safe.
 		tableViewer.setContentProvider(new SolrGUIContentProvider());
 		tableViewer.setLabelProvider(new SolrGUILabelProvider(server));
 		tableViewer.setInput(server);

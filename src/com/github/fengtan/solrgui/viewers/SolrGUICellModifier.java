@@ -1,9 +1,12 @@
-package com.github.fengtan.solrgui;
+package com.github.fengtan.solrgui.viewers;
 import java.util.Arrays;
 import java.util.Objects;
 
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.swt.widgets.TableItem;
+
+import com.github.fengtan.solrgui.beans.SolrGUIDocument;
+import com.github.fengtan.solrgui.beans.SolrGUIServer;
 
 public class SolrGUICellModifier implements ICellModifier {
 
@@ -40,5 +43,6 @@ public class SolrGUICellModifier implements ICellModifier {
 		document.setField(columnName, value.toString());
 		server.documentChanged(document);
 		// TODO do not mark as Modified if new value = old value
+		// TODO make the background row yellow/red/green instead of Status column
 	}
 }

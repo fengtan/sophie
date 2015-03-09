@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui;
+package com.github.fengtan.solrgui.beans;
 
 import java.util.Random;
 
@@ -6,7 +6,7 @@ import org.apache.solr.common.SolrDocument;
 
 public class SolrGUIDocument {
 
-	private SolrGUIChange change = SolrGUIChange.NONE;
+	private SolrGUIStatus change = SolrGUIStatus.NONE;
 	private SolrDocument document;
 	
 	public SolrGUIDocument(SolrDocument document) {
@@ -27,11 +27,11 @@ public class SolrGUIDocument {
 		return new SolrGUIDocument(document);
 	}
 	
-	public SolrGUIChange getChange() {
+	public SolrGUIStatus getChange() {
 		return change;
 	}
 	
-	public void setChange(SolrGUIChange change) {
+	public void setChange(SolrGUIStatus change) {
 		this.change = change;
 	}
 	

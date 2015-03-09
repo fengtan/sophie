@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui;
+package com.github.fengtan.solrgui.viewers;
 
 import java.util.Objects;
 
@@ -6,9 +6,12 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
+import com.github.fengtan.solrgui.beans.SolrGUIDocument;
+import com.github.fengtan.solrgui.beans.SolrGUIServer;
+
 public class SolrGUILabelProvider extends LabelProvider implements ITableLabelProvider {
 
-	String[] fields;
+	private String[] fields;
 	
 	public SolrGUILabelProvider(SolrGUIServer server) {
 		this.fields = server.getFields();

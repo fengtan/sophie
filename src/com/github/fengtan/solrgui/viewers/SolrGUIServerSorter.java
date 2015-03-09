@@ -1,8 +1,10 @@
-package com.github.fengtan.solrgui;
+package com.github.fengtan.solrgui.viewers;
 import java.util.Objects;
 
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
+
+import com.github.fengtan.solrgui.beans.SolrGUIDocument;
 
 public class SolrGUIServerSorter extends ViewerSorter {
 

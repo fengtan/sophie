@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui;
+package com.github.fengtan.solrgui.beans;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -22,6 +22,8 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
+import com.github.fengtan.solrgui.viewers.ISolrGUIServerViewer;
+
 // TODO test with Solr < 4.
 // TODO test 2 servers with different fields/schema.
 public class SolrGUIServer {
@@ -38,7 +40,7 @@ public class SolrGUIServer {
 		this.name = name;
 		this.server = new HttpSolrServer(url.toExternalForm());
 		this.parameters.put("q", "*:*"); // TODO allow user to alter / add default params.
-		this.parameters.put("rows", "100"); // TODO idem
+		this.parameters.put("rows", "500"); // TODO idem
 		refreshDocuments();
 	}
 	
@@ -50,7 +52,7 @@ public class SolrGUIServer {
 		return name;
 	}
 	
-	public void refreshDocuments() {
+	private void refreshDocuments() {
 		// TODO cache ? use transactions ?
 		// TODO allow not to use the default request handler + allow to configure req params => advanded "Add Server" in menus
 		// Build query.
@@ -90,7 +92,7 @@ public class SolrGUIServer {
 	 * Add a new document to the collection of documents
 	 */
 	public void addDocument(SolrGUIDocument document) {
-		document.setChange(SolrGUIChange.ADDED);
+		document.setChange(SolrGUIStatus.ADDED);
 		documents.add(documents.size(), document);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.addDocument(document);
@@ -101,7 +103,7 @@ public class SolrGUIServer {
 	 * @param document
 	 */
 	public void removeDocument(SolrGUIDocument document) {
-		document.setChange(SolrGUIChange.DELETED);
+		document.setChange(SolrGUIStatus.DELETED);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.updateDocument(document);
 		}
@@ -111,7 +113,7 @@ public class SolrGUIServer {
 	 * @param document
 	 */
 	public void documentChanged(SolrGUIDocument document) {
-		document.setChange(SolrGUIChange.UPDATED);
+		document.setChange(SolrGUIStatus.UPDATED);
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.updateDocument(document);
 		}

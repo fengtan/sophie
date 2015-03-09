@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui;
+package com.github.fengtan.solrgui.beans;
 
 import java.io.File;
 import java.io.IOException;

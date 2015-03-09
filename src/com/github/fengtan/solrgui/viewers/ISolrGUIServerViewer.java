@@ -1,4 +1,6 @@
-package com.github.fengtan.solrgui;
+package com.github.fengtan.solrgui.viewers;
+
+import com.github.fengtan.solrgui.beans.SolrGUIDocument;
 
 
 public interface ISolrGUIServerViewer {
