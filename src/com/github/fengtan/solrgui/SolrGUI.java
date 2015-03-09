@@ -2,6 +2,8 @@ package com.github.fengtan.solrgui;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -24,6 +26,10 @@ import com.github.fengtan.solrgui.viewers.SolrGUITab;
 
 public class SolrGUI {
 
+	private static final String DEFAULT_SERVER_NAME = "collection1@localhost";
+	private static final String DEFAULT_SERVER_URL = "http://localhost:8983/solr/collection1";
+	private static final String DEFAULT_SERVER_ROWS = "500";
+	
 	private CTabFolder tabFolder;
 
 	public static void main(String[] args) {
@@ -92,15 +98,18 @@ public class SolrGUI {
 	private void createToolbar(Composite composite) {
 		// 'Add server' UI.
     	// TODO validate connection before saving
-    	// TODO onfocus, drop default values
-        // TODO size of text fields
+        // TODO width of text fields
+		// TODO height of labels
 		// TODO possibility to reduce/expand toolbar
         new Label(composite, SWT.NULL).setText("Name");
         final Text name = new Text(composite, SWT.BORDER); // TODO border
-        name.setText("collection1@localhost");
+        name.setText(DEFAULT_SERVER_NAME);
         new Label(composite, SWT.NULL).setText("URL");
         final Text url = new Text(composite, SWT.BORDER); // TODO border
-        url.setText("http://localhost:8983/solr/collection1");
+        url.setText(DEFAULT_SERVER_URL);
+        new Label(composite, SWT.NULL).setText("Rows"); // TODO what if user enters garbage (e.g. not a number)
+        final Text rows = new Text(composite, SWT.BORDER); // TODO border
+        rows.setText(DEFAULT_SERVER_ROWS);
         
 		Button button = new Button(composite, SWT.PUSH);
 		button.setText("Add &Server");
@@ -108,7 +117,10 @@ public class SolrGUI {
 			public void widgetSelected(SelectionEvent event) {
 				// TODO do not create if server already exists.
 				try {
-					SolrGUIServer server = new SolrGUIServer(new URL(url.getText()), name.getText());
+					Map<String, String> parameters = new HashMap<String, String>();
+					parameters.put("q", "*:*");
+					parameters.put("rows", rows.getText());
+					SolrGUIServer server = new SolrGUIServer(new URL(url.getText()), name.getText(), parameters);
 	                SolrGUIConfig.addServer(server);
 	                new SolrGUITab(tabFolder, server);
 				} catch (MalformedURLException e) {

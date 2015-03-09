@@ -36,12 +36,11 @@ public class SolrGUIServer {
 	private List<SolrGUIDocument> documents;
 	private Set<ISolrGUIServerViewer> changeListeners = new HashSet<ISolrGUIServerViewer>();
 
-	public SolrGUIServer(URL url, String name) {
+	public SolrGUIServer(URL url, String name, Map<String, String> parameters) {
 		this.url = url;
 		this.name = name;
 		this.server = new HttpSolrServer(url.toExternalForm());
-		this.parameters.put("q", "*:*"); // TODO allow user to alter / add default params.
-		this.parameters.put("rows", "500"); // TODO idem
+		this.parameters = parameters;
 		refreshFields();
 		refreshDocuments();
 	}
@@ -52,6 +51,10 @@ public class SolrGUIServer {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public Map<String, String> getParameters() {
+		return parameters;
 	}
 	
 	public void refreshDocuments() {
