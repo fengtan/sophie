@@ -2,11 +2,9 @@ package com.github.fengtan.solrgui.viewers;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -116,11 +114,9 @@ public class SolrGUITab extends CTabItem {
 		}
 
 		tableViewer.setCellEditors(editors);
-		// Set the cell modifier for the viewer
 		tableViewer.setCellModifier(new SolrGUICellModifier(server));
-		// Set the default sorter for the viewer.
-		tableViewer.setSorter(sorter); // null-safe.
-		tableViewer.setContentProvider(new SolrGUIContentProvider());
+		tableViewer.setSorter(sorter); // Set default sorter (null-safe).
+		tableViewer.setContentProvider(new SolrGUIContentProvider(server, tableViewer));
 		tableViewer.setLabelProvider(new SolrGUILabelProvider(server));
 		tableViewer.setInput(server);
 	}
@@ -130,44 +126,6 @@ public class SolrGUITab extends CTabItem {
 		tableViewer.getLabelProvider().dispose();
 		server.dispose();
 		super.dispose();
-	}
-
-	/**
-	 * InnerClass that acts as a proxy for the SolrGUIServer
-	 * providing content for the Table. It implements the ISolrGUIServerViewer 
-	 * interface since it must register changeListeners with the 
-	 * SolrGUIServer
-	 */
-	class SolrGUIContentProvider implements IStructuredContentProvider, ISolrGUIServerViewer {
-		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-			if (newInput != null) {
-				((SolrGUIServer) newInput).addChangeListener(this);
-			}
-			if (oldInput != null) {
-				((SolrGUIServer) oldInput).removeChangeListener(this);
-			}
-		}
-
-		public void dispose() {
-			server.removeChangeListener(this);
-		}
-
-		// Return the documents as an array of Objects
-		public Object[] getElements(Object parent) {
-			return server.getDocuments().toArray();
-		}
-
-		public void addDocument(SolrGUIDocument document) {
-			tableViewer.add(document);
-		}
-
-		public void removeDocument(SolrGUIDocument document) {
-			tableViewer.remove(document);
-		}
-
-		public void updateDocument(SolrGUIDocument document) {
-			tableViewer.update(document, null);	
-		}
 	}
 
 	/**
