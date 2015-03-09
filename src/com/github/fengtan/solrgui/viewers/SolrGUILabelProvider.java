@@ -28,27 +28,10 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 		SolrGUIDocument document = (SolrGUIDocument) element;
-		switch (columnIndex) {
-			case 0: // Change status.
-				// TODO tooltips A/D/M
-				switch(document.getChange()) {
-					case ADDED:
-						return "A";
-					case DELETED:
-						return "D";
-					case NONE:
-						return "";
-					case UPDATED:
-						return "M";
-				}
-			default: // Solr fields.
-				int fieldIndex = columnIndex-1;
-				if (fieldIndex < fields.length) {
-					String field = fields[fieldIndex];
-					return Objects.toString(document.getFieldValue(field), "");	
-				} else {
-					return "";
-				}
+		if (columnIndex < fields.length) {
+			return Objects.toString(document.getFieldValue(fields[columnIndex]), "");	
+		} else {
+			return "";
 		}
 	}
 	

@@ -1,6 +1,5 @@
 package com.github.fengtan.solrgui.viewers;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -72,12 +71,7 @@ public class SolrGUITab extends CTabItem {
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 
-		TableColumn column = new TableColumn(table, SWT.CENTER, 0);
-		// TODO Review tooltip + Changes vs Status (Ctrl+F) should be consistent 
-		column.setText("Changes");
-		column.setToolTipText("Pending changes:\nClick on \"Commit\" to push to Solr\nClick on \"Revert\" to cancel changes");
-		column.setWidth(20);
-		
+		TableColumn column;
 		for (final String field:server.getFields()) {
 			column = new TableColumn(table, SWT.LEFT);
 			column.setText(field);
@@ -99,9 +93,7 @@ public class SolrGUITab extends CTabItem {
 	private void createTableViewer() {
 		tableViewer = new TableViewer(table);
 		tableViewer.setUseHashlookup(true);
-
-		String[] columns = ArrayUtils.addAll(new String[]{"Status"}, server.getFields());
-		tableViewer.setColumnProperties(columns);
+		tableViewer.setColumnProperties(server.getFields());
 
 		// Create the cell editors
 		CellEditor[] editors = new CellEditor[tableViewer.getColumnProperties().length];
