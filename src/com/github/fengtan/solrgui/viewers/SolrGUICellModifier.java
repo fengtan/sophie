@@ -1,5 +1,4 @@
 package com.github.fengtan.solrgui.viewers;
-import java.util.Arrays;
 import java.util.Objects;
 
 import org.eclipse.jface.viewers.ICellModifier;
@@ -18,16 +17,16 @@ public class SolrGUICellModifier implements ICellModifier {
 	}
 
 	/**
-	 * @see org.eclipse.jface.viewers.ICellModifier#canModify(java.lang.Object, java.lang.String)
+	 * @Override
 	 * 
-	 * All Solr fields can be modified. The others cannot.
+	 * All cells may be modified.
 	 */
 	public boolean canModify(Object element, String columnName) {
-		return Arrays.asList(server.getFields()).contains(columnName);
+		return true;
 	}
 
 	/**
-	 * @see org.eclipse.jface.viewers.ICellModifier#getValue(java.lang.Object, java.lang.String)
+	 * @Override
 	 */
 	public Object getValue(Object element, String columnName) {
 		SolrGUIDocument document = (SolrGUIDocument) element;
@@ -35,13 +34,18 @@ public class SolrGUICellModifier implements ICellModifier {
 	}
 
 	/**
-	 * @see org.eclipse.jface.viewers.ICellModifier#modify(java.lang.Object, java.lang.String, java.lang.Object)
+	 * @Override
+	 * 
+	 * If user set a new value, then flag the document as Modified.
 	 */
 	public void modify(Object element, String columnName, Object value) {
 		TableItem item = (TableItem) element;
 		SolrGUIDocument document = (SolrGUIDocument) item.getData();
-		document.setField(columnName, value.toString());
-		server.documentChanged(document);
-		// TODO do not mark as Modified if new value = old value
+		String oldValue = Objects.toString(document.getFieldValue(columnName), "");
+		String newValue = value.toString();
+		if (!newValue.equals(oldValue)) {
+			document.setField(columnName, value.toString());
+			server.documentChanged(document);
+		}
 	}
 }
