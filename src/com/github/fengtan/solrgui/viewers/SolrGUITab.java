@@ -28,7 +28,7 @@ public class SolrGUITab extends CTabItem {
 	private Table table;
 	private TableViewer tableViewer;
 	private SolrGUIServer server;
-	private SolrGUIServerSorter sorter;
+	private SolrGUISorter sorter;
 	
 	public SolrGUITab(CTabFolder tabFolder, SolrGUIServer server) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());		
@@ -84,7 +84,7 @@ public class SolrGUITab extends CTabItem {
 			// Add listener to column so documents are sorted when clicked.
 			column.addSelectionListener(new SelectionAdapter() { 
 				public void widgetSelected(SelectionEvent e) {
-					sorter = new SolrGUIServerSorter(field);
+					sorter = new SolrGUISorter(field);
 					tableViewer.setSorter(sorter); // TODO does sorting scale ?
 				}
 			});

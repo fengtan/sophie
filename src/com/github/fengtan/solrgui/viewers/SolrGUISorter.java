@@ -6,13 +6,13 @@ import org.eclipse.jface.viewers.ViewerSorter;
 
 import com.github.fengtan.solrgui.beans.SolrGUIDocument;
 
-public class SolrGUIServerSorter extends ViewerSorter {
+public class SolrGUISorter extends ViewerSorter {
 
 	private String field;
 	private static boolean ascending;
 	private static String currentField = null; // Data are currently sorted by this field.
 
-	public SolrGUIServerSorter(String field) {
+	public SolrGUISorter(String field) {
 		super();
 		this.field = field;
 		// If click on new field, then sort ascending.
