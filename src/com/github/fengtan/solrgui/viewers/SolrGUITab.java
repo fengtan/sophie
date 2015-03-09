@@ -47,11 +47,10 @@ public class SolrGUITab extends CTabItem {
 	}
 
 	private void createLayout(Composite composite) {
-		GridData gridData = new GridData (GridData.HORIZONTAL_ALIGN_FILL | GridData.FILL_BOTH);
-		composite.setLayoutData (gridData);
-		// Set numColumns to 3 for the buttons 
-		GridLayout layout = new GridLayout(4, false);
-		layout.marginWidth = 4;
+		GridData grid = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.FILL_BOTH);
+		composite.setLayoutData(grid); 
+		GridLayout layout = new GridLayout(5, false); // 5 according to number of buttons.
+		layout.marginWidth = 4; 
 		composite.setLayout(layout);
 	}
 	
@@ -65,7 +64,7 @@ public class SolrGUITab extends CTabItem {
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
-		gridData.horizontalSpan = 4;
+		gridData.horizontalSpan = 5; // 5 according to number of buttons.
 		table.setLayoutData(gridData);
 					
 		table.setLinesVisible(true);
@@ -99,7 +98,7 @@ public class SolrGUITab extends CTabItem {
 		CellEditor[] editors = new CellEditor[tableViewer.getColumnProperties().length];
 		TextCellEditor textEditor;
 
-		for (int i=0; i<editors.length; i++) {
+		for (int i =0; i < editors.length; i++) {
 			textEditor = new TextCellEditor(table);
 			((Text) textEditor.getControl()).setTextLimit(60);
 			editors[i] = textEditor;
@@ -121,30 +120,30 @@ public class SolrGUITab extends CTabItem {
 	}
 
 	/**
-	 * Add the "Add", "Delete" and "Commit" buttons
+	 * Add buttons
 	 * 
 	 * @param composite the parent composite
 	 */
 	private void createButtons(Composite composite) {
-
+		GridData gridLeft = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
+		gridLeft.widthHint = 80;
+		GridData gridRight = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		gridRight.widthHint = 80; 
+		
 		// Create and configure the "Add" button
 		Button add = new Button(composite, SWT.PUSH | SWT.CENTER);
-		add.setText("Add");
-		GridData gridData = new GridData (GridData.HORIZONTAL_ALIGN_BEGINNING);
-		gridData.widthHint = 80;
-		add.setLayoutData(gridData);
+		add.setText("&Add");
+		add.setLayoutData(gridLeft);
 		add.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				server.addDocument();
 			}
 		});
 
-		//	Create and configure the "Delete" button
+		// Create and configure the "Delete" button
 		Button delete = new Button(composite, SWT.PUSH | SWT.CENTER);
-		delete.setText("Delete");
-		gridData = new GridData (GridData.HORIZONTAL_ALIGN_BEGINNING);
-		gridData.widthHint = 80; 
-		delete.setLayoutData(gridData); 
+		delete.setText("&Delete");
+		delete.setLayoutData(gridLeft); 
 		delete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUIDocument document = (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
@@ -154,28 +153,35 @@ public class SolrGUITab extends CTabItem {
 			}
 		});
 
-		//	Create and configure the "Clone" button
+		// Create and configure the "Clone" button
 		Button clone = new Button(composite, SWT.PUSH | SWT.CENTER);
-		clone.setText("Clone");
-		gridData = new GridData (GridData.HORIZONTAL_ALIGN_BEGINNING);
-		gridData.widthHint = 80; 
-		clone.setLayoutData(gridData);
+		clone.setText("&Clone");
+		clone.setLayoutData(gridLeft);
 		clone.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUIDocument document = (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
 				if (document != null) {
 					// TODO Cloning generate remote exception
 					server.addDocument(document.clone());
-				} 				
+				}
 			}
 		});
 
-		//	Create and configure the "Commit" button.
+		// Create and configure the "Refresh" button.
+		Button refresh = new Button(composite, SWT.PUSH | SWT.CENTER);
+		refresh.setText("&Refresh");
+		refresh.setLayoutData(gridRight); // TODO refresh should show up on right side
+		refresh.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				server.refreshDocuments();
+				tableViewer.refresh();
+			}
+		});
+
+		// Create and configure the "Commit" button.
 		Button commit = new Button(composite, SWT.PUSH | SWT.CENTER);
-		commit.setText("Commit");
-		gridData = new GridData (GridData.HORIZONTAL_ALIGN_END);
-		gridData.widthHint = 80; 
-		commit.setLayoutData(gridData);
+		commit.setText("Co&mmit");
+		commit.setLayoutData(gridRight);
 		commit.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				server.commit();

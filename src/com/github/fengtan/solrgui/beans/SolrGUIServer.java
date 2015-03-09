@@ -52,7 +52,7 @@ public class SolrGUIServer {
 		return name;
 	}
 	
-	private void refreshDocuments() {
+	public void refreshDocuments() {
 		// TODO cache ? use transactions ?
 		// TODO allow not to use the default request handler + allow to configure req params => advanded "Add Server" in menus
 		// Build query.

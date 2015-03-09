@@ -103,7 +103,7 @@ public class SolrGUI {
         url.setText("http://localhost:8983/solr/collection1");
         
 		Button button = new Button(composite, SWT.PUSH);
-		button.setText("Add Server");
+		button.setText("Add &Server");
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				// TODO do not create if server already exists.

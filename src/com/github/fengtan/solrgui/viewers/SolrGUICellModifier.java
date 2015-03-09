@@ -43,6 +43,5 @@ public class SolrGUICellModifier implements ICellModifier {
 		document.setField(columnName, value.toString());
 		server.documentChanged(document);
 		// TODO do not mark as Modified if new value = old value
-		// TODO make the background row yellow/red/green instead of Status column
 	}
 }
