@@ -7,6 +7,8 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -15,6 +17,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.beans.SolrGUIDocument;
@@ -69,6 +72,18 @@ public class SolrGUITab extends CTabItem {
 					
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
+		table.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent event) {
+				// TODO document in readme: typing 'Suppr' deletes a row.
+				if (event.keyCode == SWT.DEL) {
+					Table table = (Table) event.getSource();
+					TableItem item = table.getSelection()[0]; // TODO what if [0] does not exist.
+					SolrGUIDocument document = (SolrGUIDocument) item.getData();
+					server.removeDocument(document);
+				}
+			}
+		});
 
 		TableColumn column;
 		for (final String field:server.getFields()) {
@@ -125,15 +140,14 @@ public class SolrGUITab extends CTabItem {
 	 * @param composite the parent composite
 	 */
 	private void createButtons(Composite composite) {
-		GridData gridLeft = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
-		gridLeft.widthHint = 80;
-		GridData gridRight = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		gridRight.widthHint = 80; 
+		GridData grid;
 		
 		// Create and configure the "Add" button
 		Button add = new Button(composite, SWT.PUSH | SWT.CENTER);
 		add.setText("&Add");
-		add.setLayoutData(gridLeft);
+		grid = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
+		grid.widthHint = 80;
+		add.setLayoutData(grid);
 		add.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				server.addDocument();
@@ -143,7 +157,9 @@ public class SolrGUITab extends CTabItem {
 		// Create and configure the "Delete" button
 		Button delete = new Button(composite, SWT.PUSH | SWT.CENTER);
 		delete.setText("&Delete");
-		delete.setLayoutData(gridLeft); 
+		grid = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
+		grid.widthHint = 80;
+		delete.setLayoutData(grid); 
 		delete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUIDocument document = (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
@@ -156,7 +172,9 @@ public class SolrGUITab extends CTabItem {
 		// Create and configure the "Clone" button
 		Button clone = new Button(composite, SWT.PUSH | SWT.CENTER);
 		clone.setText("&Clone");
-		clone.setLayoutData(gridLeft);
+		grid = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
+		grid.widthHint = 80;
+		clone.setLayoutData(grid);
 		clone.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUIDocument document = (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
@@ -170,7 +188,9 @@ public class SolrGUITab extends CTabItem {
 		// Create and configure the "Refresh" button.
 		Button refresh = new Button(composite, SWT.PUSH | SWT.CENTER);
 		refresh.setText("&Refresh");
-		refresh.setLayoutData(gridRight); // TODO refresh should show up on right side
+		grid = new GridData(GridData.HORIZONTAL_ALIGN_END); // TODO should show up on the right
+		grid.widthHint = 80;
+		refresh.setLayoutData(grid);
 		refresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				server.refreshDocuments();
@@ -181,7 +201,9 @@ public class SolrGUITab extends CTabItem {
 		// Create and configure the "Commit" button.
 		Button commit = new Button(composite, SWT.PUSH | SWT.CENTER);
 		commit.setText("Co&mmit");
-		commit.setLayoutData(gridRight);
+		grid = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		grid.widthHint = 80;
+		commit.setLayoutData(grid);
 		commit.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				server.commit();

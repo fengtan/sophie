@@ -32,6 +32,7 @@ public class SolrGUIServer {
 	private String name;
 	private SolrServer server;
 	private Map<String,String> parameters = new HashMap<String, String>(); // Query parameters.
+	private String[] fields;
 	private List<SolrGUIDocument> documents;
 	private Set<ISolrGUIServerViewer> changeListeners = new HashSet<ISolrGUIServerViewer>();
 
@@ -41,6 +42,7 @@ public class SolrGUIServer {
 		this.server = new HttpSolrServer(url.toExternalForm());
 		this.parameters.put("q", "*:*"); // TODO allow user to alter / add default params.
 		this.parameters.put("rows", "500"); // TODO idem
+		refreshFields();
 		refreshDocuments();
 	}
 	
@@ -134,24 +136,28 @@ public class SolrGUIServer {
 	}
 	
 	public String[] getFields() {
+		return fields;
+	}
+	
+	public void refreshFields() {
 		LukeRequest request = new LukeRequest();
 		try {
 			LukeResponse response = request.process(server);
 			Collection<FieldInfo> fieldsInfo = response.getFieldInfo().values();
-			List<String> fields = new ArrayList<String>();
+			List<String> fieldsList = new ArrayList<String>();
 			for (FieldInfo fieldInfo:fieldsInfo) {
-				fields.add(fieldInfo.getName());
+				fieldsList.add(fieldInfo.getName());
 			}
-			Collections.sort(fields);
-			return fields.toArray(new String[fields.size()]);
+			Collections.sort(fieldsList);
+			fields = fieldsList.toArray(new String[fieldsList.size()]);
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return new String[]{};
+			fields = new String[]{};
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return new String[]{};
+			fields = new String[]{};
 		}
 		/* TODO provide option to use this in case Luke handler is not available? requires at least 1 document in the server
 		Collection<String> fields = getAllDocuments().get(0).getFieldNames();
