@@ -4,10 +4,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrQuery;
@@ -31,16 +29,20 @@ public class SolrGUIServer {
 	private URL url;
 	private String name;
 	private SolrServer server;
-	private Map<String,String> parameters = new HashMap<String, String>(); // Query parameters.
+	
+	private String q;
+	private int rows;
+	
 	private String[] fields;
 	private List<SolrGUIDocument> documents;
 	private Set<ISolrGUIServerViewer> changeListeners = new HashSet<ISolrGUIServerViewer>();
 
-	public SolrGUIServer(URL url, String name, Map<String, String> parameters) {
+	public SolrGUIServer(URL url, String name, String q, int rows) {
 		this.url = url;
 		this.name = name;
 		this.server = new HttpSolrServer(url.toExternalForm());
-		this.parameters = parameters;
+		this.q = q;
+		this.rows = rows;
 		refreshFields();
 		refreshDocuments();
 	}
@@ -53,8 +55,12 @@ public class SolrGUIServer {
 		return name;
 	}
 	
-	public Map<String, String> getParameters() {
-		return parameters;
+	public String getQ() {
+		return q;
+	}
+	
+	public int getRows() {
+		return rows;
 	}
 	
 	public void refreshDocuments() {
@@ -62,9 +68,8 @@ public class SolrGUIServer {
 		// TODO allow not to use the default request handler + allow to configure req params => advanded "Add Server" in menus
 		// Build query.
 		SolrQuery query = new SolrQuery();
-		for (Map.Entry<String, String> parameter: parameters.entrySet()) {
-			query.set(parameter.getKey(), parameter.getValue());
-		}
+		query.setQuery(q);
+		query.setRows(rows);
 		// Initialize attribute.
 		documents = new ArrayList<SolrGUIDocument>();
 		// Get Solr response and update local attribute.

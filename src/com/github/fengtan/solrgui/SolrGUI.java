@@ -2,8 +2,6 @@ package com.github.fengtan.solrgui;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -117,10 +115,7 @@ public class SolrGUI {
 			public void widgetSelected(SelectionEvent event) {
 				// TODO do not create if server already exists.
 				try {
-					Map<String, String> parameters = new HashMap<String, String>();
-					parameters.put("q", "*:*");
-					parameters.put("rows", rows.getText());
-					SolrGUIServer server = new SolrGUIServer(new URL(url.getText()), name.getText(), parameters);
+					SolrGUIServer server = new SolrGUIServer(new URL(url.getText()), name.getText(), "*:*", Integer.parseInt(rows.getText()));
 	                SolrGUIConfig.addServer(server);
 	                new SolrGUITab(tabFolder, server);
 				} catch (MalformedURLException e) {
