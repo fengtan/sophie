@@ -31,7 +31,7 @@ public class SolrGUIServer {
 	private SolrServer server;
 	
 	private String q;
-	private int rows;
+	private int rows; // TODO load 500 rows by default + add button "load more" if necessary
 	
 	private String[] fields;
 	private List<SolrGUIDocument> documents;

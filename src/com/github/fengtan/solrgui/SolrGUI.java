@@ -95,6 +95,7 @@ public class SolrGUI {
 	
 	private void createToolbar(Composite composite) {
 		// 'Add server' UI.
+    // TODO button 'clear/empty index'
     	// TODO validate connection before saving
         // TODO width of text fields
 		// TODO height of labels
