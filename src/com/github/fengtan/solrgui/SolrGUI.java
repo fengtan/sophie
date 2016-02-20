@@ -14,9 +14,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.beans.SolrGUIConfig;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
@@ -46,10 +44,9 @@ public class SolrGUI {
 		GridLayout layout = new GridLayout();
 		shell.setLayout(layout);
 
-		// Fill up shell.
+		// Add tab folder.
 		Composite composite = createComposite(shell);
 		createTabFolder(composite, shell);
-		createToolbar(composite);
 		
 		// Make the shell to display its content.
 		shell.open();
@@ -79,6 +76,35 @@ public class SolrGUI {
 		tabFolder.setSimple(false);
 		tabFolder.setTabHeight(25);
 
+		// Create the 'Add server button
+		// TODO button 'clear/empty index'
+    	// TODO validate connection before saving
+		// TODO what if user enters garbage (e.g. not a number)
+		Button button = new Button(tabFolder, SWT.PUSH | SWT.CENTER);
+		button.setText("Add &new server");
+		button.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				// TODO do not create if server already exists.
+				try {
+					// TODO create popup to get URL/name/rows/query
+					SolrGUIServer server = new SolrGUIServer(new URL(DEFAULT_SERVER_URL), DEFAULT_SERVER_NAME, "*:*", Integer.parseInt(DEFAULT_SERVER_ROWS));
+	                SolrGUIConfig.addServer(server);
+	                new SolrGUITab(tabFolder, server);
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				/* TODO
+				getControl().addDisposeListener(new DisposeListener() {
+					public void widgetDisposed(DisposeEvent e) {
+						solrGUI.dispose();
+					}
+				});
+				*/
+			}
+	    });
+		tabFolder.setTopRight(button);
+
 		// Set up a gradient background for the selected tab
 		Display display = shell.getDisplay();
 		Color titleForeColor = display.getSystemColor(SWT.COLOR_TITLE_FOREGROUND);
@@ -98,46 +124,10 @@ public class SolrGUI {
 		
 	}
 	
-	private void createToolbar(Composite composite) {
-		// 'Add server' UI.
-    // TODO button 'clear/empty index'
-    	// TODO validate connection before saving
-        // TODO width of text fields
-		// TODO height of labels
-		// TODO possibility to reduce/expand toolbar
-        new Label(composite, SWT.NULL).setText("Name");
-        final Text name = new Text(composite, SWT.BORDER); // TODO border
-        name.setText(DEFAULT_SERVER_NAME);
-        new Label(composite, SWT.NULL).setText("URL");
-        final Text url = new Text(composite, SWT.BORDER); // TODO border
-        url.setText(DEFAULT_SERVER_URL);
-        new Label(composite, SWT.NULL).setText("Rows"); // TODO what if user enters garbage (e.g. not a number)
-        final Text rows = new Text(composite, SWT.BORDER); // TODO border
-        rows.setText(DEFAULT_SERVER_ROWS);
-        
-		Button button = new Button(composite, SWT.PUSH);
-		button.setText("Add &Server");
-		button.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				// TODO do not create if server already exists.
-				try {
-					SolrGUIServer server = new SolrGUIServer(new URL(url.getText()), name.getText(), "*:*", Integer.parseInt(rows.getText()));
-	                SolrGUIConfig.addServer(server);
-	                new SolrGUITab(tabFolder, server);
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				/* TODO
-				getControl().addDisposeListener(new DisposeListener() {
-					public void widgetDisposed(DisposeEvent e) {
-						solrGUI.dispose();
-					}
-				});
-				*/
-		    }
-		});
-
-	}
+	// TODO right click 'Show Solr query'
+	// TODO catch all exception
+	// TODO keyboard shortcuts
+	// TODO test Solr 5
+	// TODO elasticsearch
 
 }
