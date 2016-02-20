@@ -37,7 +37,6 @@ public class SolrGUICellModifier implements ICellModifier {
 	 * @Override
 	 * 
 	 * If user has set a new value, then flag the document as Modified.
-	 * TODO New documents should remain flagged as Added instead of Modified.
 	 */
 	public void modify(Object element, String columnName, Object value) {
 		TableItem item = (TableItem) element;

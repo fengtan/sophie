@@ -121,9 +121,14 @@ public class SolrGUIServer {
 
 	/**
 	 * @param document
+	 *
+	 * If user modified an existing document, flag as 'Updated'.
+	 * If user modified a new document, leave flag as 'Added'.
 	 */
 	public void documentChanged(SolrGUIDocument document) {
-		document.setStatus(SolrGUIStatus.UPDATED);
+		if (!document.getStatus().equals(SolrGUIStatus.ADDED)) {
+			document.setStatus(SolrGUIStatus.UPDATED);
+		}
 		for (ISolrGUIServerViewer viewer:changeListeners) {
 			viewer.updateDocument(document);
 		}
