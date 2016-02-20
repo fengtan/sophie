@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.beans.SolrGUIConfig;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
+import com.github.fengtan.solrgui.toolbar.SolrGUIToolbar;
 import com.github.fengtan.solrgui.viewers.SolrGUITab;
 
 public class SolrGUI {
@@ -38,6 +39,9 @@ public class SolrGUI {
 		Shell shell = new Shell();
 		shell.setText("Solr GUI");
 
+		// Add toolbar
+		SolrGUIToolbar toolbar = new SolrGUIToolbar(shell);
+		
 		// Set layout for shell.
 		GridLayout layout = new GridLayout();
 		shell.setLayout(layout);
@@ -46,7 +50,7 @@ public class SolrGUI {
 		Composite composite = createComposite(shell);
 		createTabFolder(composite, shell);
 		createToolbar(composite);
-
+		
 		// Make the shell to display its content.
 		shell.open();
 		Display display = shell.getDisplay();
@@ -54,6 +58,7 @@ public class SolrGUI {
 			if (!display.readAndDispatch())
 				display.sleep();
 		}
+		toolbar.finalize();
 		display.dispose();
 		shell.dispose();
 	}

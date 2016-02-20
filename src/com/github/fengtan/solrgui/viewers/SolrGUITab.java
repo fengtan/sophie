@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Text;
 import com.github.fengtan.solrgui.beans.SolrGUIDocument;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
 
+// TODO license
 // TODO mechanism to load / delete servers from config file.
 // TODO sort by ID field by default ? so rows remain the same when modify one
 public class SolrGUITab extends CTabItem {
