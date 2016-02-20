@@ -1,16 +1,11 @@
 package com.github.fengtan.solrgui.toolbar;
 
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-
-import com.github.fengtan.solrgui.beans.SolrGUIDocument;
 
 public class SolrGUIToolbar {
 
@@ -19,6 +14,7 @@ public class SolrGUIToolbar {
     private Image imgClone;
     private Image imgRefresh;
     private Image imgCommit;
+    private Image imgSettings;
 
     public SolrGUIToolbar(Shell shell) {
         Device dev = shell.getDisplay();
@@ -28,6 +24,7 @@ public class SolrGUIToolbar {
         imgClone = new Image(dev, "img/toolbar-clone.svg");
         imgRefresh = new Image(dev, "img/toolbar-refresh.svg");
         imgCommit = new Image(dev, "img/toolbar-commit.svg");
+        imgSettings = new Image(dev, "img/toolbar-settings.svg");
 
         // TODO disabled whole toolbar when no server configured
         ToolBar toolBar = new ToolBar(shell, SWT.BORDER);
@@ -97,6 +94,13 @@ public class SolrGUIToolbar {
 			}
 		});
 		*/
+
+        new ToolItem(toolBar, SWT.SEPARATOR);
+        
+        ToolItem itemSettings = new ToolItem(toolBar, SWT.PUSH);
+        itemSettings.setImage(imgSettings);
+        itemSettings.setToolTipText("Settings");
+        // TODO listener
         
         toolBar.pack();
     }
@@ -108,6 +112,8 @@ public class SolrGUIToolbar {
         imgClone.dispose();
         imgRefresh.dispose();
         imgCommit.dispose();
-    }	
+    }
+    
+    // TODO form criteria 'filter field XX and filter field XX'
 	
 }

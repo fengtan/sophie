@@ -1,8 +1,5 @@
 package com.github.fengtan.solrgui;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -10,22 +7,17 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.github.fengtan.solrgui.beans.SolrGUIConfig;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
+import com.github.fengtan.solrgui.dialogs.SolrGUIAddServerDialog;
+import com.github.fengtan.solrgui.tabs.SolrGUITab;
 import com.github.fengtan.solrgui.toolbar.SolrGUIToolbar;
-import com.github.fengtan.solrgui.viewers.SolrGUITab;
 
 public class SolrGUI {
-
-	private static final String DEFAULT_SERVER_NAME = "collection1@localhost";
-	private static final String DEFAULT_SERVER_URL = "http://localhost:8983/solr/collection1";
-	private static final String DEFAULT_SERVER_ROWS = "500";
 	
 	private CTabFolder tabFolder;
 
@@ -45,8 +37,7 @@ public class SolrGUI {
 		shell.setLayout(layout);
 
 		// Add tab folder.
-		Composite composite = createComposite(shell);
-		createTabFolder(composite, shell);
+		createTabFolder(shell);
 		
 		// Make the shell to display its content.
 		shell.open();
@@ -59,16 +50,9 @@ public class SolrGUI {
 		display.dispose();
 		shell.dispose();
 	}
-	
-	private Composite createComposite(Shell shell) {
-		shell.setLayout(new GridLayout(1, true));
-		Composite composite = new Composite(shell, SWT.NONE);
-		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new RowLayout());
-		return composite;
-	}
-	
-	private void createTabFolder(Composite composite, final Shell shell) {
+
+	// TODO move into separate class ?
+	private void createTabFolder(final Shell shell) {
 		// Create the tabs
 		tabFolder = new CTabFolder(shell, SWT.TOP | SWT.CLOSE | SWT.BORDER);
 		tabFolder.setBorderVisible(true);
@@ -84,23 +68,7 @@ public class SolrGUI {
 		button.setText("Add &new server");
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				// TODO do not create if server already exists.
-				try {
-					// TODO create popup to get URL/name/rows/query
-					SolrGUIServer server = new SolrGUIServer(new URL(DEFAULT_SERVER_URL), DEFAULT_SERVER_NAME, "*:*", Integer.parseInt(DEFAULT_SERVER_ROWS));
-	                SolrGUIConfig.addServer(server);
-	                new SolrGUITab(tabFolder, server);
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				/* TODO
-				getControl().addDisposeListener(new DisposeListener() {
-					public void widgetDisposed(DisposeEvent e) {
-						solrGUI.dispose();
-					}
-				});
-				*/
+				new SolrGUIAddServerDialog(shell, tabFolder).open();
 			}
 	    });
 		tabFolder.setTopRight(button);

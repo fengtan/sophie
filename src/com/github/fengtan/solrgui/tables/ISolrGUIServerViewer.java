@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.viewers;
+package com.github.fengtan.solrgui.tables;
 
 import com.github.fengtan.solrgui.beans.SolrGUIDocument;
 

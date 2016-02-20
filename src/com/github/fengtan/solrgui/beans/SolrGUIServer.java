@@ -20,7 +20,7 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.github.fengtan.solrgui.viewers.ISolrGUIServerViewer;
+import com.github.fengtan.solrgui.tables.ISolrGUIServerViewer;
 
 // TODO test with Solr < 4.
 // TODO test 2 servers with different fields/schema.

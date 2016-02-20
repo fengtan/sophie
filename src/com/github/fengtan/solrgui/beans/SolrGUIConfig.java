@@ -14,6 +14,7 @@ import org.ini4j.Profile.Section;
 
 public class SolrGUIConfig {
 
+	// TODO 'add server to favorites'
 	// TODO make sure hidden file works on windows
 	private static final String filename = ".solrgui";
 

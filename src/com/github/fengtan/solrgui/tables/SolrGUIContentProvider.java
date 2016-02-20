@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.viewers;
+package com.github.fengtan.solrgui.tables;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;

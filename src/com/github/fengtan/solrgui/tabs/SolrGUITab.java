@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.viewers;
+package com.github.fengtan.solrgui.tabs;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
@@ -20,6 +20,10 @@ import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.beans.SolrGUIDocument;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
+import com.github.fengtan.solrgui.tables.SolrGUICellModifier;
+import com.github.fengtan.solrgui.tables.SolrGUIContentProvider;
+import com.github.fengtan.solrgui.tables.SolrGUILabelProvider;
+import com.github.fengtan.solrgui.tables.SolrGUISorter;
 
 // TODO license
 // TODO mechanism to load / delete servers from config file.
@@ -36,12 +40,14 @@ public class SolrGUITab extends CTabItem {
 		this.server = server;
 		setText(server.getName());
 		setToolTipText(server.getURL().toString());
-		// Fill up tab.
+		
+		// Fill in tab.
 		Composite composite = new Composite(getParent(), SWT.BORDER);
 		createLayout(composite);
 		createTable(composite);
 		createTableViewer();
 		setControl(composite);
+		
 		// Set focus on this tab.
 		tabFolder.setSelection(this);
 		tabFolder.forceFocus();

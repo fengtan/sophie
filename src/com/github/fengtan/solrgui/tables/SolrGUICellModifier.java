@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.viewers;
+package com.github.fengtan.solrgui.tables;
 import java.util.Objects;
 
 import org.eclipse.jface.viewers.ICellModifier;
