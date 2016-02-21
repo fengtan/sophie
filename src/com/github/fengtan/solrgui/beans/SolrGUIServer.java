@@ -20,7 +20,8 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.github.fengtan.solrgui.tables.ISolrGUIServerViewer;
+import com.github.fengtan.solrgui.tables.ISolrGUIChangeListener;
+import com.github.fengtan.statusline.ISolrGUIQueryListener;
 
 // TODO test with Solr < 4.
 // TODO test 2 servers with different fields/schema.
@@ -35,7 +36,8 @@ public class SolrGUIServer {
 	
 	private String[] fields;
 	private List<SolrGUIDocument> documents;
-	private Set<ISolrGUIServerViewer> changeListeners = new HashSet<ISolrGUIServerViewer>();
+	private Set<ISolrGUIChangeListener> changeListeners = new HashSet<ISolrGUIChangeListener>();
+	private Set<ISolrGUIQueryListener> queryListeners = new HashSet<ISolrGUIQueryListener>();
 
 	public SolrGUIServer(URL url, String name, String q, int rows) {
 		this.url = url;
@@ -104,7 +106,7 @@ public class SolrGUIServer {
 	public void addDocument(SolrGUIDocument document) {
 		document.setStatus(SolrGUIStatus.ADDED);
 		documents.add(documents.size(), document);
-		for (ISolrGUIServerViewer viewer:changeListeners) {
+		for (ISolrGUIChangeListener viewer:changeListeners) {
 			viewer.addDocument(document);
 		}
 	}
@@ -114,7 +116,7 @@ public class SolrGUIServer {
 	 */
 	public void removeDocument(SolrGUIDocument document) {
 		document.setStatus(SolrGUIStatus.DELETED);
-		for (ISolrGUIServerViewer viewer:changeListeners) {
+		for (ISolrGUIChangeListener viewer:changeListeners) {
 			viewer.updateDocument(document);
 		}
 	}
@@ -129,23 +131,37 @@ public class SolrGUIServer {
 		if (!document.getStatus().equals(SolrGUIStatus.ADDED)) {
 			document.setStatus(SolrGUIStatus.UPDATED);
 		}
-		for (ISolrGUIServerViewer viewer:changeListeners) {
+		for (ISolrGUIChangeListener viewer:changeListeners) {
 			viewer.updateDocument(document);
 		}
 	}
 
 	/**
-	 * @param viewer
+	 * @param changeListener
 	 */
-	public void removeChangeListener(ISolrGUIServerViewer viewer) {
-		changeListeners.remove(viewer);
+	public void addChangeListener(ISolrGUIChangeListener changeListener) {
+		changeListeners.add(changeListener);
+	}
+	
+	/**
+	 * @param changeListener
+	 */
+	public void removeChangeListener(ISolrGUIChangeListener changeListener) {
+		changeListeners.remove(changeListener);
 	}
 
 	/**
-	 * @param viewer
+	 * @param queryListener
 	 */
-	public void addChangeListener(ISolrGUIServerViewer viewer) {
-		changeListeners.add(viewer);
+	public void addQueryListener(ISolrGUIQueryListener queryListener) {
+		queryListeners.remove(queryListener);
+	}
+	
+	/**
+	 * @param queryListener
+	 */
+	public void removeQueryListener(ISolrGUIQueryListener queryListener) { // TODO useless ?
+		queryListeners.remove(queryListener);
 	}
 	
 	public String[] getFields() {

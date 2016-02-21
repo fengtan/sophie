@@ -25,7 +25,7 @@ public class SolrGUI {
 		GridLayout layout = new GridLayout();
 		shell.setLayout(layout);
 		
-		// Add toolbar + tab folder
+		// Add toolbar + tab folder.
 		toolbar = new SolrGUIToolbar(shell, this); // TODO passing the SolrGUI object is ugly
 		tabFolder = new SolrGUITabFolder(shell);
 		

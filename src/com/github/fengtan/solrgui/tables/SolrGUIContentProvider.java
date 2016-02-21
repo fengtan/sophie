@@ -14,7 +14,7 @@ import com.github.fengtan.solrgui.beans.SolrGUIServer;
  * interface since it must register changeListeners with the 
  * SolrGUIServer
  */
-public class SolrGUIContentProvider implements IStructuredContentProvider, ISolrGUIServerViewer {
+public class SolrGUIContentProvider implements IStructuredContentProvider, ISolrGUIChangeListener {
 	
 	private SolrGUIServer server;
 	private TableViewer tableViewer;

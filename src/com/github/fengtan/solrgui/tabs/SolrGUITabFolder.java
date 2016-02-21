@@ -19,7 +19,7 @@ public class SolrGUITabFolder extends CTabFolder {
 	private SolrGUIAddServerDialog dialog;
 	
 	public SolrGUITabFolder(Shell shell) {
-		// Create the tabs
+		// Create the tabs + status line manager
 		super(shell, SWT.TOP | SWT.CLOSE | SWT.BORDER);
 		dialog = new SolrGUIAddServerDialog(shell, this);
 

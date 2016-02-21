@@ -12,6 +12,8 @@ import org.eclipse.swt.widgets.ToolItem;
 import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.tabs.SolrGUITabItem;
 
+
+// TODO use a coolbar ?
 public class SolrGUIToolbar {
 
     private Image imgAdd;
@@ -78,7 +80,7 @@ public class SolrGUIToolbar {
 
         ToolItem itemRefresh = new ToolItem(toolBar, SWT.PUSH);
         itemRefresh.setImage(imgRefresh);
-        itemRefresh.setToolTipText("Refresh from server: this will revert local modifications");
+        itemRefresh.setToolTipText("Refresh from server: this will wipe out local modifications");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
@@ -98,7 +100,7 @@ public class SolrGUIToolbar {
         
         ToolItem itemClear = new ToolItem(toolBar, SWT.PUSH);
         itemClear.setImage(imgClear);
-        itemClear.setToolTipText("Clear index on server"); // TODO disabled when no local modifications
+        itemClear.setToolTipText("Clear all documents on server"); // TODO disabled when no local modifications
         // TODO ask for confirmation before clearing index
         itemClear.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {

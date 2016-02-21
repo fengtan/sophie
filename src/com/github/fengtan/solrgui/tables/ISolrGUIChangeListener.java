@@ -3,7 +3,7 @@ package com.github.fengtan.solrgui.tables;
 import com.github.fengtan.solrgui.beans.SolrGUIDocument;
 
 
-public interface ISolrGUIServerViewer {
+public interface ISolrGUIChangeListener {
 	
 	/**
 	 * Update the view to reflect the fact that a document was added to the list.
