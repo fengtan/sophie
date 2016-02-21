@@ -169,4 +169,9 @@ public class SolrGUITabItem extends CTabItem {
 		tableViewer.refresh();
 	}
 	
+	public void clear() {
+		server.clear();
+		tableViewer.refresh();
+	}
+	
 }

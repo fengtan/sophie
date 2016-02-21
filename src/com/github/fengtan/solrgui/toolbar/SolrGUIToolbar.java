@@ -19,6 +19,7 @@ public class SolrGUIToolbar {
     private Image imgClone;
     private Image imgRefresh;
     private Image imgCommit;
+    private Image imgClear;
     private Image imgSettings;
     
     private SolrGUI solrGUI;
@@ -36,11 +37,13 @@ public class SolrGUIToolbar {
         imgClone = new Image(display, "img/toolbar-clone.svg");
         imgRefresh = new Image(display, "img/toolbar-refresh.svg");
         imgCommit = new Image(display, "img/toolbar-commit.svg"); // TODO find a better icon ?
+        imgClear = new Image(display, "img/toolbar-clear.png"); // TODO png while others are svg
         imgSettings = new Image(display, "img/toolbar-settings.svg");
 
         // TODO disabled whole toolbar when no server configured
         ToolBar toolBar = new ToolBar(shell, SWT.BORDER);
 
+        // TODO allow to create documents with new fields
         ToolItem itemAdd = new ToolItem(toolBar, SWT.PUSH);
         itemAdd.setImage(imgAdd);
         itemAdd.setToolTipText("Add new document");
@@ -90,6 +93,17 @@ public class SolrGUIToolbar {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
 				tabItem.commit();
+			}
+		});
+        
+        ToolItem itemClear = new ToolItem(toolBar, SWT.PUSH);
+        itemClear.setImage(imgClear);
+        itemClear.setToolTipText("Clear index on server"); // TODO disabled when no local modifications
+        // TODO ask for confirmation before clearing index
+        itemClear.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
+				tabItem.clear();
 			}
 		});
 

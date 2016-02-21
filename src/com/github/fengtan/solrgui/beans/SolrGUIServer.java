@@ -242,8 +242,22 @@ public class SolrGUIServer {
 		}
 		// TODO reload data
 	}
+
+	public void clear() {
+		try {
+			server.deleteByQuery("*:*");
+			server.commit();
+			refreshDocuments();  // Returned object seems to have no relevant information.
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
-	/*
+	/**
 	 * Release resources.
 	 */
 	public void dispose() {
