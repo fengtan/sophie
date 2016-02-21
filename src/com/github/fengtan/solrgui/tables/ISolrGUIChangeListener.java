@@ -25,4 +25,5 @@ public interface ISolrGUIChangeListener {
 	 * @param document
 	 */
 	public void updateDocument(SolrGUIDocument document);
+	
 }

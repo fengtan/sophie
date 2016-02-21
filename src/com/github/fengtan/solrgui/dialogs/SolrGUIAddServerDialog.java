@@ -5,7 +5,6 @@ import java.net.URL;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -14,7 +13,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.beans.SolrGUIConfig;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
-import com.github.fengtan.solrgui.tabs.SolrGUITabItem;
+import com.github.fengtan.solrgui.tabs.SolrGUITabFolder;
 
 public class SolrGUIAddServerDialog extends Dialog {
 
@@ -26,11 +25,11 @@ public class SolrGUIAddServerDialog extends Dialog {
 	private Text url;
 	private Text rows;
 	
-	private CTabFolder tabFolder;
+	private SolrGUITabFolder tabFolder;
 	
 	// TODO allow http auth
 	// TODO rows should be controllable using the UI - not with a regular setting
-	public SolrGUIAddServerDialog(Shell parentShell, CTabFolder tabFolder) {
+	public SolrGUIAddServerDialog(Shell parentShell, SolrGUITabFolder tabFolder) {
 		super(parentShell);
 		this.tabFolder = tabFolder;
 	}
@@ -70,7 +69,7 @@ public class SolrGUIAddServerDialog extends Dialog {
 			try {
 				SolrGUIServer server = new SolrGUIServer(new URL(url.getText()), name.getText(), "*:*", Integer.parseInt(rows.getText()));
 	            SolrGUIConfig.addServer(server);
-	            new SolrGUITabItem(tabFolder, server);
+	            tabFolder.addTabItem(server);
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -53,4 +53,5 @@ public class SolrGUIContentProvider implements IStructuredContentProvider, ISolr
 	public void updateDocument(SolrGUIDocument document) {
 		tableViewer.update(document, null);	
 	}
+
 }

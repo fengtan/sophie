@@ -21,7 +21,6 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
 import com.github.fengtan.solrgui.tables.ISolrGUIChangeListener;
-import com.github.fengtan.statusline.ISolrGUIQueryListener;
 
 // TODO test with Solr < 4.
 // TODO test 2 servers with different fields/schema.
@@ -37,7 +36,6 @@ public class SolrGUIServer {
 	private String[] fields;
 	private List<SolrGUIDocument> documents;
 	private Set<ISolrGUIChangeListener> changeListeners = new HashSet<ISolrGUIChangeListener>();
-	private Set<ISolrGUIQueryListener> queryListeners = new HashSet<ISolrGUIQueryListener>();
 
 	public SolrGUIServer(URL url, String name, String q, int rows) {
 		this.url = url;
@@ -106,8 +104,8 @@ public class SolrGUIServer {
 	public void addDocument(SolrGUIDocument document) {
 		document.setStatus(SolrGUIStatus.ADDED);
 		documents.add(documents.size(), document);
-		for (ISolrGUIChangeListener viewer:changeListeners) {
-			viewer.addDocument(document);
+		for (ISolrGUIChangeListener listener:changeListeners) {
+			listener.addDocument(document);
 		}
 	}
 
@@ -116,8 +114,8 @@ public class SolrGUIServer {
 	 */
 	public void removeDocument(SolrGUIDocument document) {
 		document.setStatus(SolrGUIStatus.DELETED);
-		for (ISolrGUIChangeListener viewer:changeListeners) {
-			viewer.updateDocument(document);
+		for (ISolrGUIChangeListener listener:changeListeners) {
+			listener.updateDocument(document);
 		}
 	}
 
@@ -131,8 +129,8 @@ public class SolrGUIServer {
 		if (!document.getStatus().equals(SolrGUIStatus.ADDED)) {
 			document.setStatus(SolrGUIStatus.UPDATED);
 		}
-		for (ISolrGUIChangeListener viewer:changeListeners) {
-			viewer.updateDocument(document);
+		for (ISolrGUIChangeListener listener:changeListeners) {
+			listener.updateDocument(document);
 		}
 	}
 
@@ -148,20 +146,6 @@ public class SolrGUIServer {
 	 */
 	public void removeChangeListener(ISolrGUIChangeListener changeListener) {
 		changeListeners.remove(changeListener);
-	}
-
-	/**
-	 * @param queryListener
-	 */
-	public void addQueryListener(ISolrGUIQueryListener queryListener) {
-		queryListeners.remove(queryListener);
-	}
-	
-	/**
-	 * @param queryListener
-	 */
-	public void removeQueryListener(ISolrGUIQueryListener queryListener) { // TODO useless ?
-		queryListeners.remove(queryListener);
 	}
 	
 	public String[] getFields() {

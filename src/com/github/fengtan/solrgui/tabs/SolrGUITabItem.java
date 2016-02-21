@@ -33,11 +33,12 @@ public class SolrGUITabItem extends CTabItem {
 
 	private Table table;
 	private TableViewer tableViewer;
+	
 	private SolrGUIServer server;
 	private SolrGUISorter sorter;
 	
 	public SolrGUITabItem(CTabFolder tabFolder, SolrGUIServer server) {
-		super(tabFolder, SWT.NONE, tabFolder.getItemCount());		
+		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
 		this.server = server;
 		setText(server.getName());
 		setToolTipText(server.getURL().toString());
