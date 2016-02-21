@@ -37,7 +37,7 @@ public class SolrGUIAddServerDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
-		
+		// TODO display inline
 		new Label(composite, SWT.NULL).setText("Name");
 		name = new Text(composite, SWT.BORDER); // TODO border
 		name.setText(DEFAULT_SERVER_NAME);

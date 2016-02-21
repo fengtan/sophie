@@ -14,6 +14,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -26,6 +27,7 @@ import com.github.fengtan.solrgui.tables.SolrGUIContentProvider;
 import com.github.fengtan.solrgui.tables.SolrGUILabelProvider;
 import com.github.fengtan.solrgui.tables.SolrGUISorter;
 
+// TODO icon in ubuntu launcher
 // TODO license
 // TODO mechanism to load / delete servers from config file.
 // TODO sort by ID field by default ? so rows remain the same when modify one
@@ -33,6 +35,7 @@ public class SolrGUITabItem extends CTabItem {
 
 	private Table table;
 	private TableViewer tableViewer;
+	private Label statusLabel; // Label in footer - displays number of documents received etc.
 	
 	private SolrGUIServer server;
 	private SolrGUISorter sorter;
@@ -48,6 +51,7 @@ public class SolrGUITabItem extends CTabItem {
 		createLayout(composite);
 		createTable(composite);
 		createTableViewer();
+		createStatusLabel(composite);
 		setControl(composite);
 		
 		// Set focus on this tab.
@@ -133,6 +137,16 @@ public class SolrGUITabItem extends CTabItem {
 		tableViewer.setInput(server);
 	}
 
+	/**
+	 * Add status label.
+	 * 
+	 * @param composite the parent composite
+	 */
+	private void createStatusLabel(Composite composite) {
+		statusLabel = new Label(composite, SWT.NULL);
+		statusLabel.setText("XXX documents (XXX on server, XX added locally, XX modified locally, XX deleted locally)");// TODO calculate nb documents based on what tableViewer contains 
+	}
+	
 	@Override
 	public void dispose() {
 		tableViewer.getLabelProvider().dispose();
