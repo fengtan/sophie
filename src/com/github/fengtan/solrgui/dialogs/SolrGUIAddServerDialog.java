@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.beans.SolrGUIConfig;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
-import com.github.fengtan.solrgui.tabs.SolrGUITab;
+import com.github.fengtan.solrgui.tabs.SolrGUITabItem;
 
 public class SolrGUIAddServerDialog extends Dialog {
 
@@ -28,6 +28,7 @@ public class SolrGUIAddServerDialog extends Dialog {
 	
 	private CTabFolder tabFolder;
 	
+	// TODO allow http auth
 	// TODO rows should be controllable using the UI - not with a regular setting
 	public SolrGUIAddServerDialog(Shell parentShell, CTabFolder tabFolder) {
 		super(parentShell);
@@ -69,7 +70,7 @@ public class SolrGUIAddServerDialog extends Dialog {
 			try {
 				SolrGUIServer server = new SolrGUIServer(new URL(url.getText()), name.getText(), "*:*", Integer.parseInt(rows.getText()));
 	            SolrGUIConfig.addServer(server);
-	            new SolrGUITab(tabFolder, server);
+	            new SolrGUITabItem(tabFolder, server);
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

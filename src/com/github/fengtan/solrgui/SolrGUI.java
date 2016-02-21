@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Shell;
 import com.github.fengtan.solrgui.beans.SolrGUIConfig;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
 import com.github.fengtan.solrgui.dialogs.SolrGUIAddServerDialog;
-import com.github.fengtan.solrgui.tabs.SolrGUITab;
+import com.github.fengtan.solrgui.tabs.SolrGUITabItem;
 import com.github.fengtan.solrgui.toolbar.SolrGUIToolbar;
 
 public class SolrGUI {
@@ -24,13 +24,13 @@ public class SolrGUI {
 	public static void main(String[] args) {
 		new SolrGUI().run();
 	}
-	
+
 	public void run() {
 		Shell shell = new Shell();
 		shell.setText("Solr GUI");
 
 		// Add toolbar
-		SolrGUIToolbar toolbar = new SolrGUIToolbar(shell);
+		SolrGUIToolbar toolbar = new SolrGUIToolbar(shell, this); // TODO passing SolrGUI is ugly
 		
 		// Set layout for shell.
 		GridLayout layout = new GridLayout();
@@ -87,9 +87,13 @@ public class SolrGUI {
 		
 		// Initialize tabs from config file.
 		for (SolrGUIServer server: SolrGUIConfig.getServers()) {
-			new SolrGUITab(tabFolder, server);
+			new SolrGUITabItem(tabFolder, server);
 		}
 		
+	}
+	
+	public CTabFolder getTabFolder() {
+		return tabFolder;
 	}
 	
 	// TODO right click 'Show Solr query'
@@ -97,5 +101,9 @@ public class SolrGUI {
 	// TODO keyboard shortcuts
 	// TODO test Solr 5
 	// TODO elasticsearch
+	// TODO about page + github.io
+	// TODO see what features luke provides
+	// TODO ability to show/hide specific columns
+	// TODO document all methods
 
 }

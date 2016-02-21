@@ -1,6 +1,7 @@
 package com.github.fengtan.solrgui.tabs;
 
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
@@ -28,14 +29,14 @@ import com.github.fengtan.solrgui.tables.SolrGUISorter;
 // TODO license
 // TODO mechanism to load / delete servers from config file.
 // TODO sort by ID field by default ? so rows remain the same when modify one
-public class SolrGUITab extends CTabItem {
+public class SolrGUITabItem extends CTabItem {
 
 	private Table table;
 	private TableViewer tableViewer;
 	private SolrGUIServer server;
 	private SolrGUISorter sorter;
 	
-	public SolrGUITab(CTabFolder tabFolder, SolrGUIServer server) {
+	public SolrGUITabItem(CTabFolder tabFolder, SolrGUIServer server) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());		
 		this.server = server;
 		setText(server.getName());
@@ -138,4 +139,34 @@ public class SolrGUITab extends CTabItem {
 		super.dispose();
 	}
 
+	// TODO what is the point of encapsulating server
+	public void addNewDocument() {
+		server.addDocument();
+	}
+	
+	public void deleteCurrentDocument() {
+		SolrGUIDocument document = (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
+		if (document != null) {
+			server.removeDocument(document);
+		}
+	}
+	
+	public void cloneCurrentDocument() {
+		SolrGUIDocument document = (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
+		if (document != null) {
+			// TODO Cloning generate remote exception
+			server.addDocument(document.clone());
+		}
+	}
+	
+	public void refresh() {
+		server.refreshDocuments();
+		tableViewer.refresh();
+	}
+	
+	public void commit() {
+		server.commit();
+		tableViewer.refresh();
+	}
+	
 }
