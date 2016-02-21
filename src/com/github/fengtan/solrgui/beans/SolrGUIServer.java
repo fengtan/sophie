@@ -115,7 +115,7 @@ public class SolrGUIServer {
 	public void removeDocument(SolrGUIDocument document) {
 		document.setStatus(SolrGUIStatus.DELETED);
 		for (ISolrGUIChangeListener listener:changeListeners) {
-			listener.updateDocument(document);
+			listener.modifyDocument(document);
 		}
 	}
 
@@ -127,10 +127,10 @@ public class SolrGUIServer {
 	 */
 	public void documentChanged(SolrGUIDocument document) {
 		if (!document.getStatus().equals(SolrGUIStatus.ADDED)) {
-			document.setStatus(SolrGUIStatus.UPDATED);
+			document.setStatus(SolrGUIStatus.MODIFIED);
 		}
 		for (ISolrGUIChangeListener listener:changeListeners) {
-			listener.updateDocument(document);
+			listener.modifyDocument(document);
 		}
 	}
 
@@ -214,7 +214,7 @@ public class SolrGUIServer {
 				case NONE:
 					// Nothing to do.
 					break;
-				case UPDATED:
+				case MODIFIED:
 					// TODO use LukeRequest ?
 					input = ClientUtils.toSolrInputDocument(document.getDocument());
 					try {

@@ -4,5 +4,5 @@ public enum SolrGUIStatus {
 	NONE,
 	ADDED,
 	DELETED,
-	UPDATED;
+	MODIFIED;
 }

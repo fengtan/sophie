@@ -31,11 +31,11 @@ import com.github.fengtan.solrgui.tables.SolrGUISorter;
 // TODO license
 // TODO mechanism to load / delete servers from config file.
 // TODO sort by ID field by default ? so rows remain the same when modify one
+// TODO if server empty and click on table viewer -> seems to crash
 public class SolrGUITabItem extends CTabItem {
 
 	private Table table;
 	private TableViewer tableViewer;
-	private Label statusLabel; // Label in footer - displays number of documents received etc.
 	
 	private SolrGUIServer server;
 	private SolrGUISorter sorter;
@@ -50,8 +50,7 @@ public class SolrGUITabItem extends CTabItem {
 		Composite composite = new Composite(getParent(), SWT.BORDER);
 		createLayout(composite);
 		createTable(composite);
-		createTableViewer();
-		createStatusLabel(composite);
+		createTableViewer(composite);
 		setControl(composite);
 		
 		// Set focus on this tab.
@@ -114,7 +113,7 @@ public class SolrGUITabItem extends CTabItem {
 	/**
 	 * Create the TableViewer 
 	 */
-	private void createTableViewer() {
+	private void createTableViewer(Composite composite) {
 		tableViewer = new TableViewer(table);
 		tableViewer.setUseHashlookup(true);
 		tableViewer.setColumnProperties(server.getFields());
@@ -129,22 +128,15 @@ public class SolrGUITabItem extends CTabItem {
 			editors[i] = textEditor;
 		}
 
+		Label statusLine = new Label(composite, SWT.WRAP);
+		statusLine.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		
 		tableViewer.setCellEditors(editors);
 		tableViewer.setCellModifier(new SolrGUICellModifier(server));
 		tableViewer.setSorter(sorter); // Set default sorter (null-safe).
-		tableViewer.setContentProvider(new SolrGUIContentProvider(server, tableViewer));
+		tableViewer.setContentProvider(new SolrGUIContentProvider(server, tableViewer, statusLine));
 		tableViewer.setLabelProvider(new SolrGUILabelProvider(server));
 		tableViewer.setInput(server);
-	}
-
-	/**
-	 * Add status label.
-	 * 
-	 * @param composite the parent composite
-	 */
-	private void createStatusLabel(Composite composite) {
-		statusLabel = new Label(composite, SWT.NULL);
-		statusLabel.setText("XXX documents (XXX on server, XX added locally, XX modified locally, XX deleted locally)");// TODO calculate nb documents based on what tableViewer contains 
 	}
 	
 	@Override

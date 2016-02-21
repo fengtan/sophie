@@ -48,7 +48,7 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 				return GREEN;
 			case DELETED:
 				return RED;
-			case UPDATED:
+			case MODIFIED:
 				return YELLOW;
 			default:
 				return null;
