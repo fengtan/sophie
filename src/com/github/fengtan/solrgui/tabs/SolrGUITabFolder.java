@@ -30,7 +30,6 @@ public class SolrGUITabFolder extends CTabFolder {
 		setTabHeight(25);
 		
 		// Create the 'Add server button
-		// TODO button 'clear/empty index'
     	// TODO validate connection before saving
 		// TODO what if user enters garbage (e.g. not a number)
 		Button button = new Button(this, SWT.PUSH | SWT.CENTER);

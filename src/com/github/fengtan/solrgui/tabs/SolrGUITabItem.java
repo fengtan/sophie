@@ -34,8 +34,10 @@ import com.github.fengtan.solrgui.tables.SolrGUISorter;
 // TODO if server empty and click on table viewer -> seems to crash
 public class SolrGUITabItem extends CTabItem {
 
+	// TODO could be worth using style VIRTUAL since the data source is remote http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fswt%2Fwidgets%2FTable.html
 	private Table table;
 	private TableViewer tableViewer;
+	private Label statusLine; // Label in footer - displays number of documents received etc.
 	
 	private SolrGUIServer server;
 	private SolrGUISorter sorter;
@@ -50,12 +52,16 @@ public class SolrGUITabItem extends CTabItem {
 		Composite composite = new Composite(getParent(), SWT.BORDER);
 		createLayout(composite);
 		createTable(composite);
-		createTableViewer(composite);
+		createTableViewer();
+		createStatusLine(composite);
 		setControl(composite);
 		
 		// Set focus on this tab.
 		tabFolder.setSelection(this);
 		tabFolder.forceFocus();
+		
+		// Initialize status line.
+		refreshStatusLine();
 	}
 
 	private void createLayout(Composite composite) {
@@ -113,7 +119,7 @@ public class SolrGUITabItem extends CTabItem {
 	/**
 	 * Create the TableViewer 
 	 */
-	private void createTableViewer(Composite composite) {
+	private void createTableViewer() {
 		tableViewer = new TableViewer(table);
 		tableViewer.setUseHashlookup(true);
 		tableViewer.setColumnProperties(server.getFields());
@@ -127,16 +133,28 @@ public class SolrGUITabItem extends CTabItem {
 			((Text) textEditor.getControl()).setTextLimit(60);
 			editors[i] = textEditor;
 		}
-
-		Label statusLine = new Label(composite, SWT.WRAP);
-		statusLine.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		
 		tableViewer.setCellEditors(editors);
 		tableViewer.setCellModifier(new SolrGUICellModifier(server));
 		tableViewer.setSorter(sorter); // Set default sorter (null-safe).
-		tableViewer.setContentProvider(new SolrGUIContentProvider(server, tableViewer, statusLine));
+		tableViewer.setContentProvider(new SolrGUIContentProvider(server, tableViewer));
 		tableViewer.setLabelProvider(new SolrGUILabelProvider(server));
 		tableViewer.setInput(server);
+	}
+	
+	/**
+	 * Create status line.
+	 */
+	private void createStatusLine(Composite composite) {
+		statusLine = new Label(composite, SWT.WRAP);
+		statusLine.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+	}
+	
+	// TODO not updated when clicking 'refresh'
+	// TODO not updated when launching app
+	protected void refreshStatusLine() {
+		int numDocuments = tableViewer.getTable().getItemCount();
+		statusLine.setText(numDocuments+" documents");// TODO "XX additions, XX deletions, XX modifications"
 	}
 	
 	@Override
@@ -149,6 +167,7 @@ public class SolrGUITabItem extends CTabItem {
 	// TODO what is the point of encapsulating server
 	public void addNewDocument() {
 		server.addDocument();
+		refreshStatusLine();
 	}
 	
 	public void deleteCurrentDocument() {
@@ -156,6 +175,7 @@ public class SolrGUITabItem extends CTabItem {
 		if (document != null) {
 			server.removeDocument(document);
 		}
+		refreshStatusLine();
 	}
 	
 	public void cloneCurrentDocument() {
@@ -164,21 +184,25 @@ public class SolrGUITabItem extends CTabItem {
 			// TODO Cloning generate remote exception
 			server.addDocument(document.clone());
 		}
+		refreshStatusLine();
 	}
 	
 	public void refresh() {
 		server.refreshDocuments();
 		tableViewer.refresh();
+		refreshStatusLine();
 	}
 	
 	public void commit() {
 		server.commit();
 		tableViewer.refresh();
+		refreshStatusLine();
 	}
 	
 	public void clear() {
 		server.clear();
 		tableViewer.refresh();
+		refreshStatusLine();
 	}
 	
 }

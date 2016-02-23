@@ -3,7 +3,6 @@ package com.github.fengtan.solrgui.tables;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.widgets.Label;
 
 import com.github.fengtan.solrgui.beans.SolrGUIDocument;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
@@ -19,12 +18,10 @@ public class SolrGUIContentProvider implements IStructuredContentProvider, ISolr
 	
 	private SolrGUIServer server;
 	private TableViewer tableViewer;
-	private Label statusLine; // Label in footer - displays number of documents received etc.
 	
-	public SolrGUIContentProvider(SolrGUIServer server, TableViewer tableViewer, Label statusLine) {
+	public SolrGUIContentProvider(SolrGUIServer server, TableViewer tableViewer) {
 		this.server = server;
 		this.tableViewer = tableViewer;
-		this.statusLine = statusLine;
 	}
 	
 	@Override
@@ -51,7 +48,6 @@ public class SolrGUIContentProvider implements IStructuredContentProvider, ISolr
 	@Override
 	public void addDocument(SolrGUIDocument document) {
 		tableViewer.add(document);
-		refreshStatusLine(); // TODO is this the right place to call refreshStatusLine() ? called in addDocument() but not removeDocument()
 	}
 
 	@Override
@@ -62,13 +58,6 @@ public class SolrGUIContentProvider implements IStructuredContentProvider, ISolr
 	@Override
 	public void modifyDocument(SolrGUIDocument document) {
 		tableViewer.update(document, null);
-	}
-
-	// TODO not updated when clicking 'refresh'
-	// TODO not updated when launching app
-	protected void refreshStatusLine() {
-		int numDocuments = tableViewer.getTable().getItemCount();
-		statusLine.setText(numDocuments+" documents");// TODO "XX additions, XX deletions, XX modifications"
 	}
 	
 }
