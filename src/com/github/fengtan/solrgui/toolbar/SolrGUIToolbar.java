@@ -5,6 +5,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -31,7 +32,7 @@ public class SolrGUIToolbar {
     	this.solrGUI = solrGUI;
     }
     
-    protected void initToolbar(Shell shell) {
+    protected void initToolbar(final Shell shell) {
         Display display = shell.getDisplay();
 
         imgAdd = new Image(display, "img/toolbar-add.svg");
@@ -100,12 +101,17 @@ public class SolrGUIToolbar {
         
         ToolItem itemClear = new ToolItem(toolBar, SWT.PUSH);
         itemClear.setImage(imgClear);
-        itemClear.setToolTipText("Clear all documents on server"); // TODO disabled when no local modifications
-        // TODO ask for confirmation before clearing index
+        itemClear.setToolTipText("Clear the index"); // TODO disabled when no local modifications
         itemClear.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
-				tabItem.clear();
+		        MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		        messageBox.setText("Clear the index");
+		        messageBox.setMessage("Do you really want to clear the index? This will wipe out all documents on the server.");
+		        int response = messageBox.open();
+		        if (response == SWT.YES) {
+		        	SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
+					tabItem.clear();
+		        }
 			}
 		});
 
