@@ -40,8 +40,8 @@ public class SolrGUI {
 					display.sleep();	
 				}	
 			} catch (RuntimeException e) { // TODO is this the right way to handle runtime exceptions ?
-				MessageBox box = new MessageBox(shell, SWT.ICON_ERROR);
 		    	e.printStackTrace(); // TODO log stack trace somewhere
+				MessageBox box = new MessageBox(shell, SWT.ICON_ERROR);
 			    box.setText("An error happened");
 			    box.setMessage(e.getMessage());
 			    box.open();

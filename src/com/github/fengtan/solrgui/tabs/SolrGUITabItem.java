@@ -13,10 +13,15 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
@@ -40,6 +45,8 @@ import com.github.fengtan.solrgui.tables.SolrGUISorter;
 // TODO if server empty and click on table viewer -> seems to crash
 public class SolrGUITabItem extends CTabItem {
 
+	private Composite filtersComposite;
+	
 	private Set<SolrGUIFilter> filters = new HashSet<SolrGUIFilter>();
 	// TODO could be worth using style VIRTUAL since the data source is remote http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fswt%2Fwidgets%2FTable.html
 	private Table table;
@@ -56,13 +63,16 @@ public class SolrGUITabItem extends CTabItem {
 		setToolTipText(server.getURL().toString());
 		
 		// Fill in tab.
-		Composite composite = new Composite(getParent(), SWT.BORDER);
-		createLayout(composite);
-		filters.add(new SolrGUIFilter(composite, server)); // TODO ability to create multiple filters
-		createTable(composite);
+		Composite tabComposite = new Composite(getParent(), SWT.NULL);
+		createLayout(tabComposite);
+		filtersComposite = new Composite(tabComposite, SWT.NULL);
+		filtersComposite.setLayout(new GridLayout());
+		addFilter(filtersComposite);
+		addFilter(filtersComposite);
+		createTable(tabComposite);
 		createTableViewer();
-		createStatusLine(composite);
-		setControl(composite);
+		createStatusLine(tabComposite);
+		setControl(tabComposite);
 		
 		// Set focus on this tab.
 		tabFolder.setSelection(this);
@@ -70,6 +80,40 @@ public class SolrGUITabItem extends CTabItem {
 		
 		// Initialize status line.
 		refreshStatusLine();
+	}
+	
+	private void addFilter(final Composite filtersComposite) {
+		final Composite filterComposite = new Composite(filtersComposite, SWT.NULL);
+		filterComposite.setLayout(new FillLayout());
+		filters.add(new SolrGUIFilter(filterComposite, server));
+	    
+	    Label labelMinus = new Label(filterComposite, SWT.NULL);
+	    Image imgMinus = new Image(getDisplay(), "img/filters-minus.png"); // TODO use another image ?
+	    labelMinus.setImage(imgMinus);
+	    labelMinus.addMouseListener(new MouseAdapter() {
+	    	@Override
+	    	public void mouseDown(MouseEvent e) {
+	    		// Do not dispose filter if there is only 1 filter.
+	    		if (filtersComposite.getChildren().length > 1) {
+		    		filterComposite.dispose();
+		    		filtersComposite.getParent().pack();
+		    		// TODO remove from this.filters
+	    		}
+	    		super.mouseDown(e);
+	    	}
+		});
+	    
+	    Label labelPlus = new Label(filterComposite, SWT.NULL);
+	    Image imgPlus = new Image(getDisplay(), "img/filters-plus.png"); // TODO use another image ?
+	    labelPlus.setImage(imgPlus);
+	    labelPlus.addMouseListener(new MouseAdapter() {
+	    	@Override
+	    	public void mouseDown(MouseEvent e) {
+	    		addFilter(filtersComposite);
+	    		filtersComposite.getParent().pack();
+	    		super.mouseDown(e);
+	    	}
+		});
 	}
 
 	private void createLayout(Composite composite) {

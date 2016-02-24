@@ -14,8 +14,8 @@ public class SolrGUIFilter extends Composite {
 	private Combo combo;
 	private Text text;
 	
-	public SolrGUIFilter(Composite parent, SolrGUIServer server) {
-		super(parent, SWT.SHADOW_ETCHED_IN);
+	public SolrGUIFilter(Composite composite, SolrGUIServer server) {
+		super(composite, SWT.SHADOW_ETCHED_IN);
 		
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 
@@ -23,7 +23,7 @@ public class SolrGUIFilter extends Composite {
 		combo.setItems(server.getFields());
 		combo.setText("Filter by");
 		
-	    text = new Text(this, SWT.BORDER);	
+	    text = new Text(this, SWT.BORDER);
 	}
 	
 	public String getField() {
