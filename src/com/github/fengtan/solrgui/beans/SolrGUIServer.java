@@ -22,29 +22,25 @@ import org.apache.solr.common.SolrInputDocument;
 
 import com.github.fengtan.solrgui.tables.ISolrGUIChangeListener;
 
+// TODO persist rows, fq, q etc ?
+// TODO dismax, facets etc
 // TODO test with Solr < 4.
-// TODO test 2 servers with different fields/schema.
 public class SolrGUIServer {
 
 	private URL url;
 	private String name;
 	private SolrServer server;
 	
-	private String q;
-	private int rows; // TODO load 500 rows by default + add button "load more" if necessary
-	
 	private String[] fields;
 	private List<SolrGUIDocument> documents;
 	private Set<ISolrGUIChangeListener> changeListeners = new HashSet<ISolrGUIChangeListener>();
 
-	public SolrGUIServer(URL url, String name, String q, int rows) {
+	public SolrGUIServer(URL url, String name) {
 		this.url = url;
 		this.name = name;
 		this.server = new HttpSolrServer(url.toExternalForm());
-		this.q = q;
-		this.rows = rows;
 		refreshFields();
-		refreshDocuments();
+		refreshDocuments(SolrGUIQuery.ALL_DOCUMENTS);
 	}
 	
 	public URL getURL() {
@@ -55,21 +51,9 @@ public class SolrGUIServer {
 		return name;
 	}
 	
-	public String getQ() {
-		return q;
-	}
-	
-	public int getRows() {
-		return rows;
-	}
-	
-	public void refreshDocuments() {
+	public void refreshDocuments(SolrQuery query) {
 		// TODO cache ? use transactions ?
 		// TODO allow not to use the default request handler + allow to configure req params => advanded "Add Server" in menus
-		// Build query.
-		SolrQuery query = new SolrQuery();
-		query.setQuery(q);
-		query.setRows(rows);
 		// Initialize attribute.
 		documents = new ArrayList<SolrGUIDocument>();
 		// Get Solr response and update local attribute.
@@ -231,7 +215,6 @@ public class SolrGUIServer {
 		}
 		try {
 			server.commit(); 
-			refreshDocuments();  // Returned object seems to have no relevant information.
 			// TODO allow to revert a specific document
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
@@ -247,7 +230,6 @@ public class SolrGUIServer {
 		try {
 			server.deleteByQuery("*:*");
 			server.commit();
-			refreshDocuments();  // Returned object seems to have no relevant information.
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

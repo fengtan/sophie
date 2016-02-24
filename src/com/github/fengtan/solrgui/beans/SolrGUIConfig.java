@@ -39,9 +39,7 @@ public class SolrGUIConfig {
 					// TODO what if one of the params does not exist.
 					URL url = new URL(section.get("protocol"), section.get("host"), Integer.parseInt(section.get("port")), section.get("path"));
 					String name = entry.getKey().toString();
-					String q = section.get("q");
-					int rows = Integer.parseInt(section.get("rows"));
-					servers.add(new SolrGUIServer(url, name, q, rows));
+					servers.add(new SolrGUIServer(url, name));
 				} catch (NumberFormatException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -65,8 +63,6 @@ public class SolrGUIConfig {
 			ini.add(server.getName(), "host", server.getURL().getHost());
 			ini.add(server.getName(), "port", server.getURL().getPort());
 			ini.add(server.getName(), "path", server.getURL().getPath());
-			ini.add(server.getName(), "q", server.getQ());
-			ini.add(server.getName(), "rows", server.getRows());
 			ini.store();
 		} catch (InvalidFileFormatException e1) {
 			// TODO Auto-generated catch block

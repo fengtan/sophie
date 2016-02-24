@@ -65,9 +65,8 @@ public class SolrGUIAddServerDialog extends Dialog {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
 			// TODO do not create if server already exists.
-			// TODO create popup to get URL/name/rows/query
 			try {
-				SolrGUIServer server = new SolrGUIServer(new URL(url.getText()), name.getText(), "*:*", Integer.parseInt(rows.getText()));
+				SolrGUIServer server = new SolrGUIServer(new URL(url.getText()), name.getText());
 	            SolrGUIConfig.addServer(server);
 	            tabFolder.addTabItem(server);
 			} catch (MalformedURLException e) {

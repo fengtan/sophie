@@ -96,6 +96,7 @@ public class SolrGUIToolbar {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
 				tabItem.commit();
+				tabItem.refresh();
 			}
 		});
         
@@ -111,6 +112,7 @@ public class SolrGUIToolbar {
 		        if (response == SWT.YES) {
 		        	SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
 					tabItem.clear();
+					tabItem.refresh();
 		        }
 			}
 		});

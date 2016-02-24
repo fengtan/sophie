@@ -1,5 +1,9 @@
 package com.github.fengtan.solrgui.tabs;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.solr.client.solrj.SolrQuery;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -21,7 +25,9 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.beans.SolrGUIDocument;
+import com.github.fengtan.solrgui.beans.SolrGUIQuery;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
+import com.github.fengtan.solrgui.filters.SolrGUIFilter;
 import com.github.fengtan.solrgui.tables.SolrGUICellModifier;
 import com.github.fengtan.solrgui.tables.SolrGUIContentProvider;
 import com.github.fengtan.solrgui.tables.SolrGUILabelProvider;
@@ -34,6 +40,7 @@ import com.github.fengtan.solrgui.tables.SolrGUISorter;
 // TODO if server empty and click on table viewer -> seems to crash
 public class SolrGUITabItem extends CTabItem {
 
+	private Set<SolrGUIFilter> filters = new HashSet<SolrGUIFilter>();
 	// TODO could be worth using style VIRTUAL since the data source is remote http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fswt%2Fwidgets%2FTable.html
 	private Table table;
 	private TableViewer tableViewer;
@@ -51,6 +58,7 @@ public class SolrGUITabItem extends CTabItem {
 		// Fill in tab.
 		Composite composite = new Composite(getParent(), SWT.BORDER);
 		createLayout(composite);
+		filters.add(new SolrGUIFilter(composite, server)); // TODO ability to create multiple filters
 		createTable(composite);
 		createTableViewer();
 		createStatusLine(composite);
@@ -150,6 +158,7 @@ public class SolrGUITabItem extends CTabItem {
 		statusLine.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 	}
 	
+	// TODO sorting could possibly be done using solr, not swt
 	// TODO not updated when clicking 'refresh'
 	// TODO not updated when launching app
 	protected void refreshStatusLine() {
@@ -188,7 +197,8 @@ public class SolrGUITabItem extends CTabItem {
 	}
 	
 	public void refresh() {
-		server.refreshDocuments();
+		SolrQuery query = new SolrGUIQuery(filters);
+		server.refreshDocuments(query);
 		tableViewer.refresh();
 		refreshStatusLine();
 	}

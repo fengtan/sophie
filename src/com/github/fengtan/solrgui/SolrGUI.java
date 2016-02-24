@@ -18,6 +18,9 @@ public class SolrGUI {
 	}
 
 	public void run() {
+		
+		Thread.setUncaughtExceptionHandler(myHandler);
+		
 		Shell shell = new Shell();
 		shell.setText("Solr GUI");
 
