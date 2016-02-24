@@ -1,8 +1,10 @@
 package com.github.fengtan.solrgui;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import com.github.fengtan.solrgui.tabs.SolrGUITabFolder;
@@ -18,9 +20,6 @@ public class SolrGUI {
 	}
 
 	public void run() {
-		
-		Thread.setUncaughtExceptionHandler(myHandler);
-		
 		Shell shell = new Shell();
 		shell.setText("Solr GUI");
 
@@ -36,8 +35,17 @@ public class SolrGUI {
 		shell.open();
 		Display display = shell.getDisplay();
 		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch())
-				display.sleep();
+			try {
+				if (!display.readAndDispatch()) {
+					display.sleep();	
+				}	
+			} catch (RuntimeException e) { // TODO is this the right way to handle runtime exceptions ?
+				MessageBox box = new MessageBox(shell, SWT.ICON_ERROR);
+		    	e.printStackTrace(); // TODO log stack trace somewhere
+			    box.setText("An error happened");
+			    box.setMessage(e.getMessage());
+			    box.open();
+			}
 		}
 		toolbar.finalize();
 		display.dispose();
