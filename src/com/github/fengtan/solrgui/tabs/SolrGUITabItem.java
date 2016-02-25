@@ -17,13 +17,13 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -69,7 +69,9 @@ public class SolrGUITabItem extends CTabItem {
 		filtersComposite.setLayout(new GridLayout());
 		addFilter();
 		createTable(tabComposite);
+		refreshColumns();
 		createTableViewer();
+		createContextualMenu();
 		createStatusLine(tabComposite);
 		setControl(tabComposite);
 		
@@ -132,6 +134,9 @@ public class SolrGUITabItem extends CTabItem {
 			}
 		});
 
+	}
+	
+	private void refreshColumns() {
 		TableColumn column;
 		for (final String field:server.getFields()) {
 			column = new TableColumn(table, SWT.LEFT);
@@ -143,9 +148,36 @@ public class SolrGUITabItem extends CTabItem {
 					tableViewer.setSorter(sorter); // TODO does sorting scale ?
 				}
 			});
-			column.pack();
+			column.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
 		}
-
+	}
+	
+	/**
+	 * Create contextual menu to show/hide columns.
+	 */
+	private void createContextualMenu() {
+		Menu menu = new Menu(table);
+		for (TableColumn column: table.getColumns()) {
+			final MenuItem item = new MenuItem(menu, SWT.NONE);
+			item.setText(column.getText());
+			item.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(SelectionEvent event) {
+					// TODO Auto-generated method stub
+System.out.println(item.getText());
+					table.setRedraw(false);
+					while (table.getColumnCount() > 0) {
+					    table.getColumns()[0].dispose();
+					}
+					refreshColumns();
+				}
+				@Override
+				public void widgetDefaultSelected(SelectionEvent event) {
+					// Do nothing
+				}
+			});
+		}
+		table.setMenu(menu);
 	}
 
 	/**
