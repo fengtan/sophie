@@ -152,24 +152,23 @@ public class SolrGUITabItem extends CTabItem {
 		}
 	}
 	
+	private void removeColumn(String field) {
+		// TODO refreshColumns() http://stackoverflow.com/questions/6512831/how-to-hide-delete-column-in-swt-table
+	}
+	
 	/**
 	 * Create contextual menu to show/hide columns.
 	 */
 	private void createContextualMenu() {
 		Menu menu = new Menu(table);
 		for (TableColumn column: table.getColumns()) {
-			final MenuItem item = new MenuItem(menu, SWT.NONE);
+			final MenuItem item = new MenuItem(menu, SWT.CHECK);
 			item.setText(column.getText());
+			item.setSelection(true);
 			item.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent event) {
-					// TODO Auto-generated method stub
-System.out.println(item.getText());
-					table.setRedraw(false);
-					while (table.getColumnCount() > 0) {
-					    table.getColumns()[0].dispose();
-					}
-					refreshColumns();
+					removeColumn(item.getText());
 				}
 				@Override
 				public void widgetDefaultSelected(SelectionEvent event) {
