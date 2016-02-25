@@ -1,6 +1,7 @@
 package com.github.fengtan.solrgui.beans;
 
-import java.util.Set;
+import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -20,12 +21,15 @@ public class SolrGUIQuery extends SolrQuery {
 		setRows(rows);
 	}
 
-	public SolrGUIQuery(Set<SolrGUIFilter> filters) {
+	public SolrGUIQuery(Collection<SolrGUIFilter> filters, Collection<String> fields) {
 		this();
 		for (SolrGUIFilter filter:filters) {
 			if (StringUtils.isNotEmpty(filter.getField()) && StringUtils.isNotEmpty(filter.getValue())) {
 				addFilterQuery(filter.getField() + ":" + filter.getValue());
 			}
+		}
+		for (String field:fields) {
+			addField(field);
 		}
 	}
 	

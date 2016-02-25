@@ -1,6 +1,9 @@
 package com.github.fengtan.solrgui.tabs;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrQuery;
@@ -13,8 +16,6 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -47,6 +48,7 @@ public class SolrGUITabItem extends CTabItem {
 
 	private Composite filtersComposite;
 	
+	private List<String> fieldsDisplayed = new ArrayList<String>(); // Fields displayed in the table.
 	private Set<SolrGUIFilter> filters = new HashSet<SolrGUIFilter>();
 	// TODO could be worth using style VIRTUAL since the data source is remote http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fswt%2Fwidgets%2FTable.html
 	private Table table;
@@ -62,14 +64,19 @@ public class SolrGUITabItem extends CTabItem {
 		setText(server.getName());
 		setToolTipText(server.getURL().toString());
 		
+		// By default, we show all fields available.
+		for (String field:server.getFields()) {
+			fieldsDisplayed.add(field);
+		}
+		
 		// Fill in tab.
 		Composite tabComposite = new Composite(getParent(), SWT.NULL);
 		createLayout(tabComposite);
-		filtersComposite = new Composite(tabComposite, SWT.NULL);
+		filtersComposite = new Composite(tabComposite, SWT.NULL); // TODO put filtersComposite into a separate class ?
 		filtersComposite.setLayout(new GridLayout());
 		addFilter();
 		createTable(tabComposite);
-		refreshColumns();
+		refreshColumns(); // TODO why not call refresh () ? which calls refreshColumns()
 		createTableViewer();
 		createContextualMenu();
 		createStatusLine(tabComposite);
@@ -136,10 +143,20 @@ public class SolrGUITabItem extends CTabItem {
 
 	}
 	
+	/**
+	 * Attaches TableColumn objects to this.table.
+	 */
 	private void refreshColumns() {
-		TableColumn column;
-		for (final String field:server.getFields()) {
-			column = new TableColumn(table, SWT.LEFT);
+		// Make sure the user does not see what we're doing.
+		table.setRedraw(false);
+		// Remove all columns.
+		while (table.getColumnCount() > 0) {
+		    table.getColumns()[0].dispose();
+		}
+		// Add the new ones.
+		Collections.sort(fieldsDisplayed);
+		for (final String field:fieldsDisplayed) {
+			TableColumn column = new TableColumn(table, SWT.LEFT);
 			column.setText(field);
 			// Add listener to column so documents are sorted when clicked.
 			column.addSelectionListener(new SelectionAdapter() { 
@@ -150,25 +167,31 @@ public class SolrGUITabItem extends CTabItem {
 			});
 			column.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
 		}
-	}
-	
-	private void removeColumn(String field) {
-		// TODO refreshColumns() http://stackoverflow.com/questions/6512831/how-to-hide-delete-column-in-swt-table
+		// Let user see what we did.
+		table.setRedraw(true);
 	}
 	
 	/**
 	 * Create contextual menu to show/hide columns.
+	 * TODO support special fields like shards/score etc ?
 	 */
 	private void createContextualMenu() {
 		Menu menu = new Menu(table);
-		for (TableColumn column: table.getColumns()) {
+		for (String field:server.getFields()) {
 			final MenuItem item = new MenuItem(menu, SWT.CHECK);
-			item.setText(column.getText());
-			item.setSelection(true);
+			item.setText(field);
+			item.setSelection(fieldsDisplayed.contains(field));
 			item.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent event) {
-					removeColumn(item.getText());
+					if (item.getSelection()) {
+						// If user checked menu item, then add column.
+						fieldsDisplayed.add(item.getText());
+					} else {
+						// If user unchecked menu item, then remove column.
+						fieldsDisplayed.remove(item.getText());
+					}
+					refresh();
 				}
 				@Override
 				public void widgetDefaultSelected(SelectionEvent event) {
@@ -179,6 +202,9 @@ public class SolrGUITabItem extends CTabItem {
 		table.setMenu(menu);
 	}
 
+	// TODO sort using setSortDirection ?
+	// TODO readme: showing/hiding a column will refresh the table (and wipe out local modifications)
+	
 	/**
 	 * Create the TableViewer 
 	 */
@@ -201,7 +227,7 @@ public class SolrGUITabItem extends CTabItem {
 		tableViewer.setCellModifier(new SolrGUICellModifier(server));
 		tableViewer.setSorter(sorter); // Set default sorter (null-safe).
 		tableViewer.setContentProvider(new SolrGUIContentProvider(server, tableViewer));
-		tableViewer.setLabelProvider(new SolrGUILabelProvider(server));
+		tableViewer.setLabelProvider(new SolrGUILabelProvider(fieldsDisplayed));
 		tableViewer.setInput(server);
 	}
 	
@@ -252,8 +278,9 @@ public class SolrGUITabItem extends CTabItem {
 	}
 	
 	public void refresh() {
-		SolrQuery query = new SolrGUIQuery(filters);
+		SolrQuery query = new SolrGUIQuery(filters, fieldsDisplayed);
 		server.refreshDocuments(query);
+		refreshColumns();
 		tableViewer.refresh();
 		refreshStatusLine();
 	}
