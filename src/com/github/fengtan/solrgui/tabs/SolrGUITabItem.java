@@ -67,8 +67,7 @@ public class SolrGUITabItem extends CTabItem {
 		createLayout(tabComposite);
 		filtersComposite = new Composite(tabComposite, SWT.NULL);
 		filtersComposite.setLayout(new GridLayout());
-		addFilter(filtersComposite);
-		addFilter(filtersComposite);
+		addFilter();
 		createTable(tabComposite);
 		createTableViewer();
 		createStatusLine(tabComposite);
@@ -81,39 +80,20 @@ public class SolrGUITabItem extends CTabItem {
 		// Initialize status line.
 		refreshStatusLine();
 	}
+
+	public void addFilter() {
+		filters.add(new SolrGUIFilter(filtersComposite, server, this)); // TODO passing this is ugly
+		filtersComposite.getParent().pack(); // TODO needed ?*/
+	}
 	
-	private void addFilter(final Composite filtersComposite) {
-		final Composite filterComposite = new Composite(filtersComposite, SWT.NULL);
-		filterComposite.setLayout(new FillLayout());
-		filters.add(new SolrGUIFilter(filterComposite, server));
-	    
-	    Label labelMinus = new Label(filterComposite, SWT.NULL);
-	    Image imgMinus = new Image(getDisplay(), "img/filters-minus.png"); // TODO use another image ?
-	    labelMinus.setImage(imgMinus);
-	    labelMinus.addMouseListener(new MouseAdapter() {
-	    	@Override
-	    	public void mouseDown(MouseEvent e) {
-	    		// Do not dispose filter if there is only 1 filter.
-	    		if (filtersComposite.getChildren().length > 1) {
-		    		filterComposite.dispose();
-		    		filtersComposite.getParent().pack();
-		    		// TODO remove from this.filters
-	    		}
-	    		super.mouseDown(e);
-	    	}
-		});
-	    
-	    Label labelPlus = new Label(filterComposite, SWT.NULL);
-	    Image imgPlus = new Image(getDisplay(), "img/filters-plus.png"); // TODO use another image ?
-	    labelPlus.setImage(imgPlus);
-	    labelPlus.addMouseListener(new MouseAdapter() {
-	    	@Override
-	    	public void mouseDown(MouseEvent e) {
-	    		addFilter(filtersComposite);
-	    		filtersComposite.getParent().pack();
-	    		super.mouseDown(e);
-	    	}
-		});
+	public void removeFilter(SolrGUIFilter filter) {
+		filters.remove(filter);
+		filter.dispose();
+		filtersComposite.getParent().pack(); // TODO needed ?*/
+	}
+	
+	public Set<SolrGUIFilter> getFilters() {
+		return filters;
 	}
 
 	private void createLayout(Composite composite) {
