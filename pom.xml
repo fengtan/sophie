@@ -54,7 +54,7 @@
       </plugin>
     </plugins>
   </build>
-  <url>https://github.com/Fengtan/solr-gui</url>
+  <url>https://github.com/fengtan/solr-gui</url>
   <dependencies>
   	<dependency>
   		<groupId>org.apache.solr</groupId>
@@ -62,12 +62,12 @@
   		<version>4.10.0</version>
   	</dependency>
   	<dependency>
-  		<groupId>ch.qos.logback</groupId>
+      <groupId>ch.qos.logback</groupId><!-- needed ? -->
   		<artifactId>logback-classic</artifactId>
   		<version>1.1.2</version>
   	</dependency>
     <dependency>
-      <groupId>commons-logging</groupId>
+      <groupId>commons-logging</groupId><!-- needed ? -->
       <artifactId>commons-logging</artifactId>
       <version>1.2</version>
       </dependency>
@@ -75,11 +75,6 @@
   		<groupId>org.apache.commons</groupId>
   		<artifactId>commons-lang3</artifactId>
   		<version>3.3.2</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.ini4j</groupId>
-  		<artifactId>ini4j</artifactId>
-  		<version>0.5.2</version>
   	</dependency>
   	<dependency>
   		<groupId>swt</groupId>

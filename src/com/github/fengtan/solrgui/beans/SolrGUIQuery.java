@@ -1,7 +1,6 @@
 package com.github.fengtan.solrgui.beans;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -10,6 +9,8 @@ import com.github.fengtan.solrgui.filters.SolrGUIFilter;
 
 public class SolrGUIQuery extends SolrQuery {
 	
+	private static final long serialVersionUID = 1L;
+
 	private String q = "*:*"; // TODO allow user to alter ?
 	private int rows = 500; // TODO load 500 rows by default + add button "load more" if necessary
 	
