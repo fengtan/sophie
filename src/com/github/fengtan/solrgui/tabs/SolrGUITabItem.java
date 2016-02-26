@@ -89,6 +89,10 @@ public class SolrGUITabItem extends CTabItem {
 		// Initialize status line.
 		refreshStatusLine();
 	}
+	
+	public SolrGUIServer getServer() {
+		return server;
+	}
 
 	public void addFilter() {
 		filters.add(new SolrGUIFilter(filtersComposite, server, this)); // TODO passing this is ugly

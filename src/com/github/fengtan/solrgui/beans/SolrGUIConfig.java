@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +20,10 @@ public class SolrGUIConfig {
 	private static final String filename = ".solrgui";
 	private static final String filepath = System.getProperty("user.home") + File.separator + filename;
 	
-	public static List<SolrGUIServer> getServers() {
-		List<SolrGUIServer> servers = new ArrayList<SolrGUIServer>();
+	private static Properties loadProperties() {
 		Properties properties = new Properties();
 		try {
 			properties.load(new FileInputStream(filepath));
-			for (Entry<Object, Object> entry:properties.entrySet()) {
-				URL url = new URL(entry.getValue().toString());
-				String name = entry.getKey().toString();
-				servers.add(new SolrGUIServer(url, name));
-			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -36,12 +31,10 @@ public class SolrGUIConfig {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return servers;
+		return properties;
 	}
-
-	public static void addServer(SolrGUIServer server) {
-		Properties properties = new Properties();
-		properties.put(server.getName(), server.getURL().toString());
+	
+	private static void storeProperties(Properties properties) {
 		try {
 			properties.store(new FileOutputStream(filepath), null);
 		} catch (FileNotFoundException e) {
@@ -52,5 +45,32 @@ public class SolrGUIConfig {
 			e.printStackTrace();
 		}
 	}
+	
+	public static List<SolrGUIServer> getServers() {
+		List<SolrGUIServer> servers = new ArrayList<SolrGUIServer>();
+		for (Entry<Object, Object> entry:loadProperties().entrySet()) {
+			try {
+				URL url = new URL(entry.getValue().toString());
+				String name = entry.getKey().toString();
+				servers.add(new SolrGUIServer(url, name));	
+			} catch(MalformedURLException e) {
+				e.printStackTrace();
+				// TODO AUto-generated catch block
+			}
+		}
+		return servers;
+	}
+
+	public static void addServer(SolrGUIServer server) {
+		Properties properties = loadProperties();
+		properties.put(server.getName(), server.getURL().toString());
+		storeProperties(properties);
+	}
+	
+	public static void removeServer(SolrGUIServer server) {
+		Properties properties = loadProperties();
+		properties.remove(server.getName());
+		storeProperties(properties);
+	} 
 	
 }
