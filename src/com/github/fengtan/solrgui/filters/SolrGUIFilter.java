@@ -16,19 +16,18 @@ import com.github.fengtan.solrgui.tabs.SolrGUITabItem;
 // TODO refresh fields when hit button 'refresh' ?
 public class SolrGUIFilter extends Composite {
 
+	private static final String LABEL = "Filter by";
+	
 	private Combo combo;
 	private Text text;
 	
-	private SolrGUITabItem tabItem;
-	
 	public SolrGUIFilter(final Composite parent, SolrGUIServer server, final SolrGUITabItem tabItem) {
 		super(parent, SWT.SHADOW_ETCHED_IN);
-		this.tabItem = tabItem;
 		setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		combo = new Combo(this, SWT.SIMPLE | SWT.BORDER);
 		combo.setItems(server.getFields());
-		combo.setText("Filter by");
+		combo.setText(LABEL);
 		
 	    text = new Text(this, SWT.BORDER);
 	    
@@ -40,9 +39,12 @@ public class SolrGUIFilter extends Composite {
 	    labelMinus.addMouseListener(new MouseAdapter() {
 	    	@Override
 	    	public void mouseDown(MouseEvent e) {
-	    		// Do not dispose filter if there is only 1 filter.
 	    		if (tabItem.getFilters().size() > 1) {
+		    		// If there are multiple filters, then remove this filter.
 	    			tabItem.removeFilter(filter);
+	    		} else {
+	    			// If this is the last filter remaining, then reset its value.
+	    			filter.reset();
 	    		}
 	    		super.mouseDown(e);
 	    	}
@@ -69,6 +71,11 @@ public class SolrGUIFilter extends Composite {
 	
 	public String getValue() {
 		return text.getText();
+	}
+	
+	public void reset() {
+		combo.setText(LABEL);
+		text.setText("");
 	}
 
 }
