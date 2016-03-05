@@ -30,6 +30,7 @@ public class SolrGUI {
 		// Add toolbar + tab folder.
 		toolbar = new SolrGUIToolbar(shell, this); // TODO passing the SolrGUI object is ugly
 		tabFolder = new SolrGUITabFolder(shell);
+		tabFolder.addListener(toolbar);
 		
 		// Make the shell to display its content.
 		shell.open();
