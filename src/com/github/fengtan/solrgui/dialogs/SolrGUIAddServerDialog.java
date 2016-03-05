@@ -5,6 +5,7 @@ import java.net.URL;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -19,16 +20,13 @@ public class SolrGUIAddServerDialog extends Dialog {
 
 	private static final String DEFAULT_SERVER_NAME = "collection1@localhost";
 	private static final String DEFAULT_SERVER_URL = "http://localhost:8983/solr/collection1";
-	private static final String DEFAULT_SERVER_ROWS = "500";
 	
 	private Text name;
 	private Text url;
-	private Text rows;
 	
 	private SolrGUITabFolder tabFolder;
 	
 	// TODO allow http auth
-	// TODO rows should be controllable using the UI - not with a regular setting
 	public SolrGUIAddServerDialog(Shell parentShell, SolrGUITabFolder tabFolder) {
 		super(parentShell);
 		this.tabFolder = tabFolder;
@@ -37,18 +35,15 @@ public class SolrGUIAddServerDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
-		// TODO display inline
+		composite.setLayout(new GridLayout(2, false));
+
 		new Label(composite, SWT.NULL).setText("Name");
-		name = new Text(composite, SWT.BORDER); // TODO border
+		name = new Text(composite, SWT.BORDER);
 		name.setText(DEFAULT_SERVER_NAME);
 		
 		new Label(composite, SWT.NULL).setText("URL");
-		url = new Text(composite, SWT.BORDER); // TODO border
+		url = new Text(composite, SWT.BORDER);
 		url.setText(DEFAULT_SERVER_URL);
-	    
-		new Label(composite, SWT.NULL).setText("Rows"); // TODO what if user enters garbage (e.g. not a number)
-	    rows = new Text(composite, SWT.BORDER); // TODO border
-	    rows.setText(DEFAULT_SERVER_ROWS);
 	    
 	    return composite;
 	}
