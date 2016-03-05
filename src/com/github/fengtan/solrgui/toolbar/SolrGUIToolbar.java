@@ -16,7 +16,6 @@ import com.github.fengtan.solrgui.tabs.SolrGUITabItem;
 
 public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 
-	// TODO use a set instead of listing all that.
     private Image imgAdd;
     private Image imgDelete;
     private Image imgClone;
@@ -40,7 +39,6 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
     
     protected void initToolbar(final Shell shell) {
         Display display = shell.getDisplay();
-        // TODO wrapp all that into a custom class
         imgAdd = new Image(display, "img/toolbar-add.svg");
         imgDelete = new Image(display, "img/toolbar-delete.svg");
         imgClone = new Image(display, "img/toolbar-clone.svg");
@@ -149,6 +147,8 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 		itemCommit.setEnabled(false);
 		itemClear.setEnabled(false);
 	}
+	
+	// TODO create tab + close window + open window -> toolbar is disabled.
 
 	@Override
 	public void tabItemAdded() {
