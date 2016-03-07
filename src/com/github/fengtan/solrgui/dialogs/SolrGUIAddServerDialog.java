@@ -60,6 +60,8 @@ public class SolrGUIAddServerDialog extends Dialog {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
 			// TODO do not create if server already exists.
+	    	// TODO validate connection before saving
+			// TODO what if user enters garbage (e.g. not a number)
 			try {
 				SolrGUIServer server = new SolrGUIServer(new URL(url.getText()), name.getText());
 	            SolrGUIConfig.addServer(server);

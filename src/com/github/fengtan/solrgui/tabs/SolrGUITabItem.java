@@ -22,7 +22,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
@@ -33,7 +32,9 @@ import org.eclipse.swt.widgets.Text;
 import com.github.fengtan.solrgui.beans.SolrGUIDocument;
 import com.github.fengtan.solrgui.beans.SolrGUIQuery;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
-import com.github.fengtan.solrgui.filters.SolrGUIFilter;
+import com.github.fengtan.solrgui.sidebar.SolrGUIFilter;
+import com.github.fengtan.solrgui.sidebar.SolrGUISidebar;
+import com.github.fengtan.solrgui.statusline.SolrGUIStatusLine;
 import com.github.fengtan.solrgui.tables.SolrGUICellModifier;
 import com.github.fengtan.solrgui.tables.SolrGUIContentProvider;
 import com.github.fengtan.solrgui.tables.SolrGUILabelProvider;
@@ -41,19 +42,18 @@ import com.github.fengtan.solrgui.tables.SolrGUISorter;
 
 // TODO icon in ubuntu launcher
 // TODO license
-// TODO mechanism to load / delete servers from config file.
 // TODO sort by ID field by default ? so rows remain the same when modify one
 // TODO if server empty and click on table viewer -> seems to crash
 public class SolrGUITabItem extends CTabItem {
 
-	private Composite filtersComposite;
+	private Composite sidebar;
 	
 	private List<String> fieldsDisplayed = new ArrayList<String>(); // Fields displayed in the table.
 	private Set<SolrGUIFilter> filters = new HashSet<SolrGUIFilter>();
 	// TODO could be worth using style VIRTUAL since the data source is remote http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fswt%2Fwidgets%2FTable.html
 	private Table table;
 	private TableViewer tableViewer;
-	private Label statusLine; // Label in footer - displays number of documents received etc.
+	private SolrGUIStatusLine statusLine;
 	
 	private SolrGUIServer server;
 	private SolrGUISorter sorter;
@@ -71,15 +71,14 @@ public class SolrGUITabItem extends CTabItem {
 		
 		// Fill in tab.
 		Composite tabComposite = new Composite(getParent(), SWT.NULL);
-		createLayout(tabComposite);
-		filtersComposite = new Composite(tabComposite, SWT.NULL); // TODO put filtersComposite into a separate class ?
-		filtersComposite.setLayout(new GridLayout());
+		tabComposite.setLayout(new GridLayout());
+		sidebar = new SolrGUISidebar(tabComposite);
 		addFilter();
 		createTable(tabComposite);
 		refreshColumns(); // TODO why not call refresh () ? which calls refreshColumns()
 		createTableViewer();
 		createContextualMenu();
-		createStatusLine(tabComposite);
+		statusLine = new SolrGUIStatusLine(tabComposite);
 		setControl(tabComposite);
 		
 		// Set focus on this tab.
@@ -95,26 +94,18 @@ public class SolrGUITabItem extends CTabItem {
 	}
 
 	public void addFilter() {
-		filters.add(new SolrGUIFilter(filtersComposite, server, this)); // TODO passing this is ugly
-		filtersComposite.getParent().pack(); // TODO needed ?*/
+		filters.add(new SolrGUIFilter(sidebar, server, this)); // TODO passing this is ugly
+		sidebar.getParent().pack(); // TODO needed ?
 	}
 	
 	public void removeFilter(SolrGUIFilter filter) {
 		filters.remove(filter);
 		filter.dispose();
-		filtersComposite.getParent().pack(); // TODO needed ?*/
+		sidebar.getParent().pack(); // TODO needed ?
 	}
 	
 	public Set<SolrGUIFilter> getFilters() {
 		return filters;
-	}
-
-	private void createLayout(Composite composite) {
-		GridData grid = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.FILL_BOTH);
-		composite.setLayoutData(grid); 
-		GridLayout layout = new GridLayout(5, false); // 5 according to number of buttons.
-		layout.marginWidth = 4; 
-		composite.setLayout(layout);
 	}
 	
 	/**
@@ -207,7 +198,6 @@ public class SolrGUITabItem extends CTabItem {
 	}
 
 	// TODO sort using setSortDirection ?
-	// TODO readme: showing/hiding a column will refresh the table (and wipe out local modifications)
 	
 	/**
 	 * Create the TableViewer 
@@ -235,15 +225,6 @@ public class SolrGUITabItem extends CTabItem {
 		tableViewer.setInput(server);
 	}
 	
-	/**
-	 * Create status line.
-	 */
-	private void createStatusLine(Composite composite) {
-		statusLine = new Label(composite, SWT.WRAP);
-		statusLine.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-	}
-	
-	// TODO sorting could possibly be done using solr, not swt
 	// TODO not updated when clicking 'refresh'
 	// TODO not updated when launching app
 	protected void refreshStatusLine() {

@@ -57,14 +57,16 @@ public class SolrGUI {
 		return tabFolder;
 	}
 	
-	// TODO right click 'Show Solr query'
-	// TODO catch all exception
+	// TODO status line showing last solr query
 	// TODO keyboard shortcuts
 	// TODO test Solr 5
 	// TODO elasticsearch
 	// TODO about page + github.io
 	// TODO see what features luke provides
-	// TODO ability to show/hide specific columns
 	// TODO document all methods
-
+	// TODO README mvn clean install; java -jar target/solr-gui-{version}-SNAPSHOT-jar-with-dependencies.jar
+	// TODO drop .settings, .classpath etc
+	// TODO README showing/hiding a column will refresh the table (and wipe out local modifications)
+	// TODO rename solrgui
+	
 }
