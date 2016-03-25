@@ -77,7 +77,9 @@ public class SolrGUITabItem extends CTabItem {
 	// TODO not updated when clicking 'refresh'
 	// TODO not updated when launching app
 	protected void refreshStatusLine() {
-		statusLine.setText(table.getItemCount() + " documents");// TODO "XX additions, XX deletions, XX modifications"
+		int count = table.getItemCount();
+		String suffix = (count > 1) ? "documents" : "document";
+		statusLine.setText(count + " " + suffix);// TODO "XX additions, XX deletions, XX modifications"
 	}
 	
 	@Override
