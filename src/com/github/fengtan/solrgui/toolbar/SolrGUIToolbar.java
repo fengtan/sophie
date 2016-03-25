@@ -148,8 +148,6 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 		itemClear.setEnabled(false);
 	}
 	
-	// TODO create tab + close window + open window -> toolbar is disabled.
-
 	@Override
 	public void tabItemAdded() {
 		// TODO a row should be selected for itemAdd/delete/clone to be enabled

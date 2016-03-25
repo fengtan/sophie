@@ -1,5 +1,8 @@
 package com.github.fengtan.solrgui;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridLayout;
@@ -7,6 +10,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
+import com.github.fengtan.solrgui.tabs.ISolrGUITabFolderListener;
 import com.github.fengtan.solrgui.tabs.SolrGUITabFolder;
 import com.github.fengtan.solrgui.toolbar.SolrGUIToolbar;
 
@@ -29,8 +33,9 @@ public class SolrGUI {
 		
 		// Add toolbar + tab folder.
 		toolbar = new SolrGUIToolbar(shell, this); // TODO passing the SolrGUI object is ugly
-		tabFolder = new SolrGUITabFolder(shell);
-		tabFolder.addListener(toolbar);
+		Set<ISolrGUITabFolderListener> listeners = new HashSet<ISolrGUITabFolderListener>();
+		listeners.add(toolbar);
+		tabFolder = new SolrGUITabFolder(shell, listeners); // TODO could refactor and not use a Set.
 		
 		// Make the shell to display its content.
 		shell.open();

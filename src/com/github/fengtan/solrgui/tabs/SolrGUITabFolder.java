@@ -25,10 +25,11 @@ public class SolrGUITabFolder extends CTabFolder {
 	
 	private Set<ISolrGUITabFolderListener> listeners = new HashSet<ISolrGUITabFolderListener>();
 	
-	public SolrGUITabFolder(Shell shell) {
+	public SolrGUITabFolder(Shell shell, final Set<ISolrGUITabFolderListener> listeners) {
 		// Create the tabs.
 		super(shell, SWT.TOP | SWT.CLOSE | SWT.BORDER);
-		dialog = new SolrGUIAddServerDialog(shell, this);
+		this.listeners = listeners;
+		this.dialog = new SolrGUIAddServerDialog(shell, this);
 
 		// Configure tab folder.
 		setBorderVisible(true);
@@ -84,10 +85,6 @@ public class SolrGUITabFolder extends CTabFolder {
 		for (ISolrGUITabFolderListener listener:listeners) {
 			listener.tabItemAdded();
 		}
-	}
-	
-	public void addListener(ISolrGUITabFolderListener listener) {
-		listeners.add(listener);
 	}
 
 }
