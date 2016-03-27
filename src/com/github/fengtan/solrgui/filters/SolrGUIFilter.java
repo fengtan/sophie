@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.sidebar;
+package com.github.fengtan.solrgui.filters;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;

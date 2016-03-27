@@ -13,8 +13,8 @@ import org.eclipse.swt.widgets.Composite;
 import com.github.fengtan.solrgui.beans.SolrGUIDocument;
 import com.github.fengtan.solrgui.beans.SolrGUIQuery;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
-import com.github.fengtan.solrgui.sidebar.SolrGUIFilter;
-import com.github.fengtan.solrgui.sidebar.SolrGUISidebar;
+import com.github.fengtan.solrgui.filters.SolrGUIFilter;
+import com.github.fengtan.solrgui.filters.SolrGUIFilterBar;
 import com.github.fengtan.solrgui.statusline.SolrGUIStatusLine;
 import com.github.fengtan.solrgui.tables.SolrGUITable;
 
@@ -24,7 +24,7 @@ import com.github.fengtan.solrgui.tables.SolrGUITable;
 // TODO if server empty and click on table viewer -> seems to crash
 public class SolrGUITabItem extends CTabItem {
 
-	private Composite sidebar;
+	private Composite filterBar;
 	
 	private SolrGUIServer server;
 	private Set<SolrGUIFilter> filters = new HashSet<SolrGUIFilter>();
@@ -40,7 +40,7 @@ public class SolrGUITabItem extends CTabItem {
 		// Fill in tab.
 		Composite tabComposite = new Composite(getParent(), SWT.NULL);
 		tabComposite.setLayout(new GridLayout());
-		sidebar = new SolrGUISidebar(tabComposite);
+		filterBar = new SolrGUIFilterBar(tabComposite);
 		addFilter();
 		table = new SolrGUITable(tabComposite, server); // TODO passing server is ugly
 		statusLine = new SolrGUIStatusLine(tabComposite);
@@ -59,14 +59,14 @@ public class SolrGUITabItem extends CTabItem {
 	}
 
 	public void addFilter() {
-		filters.add(new SolrGUIFilter(sidebar, server, this)); // TODO passing this is ugly
-		sidebar.getParent().pack(); // TODO needed ?
+		filters.add(new SolrGUIFilter(filterBar, server, this)); // TODO passing this is ugly
+		filterBar.getParent().pack(); // TODO needed ?
 	}
 	
 	public void removeFilter(SolrGUIFilter filter) {
 		filters.remove(filter);
 		filter.dispose();
-		sidebar.getParent().pack(); // TODO needed ?
+		filterBar.getParent().pack(); // TODO needed ?
 	}
 	
 	public Set<SolrGUIFilter> getFilters() {

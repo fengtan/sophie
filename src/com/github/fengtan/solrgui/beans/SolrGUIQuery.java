@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 
-import com.github.fengtan.solrgui.sidebar.SolrGUIFilter;
+import com.github.fengtan.solrgui.filters.SolrGUIFilter;
 
 public class SolrGUIQuery extends SolrQuery {
 	
