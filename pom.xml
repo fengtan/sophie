@@ -86,5 +86,19 @@
   		<artifactId>x86_64</artifactId>
   		<version>3.3.0-v3346</version>
   	</dependency>
+    <dependency>
+      <groupId>nattable</groupId><!-- TODO drop this + lib/nattable when artifact available http://www.eclipse.org/nattable/download.php -->
+      <artifactId>nattable-core</artifactId>
+      <version>1.3.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/org.eclipse.nebula.widgets.nattable.core.feature_1.3.0.201503261201.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>nattable</groupId><!-- TODO drop this + lib/nattable when artifact available http://www.eclipse.org/nattable/download.php -->
+      <artifactId>nattable-glazedlists</artifactId><!-- TODO needed ? -->
+      <version>1.3.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/org.eclipse.nebula.widgets.nattable.extension.glazedlists.feature_1.3.0.201503261201.jar</systemPath>
+    </dependency>
   </dependencies>
 </project>

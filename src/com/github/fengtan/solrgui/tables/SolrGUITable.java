@@ -26,6 +26,11 @@ import org.eclipse.swt.widgets.Text;
 import com.github.fengtan.solrgui.beans.SolrGUIDocument;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
 
+// TODO measure memory footprint
+// TODO see luke ui
+// TODO measure table items http://www.eclipse.org/articles/article.php?file=Article-CustomDrawingTableAndTreeItems/index.html
+// TODO allow to export in xls (may require org.eclipse.nebula.widgets.nattable.extension.poi*.jar)
+
 public class SolrGUITable { // TODO extend Composite ?
 
 	private List<String> fieldsDisplayed = new ArrayList<String>(); // Fields displayed in the table.
