@@ -2,6 +2,7 @@ package com.github.fengtan.solrgui.tables;
 
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.DefaultNatTableStyleConfiguration;
+import org.eclipse.nebula.widgets.nattable.selection.config.RowOnlySelectionBindings;
 import org.eclipse.nebula.widgets.nattable.ui.menu.HeaderMenuConfiguration;
 import org.eclipse.nebula.widgets.nattable.ui.menu.PopupMenuBuilder;
 import org.eclipse.swt.widgets.Composite;
@@ -19,6 +20,7 @@ public class SolrGUITable extends NatTable {
 				return super.createColumnHeaderMenu(natTable).withCategoriesBasedColumnChooser("Choose columns");
 			}
 		});
+		addConfiguration(new RowOnlySelectionBindings());
 		// TODO right click + select 'choose columns' seems to do nothing
 		configure();
 	}
