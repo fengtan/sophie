@@ -12,8 +12,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.beans.SolrGUIConfig;
-import com.github.fengtan.solrgui.beans.SolrGUIServer;
+import com.github.fengtan.solrgui.config.SolrGUIConfig;
+import com.github.fengtan.solrgui.solr.SolrGUIServer;
 import com.github.fengtan.solrgui.tabs.SolrGUITabFolder;
 
 public class SolrGUIAddServerDialog extends Dialog {

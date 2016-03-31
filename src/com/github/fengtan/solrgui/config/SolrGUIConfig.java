@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.beans;
+package com.github.fengtan.solrgui.config;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
+
+import com.github.fengtan.solrgui.solr.SolrGUIServer;
 
 public class SolrGUIConfig {
 
