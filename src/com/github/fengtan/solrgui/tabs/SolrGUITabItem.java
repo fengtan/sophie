@@ -4,10 +4,9 @@ import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.widgets.Control;
 
 import com.github.fengtan.solrgui.solr.SolrGUIServer;
-import com.github.fengtan.solrgui.tables.SolrGUIGridLayer;
+import com.github.fengtan.solrgui.tables.SolrGUITable;
 
 // TODO icon in ubuntu launcher
 // TODO license
@@ -16,7 +15,7 @@ import com.github.fengtan.solrgui.tables.SolrGUIGridLayer;
 public class SolrGUITabItem extends CTabItem {
 
 	private SolrGUIServer server;
-	private Control table;
+	private NatTable table;
 	
 	public SolrGUITabItem(CTabFolder tabFolder, SolrGUIServer server) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
@@ -25,7 +24,7 @@ public class SolrGUITabItem extends CTabItem {
 		setToolTipText(server.getURL().toString());
 
 		// Add table.
-		table = new NatTable(getParent(), new SolrGUIGridLayer(server));
+		table = new SolrGUITable(getParent(), server);
 		setControl(table);
 		
 		// Set focus on this tab.
