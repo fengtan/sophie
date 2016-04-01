@@ -29,7 +29,7 @@ public class SolrGUITable extends NatTable {
 		
 		// Select full row.
 		addConfiguration(new RowOnlySelectionBindings());
-		
+
 		configure();
 	}
 
