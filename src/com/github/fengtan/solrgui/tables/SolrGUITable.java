@@ -1,5 +1,6 @@
 package com.github.fengtan.solrgui.tables;
 
+import org.apache.solr.client.solrj.SolrServer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.DefaultNatTableStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.selection.config.RowOnlySelectionBindings;
@@ -7,12 +8,10 @@ import org.eclipse.nebula.widgets.nattable.ui.menu.HeaderMenuConfiguration;
 import org.eclipse.nebula.widgets.nattable.ui.menu.PopupMenuBuilder;
 import org.eclipse.swt.widgets.Composite;
 
-import com.github.fengtan.solrgui.solr.SolrGUIServer;
-
 // TODO ability to freeze panes
 public class SolrGUITable extends NatTable {
 
-	public SolrGUITable(Composite parent, SolrGUIServer server) {
+	public SolrGUITable(Composite parent, SolrServer server) {
 		super(parent, new SolrGUIGridLayer(server), false);
 
 		// Default styles.
@@ -29,7 +28,7 @@ public class SolrGUITable extends NatTable {
 		
 		// Select full row.
 		addConfiguration(new RowOnlySelectionBindings());
-
+		
 		configure();
 	}
 

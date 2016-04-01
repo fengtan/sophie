@@ -14,7 +14,6 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.github.fengtan.solrgui.config.SolrGUIConfig;
 import com.github.fengtan.solrgui.dialogs.SolrGUIAddServerDialog;
-import com.github.fengtan.solrgui.solr.SolrGUIServer;
 
 public class SolrGUITabFolder extends CTabFolder {
 
