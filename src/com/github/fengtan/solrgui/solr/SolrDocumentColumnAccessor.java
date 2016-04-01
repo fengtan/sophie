@@ -23,7 +23,7 @@ public class SolrDocumentColumnAccessor implements IColumnAccessor<SolrDocument>
 
 	@Override
 	public void setDataValue(SolrDocument document, int columnIndex, Object newValue) {
-		// TODO Auto-generated method stub
+		document.setField(fields[columnIndex], newValue);
 	}
 
 }
