@@ -1,27 +1,42 @@
 package com.github.fengtan.solrgui.tables;
 
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.DefaultNatTableStyleConfiguration;
+import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
+import org.eclipse.nebula.widgets.nattable.config.IConfiguration;
+import org.eclipse.nebula.widgets.nattable.grid.layer.DefaultColumnHeaderDataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.AbstractLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.ColumnOverrideLabelAccumulator;
 import org.eclipse.nebula.widgets.nattable.selection.config.RowOnlySelectionBindings;
+import org.eclipse.nebula.widgets.nattable.sort.config.SingleClickSortConfiguration;
 import org.eclipse.nebula.widgets.nattable.ui.menu.HeaderMenuConfiguration;
 import org.eclipse.nebula.widgets.nattable.ui.menu.PopupMenuBuilder;
 import org.eclipse.swt.widgets.Composite;
 
 import com.github.fengtan.solrgui.solr.SolrGUIServer;
 
+// TODO ability to freeze panes
 public class SolrGUITable extends NatTable {
 
 	public SolrGUITable(Composite parent, SolrGUIServer server) {
 		super(parent, new SolrGUIGridLayer(server), false);
+
+		// Default styles.
 		addConfiguration(new DefaultNatTableStyleConfiguration());
+		
+		// Allow to show/hide columns.
 		addConfiguration(new HeaderMenuConfiguration(this) {
 			@Override
 			protected PopupMenuBuilder createColumnHeaderMenu(NatTable natTable) {
+				// TODO right click + select 'choose columns' seems to do nothing
 				return super.createColumnHeaderMenu(natTable).withCategoriesBasedColumnChooser("Choose columns");
 			}
 		});
+		
+		// Select full row.
 		addConfiguration(new RowOnlySelectionBindings());
-		// TODO right click + select 'choose columns' seems to do nothing
+		
 		configure();
 	}
 

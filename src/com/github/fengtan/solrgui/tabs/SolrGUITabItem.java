@@ -1,5 +1,7 @@
 package com.github.fengtan.solrgui.tabs;
 
+import java.net.URL;
+
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -17,11 +19,10 @@ public class SolrGUITabItem extends CTabItem {
 	private SolrGUIServer server;
 	private NatTable table;
 	
-	public SolrGUITabItem(CTabFolder tabFolder, SolrGUIServer server) {
+	public SolrGUITabItem(URL url, CTabFolder tabFolder) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
-		this.server = server;
-		setText(server.getName());
-		setToolTipText(server.getURL().toString());
+		this.server = new SolrGUIServer(url);
+		setText(url.toExternalForm());
 
 		// Add table.
 		table = new SolrGUITable(getParent(), server);
@@ -34,7 +35,7 @@ public class SolrGUITabItem extends CTabItem {
 	
 	@Override
 	public void dispose() {
-		server.dispose(); // TODO since we dispose server here, it would make sense to create the object in this class
+		server.shutdown();
 		table.dispose();
 		super.dispose();
 	}

@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import com.github.fengtan.solrgui.solr.SolrGUIServer;
-
 public class SolrGUIConfig {
 
 	// TODO 'add server to favorites'
@@ -48,30 +46,30 @@ public class SolrGUIConfig {
 		}
 	}
 	
-	public static List<SolrGUIServer> getServers() {
-		List<SolrGUIServer> servers = new ArrayList<SolrGUIServer>();
+	// TODO we don't use names => do not save/load names
+	public static List<URL> getServers() {
+		List<URL> urls = new ArrayList<URL>();
 		for (Entry<Object, Object> entry:loadProperties().entrySet()) {
 			try {
 				URL url = new URL(entry.getValue().toString());
-				String name = entry.getKey().toString();
-				servers.add(new SolrGUIServer(url, name));	
+				urls.add(url);	
 			} catch(MalformedURLException e) {
 				e.printStackTrace();
 				// TODO AUto-generated catch block
 			}
 		}
-		return servers;
+		return urls;
 	}
 
-	public static void addServer(SolrGUIServer server) {
+	public static void addServer(URL url) {
 		Properties properties = loadProperties();
-		properties.put(server.getName(), server.getURL().toString());
+		properties.put("abcd", url.toString()); // TODO abcd
 		storeProperties(properties);
 	}
 	
-	public static void removeServer(SolrGUIServer server) {
+	public static void removeServer(URL url) {
 		Properties properties = loadProperties();
-		properties.remove(server.getName());
+		properties.remove("abcd"); // TODO abcd
 		storeProperties(properties);
 	} 
 	

@@ -6,43 +6,21 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
-import org.apache.solr.common.SolrDocument;
 
-public class SolrGUIServer {
+// TODO drop and manipulate only HttpSolrServer ?
+public class SolrGUIServer extends HttpSolrServer {
 
-	private URL url;
-	private String name;
-	private SolrServer server;
 	private String[] fields;
 	
-	public SolrGUIServer(URL url, String name) {
-		this.name = name;
-		this.url = url;
-		this.server = new HttpSolrServer(url.toExternalForm());
+	public SolrGUIServer(URL url) {
+		super(url.toExternalForm());
 		// TODO what if user adds a new field after the SolrGUIServer object gets created ?
 		refreshFields();
-	}
-	
-	public URL getURL() {
-		return url;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * Release resources.
-	 */
-	public void dispose() {
-		server.shutdown();
 	}
 	
 	public String[] getFields() {
@@ -53,7 +31,7 @@ public class SolrGUIServer {
 	private void refreshFields() {
 		LukeRequest request = new LukeRequest();
 		try {
-			LukeResponse response = request.process(server);
+			LukeResponse response = request.process(this);
 			Collection<FieldInfo> fieldsInfo = response.getFieldInfo().values();
 			List<String> fieldsList = new ArrayList<String>();
 			for (FieldInfo fieldInfo:fieldsInfo) {
@@ -74,17 +52,6 @@ public class SolrGUIServer {
 		Collection<String> fields = getAllDocuments().get(0).getFieldNames();
 		return fields.toArray(new String[fields.size()]);
 		*/
-	}
-	
-	// TODO probably not the right place to query Solr
-	public List<SolrDocument> query(SolrQuery query) {
-		try {
-			return server.query(query).getResults();
-		} catch (SolrServerException e) {
-			// TODO log error
-			e.printStackTrace();
-		}
-		return new ArrayList<SolrDocument>();
 	}
 
 }

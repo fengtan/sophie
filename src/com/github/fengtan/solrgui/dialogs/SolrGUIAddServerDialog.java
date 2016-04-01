@@ -13,15 +13,12 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.config.SolrGUIConfig;
-import com.github.fengtan.solrgui.solr.SolrGUIServer;
 import com.github.fengtan.solrgui.tabs.SolrGUITabFolder;
 
 public class SolrGUIAddServerDialog extends Dialog {
 
-	private static final String DEFAULT_SERVER_NAME = "collection1@localhost";
-	private static final String DEFAULT_SERVER_URL = "http://localhost:8983/solr/collection1";
+	private static final String DEFAULT_SERVER_URL = "http://localhost:8983/solr";
 	
-	private Text name;
 	private Text url;
 	
 	private SolrGUITabFolder tabFolder;
@@ -36,14 +33,11 @@ public class SolrGUIAddServerDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setLayout(new GridLayout(2, false));
-
-		new Label(composite, SWT.NULL).setText("Name");
-		name = new Text(composite, SWT.BORDER);
-		name.setText(DEFAULT_SERVER_NAME);
 		
 		new Label(composite, SWT.NULL).setText("URL");
 		url = new Text(composite, SWT.BORDER);
 		url.setText(DEFAULT_SERVER_URL);
+		// TODO make text box wider ?
 	    
 	    return composite;
 	}
@@ -63,9 +57,9 @@ public class SolrGUIAddServerDialog extends Dialog {
 	    	// TODO validate connection before saving
 			// TODO what if user enters garbage (e.g. not a number)
 			try {
-				SolrGUIServer server = new SolrGUIServer(new URL(url.getText()), name.getText());
-	            SolrGUIConfig.addServer(server);
-	            tabFolder.addTabItem(server);
+				URL myurl = new URL(url.getText()); // TODO myurl
+	            SolrGUIConfig.addServer(myurl);
+	            tabFolder.addTabItem(myurl);
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

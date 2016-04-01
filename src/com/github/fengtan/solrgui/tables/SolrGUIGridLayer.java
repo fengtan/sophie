@@ -3,7 +3,10 @@ package com.github.fengtan.solrgui.tables;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.grid.data.DefaultCornerDataProvider;
 import org.eclipse.nebula.widgets.nattable.grid.data.DefaultRowHeaderDataProvider;
+import org.eclipse.nebula.widgets.nattable.grid.layer.DefaultColumnHeaderDataLayer;
 import org.eclipse.nebula.widgets.nattable.grid.layer.DefaultGridLayer;
+import org.eclipse.nebula.widgets.nattable.grid.layer.DefaultRowHeaderDataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 
 import com.github.fengtan.solrgui.solr.SolrGUIServer;
 
@@ -17,16 +20,16 @@ public class SolrGUIGridLayer extends DefaultGridLayer {
         IDataProvider rowHeaderDataProvider = new DefaultRowHeaderDataProvider(bodyDataProvider);
         IDataProvider cornerDataProvider = new DefaultCornerDataProvider(columnHeaderDataProvider, rowHeaderDataProvider);
         
-        /* TODO drop (unless we want to customize layers)
-        IUniqueIndexLayer bodyDataLayer = new DataLayer(bodyDataProvider);
-        IUniqueIndexLayer columnHeaderDataLayer = new DefaultColumnHeaderDataLayer(columnHeaderDataProvider);
-        IUniqueIndexLayer rowHeaderDataLayer = new DefaultRowHeaderDataLayer(rowHeaderDataProvider);
-        IUniqueIndexLayer cornerDataLayer = new DataLayer(cornerDataProvider);
+        DataLayer bodyDataLayer = new DataLayer(bodyDataProvider);
+        DataLayer columnHeaderDataLayer = new DefaultColumnHeaderDataLayer(columnHeaderDataProvider);
+        DataLayer rowHeaderDataLayer = new DefaultRowHeaderDataLayer(rowHeaderDataProvider);
+        DataLayer cornerDataLayer = new DataLayer(cornerDataProvider);
+        
+        // TODO what if too many columns - horizontal scrollbar ?
+        // Make table expand the full width of the window. TODO drop ?
+        //bodyDataLayer.setColumnPercentageSizing(true);
         
         init(bodyDataLayer, columnHeaderDataLayer, rowHeaderDataLayer, cornerDataLayer);
-        */
-        
-        init(bodyDataProvider, columnHeaderDataProvider, rowHeaderDataProvider, cornerDataProvider);
     }
 	
 }

@@ -1,5 +1,7 @@
 package com.github.fengtan.solrgui.tabs;
 
+import java.net.URL;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -52,8 +54,8 @@ public class SolrGUITabFolder extends CTabFolder {
 		);
 		
 		// Initialize tabs from config file.
-		for (SolrGUIServer server: SolrGUIConfig.getServers()) {
-			addTabItem(server);
+		for (URL url: SolrGUIConfig.getServers()) {
+			addTabItem(url);
 		}
 		
 		// Remove server from config file if user closed the tab.
@@ -68,8 +70,8 @@ public class SolrGUITabFolder extends CTabFolder {
 		*/
 	}
 	
-	public void addTabItem(SolrGUIServer server) {
-		new SolrGUITabItem(this, server);
+	public void addTabItem(URL url) {
+		new SolrGUITabItem(url, this);
 	}
 
 }
