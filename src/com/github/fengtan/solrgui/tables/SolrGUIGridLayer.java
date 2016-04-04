@@ -2,15 +2,15 @@ package com.github.fengtan.solrgui.tables;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.TreeMap;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.LukeRequest;
-import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.apache.solr.common.SolrDocument;
 import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
@@ -38,7 +38,7 @@ public class SolrGUIGridLayer extends DefaultGridLayer {
         
 		try {
 			// TODO what if user adds a new field after the SolrGUIServer object gets created ?
-			String[] fields = extractFields(server);
+			List<FieldInfo> fields = extractFields(server);
 	        // TODO right place to do that ?
 			// TODO page results
 	        SolrQuery query = new SolrQuery("*:*");
@@ -47,7 +47,11 @@ public class SolrGUIGridLayer extends DefaultGridLayer {
 
 	        IColumnAccessor<SolrDocument> columnAccessor = new SolrDocumentColumnAccessor(fields);
 	        IDataProvider bodyDataProvider = new GlazedListsDataProvider<>(list, columnAccessor);
-	        IDataProvider columnHeaderDataProvider = new DefaultColumnHeaderDataProvider(fields);
+	        String[] columnLabels = new String[fields.size()];
+	        for (int i = 0; i < fields.size(); i++) {
+	        	columnLabels[i] = fields.get(i).getName();
+	        }
+	        IDataProvider columnHeaderDataProvider = new DefaultColumnHeaderDataProvider(columnLabels);
 	        IDataProvider rowHeaderDataProvider = new DefaultRowHeaderDataProvider(bodyDataProvider);
 	        IDataProvider cornerDataProvider = new DefaultCornerDataProvider(columnHeaderDataProvider, rowHeaderDataProvider);
 	        
@@ -65,25 +69,18 @@ public class SolrGUIGridLayer extends DefaultGridLayer {
     }
 	
 
-	private static String[] extractFields(SolrServer server) {
-		LukeRequest request = new LukeRequest();
+	// Map field name => field info
+	private static List<FieldInfo> extractFields(SolrServer server) {
 		try {
-			LukeResponse response = request.process(server);
-			Collection<FieldInfo> fieldsInfo = response.getFieldInfo().values();
-			List<String> fieldsList = new ArrayList<String>();
-			for (FieldInfo fieldInfo:fieldsInfo) {
-				fieldsList.add(fieldInfo.getName());
-			}
-			Collections.sort(fieldsList);
-			return fieldsList.toArray(new String[fieldsList.size()]);
+			return new ArrayList<FieldInfo>(new LukeRequest().process(server).getFieldInfo().values());
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return new String[]{};
+			return Collections.EMPTY_LIST;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return new String[]{};
+			return Collections.EMPTY_LIST;
 		}
 		/* TODO provide option to use this in case Luke handler is not available? requires at least 1 document in the server
 		Collection<String> fields = getAllDocuments().get(0).getFieldNames();

@@ -43,6 +43,8 @@ public class SolrGUITable extends NatTable {
 
 
 /*
+ * TODO checkbox "readonly/readwrite"
+ * TODO pref "ask for confirmation before updating server"
  * TODO move into SolrGUITable.class ?
  * TODO create drop down lists for booleans ?
  */
@@ -51,7 +53,6 @@ class EditConfiguration extends AbstractRegistryConfiguration  {
 	public void configureRegistry(IConfigRegistry configRegistry) {
 		// TODO should all cells actually be editable ?
 		configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITABLE_RULE, IEditableRule.ALWAYS_EDITABLE);
-
 	}
 }
 
