@@ -60,13 +60,14 @@ public class SolrGUIDataProvider implements IDataProvider {
 		return rowCount;
 	}
 	
-	public void setSort(String item, SortDirectionEnum direction) {
+	public void setSort(int fieldIndex, SortDirectionEnum direction) {
+		String field = fields.get(fieldIndex).getName();
 		switch (direction) {
 			case ASC:
-				this.sortClause = new SortClause(item, ORDER.asc);
+				this.sortClause = new SortClause(field, ORDER.asc);
 				break;
 			case DESC:
-				this.sortClause = new SortClause(item, ORDER.desc);
+				this.sortClause = new SortClause(field, ORDER.desc);
 				break;
 			case NONE:
 				this.sortClause = null;

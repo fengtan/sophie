@@ -66,7 +66,7 @@ public class SolrGUISortModel implements ISortModel {
 	public void sort(int columnIndex, SortDirectionEnum direction, boolean accumulate) {
 		this.columnIndexSorted = columnIndex;
 		this.direction = direction;
-		dataProvider.setSort("hash", direction); // TODO "hash"
+		dataProvider.setSort(columnIndex, direction);
 	}
 
 }
