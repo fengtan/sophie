@@ -29,7 +29,7 @@ public class SolrGUITable extends NatTable {
 				return super.createColumnHeaderMenu(natTable).withCategoriesBasedColumnChooser("Choose columns");
 			}
 		});
-		
+	
 		// Select full row.
 		addConfiguration(new RowOnlySelectionBindings());
 		

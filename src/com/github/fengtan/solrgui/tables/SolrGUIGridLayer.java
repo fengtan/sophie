@@ -51,7 +51,6 @@ public class SolrGUIGridLayer extends GridLayer {
         SortHeaderLayer sortHeaderLayer = new SortHeaderLayer<>(columnHeaderDataLayer, new SolrGUISortModel(bodyDataProvider));
         sortHeaderLayer.addConfiguration(new SingleClickSortConfiguration());
 
-        // TODO sorting should leverage Solr features
 		DefaultBodyLayerStack bodyLayer = new DefaultBodyLayerStack(bodyDataLayer);
 		SelectionLayer selectionLayer = bodyLayer.getSelectionLayer();
 		ILayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, bodyLayer, selectionLayer);
@@ -59,25 +58,26 @@ public class SolrGUIGridLayer extends GridLayer {
 		ILayer cornerLayer = new CornerLayer(cornerDataLayer, rowHeaderLayer, columnHeaderLayer);
 		
 		setBodyLayer(bodyLayer);
-		setColumnHeaderLayer(sortHeaderLayer);
+		// TODO setColumnHeaderLayer(sortHeaderLayer);
+		setColumnHeaderLayer(columnHeaderLayer);
 		setRowHeaderLayer(rowHeaderLayer);
 		setCornerLayer(cornerLayer);
         
     }
 	
 
-	// Map field name => field info
+	// TODO sort by field name
 	private static List<FieldInfo> extractFields(SolrServer server) {
 		try {
 			return new ArrayList<FieldInfo>(new LukeRequest().process(server).getFieldInfo().values());
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
 		/* TODO provide option to use this in case Luke handler is not available? requires at least 1 document in the server
 		Collection<String> fields = getAllDocuments().get(0).getFieldNames();
