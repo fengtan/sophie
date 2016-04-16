@@ -35,7 +35,7 @@ public class SolrGUITable extends NatTable {
 		
 		// Make cells editable.
 		addConfiguration(new EditConfiguration());
-
+		
 		configure();
 	}
 
