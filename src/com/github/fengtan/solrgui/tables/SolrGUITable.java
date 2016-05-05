@@ -18,6 +18,7 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -34,8 +35,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.github.fengtan.solrgui.SolrGUI;
-import com.github.fengtan.solrgui.dialogs.SolrGUIAddServerDialog;
 import com.github.fengtan.solrgui.dialogs.SolrGUIEditValueDialog;
 
 public class SolrGUITable { // TODO extend Composite ?
@@ -132,6 +131,21 @@ public class SolrGUITable { // TODO extend Composite ?
 				combo.add(count.getName()); // TODO use count.getCount() too ?
 			}
 			combo.setData("field", facet.getName());
+			/*
+			 * TODO could use this instead of storing field name in setData() 
+			 * Point point = new Point(event.x, event.y);
+		     * TableItem item = table.getItem(point);
+		     * if (item == null) {
+		     *   return;
+		     * }
+		     * for (int i=0; i<fields.size(); i++) {
+		     *   Rectangle rect = item.getBounds(i);
+		     *   if (rect.contains(point)) {
+		     *     SolrDocument document = (SolrDocument) item.getData("document");
+		     *     dialog.open(item.getText(i), fields.get(i).getName(), document);
+		     *   }
+		     * }
+			 */
 			// Filter results when user selects a facet value.
 			combo.addModifyListener(new ModifyListener() {
 				@Override
@@ -154,21 +168,21 @@ public class SolrGUITable { // TODO extend Composite ?
 		// Add editor dialog.
 		final SolrGUIEditValueDialog dialog = new SolrGUIEditValueDialog(table.getShell());
 		table.addListener(SWT.MouseDoubleClick, new Listener() {
-		      public void handleEvent(Event event) {
-		        Point point = new Point(event.x, event.y);
-		        TableItem item = table.getItem(point);
-		        if (item == null) {
-		        	return;
-		        }
-		        for (int i=0; i<fields.size(); i++) {
-		          Rectangle rect = item.getBounds(i);
-		          if (rect.contains(point)) {
-		            int index = table.indexOf(item);
-		            dialog.open(item.getText(i));
-		          }
-		        }
-		      }
-		    });
+			public void handleEvent(Event event) {
+				Point point = new Point(event.x, event.y);
+		    	TableItem item = table.getItem(point);
+		    	if (item == null) {
+		    		return;
+		    	}
+		    	for (int i=0; i<fields.size(); i++) {
+		    		Rectangle rect = item.getBounds(i);
+		    		if (rect.contains(point)) {
+		    			SolrDocument document = (SolrDocument) item.getData("document");
+		    			dialog.open(item.getText(i), fields.get(i).getName(), document);
+		    		}
+		    	}
+			}
+		});
 		
 		return table;
 	}

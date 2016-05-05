@@ -12,8 +12,10 @@ import org.eclipse.swt.widgets.Text;
 
 public class SolrGUIEditValueDialog extends Dialog {
 
-	private Text value;
+	private Text newValue;
 	private String originalValue;
+	private String fieldName;
+	private SolrDocument document;
 	
 	public SolrGUIEditValueDialog(Shell parentShell) {
 		super(parentShell);
@@ -26,8 +28,8 @@ public class SolrGUIEditValueDialog extends Dialog {
 		
 		// TODO support multiple-value fields.
 		new Label(composite, SWT.NULL).setText("New value");
-		value = new Text(composite, SWT.BORDER);
-		value.setText(originalValue);
+		newValue = new Text(composite, SWT.BORDER);
+		newValue.setText(originalValue);
 	    
 	    return composite;
 	}
@@ -43,13 +45,15 @@ public class SolrGUIEditValueDialog extends Dialog {
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
-			// TODO
+			document.setField(fieldName, newValue.getText());
 		}
 		super.buttonPressed(buttonId);
 	}
 	
-	public int open(String originalValue) {
+	public int open(String originalValue, String fieldName, SolrDocument document) {
 		this.originalValue = originalValue;
+		this.fieldName = fieldName;
+		this.document = document;
 		return super.open();
 	}
 	
