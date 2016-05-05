@@ -14,10 +14,8 @@ import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
-import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
@@ -44,17 +42,17 @@ public class SolrGUITable { // TODO extend Composite ?
 	public SolrGUITable(Composite parent, String url) {
 		this.server = new HttpSolrServer(url);
 		this.fields = getRemoteFields(); // TODO what if new fields get created ? refresh ?
-		createTable(parent);
-		createTableViewer();
+		this.table = createTable(parent);
+		this.tableViewer = createTableViewer();
 	}
 	
 	/**
 	 * Create the Table
 	 */
-	private void createTable(Composite parent) {
+	private Table createTable(Composite parent) {
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL; // TODO HIDE_SELECTION ?
 
-		table = new Table(parent, style);
+		final Table table = new Table(parent, style);
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
@@ -89,6 +87,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	            	item.setText(i, Objects.toString(value, ""));
 	            }
 	            // TODO use item.setText(String[] values) ?
+	            // TODO store status insert/update/delete using item.setData() ? 
 			}
 		});
 		
@@ -98,12 +97,14 @@ public class SolrGUITable { // TODO extend Composite ?
 			column.setText(field.getName());
 			column.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
 		}
+		
+		return table;
 	}
 	
 	/**
 	 * Create the TableViewer 
 	 */
-	private void createTableViewer() {
+	private TableViewer createTableViewer() {
 		// TODO use collectionutils to transform List<FieldInfo> into List<String>
 		List<String> columnNames = new ArrayList<String>();
 		for(FieldInfo field:fields) {
@@ -113,7 +114,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		String[] cols = new String[columnNames.size()];
 		columnNames.toArray(cols);
 		
-		tableViewer = new TableViewer(table);
+		TableViewer tableViewer = new TableViewer(table);
 		tableViewer.setUseHashlookup(true);
 		tableViewer.setColumnProperties(cols);
 
@@ -129,15 +130,8 @@ public class SolrGUITable { // TODO extend Composite ?
 		
 		tableViewer.setCellEditors(editors);
 		tableViewer.setCellModifier(new SolrGUICellModifier());
-	}
-
-	// Return selected document (or null if none selected).
-	public SolrDocument getSelectedDocument() { // TODO needed ?
-		return (SolrDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
-	}
-	
-	public void refresh() { // TODO needed ?
-		tableViewer.refresh();
+		
+		return tableViewer;
 	}
 	
 	public void dispose() {
@@ -180,7 +174,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	}
 	
 	/**
-	 * May return null
+	 * Not null-safe
 	 */
 	private Object getDocumentValue(int rowIndex, FieldInfo field) {
 		int page = rowIndex / PAGE_SIZE;

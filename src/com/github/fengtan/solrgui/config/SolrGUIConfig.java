@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.beans;
+package com.github.fengtan.solrgui.config;
 
 import java.io.File;
 import java.io.FileInputStream;
