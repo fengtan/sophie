@@ -314,6 +314,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	 */
 	public void commit() {
 		// Commit local updates.
+		// TODO does not seem to be possible to update multiple documents.
 		for (TableItem item:documentsUpdated) {
 			// TODO
 			SolrDocument document = (SolrDocument) item.getData("document");

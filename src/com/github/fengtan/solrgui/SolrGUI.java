@@ -94,9 +94,10 @@ public class SolrGUI {
 	// TODO dismax, spellcheck, debug etc
 	// TODO support HttpSolrServer/CloudSolrServer
 	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
-	// TODO need to launch from root dir for imgs to show up
 	// TODO provide original value for stored fields ?
 	// TODO mode R/W, mode RO
 	// TODO allow to select multiple values for each filter
+	// TODO mv resources src/resources && mv src/com src/java/com
+	
 	
 }
