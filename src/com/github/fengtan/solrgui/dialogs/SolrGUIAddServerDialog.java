@@ -1,6 +1,5 @@
 package com.github.fengtan.solrgui.dialogs;
 
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;

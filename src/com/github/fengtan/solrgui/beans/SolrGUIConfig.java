@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
-
 public class SolrGUIConfig {
 
 	// TODO make sure hidden file works on windows

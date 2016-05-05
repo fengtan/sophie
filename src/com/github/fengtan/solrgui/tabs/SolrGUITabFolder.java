@@ -3,7 +3,6 @@ package com.github.fengtan.solrgui.tabs;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabFolder2Adapter;
