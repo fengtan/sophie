@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -14,7 +12,6 @@ import java.util.Properties;
 
 public class SolrGUIConfig {
 
-	// TODO 'add server to favorites'
 	// TODO make sure hidden file works on windows
 	// TODO properties file does not support name duplicates -> prevent user from creating 2 servers with the same name
 	private static final String filename = ".solrgui";
@@ -49,26 +46,23 @@ public class SolrGUIConfig {
 	public static List<SolrGUIServer> getServers() {
 		List<SolrGUIServer> servers = new ArrayList<SolrGUIServer>();
 		for (Entry<Object, Object> entry:loadProperties().entrySet()) {
-			try {
-				URL url = new URL(entry.getValue().toString());
-				servers.add(new SolrGUIServer(url));
-			} catch(MalformedURLException e) {
-				e.printStackTrace();
-				// TODO AUto-generated catch block
-			}
+			String url = entry.getKey().toString();
+			// TODO validate URL is valid ?
+			servers.add(new SolrGUIServer(url));
 		}
 		return servers;
 	}
 
 	public static void addServer(SolrGUIServer server) {
 		Properties properties = loadProperties();
-		properties.put(server.getURL().toExternalForm(), ""); // TODO drop "" and do not use properties files
+		// We could store additional data if needed - for now we store an empty string.
+		properties.put(server.getURL().toString(), "");
 		storeProperties(properties);
 	}
 	
 	public static void removeServer(SolrGUIServer server) {
 		Properties properties = loadProperties();
-		properties.remove(server.getURL().toExternalForm());
+		properties.remove(server.getURL().toString());
 		storeProperties(properties);
 	} 
 	

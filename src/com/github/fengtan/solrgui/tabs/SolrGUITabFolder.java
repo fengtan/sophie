@@ -20,8 +20,6 @@ import com.github.fengtan.solrgui.beans.SolrGUIServer;
 import com.github.fengtan.solrgui.dialogs.SolrGUIAddServerDialog;
 
 public class SolrGUITabFolder extends CTabFolder {
-
-	private SolrGUIAddServerDialog dialog;
 	
 	private Set<ISolrGUITabFolderListener> listeners = new HashSet<ISolrGUITabFolderListener>();
 	
@@ -29,7 +27,7 @@ public class SolrGUITabFolder extends CTabFolder {
 		// Create the tabs.
 		super(shell, SWT.TOP | SWT.CLOSE | SWT.BORDER);
 		this.listeners = listeners;
-		this.dialog = new SolrGUIAddServerDialog(shell, this);
+		final SolrGUIAddServerDialog dialog = new SolrGUIAddServerDialog(shell, this);
 
 		// Configure tab folder.
 		setBorderVisible(true);

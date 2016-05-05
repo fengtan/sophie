@@ -1,6 +1,5 @@
 package com.github.fengtan.solrgui.beans;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,21 +26,21 @@ import com.github.fengtan.solrgui.tables.ISolrGUIChangeListener;
 // TODO test with Solr < 4.
 public class SolrGUIServer {
 
-	private URL url;
+	private String url;
 	private SolrServer server;
 	
 	private String[] fields;
 	private List<SolrGUIDocument> documents;
 	private Set<ISolrGUIChangeListener> changeListeners = new HashSet<ISolrGUIChangeListener>();
 
-	public SolrGUIServer(URL url) {
+	public SolrGUIServer(String url) {
 		this.url = url;
-		this.server = new HttpSolrServer(url.toExternalForm());
+		this.server = new HttpSolrServer(url);
 		refreshFields();
 		refreshDocuments(SolrGUIQuery.ALL_DOCUMENTS);
 	}
 	
-	public URL getURL() {
+	public String getURL() {
 		return url;
 	}
 	

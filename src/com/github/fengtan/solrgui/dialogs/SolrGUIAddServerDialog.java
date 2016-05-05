@@ -1,8 +1,5 @@
 package com.github.fengtan.solrgui.dialogs;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -54,16 +51,10 @@ public class SolrGUIAddServerDialog extends Dialog {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
 			// TODO do not create if server already exists.
-	    	// TODO validate connection before saving
-			// TODO what if user enters garbage (e.g. not a number)
-			try {
-				SolrGUIServer server = new SolrGUIServer(new URL(url.getText()));
-	            SolrGUIConfig.addServer(server);
-	            tabFolder.addTabItem(server);
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	    	// TODO validate connection/url before saving
+			SolrGUIServer server = new SolrGUIServer(url.getText());
+            SolrGUIConfig.addServer(server);
+            tabFolder.addTabItem(server);
 		}
 		super.buttonPressed(buttonId);
 	}

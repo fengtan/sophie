@@ -5,7 +5,7 @@ import java.util.Random;
 import org.apache.solr.common.SolrDocument;
 
 public class SolrGUIDocument {
-
+	
 	private SolrGUIStatus status = SolrGUIStatus.NONE;
 	private SolrDocument document;
 	
