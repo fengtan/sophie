@@ -31,7 +31,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -125,6 +124,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		TableEditor editor = new TableEditor(table);
 		for(int i=0; i<fields.size(); i++) {
 			final CCombo combo = new CCombo(table, SWT.NONE);
+			combo.add("");
 			// TODO check if map contains field ?
 			// TODO no need to use facets for tm_body for instance
 			FacetField facet = facets.get(fields.get(i).getName());
@@ -235,6 +235,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	private Map<String, FacetField> getRemoteFacets() {
 		SolrQuery query = getBaseQuery(0, 0);
 		query.setFacet(true);
+		query.setFacetSort("index");
 		query.setFacetLimit(-1); // TODO or set a limit ? no limit could be bad for perf
 		for(FieldInfo field:fields) {
 			// TODO we don't want facets on fields with too many values
@@ -285,7 +286,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	 */
 	private void clear() {
 		pages = new HashMap<Integer, SolrDocumentList>();
-		table.setItemCount(getRemoteCount());
+		table.setItemCount(getRemoteCount() + 1); // First row is for filters, the rest is for documents.
 		table.clearAll();
 	}
 	
