@@ -1,10 +1,12 @@
 package com.github.fengtan.solrgui.dialogs;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
@@ -13,7 +15,7 @@ import org.eclipse.swt.widgets.Text;
 public class SolrGUIEditValueDialog extends Dialog {
 
 	private Text newValue;
-	private String originalValue;
+	private String oldValue;
 	private TableItem item;
 	private int columnIndex;
 	
@@ -29,7 +31,7 @@ public class SolrGUIEditValueDialog extends Dialog {
 		// TODO support multiple-value fields.
 		new Label(composite, SWT.NULL).setText("New value");
 		newValue = new Text(composite, SWT.BORDER);
-		newValue.setText(originalValue);
+		newValue.setText(oldValue);
 	    
 	    return composite;
 	}
@@ -45,13 +47,17 @@ public class SolrGUIEditValueDialog extends Dialog {
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
-			item.setText(columnIndex, newValue.getText());
+			if (!StringUtils.equals(oldValue, newValue.getText())) {
+				item.setText(columnIndex, newValue.getText());
+				// TODO if new record, then leave green
+				item.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW));	
+			}
 		}
 		super.buttonPressed(buttonId);
 	}
 
-	public int open(String originalValue, TableItem item, int columnIndex) {
-		this.originalValue = originalValue;
+	public int open(String oldValue, TableItem item, int columnIndex) {
+		this.oldValue = oldValue;
 		this.item = item;
 		this.columnIndex = columnIndex;
 		return super.open();
