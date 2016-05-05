@@ -1,9 +1,12 @@
 package com.github.fengtan.solrgui.tabs;
 
-import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabFolder2Adapter;
+import org.eclipse.swt.custom.CTabFolderEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -12,16 +15,20 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import com.github.fengtan.solrgui.config.SolrGUIConfig;
+import com.github.fengtan.solrgui.beans.SolrGUIConfig;
+import com.github.fengtan.solrgui.beans.SolrGUIServer;
 import com.github.fengtan.solrgui.dialogs.SolrGUIAddServerDialog;
 
 public class SolrGUITabFolder extends CTabFolder {
 
 	private SolrGUIAddServerDialog dialog;
 	
-	public SolrGUITabFolder(Shell shell) {
+	private Set<ISolrGUITabFolderListener> listeners = new HashSet<ISolrGUITabFolderListener>();
+	
+	public SolrGUITabFolder(Shell shell, final Set<ISolrGUITabFolderListener> listeners) {
 		// Create the tabs.
 		super(shell, SWT.TOP | SWT.CLOSE | SWT.BORDER);
+		this.listeners = listeners;
 		this.dialog = new SolrGUIAddServerDialog(shell, this);
 
 		// Configure tab folder.
@@ -53,24 +60,31 @@ public class SolrGUITabFolder extends CTabFolder {
 		);
 		
 		// Initialize tabs from config file.
-		for (URL url: SolrGUIConfig.getServers()) {
-			addTabItem(url);
+		for (SolrGUIServer server: SolrGUIConfig.getServers()) {
+			addTabItem(server);
 		}
 		
 		// Remove server from config file if user closed the tab.
 		// If this is the last item remaining, notify listeners.
-		/* TODO
 		addCTabFolder2Listener(new CTabFolder2Adapter() {
 			@Override
 			public void close(CTabFolderEvent event) {
-				SolrGUIConfig.removeServer(((SolrGUITabItem) event.item).getServer()); // TODO is there a native way to persist open tabs ?
+				SolrGUIConfig.removeServer(((SolrGUITabItem) event.item).getServer());
+				if (getItemCount() == 1) {
+					for (ISolrGUITabFolderListener listener:listeners) {
+						listener.noTabItem();
+					}
+				}
 			}
 		});
-		*/
 	}
 	
-	public void addTabItem(URL url) {
-		new SolrGUITabItem(url, this);
+	public void addTabItem(SolrGUIServer server) {
+		new SolrGUITabItem(this, server);
+		// Notify listeners that a new tab was added.
+		for (ISolrGUITabFolderListener listener:listeners) {
+			listener.tabItemAdded();
+		}
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.config;
+package com.github.fengtan.solrgui.beans;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,30 +46,30 @@ public class SolrGUIConfig {
 		}
 	}
 	
-	// TODO we don't use names => do not save/load names
-	public static List<URL> getServers() {
-		List<URL> urls = new ArrayList<URL>();
+	public static List<SolrGUIServer> getServers() {
+		List<SolrGUIServer> servers = new ArrayList<SolrGUIServer>();
 		for (Entry<Object, Object> entry:loadProperties().entrySet()) {
 			try {
 				URL url = new URL(entry.getValue().toString());
-				urls.add(url);	
+				String name = entry.getKey().toString();
+				servers.add(new SolrGUIServer(url, name));	
 			} catch(MalformedURLException e) {
 				e.printStackTrace();
 				// TODO AUto-generated catch block
 			}
 		}
-		return urls;
+		return servers;
 	}
 
-	public static void addServer(URL url) {
+	public static void addServer(SolrGUIServer server) {
 		Properties properties = loadProperties();
-		properties.put("abcd", url.toString()); // TODO abcd
+		properties.put(server.getName(), server.getURL().toString());
 		storeProperties(properties);
 	}
 	
-	public static void removeServer(URL url) {
+	public static void removeServer(SolrGUIServer server) {
 		Properties properties = loadProperties();
-		properties.remove("abcd"); // TODO abcd
+		properties.remove(server.getName());
 		storeProperties(properties);
 	} 
 	

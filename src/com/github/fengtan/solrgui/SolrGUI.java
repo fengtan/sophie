@@ -1,27 +1,42 @@
 package com.github.fengtan.solrgui;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
+import com.github.fengtan.solrgui.tabs.ISolrGUITabFolderListener;
 import com.github.fengtan.solrgui.tabs.SolrGUITabFolder;
+import com.github.fengtan.solrgui.toolbar.SolrGUIToolbar;
 
 public class SolrGUI {
 	
+	private SolrGUIToolbar toolbar;
+	private SolrGUITabFolder tabFolder;
+
 	public static void main(String[] args) {
 		new SolrGUI().run();
 	}
 
 	public void run() {
- 		// Set layout for shell.
 		Shell shell = new Shell();
-		shell.setLayout(new GridLayout()); // TODO needed ?
+		shell.setText("Solr GUI");
+
+		// Set layout for shell.
+		GridLayout layout = new GridLayout();
+		shell.setLayout(layout);
 		
-		// Add tab folder.
-		new SolrGUITabFolder(shell);
-				
+		// Add toolbar + tab folder.
+		toolbar = new SolrGUIToolbar(shell, this); // TODO passing the SolrGUI object is ugly
+		Set<ISolrGUITabFolderListener> listeners = new HashSet<ISolrGUITabFolderListener>();
+		listeners.add(toolbar);
+		tabFolder = new SolrGUITabFolder(shell, listeners); // TODO could refactor and not use a Set.
+		
 		// Make the shell to display its content.
 		shell.open();
 		Display display = shell.getDisplay();
@@ -38,16 +53,18 @@ public class SolrGUI {
 			    box.open();
 			}
 		}
+		toolbar.finalize();
 		display.dispose();
 		shell.dispose();
+	}
+	
+	public CTabFolder getTabFolder() { // TODO drop ?
+		return tabFolder;
 	}
 	
 	// TODO status line showing last solr query
 	// TODO keyboard shortcuts
 	// TODO test Solr 5
-	// TODO test Solr < 4
-	// TODO persist rows, fq, q etc ?
-	// TODO dismax, facets, debug etc
 	// TODO elasticsearch
 	// TODO about page + github.io
 	// TODO see what features luke provides
@@ -56,7 +73,10 @@ public class SolrGUI {
 	// TODO drop .settings, .classpath etc
 	// TODO README showing/hiding a column will refresh the table (and wipe out local modifications)
 	// TODO rename solrgui
-    // TODO allow to create documents with new fields
+	// TODO test Solr < 4
+	// TODO persist rows, fq, q etc ?
+	// TODO dismax, facets, debug etc
+	// TODO allow to create documents with new fields
 	// TODO measure memory footprint
 	// TODO see luke ui
 	// TODO measure table items http://www.eclipse.org/articles/article.php?file=Article-CustomDrawingTableAndTreeItems/index.html
@@ -72,7 +92,7 @@ public class SolrGUI {
 	// TODO allow not to use the default request handler
 	// TODO status line
 	// TODO generate name from URL ? painful to decide a name
-	// TODO glazedlists ?
-	
+
+
 	
 }
