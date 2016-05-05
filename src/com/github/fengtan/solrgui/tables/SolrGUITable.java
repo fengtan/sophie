@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 import org.apache.solr.client.solrj.SolrQuery;
@@ -23,10 +24,13 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -36,10 +40,12 @@ public class SolrGUITable { // TODO extend Composite ?
 
 	// Fetch 50 documents at a time. TODO make this configurable ?
 	private static final int PAGE_SIZE = 50;
-	private Map<Integer, SolrDocumentList> pages = new HashMap<Integer, SolrDocumentList>();
+	
+	private Map<Integer, SolrDocumentList> pages;
 	private List<FieldInfo> fields;
 	private Map<String, FacetField> facets;
-	
+	private Map<String, String> filters = new HashMap<String, String>();
+
 	private Table table;
 	private TableViewer tableViewer;
 	private SolrServer server;
@@ -50,6 +56,8 @@ public class SolrGUITable { // TODO extend Composite ?
 		this.facets = getRemoteFacets();
 		this.table = createTable(parent);
 		this.tableViewer = createTableViewer();
+		// Initialize cache + row count
+		clear();
 	}
 	
 	/**
@@ -59,10 +67,10 @@ public class SolrGUITable { // TODO extend Composite ?
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL; // TODO HIDE_SELECTION ?
 
 		final Table table = new Table(parent, style);
-
+		
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
-		gridData.horizontalSpan = 5; // 5 according to number of buttons.
+		gridData.horizontalSpan = 5; // 5 according to number of buttons. TODO needed ?
 		table.setLayoutData(gridData);
 
 		table.setLinesVisible(true);
@@ -82,7 +90,8 @@ public class SolrGUITable { // TODO extend Composite ?
 		});
 		*/
 
-		table.setItemCount(getRemoteCount());
+		// Initialize item count to 1 so we can populate the first row with filters.
+		table.setItemCount(1);
 		table.addListener(SWT.SetData, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
@@ -90,6 +99,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	            int rowIndex = table.indexOf(item);
 	            // The first line is used for filters.
 	            if (rowIndex == 0) {
+	            	// TODO might need to populate if existing filters
 	            	return;
 	            }
 	            // Use rowIndex - 1 since the first line is used for filters.
@@ -113,17 +123,28 @@ public class SolrGUITable { // TODO extend Composite ?
 		TableItem[] items = table.getItems(); // TODO do we need to load all items ?
 		TableEditor editor = new TableEditor(table);
 		for(int i=0; i<fields.size(); i++) {
-			CCombo combo = new CCombo(table, SWT.NONE);
+			final CCombo combo = new CCombo(table, SWT.NONE);
 			// TODO check if map contains field ?
 			// TODO no need to use facets for tm_body for instance
 			FacetField facet = facets.get(fields.get(i).getName());
 			for(Count count:facet.getValues()) {
 				combo.add(count.getName()); // TODO use count.getCount() too ?
 			}
+			combo.setData("field", facet.getName());
+			// Filter results when user selects a facet value.
+			combo.addModifyListener(new ModifyListener() {
+				@Override
+				public void modifyText(ModifyEvent event) {
+					filters.put(combo.getData("field").toString(), combo.getText());
+					// TODO filters.remove() if combo.getText() is empty string
+					clear();
+				}
+			});
 		    editor.grabHorizontal = true;
 		    editor.setEditor(combo, items[0], i);
-		    editor = new TableEditor(table);	
+		    editor = new TableEditor(table);
 		}
+		
 		// TODO re-use editor instead of SorlGUICellModifier ?
 		
 		return table;
@@ -162,6 +183,8 @@ public class SolrGUITable { // TODO extend Composite ?
 		return tableViewer;
 	}
 	
+	// TODO allow to select multiple values for each field
+	
 	public void dispose() {
 		tableViewer.getLabelProvider().dispose(); // TODO needed ?
 		server.shutdown(); // TODO move server instantiation/shutdown into SolrGUITabItem ?
@@ -188,8 +211,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	}
 
 	private int getRemoteCount() {
-		SolrQuery query = new SolrQuery("*:*");
-		query.setRows(0);
+		SolrQuery query = getBaseQuery(0, 0);
 		try {
 			// Solr returns a long, SWT expects an int.
 			long count = server.query(query).getResults().getNumFound();
@@ -201,15 +223,15 @@ public class SolrGUITable { // TODO extend Composite ?
 		}
 	}
 	
-	/**
+	/*
 	 * Map facet name => facet field
 	 */
 	private Map<String, FacetField> getRemoteFacets() {
-		SolrQuery query = new SolrQuery("*:*");
-		query.setRows(0);
+		SolrQuery query = getBaseQuery(0, 0);
 		query.setFacet(true);
-		// TODO set facet.limit=-1 ?
+		query.setFacetLimit(-1); // TODO or set a limit ? no limit could be bad for perf
 		for(FieldInfo field:fields) {
+			// TODO we don't want facets on fields with too many values
 			query.addFacetField(field.getName());	
 		}
 		Map<String, FacetField> facets = new HashMap<String, FacetField>();
@@ -230,9 +252,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		int page = rowIndex / PAGE_SIZE;
 		// If page has not be fetched yet, then fetch it.
 		if (!pages.containsKey(page)) {
-			SolrQuery query = new SolrQuery("*:*");
-			query.setStart(page * PAGE_SIZE);
-			query.setRows(PAGE_SIZE);
+			SolrQuery query = getBaseQuery(page * PAGE_SIZE, PAGE_SIZE);
 			try {
 				pages.put(page, server.query(query).getResults());	
 			} catch(SolrServerException e) {
@@ -241,6 +261,26 @@ public class SolrGUITable { // TODO extend Composite ?
 			}
 		}
 		return pages.get(page).get(rowIndex % PAGE_SIZE).getFieldValue(field.getName());
+	}
+	
+	private SolrQuery getBaseQuery(int start, int rows) {
+		SolrQuery query = new SolrQuery("*:*");
+		query.setStart(start);
+		query.setRows(rows);
+		// Add filters.
+		for (Entry<String, String> filter:filters.entrySet()) {
+			query.addFilterQuery(filter.getKey()+":"+filter.getValue());
+		}
+		return query;
+	}
+	
+	/*
+	 * Re-populate table with remote data.
+	 */
+	private void clear() {
+		pages = new HashMap<Integer, SolrDocumentList>();
+		table.setItemCount(getRemoteCount());
+		table.clearAll();
 	}
 	
 }

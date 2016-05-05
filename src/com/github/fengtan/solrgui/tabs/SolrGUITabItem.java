@@ -10,7 +10,7 @@ import com.github.fengtan.solrgui.tables.SolrGUITable;
 
 public class SolrGUITabItem extends CTabItem {
 
-	private SolrGUITable table; // TODO Composite ?
+	private SolrGUITable table;
 	
 	public SolrGUITabItem(CTabFolder tabFolder, String url) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
@@ -25,6 +25,10 @@ public class SolrGUITabItem extends CTabItem {
 		// Set focus on this tab.
 		tabFolder.setSelection(this);
 		tabFolder.forceFocus();
+	}
+	
+	public SolrGUITable getTable() {
+		return table;
 	}
 	
 	@Override
@@ -57,14 +61,7 @@ public class SolrGUITabItem extends CTabItem {
 		}
 		refreshStatusLine();
 	}
-	
-	public void refresh() {
-		SolrQuery query = SolrGUIQuery.ALL_DOCUMENTS;
-		server.refreshDocuments(query);
-		table.refresh();
-		refreshStatusLine();
-	}
-	
+
 	public void commit() {
 		server.commit();
 		table.refresh();

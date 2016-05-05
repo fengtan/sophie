@@ -105,5 +105,4 @@ public class SolrGUI {
 	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
 	// TODO need to launch from root dir for imgs to show up
 	// TODO provide original value for stored fields ?
-	// TODO use XViewer ? Allows to freeze a row (filters) http://wiki.eclipse.org/Nebula_XViewer_Getting_Started
 }
