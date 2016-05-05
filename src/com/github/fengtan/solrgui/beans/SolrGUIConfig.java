@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
+
 public class SolrGUIConfig {
 
 	// TODO make sure hidden file works on windows
@@ -43,26 +45,25 @@ public class SolrGUIConfig {
 		}
 	}
 	
-	public static List<SolrGUIServer> getServers() {
-		List<SolrGUIServer> servers = new ArrayList<SolrGUIServer>();
+	public static List<String> getURLs() {
+		List<String> urls = new ArrayList<String>();
 		for (Entry<Object, Object> entry:loadProperties().entrySet()) {
-			String url = entry.getKey().toString();
 			// TODO validate URL is valid ?
-			servers.add(new SolrGUIServer(url));
+			urls.add(entry.getKey().toString());
 		}
-		return servers;
+		return urls;
 	}
 
-	public static void addServer(SolrGUIServer server) {
+	public static void addServer(String url) {
 		Properties properties = loadProperties();
 		// We could store additional data if needed - for now we store an empty string.
-		properties.put(server.getURL().toString(), "");
+		properties.put(url, "");
 		storeProperties(properties);
 	}
 	
-	public static void removeServer(SolrGUIServer server) {
+	public static void removeServer(String url) {
 		Properties properties = loadProperties();
-		properties.remove(server.getURL().toString());
+		properties.remove(url);
 		storeProperties(properties);
 	} 
 	

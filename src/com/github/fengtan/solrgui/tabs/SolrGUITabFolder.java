@@ -3,6 +3,7 @@ package com.github.fengtan.solrgui.tabs;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabFolder2Adapter;
@@ -16,7 +17,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.github.fengtan.solrgui.beans.SolrGUIConfig;
-import com.github.fengtan.solrgui.beans.SolrGUIServer;
 import com.github.fengtan.solrgui.dialogs.SolrGUIAddServerDialog;
 
 public class SolrGUITabFolder extends CTabFolder {
@@ -58,8 +58,8 @@ public class SolrGUITabFolder extends CTabFolder {
 		);
 		
 		// Initialize tabs from config file.
-		for (SolrGUIServer server: SolrGUIConfig.getServers()) {
-			addTabItem(server);
+		for (String url: SolrGUIConfig.getURLs()) {
+			addTabItem(url);
 		}
 		
 		// Remove server from config file if user closed the tab.
@@ -67,7 +67,7 @@ public class SolrGUITabFolder extends CTabFolder {
 		addCTabFolder2Listener(new CTabFolder2Adapter() {
 			@Override
 			public void close(CTabFolderEvent event) {
-				SolrGUIConfig.removeServer(((SolrGUITabItem) event.item).getServer());
+				// TODO drop from config: SolrGUIConfig.removeServer(((SolrGUITabItem) event.item).getServer());
 				if (getItemCount() == 1) {
 					for (ISolrGUITabFolderListener listener:listeners) {
 						listener.noTabItem();
@@ -77,8 +77,8 @@ public class SolrGUITabFolder extends CTabFolder {
 		});
 	}
 	
-	public void addTabItem(SolrGUIServer server) {
-		new SolrGUITabItem(this, server);
+	public void addTabItem(String url) {
+		new SolrGUITabItem(this, url);
 		// Notify listeners that a new tab was added.
 		for (ISolrGUITabFolderListener listener:listeners) {
 			listener.tabItemAdded();

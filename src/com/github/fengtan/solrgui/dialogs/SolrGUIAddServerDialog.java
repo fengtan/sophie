@@ -1,5 +1,6 @@
 package com.github.fengtan.solrgui.dialogs;
 
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -10,7 +11,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.beans.SolrGUIConfig;
-import com.github.fengtan.solrgui.beans.SolrGUIServer;
 import com.github.fengtan.solrgui.tabs.SolrGUITabFolder;
 
 public class SolrGUIAddServerDialog extends Dialog {
@@ -52,9 +52,8 @@ public class SolrGUIAddServerDialog extends Dialog {
 		if (buttonId == 0) {
 			// TODO do not create if server already exists.
 	    	// TODO validate connection/url before saving
-			SolrGUIServer server = new SolrGUIServer(url.getText());
-            SolrGUIConfig.addServer(server);
-            tabFolder.addTabItem(server);
+            SolrGUIConfig.addServer(url.getText());
+            tabFolder.addTabItem(url.getText());
 		}
 		super.buttonPressed(buttonId);
 	}

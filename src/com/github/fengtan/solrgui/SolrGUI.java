@@ -101,5 +101,7 @@ public class SolrGUI {
 	// TODO sort by ID field by default ? so rows remain the same when modify one
 	// TODO if server empty and click on table viewer -> seems to crash
 	// TODO dismax, facets etc
+	// TODO support HttpSolrServer/CloudSolrServer
+	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
 	
 }

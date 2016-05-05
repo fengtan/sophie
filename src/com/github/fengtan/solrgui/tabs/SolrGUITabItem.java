@@ -1,61 +1,35 @@
 package com.github.fengtan.solrgui.tabs;
 
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.SolrDocument;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.github.fengtan.solrgui.beans.SolrGUIQuery;
-import com.github.fengtan.solrgui.beans.SolrGUIServer;
-import com.github.fengtan.solrgui.statusline.SolrGUIStatusLine;
 import com.github.fengtan.solrgui.tables.SolrGUITable;
 
 public class SolrGUITabItem extends CTabItem {
 
-	private SolrGUIServer server;
 	private SolrGUITable table; // TODO Composite ?
-	private SolrGUIStatusLine statusLine; // TODO Composite ? TODO use a column for row # + drop statusline ?
 	
-	public SolrGUITabItem(CTabFolder tabFolder, SolrGUIServer server) {
+	public SolrGUITabItem(CTabFolder tabFolder, String url) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
-		this.server = server;
-		setText(server.getURL());
-		setToolTipText(server.getURL().toString());
+		setText(url);
 		
 		// Fill in tab.
 		Composite tabComposite = new Composite(getParent(), SWT.NULL);
 		tabComposite.setLayout(new GridLayout());
-		table = new SolrGUITable(tabComposite, server); // TODO passing server is ugly
-		statusLine = new SolrGUIStatusLine(tabComposite);
-		setControl(tabComposite);
+		table = new SolrGUITable(tabComposite, url);
+		setControl(tabComposite); // TODO need composite ? TODO add status line ?
 		
 		// Set focus on this tab.
 		tabFolder.setSelection(this);
 		tabFolder.forceFocus();
-		
-		// Initialize status line.
-		refreshStatusLine();
-	}
-	
-	public SolrGUIServer getServer() {
-		return server;
-	}
-	
-	// TODO not updated when clicking 'refresh'
-	// TODO not updated when launching app
-	protected void refreshStatusLine() {
-		int count = table.getItemCount();
-		String suffix = (count > 1) ? "documents" : "document";
-		statusLine.setText(count + " " + suffix);// TODO "XX additions, XX deletions, XX modifications"
 	}
 	
 	@Override
 	public void dispose() {
 		table.dispose();
-		server.dispose();
 		super.dispose();
 	}
 	

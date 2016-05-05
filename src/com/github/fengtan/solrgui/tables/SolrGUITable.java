@@ -1,10 +1,21 @@
 package com.github.fengtan.solrgui.tables;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.request.LukeRequest;
+import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -19,16 +30,20 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.beans.SolrGUIServer;
-
 public class SolrGUITable { // TODO extend Composite ?
 
+	// Fetch 50 documents at a time. TODO make this configurable ?
+	private static final int PAGE_SIZE = 50;
+	private Map<Integer, SolrDocumentList> pages = new HashMap<Integer, SolrDocumentList>();
+	private List<FieldInfo> fields;
+	
 	private Table table;
 	private TableViewer tableViewer;
-	private SolrGUIServer server;
+	private SolrServer server;
 
-	public SolrGUITable(Composite parent, SolrGUIServer server) {
-		this.server = server;
+	public SolrGUITable(Composite parent, String url) {
+		this.server = new HttpSolrServer(url);
+		this.fields = getRemoteFields(); // TODO what if new fields get created ? refresh ?
 		createTable(parent);
 		createTableViewer();
 	}
@@ -62,18 +77,23 @@ public class SolrGUITable { // TODO extend Composite ?
 			}
 		});
 		*/
-		
-		table.setItemCount(1); // TODO
+
+		table.setItemCount(getRemoteCount());
 		table.addListener(SWT.SetData, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-	            TableItem item = (TableItem)event.item;
-	            item.setText("test"); // TODO
+	            TableItem item = (TableItem) event.item;
+	            int rowIndex = table.indexOf(item);
+	            for(int i=0; i<fields.size(); i++) {
+	            	Object value = getDocumentValue(rowIndex, fields.get(i));
+	            	item.setText(i, Objects.toString(value, ""));
+	            }
+	            // TODO use item.setText(String[] values) ?
 			}
 		});
 		
 		// Add columns
-		for (FieldInfo field:server.getRemoteFields()) { // TODO should cache the result of getRemoteFields() in SolrGUIServer and call getFields()
+		for (FieldInfo field:fields) {
 			TableColumn column = new TableColumn(table, SWT.LEFT);
 			column.setText(field.getName());
 			column.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
@@ -85,8 +105,8 @@ public class SolrGUITable { // TODO extend Composite ?
 	 */
 	private void createTableViewer() {
 		// TODO use collectionutils to transform List<FieldInfo> into List<String>
-		List<String> columnNames = new ArrayList<String>(); // TODO should cache the result of getRemoteFields() in SolrGUIServer and call getFields()
-		for(FieldInfo field:server.getRemoteFields()) {
+		List<String> columnNames = new ArrayList<String>();
+		for(FieldInfo field:fields) {
 			columnNames.add(field.getName());
 		}
 		// TODO cols
@@ -101,7 +121,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		CellEditor[] editors = new CellEditor[tableViewer.getColumnProperties().length];
 		TextCellEditor textEditor;
 
-		for (int i =0; i < editors.length; i++) {
+		for (int i=0; i < editors.length; i++) {
 			textEditor = new TextCellEditor(table);
 			((Text) textEditor.getControl()).setTextLimit(60);
 			editors[i] = textEditor;
@@ -112,20 +132,71 @@ public class SolrGUITable { // TODO extend Composite ?
 	}
 
 	// Return selected document (or null if none selected).
-	public SolrDocument getSelectedDocument() {
+	public SolrDocument getSelectedDocument() { // TODO needed ?
 		return (SolrDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
 	}
 	
-	public void refresh() {
+	public void refresh() { // TODO needed ?
 		tableViewer.refresh();
 	}
 	
-	public int getItemCount() {
-		return tableViewer.getTable().getItemCount();
+	public void dispose() {
+		tableViewer.getLabelProvider().dispose(); // TODO needed ?
+		server.shutdown(); // TODO move server instantiation/shutdown into SolrGUITabItem ?
 	}
 	
-	public void dispose() {
-		tableViewer.getLabelProvider().dispose();
+	private List<FieldInfo> getRemoteFields() {
+		LukeRequest request = new LukeRequest();
+		try {
+			LukeResponse response = request.process(server);
+			return new ArrayList<FieldInfo>(response.getFieldInfo().values());
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new ArrayList<FieldInfo>(); // TODO Collections.EMPTY_LIST
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new ArrayList<FieldInfo>(); // TODO Collections.EMPTY_LIST
+		}
+		/* TODO provide option to use this in case Luke handler is not available? requires at least 1 document in the server
+		Collection<String> fields = getAllDocuments().get(0).getFieldNames();
+		return fields.toArray(new String[fields.size()]);
+		*/
 	}
 
+	private int getRemoteCount() {
+		SolrQuery query = new SolrQuery("*");
+		query.setRows(0);
+		try {
+			// Solr returns a long, SWT expects an int.
+			long count = server.query(query).getResults().getNumFound();
+			return Integer.parseInt(String.valueOf(count));
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	/**
+	 * May return null
+	 */
+	private Object getDocumentValue(int rowIndex, FieldInfo field) {
+		int page = rowIndex / PAGE_SIZE;
+		// If page has not be fetched yet, then fetch it.
+		if (!pages.containsKey(page)) {
+			SolrQuery query = new SolrQuery("*:*");
+			query.setStart(page * PAGE_SIZE);
+			query.setRows(PAGE_SIZE);
+			try {
+				pages.put(page, server.query(query).getResults());	
+			} catch(SolrServerException e) {
+				// TODO handle exception
+				e.printStackTrace();
+			}
+		}
+		return pages.get(page).get(rowIndex % PAGE_SIZE).getFieldValue(field.getName());
+	}
+	
 }
