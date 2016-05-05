@@ -157,18 +157,14 @@ public class SolrGUITable { // TODO extend Composite ?
 	 * Create the TableViewer 
 	 */
 	private TableViewer createTableViewer() {
-		// TODO use collectionutils to transform List<FieldInfo> into List<String>
-		List<String> columnNames = new ArrayList<String>();
-		for(FieldInfo field:fields) {
-			columnNames.add(field.getName());
+		String[] columns = new String[fields.size()];
+		for (int i=0; i<fields.size(); i++) {
+			columns[i] = fields.get(i).getName();
 		}
-		// TODO cols
-		String[] cols = new String[columnNames.size()];
-		columnNames.toArray(cols);
 		
 		TableViewer tableViewer = new TableViewer(table);
 		tableViewer.setUseHashlookup(true);
-		tableViewer.setColumnProperties(cols);
+		tableViewer.setColumnProperties(columns);
 
 		return tableViewer;
 	}
