@@ -1,26 +1,26 @@
 package com.github.fengtan.solrgui.dialogs;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-public class SolrGUIEditValueDialog extends Dialog {
+import com.github.fengtan.solrgui.tables.SolrGUITable;
 
-	private static final Color YELLOW = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
+public class SolrGUIEditValueDialog extends Dialog {
 	
 	private Text newValue;
 	private String oldValue;
 	private TableItem item;
 	private int columnIndex;
+	private SolrGUITable table;
 	
 	public SolrGUIEditValueDialog(Shell parentShell) {
 		super(parentShell);
@@ -53,17 +53,19 @@ public class SolrGUIEditValueDialog extends Dialog {
 		if (buttonId == 0) {
 			if (!StringUtils.equals(oldValue, newValue.getText())) {
 				item.setText(columnIndex, newValue.getText());
-				// TODO if new record, then leave green
-				item.setBackground(YELLOW);	
+				SolrDocument document = (SolrDocument) item.getData("document");
+				document.setField(table.getFields().get(columnIndex).getName(), newValue.getText());
+				table.addDocumentUpdated(item);
 			}
 		}
 		super.buttonPressed(buttonId);
 	}
 
-	public int open(String oldValue, TableItem item, int columnIndex) {
+	public int open(String oldValue, TableItem item, int columnIndex, SolrGUITable table) {
 		this.oldValue = oldValue;
 		this.item = item;
 		this.columnIndex = columnIndex;
+		this.table = table;
 		return super.open();
 	}
 	

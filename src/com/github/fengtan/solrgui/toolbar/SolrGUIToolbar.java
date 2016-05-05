@@ -103,7 +103,6 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
 				tabItem.getTable().commit();
-				tabItem.getTable().refresh();
 			}
 		});
         

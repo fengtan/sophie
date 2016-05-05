@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
@@ -18,8 +19,10 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
+import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
@@ -44,6 +47,8 @@ import com.github.fengtan.solrgui.dialogs.SolrGUIEditValueDialog;
 public class SolrGUITable { // TODO extend Composite ?
 
 	private static final Color RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+	private static final Color YELLOW = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
+	
 	// Fetch 50 documents at a time. TODO make this configurable ?
 	private static final int PAGE_SIZE = 50;
 	
@@ -85,6 +90,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		table.setHeaderVisible(true);
 		
 		// Add KeyListener to delete documents.
+		// TODO hitting "suppr" a second time should remove the deletion.
 		table.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
@@ -180,6 +186,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		
 		// Add editor dialog.
 		final SolrGUIEditValueDialog dialog = new SolrGUIEditValueDialog(table.getShell());
+		final SolrGUITable tmp = this; // TODO not very elegant
 		table.addListener(SWT.MouseDoubleClick, new Listener() {
 			public void handleEvent(Event event) {
 				Point point = new Point(event.x, event.y);
@@ -190,7 +197,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		    	for (int i=0; i<fields.size(); i++) {
 		    		Rectangle rect = item.getBounds(i);
 		    		if (rect.contains(point)) {
-		    			dialog.open(item.getText(i), item, i);
+		    			dialog.open(item.getText(i), item, i, tmp);
 		    		}
 		    	}
 			}
@@ -226,7 +233,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	private int getRemoteCount() {
 		SolrQuery query = getBaseQuery(0, 0);
 		try {
-			// Solr returns a long, SWT expects an int.
+			// Solr returns a long, table expects an int.
 			long count = server.query(query).getResults().getNumFound();
 			return Integer.parseInt(String.valueOf(count));
 		} catch (SolrServerException e) {
@@ -267,6 +274,9 @@ public class SolrGUITable { // TODO extend Composite ?
 		// If page has not be fetched yet, then fetch it.
 		if (!pages.containsKey(page)) {
 			SolrQuery query = getBaseQuery(page * PAGE_SIZE, PAGE_SIZE);
+			// TODO "id" should be fetched using query.getInt("uniqueKey")
+			// TODO user should be able to change sort column. 
+			query.setSort("id", ORDER.asc);
 			try {
 				pages.put(page, server.query(query).getResults());	
 			} catch(SolrServerException e) {
@@ -281,7 +291,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		SolrQuery query = new SolrQuery("*:*");
 		query.setStart(start);
 		query.setRows(rows);
-		// Add filters.
+		// Add filters. TODO move filters outside of this function ? no need to set fq for facets
 		for (Entry<String, String> filter:filters.entrySet()) {
 			query.addFilterQuery(filter.getKey()+":"+filter.getValue());
 		}
@@ -308,6 +318,18 @@ public class SolrGUITable { // TODO extend Composite ?
 		// Commit local updates.
 		for (TableItem item:documentsUpdated) {
 			// TODO
+			SolrDocument document = (SolrDocument) item.getData("document");
+			SolrInputDocument input = ClientUtils.toSolrInputDocument(document);
+			try {
+				server.add(input); // Returned object seems to have no relevant information.
+			} catch (SolrServerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
 		}
 		// Commit local deletions.
 		for (TableItem item:documentsDeleted) {
@@ -330,7 +352,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		}
 		// Commit on server.
 		try {
-			server.commit(); 
+			server.commit();
 			// TODO allow to revert a specific document
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
@@ -339,6 +361,20 @@ public class SolrGUITable { // TODO extend Composite ?
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		// Refresh so user can see what the new state of the server.
+		refresh();
+	}
+
+	// TODO not very elegant
+	public void addDocumentUpdated(TableItem item) {
+		// TODO if new record, then leave green
+		item.setBackground(YELLOW);	
+		documentsUpdated.add(item);
+	}
+
+	// TODO not ideal
+	public List<FieldInfo> getFields() {
+		return fields;
 	}
 	
 	// TODO allow to filter value on empty value (e.g. value not set)
