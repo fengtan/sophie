@@ -52,6 +52,11 @@ public class SolrGUITable { // TODO extend Composite ?
 	private Map<String, FacetField> facets;
 	private Map<String, String> filters = new HashMap<String, String>();
 
+	// List of documents locally updated/deleted/added.
+	private List<TableItem> documentsUpdated;
+	private List<TableItem> documentsDeleted;
+	private List<TableItem> documentsAdded;
+	
 	private Table table;
 	private SolrServer server;
 
@@ -88,6 +93,7 @@ public class SolrGUITable { // TODO extend Composite ?
 					TableItem item = table.getSelection()[0]; // TODO what if [0] does not exist.
 					// TODO if local item does not exist on server, then just drop the row.
 					item.setBackground(RED);
+					documentsDeleted.add(item);
 				}
 			}
 		});
@@ -111,8 +117,8 @@ public class SolrGUITable { // TODO extend Composite ?
 	            	String fieldName = fields.get(i).getName();
 	            	item.setText(i, Objects.toString(document.getFieldValue(fieldName), ""));
 	            }
-	            // Store document in item so we can prepopulate the edit dialog.
-	            // TODO needed ? item.setData("document", document);
+	            // Store document in item.
+	            item.setData("document", document);
 	            // TODO use item.setText(String[] values) ?
 	            // TODO store status insert/update/delete using item.setData() ?
 			}
@@ -287,9 +293,52 @@ public class SolrGUITable { // TODO extend Composite ?
 	 */
 	public void refresh() {
 		// TODO re-populate columns/filters ?
+		documentsUpdated = new ArrayList<TableItem>();
+		documentsDeleted = new ArrayList<TableItem>();
+		documentsAdded = new ArrayList<TableItem>();
 		pages = new HashMap<Integer, SolrDocumentList>();
 		table.setItemCount(1 + getRemoteCount()); // First row is for filters, the rest is for documents.
 		table.clearAll();
+	}
+	
+	/*
+	 * Commit local changes to the Solr server.
+	 */
+	public void commit() {
+		// Commit local updates.
+		for (TableItem item:documentsUpdated) {
+			// TODO
+		}
+		// Commit local deletions.
+		for (TableItem item:documentsDeleted) {
+			// TODO
+			SolrDocument document = (SolrDocument) item.getData("document");
+			String id = document.getFieldValue("id").toString(); // TODO what if no field named "id"
+			try {
+				server.deleteById(id);
+			} catch (SolrServerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		// Commit local additions.
+		for (TableItem item:documentsAdded) {
+			// TODO
+		}
+		// Commit on server.
+		try {
+			server.commit(); 
+			// TODO allow to revert a specific document
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	// TODO allow to filter value on empty value (e.g. value not set)

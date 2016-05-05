@@ -37,9 +37,6 @@ public class SolrGUITabItem extends CTabItem {
 		super.dispose();
 	}
 	
-	public void refresh() {
-		table.refresh();
-	}
 	
 	/* TODO implement
 
@@ -63,12 +60,6 @@ public class SolrGUITabItem extends CTabItem {
 			// TODO Cloning generate remote exception
 			server.addDocument(document.clone());
 		}
-		refreshStatusLine();
-	}
-
-	public void commit() {
-		server.commit();
-		table.refresh();
 		refreshStatusLine();
 	}
 	
