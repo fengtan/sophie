@@ -40,12 +40,12 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
     protected void initToolbar(final Shell shell) {
         Display display = shell.getDisplay();
         ClassLoader loader = getClass().getClassLoader();
-        imgAdd = new Image(display, loader.getResourceAsStream("toolbar-add.png"));
-        imgDelete = new Image(display, loader.getResourceAsStream("toolbar-delete.png"));
-        imgClone = new Image(display, loader.getResourceAsStream("toolbar-clone.png"));
-        imgRefresh = new Image(display, loader.getResourceAsStream("toolbar-refresh.png"));
-        imgCommit = new Image(display, loader.getResourceAsStream("toolbar-commit.png")); // TODO find a better icon ?
-        imgClear = new Image(display, loader.getResourceAsStream("toolbar-clear.png"));
+        imgAdd = new Image(display, loader.getResourceAsStream("toolbar/add.png"));
+        imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
+        imgClone = new Image(display, loader.getResourceAsStream("toolbar/clone.png"));
+        imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
+        imgCommit = new Image(display, loader.getResourceAsStream("toolbar/commit.png")); // TODO find a better icon ?
+        imgClear = new Image(display, loader.getResourceAsStream("toolbar/clear.png"));
 
         ToolBar toolBar = new ToolBar(shell, SWT.BORDER);
 
