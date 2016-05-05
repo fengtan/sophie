@@ -1,6 +1,5 @@
 package com.github.fengtan.solrgui.dialogs;
 
-import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -8,14 +7,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 public class SolrGUIEditValueDialog extends Dialog {
 
 	private Text newValue;
 	private String originalValue;
-	private String fieldName;
-	private SolrDocument document;
+	private TableItem item;
+	private int columnIndex;
 	
 	public SolrGUIEditValueDialog(Shell parentShell) {
 		super(parentShell);
@@ -45,15 +45,15 @@ public class SolrGUIEditValueDialog extends Dialog {
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
-			document.setField(fieldName, newValue.getText());
+			item.setText(columnIndex, newValue.getText());
 		}
 		super.buttonPressed(buttonId);
 	}
-	
-	public int open(String originalValue, String fieldName, SolrDocument document) {
+
+	public int open(String originalValue, TableItem item, int columnIndex) {
 		this.originalValue = originalValue;
-		this.fieldName = fieldName;
-		this.document = document;
+		this.item = item;
+		this.columnIndex = columnIndex;
 		return super.open();
 	}
 	

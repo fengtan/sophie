@@ -102,10 +102,13 @@ public class SolrGUITable { // TODO extend Composite ?
 	            }
 	            // Use rowIndex - 1 since the first line is used for filters.
 	            // TODO make sure the last document gets displayed.
+	            SolrDocument document = getDocument(rowIndex - 1);
 	            for(int i=0; i<fields.size(); i++) {
-	            	Object value = getDocumentValue(rowIndex - 1, fields.get(i));
-	            	item.setText(i, Objects.toString(value, ""));
+	            	String fieldName = fields.get(i).getName();
+	            	item.setText(i, Objects.toString(document.getFieldValue(fieldName), ""));
 	            }
+	            // Store document in item so we can prepopulate the edit dialog.
+	            // TODO needed ? item.setData("document", document);
 	            // TODO use item.setText(String[] values) ?
 	            // TODO store status insert/update/delete using item.setData() ?
 			}
@@ -177,8 +180,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		    	for (int i=0; i<fields.size(); i++) {
 		    		Rectangle rect = item.getBounds(i);
 		    		if (rect.contains(point)) {
-		    			SolrDocument document = (SolrDocument) item.getData("document");
-		    			dialog.open(item.getText(i), fields.get(i).getName(), document);
+		    			dialog.open(item.getText(i), item, i);
 		    		}
 		    	}
 			}
@@ -250,7 +252,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	/**
 	 * Not null-safe
 	 */
-	private Object getDocumentValue(int rowIndex, FieldInfo field) {
+	private SolrDocument getDocument(int rowIndex) {
 		int page = rowIndex / PAGE_SIZE;
 		// If page has not be fetched yet, then fetch it.
 		if (!pages.containsKey(page)) {
@@ -262,7 +264,7 @@ public class SolrGUITable { // TODO extend Composite ?
 				e.printStackTrace();
 			}
 		}
-		return pages.get(page).get(rowIndex % PAGE_SIZE).getFieldValue(field.getName());
+		return pages.get(page).get(rowIndex % PAGE_SIZE);
 	}
 	
 	private SolrQuery getBaseQuery(int start, int rows) {
