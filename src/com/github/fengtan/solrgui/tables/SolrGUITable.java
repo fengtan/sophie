@@ -19,9 +19,7 @@ import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.apache.solr.common.SolrDocumentList;
-import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
@@ -34,7 +32,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 
 public class SolrGUITable { // TODO extend Composite ?
 
@@ -173,18 +170,6 @@ public class SolrGUITable { // TODO extend Composite ?
 		tableViewer.setUseHashlookup(true);
 		tableViewer.setColumnProperties(cols);
 
-		// Create the cell editors
-		CellEditor[] editors = new CellEditor[tableViewer.getColumnProperties().length];
-		TextCellEditor textEditor;
-
-		for (int i=0; i < editors.length; i++) {
-			textEditor = new TextCellEditor(table);
-			((Text) textEditor.getControl()).setTextLimit(60);
-			editors[i] = textEditor;
-		}
-		
-		tableViewer.setCellEditors(editors);
-		
 		return tableViewer;
 	}
 	
