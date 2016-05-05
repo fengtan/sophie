@@ -35,7 +35,7 @@ public class SolrGUIEditValueDialog extends Dialog {
 		new Label(composite, SWT.NULL).setText("New value");
 		newValue = new Text(composite, SWT.BORDER);
 		newValue.setText(oldValue);
-		// TODO should update remote document probably
+		// TODO set minimum size of textarea
 	    
 	    return composite;
 	}
@@ -55,7 +55,7 @@ public class SolrGUIEditValueDialog extends Dialog {
 				item.setText(columnIndex, newValue.getText());
 				SolrDocument document = (SolrDocument) item.getData("document");
 				document.setField(table.getFields().get(columnIndex).getName(), newValue.getText());
-				table.addDocumentUpdated(item);
+				table.updateDocument(item);
 			}
 		}
 		super.buttonPressed(buttonId);

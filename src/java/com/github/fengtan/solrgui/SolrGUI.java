@@ -95,7 +95,7 @@ public class SolrGUI {
 	// TODO support HttpSolrServer/CloudSolrServer
 	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
 	// TODO provide original value for stored fields ?
-	// TODO mode R/W, mode RO
 	// TODO allow to select multiple values for each filter
+	// TODO test modifying 2 documents and then commiting
 	
 }

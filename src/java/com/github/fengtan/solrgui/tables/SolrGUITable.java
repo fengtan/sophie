@@ -13,7 +13,6 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
@@ -97,7 +96,7 @@ public class SolrGUITable { // TODO extend Composite ?
 			public void keyPressed(KeyEvent event) {
 				if (event.keyCode == SWT.DEL) {
 					Table table = (Table) event.getSource();
-					addDocumentDeleted(table.getSelection()[0]); // TODO what if [0] does not exist.
+					deleteSelectedDocument();
 				}
 			}
 		});
@@ -377,18 +376,21 @@ public class SolrGUITable { // TODO extend Composite ?
 		refresh();
 	}
 
-	public void addDocumentUpdated(TableItem item) {
+	public void updateDocument(TableItem item) {
 		// TODO if new record, then leave green
 		item.setBackground(YELLOW);	
 		documentsUpdated.add(item);
 	}
 	
-	public void addDocumentDeleted(TableItem item) {
+	public void deleteSelectedDocument() {
 		// TODO if local item (i.e. does not exist on server), then just drop the row.
-		item.setBackground(RED);
-		documentsDeleted.add(item);
+		TableItem[] items = table.getSelection();
+		if (items.length > 0) {
+			items[0].setBackground(RED);
+			documentsDeleted.add(items[0]);	
+		}
 	}
-
+	
 	// TODO not ideal
 	public List<FieldInfo> getFields() {
 		return fields;
