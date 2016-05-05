@@ -1,5 +1,7 @@
 package com.github.fengtan.solrgui.tabs;
 
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -11,6 +13,7 @@ import com.github.fengtan.solrgui.tables.SolrGUITable;
 public class SolrGUITabItem extends CTabItem {
 
 	private SolrGUITable table;
+	private SolrServer server;
 	
 	public SolrGUITabItem(CTabFolder tabFolder, String url) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
@@ -19,7 +22,8 @@ public class SolrGUITabItem extends CTabItem {
 		// Fill in tab.
 		Composite tabComposite = new Composite(getParent(), SWT.NULL);
 		tabComposite.setLayout(new GridLayout());
-		table = new SolrGUITable(tabComposite, url);
+		server = new HttpSolrServer(url);
+		table = new SolrGUITable(tabComposite, server);
 		setControl(tabComposite); // TODO need composite ? TODO add status line ?
 		
 		// Set focus on this tab.
@@ -33,7 +37,7 @@ public class SolrGUITabItem extends CTabItem {
 	
 	@Override
 	public void dispose() {
-		table.dispose();
+		server.shutdown();
 		super.dispose();
 	}
 	

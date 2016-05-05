@@ -66,8 +66,8 @@ public class SolrGUITable { // TODO extend Composite ?
 	private Table table;
 	private SolrServer server;
 
-	public SolrGUITable(Composite parent, String url) {
-		this.server = new HttpSolrServer(url);
+	public SolrGUITable(Composite parent, SolrServer server) {
+		this.server = server;
 		this.fields = getRemoteFields(); // TODO what if new fields get created ? refresh ?
 		this.facets = getRemoteFacets();
 		this.table = createTable(parent);
@@ -202,10 +202,6 @@ public class SolrGUITable { // TODO extend Composite ?
 		});
 		
 		return table;
-	}
-	
-	public void dispose() {
-		server.shutdown(); // TODO move server instantiation/shutdown into SolrGUITabItem ?
 	}
 	
 	private List<FieldInfo> getRemoteFields() {
