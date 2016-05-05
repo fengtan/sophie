@@ -19,7 +19,10 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -82,8 +85,13 @@ public class SolrGUITable { // TODO extend Composite ?
 			public void handleEvent(Event event) {
 	            TableItem item = (TableItem) event.item;
 	            int rowIndex = table.indexOf(item);
+	            // The first line is used for filters.
+	            if (rowIndex == 0) {
+	            	return;
+	            }
+	            // Use rowIndex - 1 since the first line is used for filters.
 	            for(int i=0; i<fields.size(); i++) {
-	            	Object value = getDocumentValue(rowIndex, fields.get(i));
+	            	Object value = getDocumentValue(rowIndex - 1, fields.get(i));
 	            	item.setText(i, Objects.toString(value, ""));
 	            }
 	            // TODO use item.setText(String[] values) ?
@@ -97,6 +105,19 @@ public class SolrGUITable { // TODO extend Composite ?
 			column.setText(field.getName());
 			column.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
 		}
+		
+		// Add filters.
+		TableItem[] items = table.getItems(); // TODO do we need to load all items ?
+		TableEditor editor = new TableEditor(table);
+		for(int i=0; i<fields.size(); i++) {
+			CCombo combo = new CCombo(table, SWT.NONE);
+			combo.add("item 1"); // TODO item1
+		    combo.add("item 2"); // TODO item2
+		    editor.grabHorizontal = true;
+		    editor.setEditor(combo, items[0], i);
+		    editor = new TableEditor(table);	
+		}
+		// TODO re-use editor instead of SorlGUICellModifier ?
 		
 		return table;
 	}
