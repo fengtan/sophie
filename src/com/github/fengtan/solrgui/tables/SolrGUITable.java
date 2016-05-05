@@ -12,6 +12,8 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.request.LukeRequest;
+import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.apache.solr.common.SolrDocumentList;
@@ -22,7 +24,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -37,6 +38,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	private static final int PAGE_SIZE = 50;
 	private Map<Integer, SolrDocumentList> pages = new HashMap<Integer, SolrDocumentList>();
 	private List<FieldInfo> fields;
+	private Map<String, FacetField> facets;
 	
 	private Table table;
 	private TableViewer tableViewer;
@@ -45,6 +47,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	public SolrGUITable(Composite parent, String url) {
 		this.server = new HttpSolrServer(url);
 		this.fields = getRemoteFields(); // TODO what if new fields get created ? refresh ?
+		this.facets = getRemoteFacets();
 		this.table = createTable(parent);
 		this.tableViewer = createTableViewer();
 	}
@@ -111,8 +114,12 @@ public class SolrGUITable { // TODO extend Composite ?
 		TableEditor editor = new TableEditor(table);
 		for(int i=0; i<fields.size(); i++) {
 			CCombo combo = new CCombo(table, SWT.NONE);
-			combo.add("item 1"); // TODO item1
-		    combo.add("item 2"); // TODO item2
+			// TODO check if map contains field ?
+			// TODO no need to use facets for tm_body for instance
+			FacetField facet = facets.get(fields.get(i).getName());
+			for(Count count:facet.getValues()) {
+				combo.add(count.getName()); // TODO use count.getCount() too ?
+			}
 		    editor.grabHorizontal = true;
 		    editor.setEditor(combo, items[0], i);
 		    editor = new TableEditor(table);	
@@ -181,7 +188,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	}
 
 	private int getRemoteCount() {
-		SolrQuery query = new SolrQuery("*");
+		SolrQuery query = new SolrQuery("*:*");
 		query.setRows(0);
 		try {
 			// Solr returns a long, SWT expects an int.
@@ -192,6 +199,28 @@ public class SolrGUITable { // TODO extend Composite ?
 			e.printStackTrace();
 			return 0;
 		}
+	}
+	
+	/**
+	 * Map facet name => facet field
+	 */
+	private Map<String, FacetField> getRemoteFacets() {
+		SolrQuery query = new SolrQuery("*:*");
+		query.setRows(0);
+		query.setFacet(true);
+		// TODO set facet.limit=-1 ?
+		for(FieldInfo field:fields) {
+			query.addFacetField(field.getName());	
+		}
+		Map<String, FacetField> facets = new HashMap<String, FacetField>();
+		try {
+			for(FacetField facet:server.query(query).getFacetFields()) {
+				facets.put(facet.getName(), facet);
+			}
+		} catch(SolrServerException e) {
+			e.printStackTrace();
+		}
+		return facets;
 	}
 	
 	/**
