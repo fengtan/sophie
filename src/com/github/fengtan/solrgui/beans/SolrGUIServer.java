@@ -1,8 +1,6 @@
 package com.github.fengtan.solrgui.beans;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,22 +19,19 @@ import org.apache.solr.common.SolrInputDocument;
 
 import com.github.fengtan.solrgui.tables.ISolrGUIChangeListener;
 
-// TODO persist rows, fq, q etc ?
-// TODO dismax, facets etc
-// TODO test with Solr < 4.
 public class SolrGUIServer {
 
 	private String url;
 	private SolrServer server;
-	
-	private String[] fields;
+
+	private List<FieldInfo> fields;
 	private List<SolrGUIDocument> documents;
 	private Set<ISolrGUIChangeListener> changeListeners = new HashSet<ISolrGUIChangeListener>();
 
 	public SolrGUIServer(String url) {
 		this.url = url;
 		this.server = new HttpSolrServer(url);
-		refreshFields();
+		this.fields = getRemoteFields();
 		refreshDocuments(SolrGUIQuery.ALL_DOCUMENTS);
 	}
 	
@@ -72,7 +67,7 @@ public class SolrGUIServer {
 	 * Add a blank document to the collection of documents
 	 */
 	public void addDocument() {
-		addDocument(new SolrGUIDocument(getFields()));
+		addDocument(new SolrGUIDocument(fields));
 	}
 
 	/**
@@ -125,29 +120,19 @@ public class SolrGUIServer {
 		changeListeners.remove(changeListener);
 	}
 	
-	public String[] getFields() {
-		return fields;
-	}
-	
-	public void refreshFields() {
+	public List<FieldInfo> getRemoteFields() {
 		LukeRequest request = new LukeRequest();
 		try {
 			LukeResponse response = request.process(server);
-			Collection<FieldInfo> fieldsInfo = response.getFieldInfo().values();
-			List<String> fieldsList = new ArrayList<String>();
-			for (FieldInfo fieldInfo:fieldsInfo) {
-				fieldsList.add(fieldInfo.getName());
-			}
-			Collections.sort(fieldsList);
-			fields = fieldsList.toArray(new String[fieldsList.size()]);
+			return new ArrayList<FieldInfo>(response.getFieldInfo().values());
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			fields = new String[]{};
+			return new ArrayList<FieldInfo>(); // TODO Collections.EMPTY_LIST
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			fields = new String[]{};
+			return new ArrayList<FieldInfo>(); // TODO Collections.EMPTY_LIST
 		}
 		/* TODO provide option to use this in case Luke handler is not available? requires at least 1 document in the server
 		Collection<String> fields = getAllDocuments().get(0).getFieldNames();

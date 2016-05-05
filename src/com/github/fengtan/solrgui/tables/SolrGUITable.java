@@ -1,9 +1,9 @@
 package com.github.fengtan.solrgui.tables;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -11,8 +11,6 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -25,30 +23,21 @@ import com.github.fengtan.solrgui.beans.SolrGUIServer;
 
 public class SolrGUITable { // TODO extend Composite ?
 
-	private List<String> fieldsDisplayed = new ArrayList<String>(); // Fields displayed in the table.
-	// TODO could be worth using style VIRTUAL since the data source is remote http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fswt%2Fwidgets%2FTable.html
 	private Table table;
 	private TableViewer tableViewer;
-	private SolrGUISorter sorter;
-	private SolrGUIServer server; // TODO should probably not be in this class
-	
+	private SolrGUIServer server;
+
 	public SolrGUITable(Composite parent, SolrGUIServer server) {
 		this.server = server;
-		
 		createTable(parent);
 		createTableViewer();
-
-		// By default, we show all fields available.
-		for (String field:server.getFields()) {
-			fieldsDisplayed.add(field);
-		}
 	}
 	
 	/**
 	 * Create the Table
 	 */
 	private void createTable(Composite parent) {
-		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL; // TODO HIDE_SELECTION ?
+		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION; // TODO HIDE_SELECTION ?
 
 		table = new Table(parent, style);
 
@@ -73,31 +62,29 @@ public class SolrGUITable { // TODO extend Composite ?
 		});
 		
 		// Add columns
-		Collections.sort(fieldsDisplayed); // TODO needed ?
-		for (final String field:fieldsDisplayed) {
+		for (FieldInfo field:server.getRemoteFields()) { // TODO should cache the result of getRemoteFields() in SolrGUIServer and call getFields()
 			TableColumn column = new TableColumn(table, SWT.LEFT);
-				column.setText(field);
-				// Add listener to column so documents are sorted when clicked.
-				// TODO should use solr sort
-				column.addSelectionListener(new SelectionAdapter() { 
-					public void widgetSelected(SelectionEvent e) {
-						sorter = new SolrGUISorter(field);
-						tableViewer.setSorter(sorter); // TODO does sorting scale ?
-					}
-				});
+			column.setText(field.getName());
 			column.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
 		}
 	}
-
-	// TODO sort using setSortDirection ?
 	
 	/**
 	 * Create the TableViewer 
 	 */
 	private void createTableViewer() {
+		// TODO use collectionutils to transform List<FieldInfo> into List<String>
+		List<String> columnNames = new ArrayList<String>(); // TODO should cache the result of getRemoteFields() in SolrGUIServer and call getFields()
+		for(FieldInfo field:server.getRemoteFields()) {
+			columnNames.add(field.getName());
+		}
+		// TODO cols
+		String[] cols = new String[columnNames.size()];
+		columnNames.toArray(cols);
+		
 		tableViewer = new TableViewer(table);
 		tableViewer.setUseHashlookup(true);
-		tableViewer.setColumnProperties(server.getFields());
+		tableViewer.setColumnProperties(cols);
 
 		// Create the cell editors
 		CellEditor[] editors = new CellEditor[tableViewer.getColumnProperties().length];
@@ -111,19 +98,14 @@ public class SolrGUITable { // TODO extend Composite ?
 		
 		tableViewer.setCellEditors(editors);
 		tableViewer.setCellModifier(new SolrGUICellModifier(server));
-		tableViewer.setSorter(sorter); // Set default sorter (null-safe).
 		tableViewer.setContentProvider(new SolrGUIContentProvider(server, tableViewer));
-		tableViewer.setLabelProvider(new SolrGUILabelProvider(fieldsDisplayed));
+		tableViewer.setLabelProvider(new SolrGUILabelProvider(server.getRemoteFields())); // TODO should cache the result of getRemoteFields() in SolrGUIServer and call getFields()
 		tableViewer.setInput(server);
 	}
 
 	// Return selected document (or null if none selected).
 	public SolrGUIDocument getSelectedDocument() {
 		return (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
-	}
-	
-	public List<String> getFieldsDisplayed() { // TODO probably should be hidden
-		return fieldsDisplayed;
 	}
 	
 	public void refresh() {

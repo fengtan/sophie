@@ -100,5 +100,6 @@ public class SolrGUI {
 	// TODO license
 	// TODO sort by ID field by default ? so rows remain the same when modify one
 	// TODO if server empty and click on table viewer -> seems to crash
+	// TODO dismax, facets etc
 	
 }

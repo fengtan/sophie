@@ -3,6 +3,7 @@ package com.github.fengtan.solrgui.tables;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -19,17 +20,18 @@ public class SolrGUILabelProvider extends LabelProvider implements ITableLabelPr
 	private static final Color RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 	private static final Color YELLOW = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
 	
-	private List<String> fieldsDisplayed;
+	private List<FieldInfo> fields;
 	
-	public SolrGUILabelProvider(List<String> fieldsDisplayed) {
-		this.fieldsDisplayed = fieldsDisplayed;
+	public SolrGUILabelProvider(List<FieldInfo> fields) {
+		this.fields = fields;
 	}
 	
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 		SolrGUIDocument document = (SolrGUIDocument) element;
-		if (columnIndex < fieldsDisplayed.size()) {
-			return Objects.toString(document.getFieldValue(fieldsDisplayed.get(columnIndex)), "");	
+		if (columnIndex < fields.size()) {
+			String fieldName = fields.get(columnIndex).getName();
+			return Objects.toString(document.getFieldValue(fieldName), "");	
 		} else {
 			return "";
 		}
