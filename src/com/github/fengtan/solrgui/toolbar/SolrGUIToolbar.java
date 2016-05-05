@@ -56,7 +56,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
-				tabItem.addNewDocument();
+				// TODO implement tabItem.addNewDocument();
 			}
 		});
 
@@ -67,7 +67,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         itemDelete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
-				tabItem.deleteCurrentDocument();
+				// TODO implement tabItem.deleteCurrentDocument();
 			}
 		});
 
@@ -78,7 +78,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         itemClone.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
-				tabItem.cloneCurrentDocument();
+				// TODO implement tabItem.cloneCurrentDocument();
 			}
 		});
 
@@ -91,7 +91,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
-				tabItem.refresh();
+				// TODO implement tabItem.refresh();
 			}
 		});
         
@@ -102,8 +102,8 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         itemCommit.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
-				tabItem.commit();
-				tabItem.refresh();
+				// TODO implement tabItem.commit();
+				// TODO implement tabItem.refresh();
 			}
 		});
         
@@ -119,8 +119,8 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
 		        	SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
-					tabItem.clear();
-					tabItem.refresh();
+					// TODO implement tabItem.clear();
+					// TODO implement tabItem.refresh();
 		        }
 			}
 		});

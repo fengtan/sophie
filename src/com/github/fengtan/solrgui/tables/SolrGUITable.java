@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
+import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.beans.SolrGUIDocument;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
 
 public class SolrGUITable { // TODO extend Composite ?
@@ -37,7 +37,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	 * Create the Table
 	 */
 	private void createTable(Composite parent) {
-		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION; // TODO HIDE_SELECTION ?
+		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL; // TODO HIDE_SELECTION ?
 
 		table = new Table(parent, style);
 
@@ -48,6 +48,7 @@ public class SolrGUITable { // TODO extend Composite ?
 
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
+		/* TODO implement
 		table.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
@@ -55,9 +56,19 @@ public class SolrGUITable { // TODO extend Composite ?
 				if (event.keyCode == SWT.DEL) {
 					Table table = (Table) event.getSource();
 					TableItem item = table.getSelection()[0]; // TODO what if [0] does not exist.
-					SolrGUIDocument document = (SolrGUIDocument) item.getData();
+					SolrDocument document = (SolrDocument) item.getData();
 					server.removeDocument(document);
 				}
+			}
+		});
+		*/
+		
+		table.setItemCount(1); // TODO
+		table.addListener(SWT.SetData, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+	            TableItem item = (TableItem)event.item;
+	            item.setText("test"); // TODO
 			}
 		});
 		
@@ -97,15 +108,12 @@ public class SolrGUITable { // TODO extend Composite ?
 		}
 		
 		tableViewer.setCellEditors(editors);
-		tableViewer.setCellModifier(new SolrGUICellModifier(server));
-		tableViewer.setContentProvider(new SolrGUIContentProvider(server, tableViewer));
-		tableViewer.setLabelProvider(new SolrGUILabelProvider(server.getRemoteFields())); // TODO should cache the result of getRemoteFields() in SolrGUIServer and call getFields()
-		tableViewer.setInput(server);
+		tableViewer.setCellModifier(new SolrGUICellModifier());
 	}
 
 	// Return selected document (or null if none selected).
-	public SolrGUIDocument getSelectedDocument() {
-		return (SolrGUIDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
+	public SolrDocument getSelectedDocument() {
+		return (SolrDocument) ((IStructuredSelection) tableViewer.getSelection()).getFirstElement();
 	}
 	
 	public void refresh() {

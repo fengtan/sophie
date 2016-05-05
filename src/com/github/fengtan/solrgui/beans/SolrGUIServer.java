@@ -1,9 +1,7 @@
 package com.github.fengtan.solrgui.beans;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
@@ -12,112 +10,42 @@ import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
 
-import com.github.fengtan.solrgui.tables.ISolrGUIChangeListener;
-
+// TODO use SolrServer
 public class SolrGUIServer {
 
 	private String url;
 	private SolrServer server;
-
-	private List<FieldInfo> fields;
-	private List<SolrGUIDocument> documents;
-	private Set<ISolrGUIChangeListener> changeListeners = new HashSet<ISolrGUIChangeListener>();
+	private List<SolrDocument> documents;
 
 	public SolrGUIServer(String url) {
 		this.url = url;
 		this.server = new HttpSolrServer(url);
-		this.fields = getRemoteFields();
-		refreshDocuments(SolrGUIQuery.ALL_DOCUMENTS);
+		this.documents = refreshDocuments(SolrGUIQuery.ALL_DOCUMENTS); // TODO do we need to use a local attribute documents ?
 	}
 	
-	public String getURL() {
+	public String getURL() { // TODO needed ?
 		return url;
 	}
 	
-	public void refreshDocuments(SolrQuery query) {
+	public List<SolrDocument> refreshDocuments(SolrQuery query) {
 		// TODO cache ? use transactions ?
 		// TODO allow not to use the default request handler + allow to configure req params => advanded "Add Server" in menus
-		// Initialize attribute.
-		documents = new ArrayList<SolrGUIDocument>();
-		// Get Solr response and update local attribute.
 		try {
-			QueryResponse response = server.query(query);
-			for (SolrDocument document:response.getResults()) {
-				documents.add(new SolrGUIDocument(document));
-			}
+			return server.query(query).getResults();
 		} catch (SolrServerException e) {
 			// TODO log error
 			e.printStackTrace();
+			return new ArrayList<SolrDocument>(); // TODO collectionutils.EMPTY
 		}
 	}
 
 	/**
 	 * Return the collection of documents
 	 */
-	public List<SolrGUIDocument> getDocuments() {
+	public List<SolrDocument> getDocuments() {
 		return documents;
-	}
-	
-	/**
-	 * Add a blank document to the collection of documents
-	 */
-	public void addDocument() {
-		addDocument(new SolrGUIDocument(fields));
-	}
-
-	/**
-	 * Add a new document to the collection of documents
-	 */
-	public void addDocument(SolrGUIDocument document) {
-		document.setStatus(SolrGUIStatus.ADDED);
-		documents.add(documents.size(), document);
-		for (ISolrGUIChangeListener listener:changeListeners) {
-			listener.addDocument(document);
-		}
-	}
-
-	/**
-	 * @param document
-	 */
-	public void removeDocument(SolrGUIDocument document) {
-		document.setStatus(SolrGUIStatus.DELETED);
-		for (ISolrGUIChangeListener listener:changeListeners) {
-			listener.modifyDocument(document);
-		}
-	}
-
-	/**
-	 * @param document
-	 *
-	 * If user modified an existing document, flag as 'Updated'.
-	 * If user modified a new document, leave flag as 'Added'.
-	 */
-	public void documentChanged(SolrGUIDocument document) {
-		if (!document.getStatus().equals(SolrGUIStatus.ADDED)) {
-			document.setStatus(SolrGUIStatus.MODIFIED);
-		}
-		for (ISolrGUIChangeListener listener:changeListeners) {
-			listener.modifyDocument(document);
-		}
-	}
-
-	/**
-	 * @param changeListener
-	 */
-	public void addChangeListener(ISolrGUIChangeListener changeListener) {
-		changeListeners.add(changeListener);
-	}
-	
-	/**
-	 * @param changeListener
-	 */
-	public void removeChangeListener(ISolrGUIChangeListener changeListener) {
-		changeListeners.remove(changeListener);
 	}
 	
 	public List<FieldInfo> getRemoteFields() {
@@ -143,9 +71,9 @@ public class SolrGUIServer {
 	public void commit() {
 		// TODO could use CollectionUtils.filter().
 		// TODO graceful degradation if Luke handlers not provided by server
-		// TODO are all jars required ?
+		/* TODO implement
 		SolrInputDocument input;
-		for (SolrGUIDocument document:documents) {
+		for (SolrDocument document:documents) {
 			switch (document.getStatus()) {
 				case ADDED:
 					input = ClientUtils.toSolrInputDocument(document.getDocument());
@@ -191,6 +119,7 @@ public class SolrGUIServer {
 					break;
 			}
 		}
+		*/
 		try {
 			server.commit(); 
 			// TODO allow to revert a specific document

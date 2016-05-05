@@ -1,13 +1,13 @@
 package com.github.fengtan.solrgui.tabs;
 
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocument;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.github.fengtan.solrgui.beans.SolrGUIDocument;
 import com.github.fengtan.solrgui.beans.SolrGUIQuery;
 import com.github.fengtan.solrgui.beans.SolrGUIServer;
 import com.github.fengtan.solrgui.statusline.SolrGUIStatusLine;
@@ -58,6 +58,8 @@ public class SolrGUITabItem extends CTabItem {
 		server.dispose();
 		super.dispose();
 	}
+	
+	/* TODO implement
 
 	// TODO what is the point of encapsulating server
 	public void addNewDocument() {
@@ -66,7 +68,7 @@ public class SolrGUITabItem extends CTabItem {
 	}
 	
 	public void deleteCurrentDocument() {
-		SolrGUIDocument document = table.getSelectedDocument();
+		SolrDocument document = table.getSelectedDocument();
 		if (document != null) {
 			server.removeDocument(document);
 		}
@@ -74,7 +76,7 @@ public class SolrGUITabItem extends CTabItem {
 	}
 	
 	public void cloneCurrentDocument() {
-		SolrGUIDocument document = table.getSelectedDocument();
+		SolrDocument document = table.getSelectedDocument();
 		if (document != null) {
 			// TODO Cloning generate remote exception
 			server.addDocument(document.clone());
@@ -100,5 +102,6 @@ public class SolrGUITabItem extends CTabItem {
 		table.refresh();
 		refreshStatusLine();
 	}
+	*/
 	
 }
