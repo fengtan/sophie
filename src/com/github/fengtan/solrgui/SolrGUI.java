@@ -58,7 +58,7 @@ public class SolrGUI {
 		shell.dispose();
 	}
 	
-	public CTabFolder getTabFolder() { // TODO drop ?
+	public CTabFolder getTabFolder() { // TODO drop ? could use a static tabfolder
 		return tabFolder;
 	}
 	

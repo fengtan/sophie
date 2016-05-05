@@ -46,8 +46,9 @@ import com.github.fengtan.solrgui.dialogs.SolrGUIEditValueDialog;
 
 public class SolrGUITable { // TODO extend Composite ?
 
-	private static final Color RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 	private static final Color YELLOW = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
+	private static final Color RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+	private static final Color GREEN = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 	
 	// Fetch 50 documents at a time. TODO make this configurable ?
 	private static final int PAGE_SIZE = 50;
@@ -90,16 +91,13 @@ public class SolrGUITable { // TODO extend Composite ?
 		table.setHeaderVisible(true);
 		
 		// Add KeyListener to delete documents.
-		// TODO hitting "suppr" a second time should remove the deletion.
+		// TODO hitting "suppr" or clicking the button a second time should remove the deletion.
 		table.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
 				if (event.keyCode == SWT.DEL) {
 					Table table = (Table) event.getSource();
-					TableItem item = table.getSelection()[0]; // TODO what if [0] does not exist.
-					// TODO if local item does not exist on server, then just drop the row.
-					item.setBackground(RED);
-					documentsDeleted.add(item);
+					addDocumentDeleted(table.getSelection()[0]); // TODO what if [0] does not exist.
 				}
 			}
 		});
@@ -118,7 +116,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	            }
 	            // Use rowIndex - 1 since the first line is used for filters.
 	            // TODO make sure the last document gets displayed.
-	            SolrDocument document = getDocument(rowIndex - 1);
+	            SolrDocument document = getRemoteDocument(rowIndex - 1);
 	            for(int i=0; i<fields.size(); i++) {
 	            	String fieldName = fields.get(i).getName();
 	            	item.setText(i, Objects.toString(document.getFieldValue(fieldName), ""));
@@ -269,7 +267,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	/**
 	 * Not null-safe
 	 */
-	private SolrDocument getDocument(int rowIndex) {
+	private SolrDocument getRemoteDocument(int rowIndex) {
 		int page = rowIndex / PAGE_SIZE;
 		// If page has not be fetched yet, then fetch it.
 		if (!pages.containsKey(page)) {
@@ -364,12 +362,34 @@ public class SolrGUITable { // TODO extend Composite ?
 		// Refresh so user can see what the new state of the server.
 		refresh();
 	}
+	
+	/*
+	 * Delete all documents on server.
+	 */
+	public void clear() {
+		try {
+			server.deleteByQuery("*:*");
+			server.commit();
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		refresh();
+	}
 
-	// TODO not very elegant
 	public void addDocumentUpdated(TableItem item) {
 		// TODO if new record, then leave green
 		item.setBackground(YELLOW);	
 		documentsUpdated.add(item);
+	}
+	
+	public void addDocumentDeleted(TableItem item) {
+		// TODO if local item (i.e. does not exist on server), then just drop the row.
+		item.setBackground(RED);
+		documentsDeleted.add(item);
 	}
 
 	// TODO not ideal

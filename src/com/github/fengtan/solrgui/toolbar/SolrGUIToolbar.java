@@ -56,7 +56,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
-				// TODO implement tabItem.addNewDocument();
+				//tabItem.getTable().addNewDocument();
 			}
 		});
 
@@ -118,8 +118,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
 		        	SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
-					// TODO implement tabItem.clear();
-					// TODO implement tabItem.refresh();
+					tabItem.getTable().clear();
 		        }
 			}
 		});
