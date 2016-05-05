@@ -24,6 +24,8 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -31,6 +33,10 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+
+import com.github.fengtan.solrgui.SolrGUI;
+import com.github.fengtan.solrgui.dialogs.SolrGUIAddServerDialog;
+import com.github.fengtan.solrgui.dialogs.SolrGUIEditValueDialog;
 
 public class SolrGUITable { // TODO extend Composite ?
 
@@ -50,7 +56,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		this.fields = getRemoteFields(); // TODO what if new fields get created ? refresh ?
 		this.facets = getRemoteFacets();
 		this.table = createTable(parent);
-		// Initialize cache + row count
+		// Initialize cache + row count.
 		clear();
 	}
 	
@@ -58,13 +64,12 @@ public class SolrGUITable { // TODO extend Composite ?
 	 * Create the Table
 	 */
 	private Table createTable(Composite parent) {
-		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL; // TODO HIDE_SELECTION ?
+		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
 
 		final Table table = new Table(parent, style);
-		
+
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
-		gridData.horizontalSpan = 5; // 5 according to number of buttons. TODO needed ?
 		table.setLayoutData(gridData);
 
 		table.setLinesVisible(true);
@@ -97,12 +102,13 @@ public class SolrGUITable { // TODO extend Composite ?
 	            	return;
 	            }
 	            // Use rowIndex - 1 since the first line is used for filters.
+	            // TODO make sure the last document gets displayed.
 	            for(int i=0; i<fields.size(); i++) {
 	            	Object value = getDocumentValue(rowIndex - 1, fields.get(i));
 	            	item.setText(i, Objects.toString(value, ""));
 	            }
 	            // TODO use item.setText(String[] values) ?
-	            // TODO store status insert/update/delete using item.setData() ? 
+	            // TODO store status insert/update/delete using item.setData() ?
 			}
 		});
 		
@@ -145,7 +151,24 @@ public class SolrGUITable { // TODO extend Composite ?
 		    editor = new TableEditor(table);
 		}
 		
-		// TODO re-use editor instead of SorlGUICellModifier ?
+		// Add editor dialog.
+		final SolrGUIEditValueDialog dialog = new SolrGUIEditValueDialog(table.getShell());
+		table.addListener(SWT.MouseDoubleClick, new Listener() {
+		      public void handleEvent(Event event) {
+		        Point point = new Point(event.x, event.y);
+		        TableItem item = table.getItem(point);
+		        if (item == null) {
+		        	return;
+		        }
+		        for (int i=0; i<fields.size(); i++) {
+		          Rectangle rect = item.getBounds(i);
+		          if (rect.contains(point)) {
+		            int index = table.indexOf(item);
+		            dialog.open(item.getText(i));
+		          }
+		        }
+		      }
+		    });
 		
 		return table;
 	}

@@ -26,7 +26,7 @@ public class SolrGUITabFolder extends CTabFolder {
 		// Create the tabs.
 		super(shell, SWT.TOP | SWT.CLOSE | SWT.BORDER);
 		this.listeners = listeners;
-		final SolrGUIAddServerDialog dialog = new SolrGUIAddServerDialog(shell, this);
+		final SolrGUIAddServerDialog dialog = new SolrGUIAddServerDialog(shell, this); // TODO turn into a singleton ? static
 
 		// Configure tab folder.
 		setBorderVisible(true);
