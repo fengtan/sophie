@@ -3,6 +3,7 @@ package com.github.fengtan.solrgui.dialogs;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -14,6 +15,8 @@ import org.eclipse.swt.widgets.Text;
 
 public class SolrGUIEditValueDialog extends Dialog {
 
+	private static final Color YELLOW = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
+	
 	private Text newValue;
 	private String oldValue;
 	private TableItem item;
@@ -32,6 +35,7 @@ public class SolrGUIEditValueDialog extends Dialog {
 		new Label(composite, SWT.NULL).setText("New value");
 		newValue = new Text(composite, SWT.BORDER);
 		newValue.setText(oldValue);
+		// TODO should update remote document probably
 	    
 	    return composite;
 	}
@@ -50,7 +54,7 @@ public class SolrGUIEditValueDialog extends Dialog {
 			if (!StringUtils.equals(oldValue, newValue.getText())) {
 				item.setText(columnIndex, newValue.getText());
 				// TODO if new record, then leave green
-				item.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW));	
+				item.setBackground(YELLOW);	
 			}
 		}
 		super.buttonPressed(buttonId);

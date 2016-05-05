@@ -23,12 +23,16 @@ import org.apache.solr.common.SolrDocumentList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
@@ -39,6 +43,7 @@ import com.github.fengtan.solrgui.dialogs.SolrGUIEditValueDialog;
 
 public class SolrGUITable { // TODO extend Composite ?
 
+	private static final Color RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 	// Fetch 50 documents at a time. TODO make this configurable ?
 	private static final int PAGE_SIZE = 50;
 	
@@ -73,20 +78,19 @@ public class SolrGUITable { // TODO extend Composite ?
 
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
-		/* TODO implement
+		
+		// Add KeyListener to delete documents.
 		table.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
-				// TODO document in readme: typing 'Suppr' deletes a row.
 				if (event.keyCode == SWT.DEL) {
 					Table table = (Table) event.getSource();
 					TableItem item = table.getSelection()[0]; // TODO what if [0] does not exist.
-					SolrDocument document = (SolrDocument) item.getData();
-					server.removeDocument(document);
+					// TODO if local item does not exist on server, then just drop the row.
+					item.setBackground(RED);
 				}
 			}
 		});
-		*/
 
 		// Initialize item count to 1 so we can populate the first row with filters.
 		table.setItemCount(1);
