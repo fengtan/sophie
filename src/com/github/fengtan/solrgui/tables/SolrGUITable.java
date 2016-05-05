@@ -56,7 +56,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		this.facets = getRemoteFacets();
 		this.table = createTable(parent);
 		// Initialize cache + row count.
-		clear();
+		refresh();
 	}
 	
 	/**
@@ -160,7 +160,7 @@ public class SolrGUITable { // TODO extend Composite ?
 					} else {
 						filters.put(filterName, filterValue);
 					}
-					clear();
+					refresh();
 				}
 			});
 		    editor.grabHorizontal = true;
@@ -281,7 +281,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	/*
 	 * Re-populate table with remote data.
 	 */
-	private void clear() {
+	public void refresh() {
 		// TODO re-populate columns/filters ?
 		pages = new HashMap<Integer, SolrDocumentList>();
 		table.setItemCount(1 + getRemoteCount()); // First row is for filters, the rest is for documents.

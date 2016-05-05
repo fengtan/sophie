@@ -37,6 +37,10 @@ public class SolrGUITabItem extends CTabItem {
 		super.dispose();
 	}
 	
+	public void refresh() {
+		table.refresh();
+	}
+	
 	/* TODO implement
 
 	// TODO what is the point of encapsulating server
