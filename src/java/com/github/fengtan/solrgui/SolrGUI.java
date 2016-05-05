@@ -97,7 +97,5 @@ public class SolrGUI {
 	// TODO provide original value for stored fields ?
 	// TODO mode R/W, mode RO
 	// TODO allow to select multiple values for each filter
-	// TODO mv resources src/resources && mv src/com src/java/com
-	
 	
 }
