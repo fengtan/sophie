@@ -62,47 +62,41 @@ public class SolrGUI {
 		return tabFolder;
 	}
 	
-	// TODO status line showing last solr query
 	// TODO keyboard shortcuts
 	// TODO test Solr 5
 	// TODO elasticsearch
 	// TODO about page + github.io
-	// TODO see what features luke provides
 	// TODO document all methods
 	// TODO README mvn clean install; java -jar target/solr-gui-{version}-SNAPSHOT-jar-with-dependencies.jar
 	// TODO drop .settings, .classpath etc
 	// TODO README showing/hiding a column will refresh the table (and wipe out local modifications)
 	// TODO rename solrgui
 	// TODO test Solr < 4
-	// TODO persist rows, fq, q etc ?
-	// TODO dismax, facets, debug etc
 	// TODO allow to create documents with new fields
 	// TODO measure memory footprint
 	// TODO see luke ui
 	// TODO measure table items http://www.eclipse.org/articles/article.php?file=Article-CustomDrawingTableAndTreeItems/index.html
 	// TODO allow to export in xls (may require org.eclipse.nebula.widgets.nattable.extension.poi*.jar)
 	// TODO document in readme: typing 'Suppr' deletes a row.
-	// TODO does sorting scale ?
 	// TODO sort using setSortDirection ?
 	// TODO allow to clone a document
-	// TODO graceful degradation if Luke handlers not provided by server
 	// TODO are all jars required ?
 	// TODO allow to revert a specific document
 	// TODO what if Luke handler is not available
 	// TODO allow not to use the default request handler
-	// TODO status line
-	// TODO generate name from URL ? painful to decide a name
-	// TODO measure memory footprint
-	// TODO see luke ui
+	// TODO status line + possibly show last solr query
 	// TODO measure table items http://www.eclipse.org/articles/article.php?file=Article-CustomDrawingTableAndTreeItems/index.html
 	// TODO allow to export in xls (may require org.eclipse.nebula.widgets.nattable.extension.poi*.jar)
 	// TODO icon in ubuntu launcher
 	// TODO license
 	// TODO sort by ID field by default ? so rows remain the same when modify one
 	// TODO if server empty and click on table viewer -> seems to crash
-	// TODO dismax, facets etc
+	// TODO dismax, spellcheck, debug etc
 	// TODO support HttpSolrServer/CloudSolrServer
 	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
 	// TODO need to launch from root dir for imgs to show up
 	// TODO provide original value for stored fields ?
+	// TODO mode R/W, mode RO
+	// TODO allow to select multiple values for each filter
+	
 }

@@ -184,12 +184,9 @@ public class SolrGUITable { // TODO extend Composite ?
 		}
 		
 		tableViewer.setCellEditors(editors);
-		tableViewer.setCellModifier(new SolrGUICellModifier());
 		
 		return tableViewer;
 	}
-	
-	// TODO allow to select multiple values for each field
 	
 	public void dispose() {
 		tableViewer.getLabelProvider().dispose(); // TODO needed ?
@@ -285,9 +282,12 @@ public class SolrGUITable { // TODO extend Composite ?
 	 * Re-populate table with remote data.
 	 */
 	private void clear() {
+		// TODO re-populate columns/filters ?
 		pages = new HashMap<Integer, SolrDocumentList>();
-		table.setItemCount(getRemoteCount() + 1); // First row is for filters, the rest is for documents.
+		table.setItemCount(1 + getRemoteCount()); // First row is for filters, the rest is for documents.
 		table.clearAll();
 	}
+	
+	// TODO allow to filter value on empty value (e.g. value not set)
 	
 }
