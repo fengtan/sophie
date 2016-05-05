@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -97,7 +98,7 @@ public class SolrGUITable { // TODO extend Composite ?
 			public void handleEvent(Event event) {
 	            TableItem item = (TableItem) event.item;
 	            int rowIndex = table.indexOf(item);
-	            // The first line is used for filters.
+	            // The first line is populated by filters.
 	            if (rowIndex == 0) {
 	            	// TODO might need to populate if existing filters
 	            	return;
@@ -135,8 +136,13 @@ public class SolrGUITable { // TODO extend Composite ?
 			combo.addModifyListener(new ModifyListener() {
 				@Override
 				public void modifyText(ModifyEvent event) {
-					filters.put(combo.getData("field").toString(), combo.getText());
-					// TODO filters.remove() if combo.getText() is empty string
+					String filterName = combo.getData("field").toString();
+					String filterValue = combo.getText();
+					if (StringUtils.isEmpty(filterValue)) {
+						filters.remove(filterName);
+					} else {
+						filters.put(filterName, filterValue);
+					}
 					clear();
 				}
 			});
