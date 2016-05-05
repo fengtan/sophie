@@ -43,18 +43,8 @@ public class SolrGUITabItem extends CTabItem {
 	
 	
 	/* TODO implement
-
-	// TODO what is the point of encapsulating server
 	public void addNewDocument() {
 		server.addDocument();
-		refreshStatusLine();
-	}
-	
-	public void deleteCurrentDocument() {
-		SolrDocument document = table.getSelectedDocument();
-		if (document != null) {
-			server.removeDocument(document);
-		}
 		refreshStatusLine();
 	}
 	
@@ -64,12 +54,6 @@ public class SolrGUITabItem extends CTabItem {
 			// TODO Cloning generate remote exception
 			server.addDocument(document.clone());
 		}
-		refreshStatusLine();
-	}
-	
-	public void clear() {
-		server.clear();
-		table.refresh();
 		refreshStatusLine();
 	}
 	*/

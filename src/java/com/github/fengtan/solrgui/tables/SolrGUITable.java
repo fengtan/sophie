@@ -383,7 +383,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	}
 	
 	public void deleteSelectedDocument() {
-		// TODO if local item (i.e. does not exist on server), then just drop the row.
+		// TODO if local item (i.e. does not exist on server), then just drop the row + update rowcount.
 		TableItem[] items = table.getSelection();
 		if (items.length > 0) {
 			items[0].setBackground(RED);
