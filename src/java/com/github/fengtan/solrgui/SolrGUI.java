@@ -68,7 +68,7 @@ public class SolrGUI {
 	// TODO about page + github.io
 	// TODO document all methods
 	// TODO README mvn clean install; java -jar target/solr-gui-{version}-SNAPSHOT-jar-with-dependencies.jar
-	// TODO drop .settings, .classpath etc
+	// TODO drop .settings, .classpath etc + README import into eclipse
 	// TODO README showing/hiding a column will refresh the table (and wipe out local modifications)
 	// TODO rename solrgui
 	// TODO test Solr < 4
