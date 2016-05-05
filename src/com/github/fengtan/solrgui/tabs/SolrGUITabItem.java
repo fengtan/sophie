@@ -18,10 +18,6 @@ import com.github.fengtan.solrgui.filters.SolrGUIFilterBar;
 import com.github.fengtan.solrgui.statusline.SolrGUIStatusLine;
 import com.github.fengtan.solrgui.tables.SolrGUITable;
 
-// TODO icon in ubuntu launcher
-// TODO license
-// TODO sort by ID field by default ? so rows remain the same when modify one
-// TODO if server empty and click on table viewer -> seems to crash
 public class SolrGUITabItem extends CTabItem {
 
 	private Composite filterBar;
@@ -34,7 +30,7 @@ public class SolrGUITabItem extends CTabItem {
 	public SolrGUITabItem(CTabFolder tabFolder, SolrGUIServer server) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
 		this.server = server;
-		setText(server.getName());
+		setText(server.getURL().toExternalForm());
 		setToolTipText(server.getURL().toString());
 		
 		// Fill in tab.
@@ -115,7 +111,6 @@ public class SolrGUITabItem extends CTabItem {
 	public void refresh() {
 		SolrQuery query = new SolrGUIQuery(filters, table.getFieldsDisplayed());
 		server.refreshDocuments(query);
-		table.refreshColumns();
 		table.refresh();
 		refreshStatusLine();
 	}

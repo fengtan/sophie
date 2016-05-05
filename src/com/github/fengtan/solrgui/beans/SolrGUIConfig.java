@@ -51,8 +51,7 @@ public class SolrGUIConfig {
 		for (Entry<Object, Object> entry:loadProperties().entrySet()) {
 			try {
 				URL url = new URL(entry.getValue().toString());
-				String name = entry.getKey().toString();
-				servers.add(new SolrGUIServer(url, name));	
+				servers.add(new SolrGUIServer(url));
 			} catch(MalformedURLException e) {
 				e.printStackTrace();
 				// TODO AUto-generated catch block
@@ -63,13 +62,13 @@ public class SolrGUIConfig {
 
 	public static void addServer(SolrGUIServer server) {
 		Properties properties = loadProperties();
-		properties.put(server.getName(), server.getURL().toString());
+		properties.put(server.getURL().toExternalForm(), ""); // TODO drop "" and do not use properties files
 		storeProperties(properties);
 	}
 	
 	public static void removeServer(SolrGUIServer server) {
 		Properties properties = loadProperties();
-		properties.remove(server.getName());
+		properties.remove(server.getURL().toExternalForm());
 		storeProperties(properties);
 	} 
 	

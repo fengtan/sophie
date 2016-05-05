@@ -92,7 +92,13 @@ public class SolrGUI {
 	// TODO allow not to use the default request handler
 	// TODO status line
 	// TODO generate name from URL ? painful to decide a name
-
-
+	// TODO measure memory footprint
+	// TODO see luke ui
+	// TODO measure table items http://www.eclipse.org/articles/article.php?file=Article-CustomDrawingTableAndTreeItems/index.html
+	// TODO allow to export in xls (may require org.eclipse.nebula.widgets.nattable.extension.poi*.jar)
+	// TODO icon in ubuntu launcher
+	// TODO license
+	// TODO sort by ID field by default ? so rows remain the same when modify one
+	// TODO if server empty and click on table viewer -> seems to crash
 	
 }

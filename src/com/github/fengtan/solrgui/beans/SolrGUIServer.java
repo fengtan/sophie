@@ -28,16 +28,14 @@ import com.github.fengtan.solrgui.tables.ISolrGUIChangeListener;
 public class SolrGUIServer {
 
 	private URL url;
-	private String name;
 	private SolrServer server;
 	
 	private String[] fields;
 	private List<SolrGUIDocument> documents;
 	private Set<ISolrGUIChangeListener> changeListeners = new HashSet<ISolrGUIChangeListener>();
 
-	public SolrGUIServer(URL url, String name) {
+	public SolrGUIServer(URL url) {
 		this.url = url;
-		this.name = name;
 		this.server = new HttpSolrServer(url.toExternalForm());
 		refreshFields();
 		refreshDocuments(SolrGUIQuery.ALL_DOCUMENTS);
@@ -45,10 +43,6 @@ public class SolrGUIServer {
 	
 	public URL getURL() {
 		return url;
-	}
-	
-	public String getName() {
-		return name;
 	}
 	
 	public void refreshDocuments(SolrQuery query) {
