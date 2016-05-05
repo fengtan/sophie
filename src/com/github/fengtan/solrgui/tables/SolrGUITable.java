@@ -19,7 +19,6 @@ import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.apache.solr.common.SolrDocumentList;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
@@ -44,7 +43,6 @@ public class SolrGUITable { // TODO extend Composite ?
 	private Map<String, String> filters = new HashMap<String, String>();
 
 	private Table table;
-	private TableViewer tableViewer;
 	private SolrServer server;
 
 	public SolrGUITable(Composite parent, String url) {
@@ -52,7 +50,6 @@ public class SolrGUITable { // TODO extend Composite ?
 		this.fields = getRemoteFields(); // TODO what if new fields get created ? refresh ?
 		this.facets = getRemoteFacets();
 		this.table = createTable(parent);
-		this.tableViewer = createTableViewer();
 		// Initialize cache + row count
 		clear();
 	}
@@ -153,24 +150,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		return table;
 	}
 	
-	/**
-	 * Create the TableViewer 
-	 */
-	private TableViewer createTableViewer() {
-		String[] columns = new String[fields.size()];
-		for (int i=0; i<fields.size(); i++) {
-			columns[i] = fields.get(i).getName();
-		}
-		
-		TableViewer tableViewer = new TableViewer(table);
-		tableViewer.setUseHashlookup(true);
-		tableViewer.setColumnProperties(columns);
-
-		return tableViewer;
-	}
-	
 	public void dispose() {
-		tableViewer.getLabelProvider().dispose(); // TODO needed ?
 		server.shutdown(); // TODO move server instantiation/shutdown into SolrGUITabItem ?
 	}
 	
