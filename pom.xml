@@ -83,7 +83,7 @@
   	</dependency>
   	<dependency>
   		<groupId>swt</groupId>
-  		<artifactId>jface</artifactId>
+      <artifactId>jface</artifactId><!-- TODO needed ? used only for dialogs -->
       <version>3.0.1</version>
   	</dependency>
   	<dependency><!-- TODO linux -->

@@ -421,7 +421,8 @@ public class SolrGUITable { // TODO extend Composite ?
 	private void addDocument(SolrDocument document) {
 		documentsAdded.add(document);
 		table.setItemCount(table.getItemCount() + 1);
-		// TODO scroll to new document ?
+		// Scroll to the bottom of the table so we reveal the new document.
+		table.setTopIndex(table.getItemCount() - 1);
 	}
 	
 	public void addEmptyDocument() {
