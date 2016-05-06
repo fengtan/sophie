@@ -58,13 +58,10 @@ public class SolrGUITable { // TODO extend Composite ?
 	private Map<String, String> filters = new HashMap<String, String>();
 
 	// List of documents locally updated/deleted/added.
+	// TODO use List<SolrDocument> instead of List<TableItem> ?
 	private List<TableItem> documentsUpdated;
 	private List<TableItem> documentsDeleted;
-	private List<TableItem> documentsAdded;
-	
-	// Number of documents locally added. We do not use documentsAdded.size() because documentsAdded is populated by the table listener (SWT.SetData) which needs to know the number of local additions itself.
-	// TODO not ideal
-	private int documentsAddedCount;
+	private List<SolrDocument> documentsAdded;
 	
 	private Table table;
 	private SolrServer server;
@@ -118,9 +115,8 @@ public class SolrGUITable { // TODO extend Composite ?
 	            }
 	            SolrDocument document;
 	            // The last lines are populated by local additions.
-	            if (rowIndex >= table.getItemCount() - documentsAddedCount) {
-	            	document = new SolrDocument();
-	            	documentsAdded.add(item);
+	            if (rowIndex >= table.getItemCount() - documentsAdded.size()) {
+	            	document = documentsAdded.get(documentsAdded.size() - table.getItemCount() + rowIndex);
 	            	item.setBackground(GREEN);
 	            } else {
 		            // Use rowIndex - 1 since the first line is used for filters.
@@ -307,10 +303,9 @@ public class SolrGUITable { // TODO extend Composite ?
 	 */
 	public void refresh() {
 		// TODO re-populate columns/filters ?
-		documentsAddedCount = 0;
 		documentsUpdated = new ArrayList<TableItem>();
 		documentsDeleted = new ArrayList<TableItem>();
-		documentsAdded = new ArrayList<TableItem>();
+		documentsAdded = new ArrayList<SolrDocument>();
 		pages = new HashMap<Integer, SolrDocumentList>();
 		// First row is for filters, the rest is for documents (remote + locally added - though no local addition since we have just refreshed documents).
 		table.setItemCount(1 + getRemoteCount());
@@ -352,8 +347,7 @@ public class SolrGUITable { // TODO extend Composite ?
 			}
 		}
 		// Commit local additions.
-		for (TableItem item:documentsAdded) {
-			SolrDocument document = (SolrDocument) item.getData("document");
+		for (SolrDocument document:documentsAdded) {
 			SolrInputDocument input = ClientUtils.toSolrInputDocument(document);
 			try {
 				server.add(input); // Returned object seems to have no relevant information.
@@ -405,22 +399,48 @@ public class SolrGUITable { // TODO extend Composite ?
 		item.setBackground(YELLOW);
 	}
 	
-	public void deleteSelectedDocument() {
+	private void deleteDocument(TableItem item) {
 		// TODO if local item (i.e. does not exist on server), then just drop the row + update rowcount.
+		if (!documentsDeleted.contains(item)) {
+			documentsDeleted.add(item);
+		}
+		item.setBackground(RED);
+	}
+	
+	/**
+	 * If a document is selected, then delete it.
+	 */
+	public void deleteSelectedDocument() {
 		TableItem[] items = table.getSelection();
 		if (items.length > 0) {
-			if (!documentsDeleted.contains(items[0])) {
-				documentsDeleted.add(items[0]);
-			}
-			items[0].setBackground(RED);	
+			deleteDocument(items[0]);
 		}
 	}
 	
 	// TODO deleting a local document should decrease setItemCount + drop from this.documentsAdded.
-	public void addNewDocument() {
-		documentsAddedCount++;
+	private void addDocument(SolrDocument document) {
+		documentsAdded.add(document);
 		table.setItemCount(table.getItemCount() + 1);
 		// TODO scroll to new document ?
+	}
+	
+	public void addEmptyDocument() {
+		addDocument(new SolrDocument());
+	}
+	
+	/**
+	 * If a document is selected, then clone it.
+	 * 
+	 * The ID field is unset so we don't have 2 rows describing the same Solr document.
+	 * TODO "ID" field could be labeled something else 
+	 */
+	public void cloneSelectedDocument() {
+		TableItem[] items = table.getSelection();
+		if (items.length > 0) {
+			SolrDocument document = (SolrDocument) items[0].getData("document");
+			document.removeFields("id"); // TODO what if field "id" does not exist
+			addDocument(document);
+		}
 	}
 	
 	// TODO not ideal

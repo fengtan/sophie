@@ -7,7 +7,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -58,7 +57,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
-				tabItem.getTable().addNewDocument();
+				tabItem.getTable().addEmptyDocument();
 			}
 		});
 
@@ -80,7 +79,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         itemClone.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
-				// TODO implement tabItem.cloneCurrentDocument();
+				tabItem.getTable().cloneSelectedDocument();
 			}
 		});
 
