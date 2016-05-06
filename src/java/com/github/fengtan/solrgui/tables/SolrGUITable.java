@@ -63,7 +63,8 @@ public class SolrGUITable { // TODO extend Composite ?
 	private List<TableItem> documentsAdded;
 	
 	// Number of documents locally added. We do not use documentsAdded.size() because documentsAdded is populated by the table listener (SWT.SetData) which needs to know the number of local additions itself.
-	private int documentsAddedCount = 0;
+	// TODO not ideal
+	private int documentsAddedCount;
 	
 	private Table table;
 	private SolrServer server;
@@ -306,6 +307,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	 */
 	public void refresh() {
 		// TODO re-populate columns/filters ?
+		documentsAddedCount = 0;
 		documentsUpdated = new ArrayList<TableItem>();
 		documentsDeleted = new ArrayList<TableItem>();
 		documentsAdded = new ArrayList<TableItem>();
@@ -322,7 +324,6 @@ public class SolrGUITable { // TODO extend Composite ?
 		// Commit local updates.
 		// TODO does not seem to be possible to update multiple documents.
 		for (TableItem item:documentsUpdated) {
-			// TODO
 			SolrDocument document = (SolrDocument) item.getData("document");
 			SolrInputDocument input = ClientUtils.toSolrInputDocument(document);
 			try {
@@ -334,7 +335,6 @@ public class SolrGUITable { // TODO extend Composite ?
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			break;
 		}
 		// Commit local deletions.
 		for (TableItem item:documentsDeleted) {
@@ -353,7 +353,17 @@ public class SolrGUITable { // TODO extend Composite ?
 		}
 		// Commit local additions.
 		for (TableItem item:documentsAdded) {
-			// TODO
+			SolrDocument document = (SolrDocument) item.getData("document");
+			SolrInputDocument input = ClientUtils.toSolrInputDocument(document);
+			try {
+				server.add(input); // Returned object seems to have no relevant information.
+			} catch (SolrServerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		// Commit on server.
 		try {
