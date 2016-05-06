@@ -97,5 +97,6 @@ public class SolrGUI {
 	// TODO provide original value for stored fields ?
 	// TODO allow to select multiple values for each filter
 	// TODO test modifying 2 documents and then commiting
+	// TODO interface to crud cores (if multicores is turned on)
 	
 }

@@ -62,6 +62,9 @@ public class SolrGUITable { // TODO extend Composite ?
 	private List<TableItem> documentsDeleted;
 	private List<TableItem> documentsAdded;
 	
+	// Number of documents locally added. We do not use documentsAdded.size() because documentsAdded is populated by the table listener (SWT.SetData) which needs to know the number of local additions itself.
+	private int documentsAddedCount = 0;
+	
 	private Table table;
 	private SolrServer server;
 
@@ -95,7 +98,6 @@ public class SolrGUITable { // TODO extend Composite ?
 			@Override
 			public void keyPressed(KeyEvent event) {
 				if (event.keyCode == SWT.DEL) {
-					Table table = (Table) event.getSource();
 					deleteSelectedDocument();
 				}
 			}
@@ -113,17 +115,25 @@ public class SolrGUITable { // TODO extend Composite ?
 	            	// TODO might need to populate if existing filters
 	            	return;
 	            }
-	            // Use rowIndex - 1 since the first line is used for filters.
-	            // TODO make sure the last document gets displayed.
-	            SolrDocument document = getRemoteDocument(rowIndex - 1);
-	            for(int i=0; i<fields.size(); i++) {
-	            	String fieldName = fields.get(i).getName();
-	            	item.setText(i, Objects.toString(document.getFieldValue(fieldName), ""));
+	            SolrDocument document;
+	            // The last lines are populated by local additions.
+	            if (rowIndex >= table.getItemCount() - documentsAddedCount) {
+	            	document = new SolrDocument();
+	            	documentsAdded.add(item);
+	            	item.setBackground(GREEN);
+	            } else {
+		            // Use rowIndex - 1 since the first line is used for filters.
+		            // TODO make sure the last document gets displayed.
+		            document = getRemoteDocument(rowIndex - 1);
 	            }
-	            // Store document in item.
-	            item.setData("document", document);
-	            // TODO use item.setText(String[] values) ?
-	            // TODO store status insert/update/delete using item.setData() ?
+		        for(int i=0; i<fields.size(); i++) {
+		        	String fieldName = fields.get(i).getName();
+		            item.setText(i, Objects.toString(document.getFieldValue(fieldName), ""));
+		        }
+		        // Store document in item.
+		        item.setData("document", document);
+		        // TODO use item.setText(String[] values) ?
+		        // TODO store status insert/update/delete using item.setData() ?
 			}
 		});
 		
@@ -300,7 +310,8 @@ public class SolrGUITable { // TODO extend Composite ?
 		documentsDeleted = new ArrayList<TableItem>();
 		documentsAdded = new ArrayList<TableItem>();
 		pages = new HashMap<Integer, SolrDocumentList>();
-		table.setItemCount(1 + getRemoteCount()); // First row is for filters, the rest is for documents.
+		// First row is for filters, the rest is for documents (remote + locally added - though no local addition since we have just refreshed documents).
+		table.setItemCount(1 + getRemoteCount());
 		table.clearAll();
 	}
 	
@@ -378,17 +389,28 @@ public class SolrGUITable { // TODO extend Composite ?
 
 	public void updateDocument(TableItem item) {
 		// TODO if new record, then leave green
-		item.setBackground(YELLOW);	
-		documentsUpdated.add(item);
+		if (!documentsUpdated.contains(item)) {
+			documentsUpdated.add(item);	
+		}
+		item.setBackground(YELLOW);
 	}
 	
 	public void deleteSelectedDocument() {
 		// TODO if local item (i.e. does not exist on server), then just drop the row + update rowcount.
 		TableItem[] items = table.getSelection();
 		if (items.length > 0) {
-			items[0].setBackground(RED);
-			documentsDeleted.add(items[0]);	
+			if (!documentsDeleted.contains(items[0])) {
+				documentsDeleted.add(items[0]);
+			}
+			items[0].setBackground(RED);	
 		}
+	}
+	
+	// TODO deleting a local document should decrease setItemCount + drop from this.documentsAdded.
+	public void addNewDocument() {
+		documentsAddedCount++;
+		table.setItemCount(table.getItemCount() + 1);
+		// TODO scroll to new document ?
 	}
 	
 	// TODO not ideal
