@@ -22,18 +22,20 @@ public class SolrGUITabItem extends CTabItem {
 	public SolrGUITabItem(CTabFolder tabFolder, String url) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
 		this.url = url;
+		server = new HttpSolrServer(url);
 		setText(formatTabTitle(url));
 		
-		// Fill in tab.
-		Composite tabComposite = new Composite(getParent(), SWT.NULL);
-		tabComposite.setLayout(new GridLayout());
-		server = new HttpSolrServer(url);
-		table = new SolrGUITable(tabComposite, server);
-		setControl(tabComposite); // TODO need composite ? TODO add status line ?
+		// Prepare layout.
+		Composite composite = new Composite(getParent(), SWT.NULL);
+		composite.setLayout(new GridLayout());
+		setControl(composite);
 		
 		// Set focus on this tab.
 		tabFolder.setSelection(this);
 		tabFolder.forceFocus();
+		
+		// Fill in tab.
+		table = new SolrGUITable(composite, server);
 	}
 	
 	private String formatTabTitle(String url) {
