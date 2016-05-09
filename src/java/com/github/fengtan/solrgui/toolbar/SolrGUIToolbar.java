@@ -137,25 +137,16 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         imgClear.dispose();
     }
 
+	// TODO a row should be selected for itemAdd/delete/clone to be enabled
 	@Override
-	public void noTabItem() {
-		itemAdd.setEnabled(false);
-		itemDelete.setEnabled(false);
-		itemClone.setEnabled(false);
-		itemRefresh.setEnabled(false);
-		itemCommit.setEnabled(false);
-		itemClear.setEnabled(false);
-	}
-	
-	@Override
-	public void tabItemAdded() {
-		// TODO a row should be selected for itemAdd/delete/clone to be enabled
-		itemAdd.setEnabled(true);
-		itemDelete.setEnabled(true);
-		itemClone.setEnabled(true);
-		itemRefresh.setEnabled(true);
-		itemCommit.setEnabled(true);
-		itemClear.setEnabled(true);		
+	public void tabItemsCountModified(int newCount) {
+		boolean enabled = (newCount != 0);
+		itemAdd.setEnabled(enabled);
+		itemDelete.setEnabled(enabled);
+		itemClone.setEnabled(enabled);
+		itemRefresh.setEnabled(enabled);
+		itemCommit.setEnabled(enabled);
+		itemClear.setEnabled(enabled);	
 	}
 
 }

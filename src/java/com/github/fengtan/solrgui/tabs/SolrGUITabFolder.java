@@ -67,10 +67,10 @@ public class SolrGUITabFolder extends CTabFolder {
 			@Override
 			public void close(CTabFolderEvent event) {
 				SolrGUIConfig.removeURL(((SolrGUITabItem) event.item).getURL());
-				if (getItemCount() == 1) {
-					for (ISolrGUITabFolderListener listener:listeners) {
-						listener.noTabItem();
-					}
+				// Notify listeners that a tab was removed.
+				// We use -1 since the tab is not closed yet.
+				for (ISolrGUITabFolderListener listener:listeners) {
+					listener.tabItemsCountModified(getItemCount() - 1);
 				}
 			}
 		});
@@ -80,7 +80,7 @@ public class SolrGUITabFolder extends CTabFolder {
 		new SolrGUITabItem(this, url);
 		// Notify listeners that a new tab was added.
 		for (ISolrGUITabFolderListener listener:listeners) {
-			listener.tabItemAdded();
+			listener.tabItemsCountModified(getItemCount());
 		}
 	}
 
