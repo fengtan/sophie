@@ -1,5 +1,8 @@
 package com.github.fengtan.solrgui.tabs;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.eclipse.swt.SWT;
@@ -19,7 +22,7 @@ public class SolrGUITabItem extends CTabItem {
 	public SolrGUITabItem(CTabFolder tabFolder, String url) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
 		this.url = url;
-		setText(url);
+		setText(formatTabTitle(url));
 		
 		// Fill in tab.
 		Composite tabComposite = new Composite(getParent(), SWT.NULL);
@@ -31,6 +34,17 @@ public class SolrGUITabItem extends CTabItem {
 		// Set focus on this tab.
 		tabFolder.setSelection(this);
 		tabFolder.forceFocus();
+	}
+	
+	private String formatTabTitle(String url) {
+		try {
+			URL u = new URL(url);
+			return u.getPath()+"@"+u.getHost()+":"+u.getPort();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return url;
+		}
 	}
 	
 	@Override
