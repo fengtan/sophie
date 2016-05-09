@@ -13,10 +13,12 @@ import com.github.fengtan.solrgui.tables.SolrGUITable;
 public class SolrGUITabItem extends CTabItem {
 
 	private SolrGUITable table;
-	private SolrServer server;
+	private SolrServer server; // TODO move into SolrGUITable ? so we do not store both this.server and this.url
+	private String url; // TODO needed ? should be gettable from this.server
 	
 	public SolrGUITabItem(CTabFolder tabFolder, String url) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
+		this.url = url;
 		setText(url);
 		
 		// Fill in tab.
@@ -31,31 +33,18 @@ public class SolrGUITabItem extends CTabItem {
 		tabFolder.forceFocus();
 	}
 	
-	public SolrGUITable getTable() {
-		return table;
-	}
-	
 	@Override
 	public void dispose() {
 		server.shutdown();
 		super.dispose();
 	}
 	
-	
-	/* TODO implement
-	public void addNewDocument() {
-		server.addDocument();
-		refreshStatusLine();
+	public SolrGUITable getTable() {
+		return table;
 	}
 	
-	public void cloneCurrentDocument() {
-		SolrDocument document = table.getSelectedDocument();
-		if (document != null) {
-			// TODO Cloning generate remote exception
-			server.addDocument(document.clone());
-		}
-		refreshStatusLine();
+	public String getURL() {
+		return url;
 	}
-	*/
 	
 }

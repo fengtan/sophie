@@ -81,6 +81,11 @@
   		<artifactId>commons-lang3</artifactId>
   		<version>3.3.2</version>
   	</dependency>
+    <dependency>
+      <groupId>org.ini4j</groupId>
+      <artifactId>ini4j</artifactId>
+      <version>0.5.2</version>
+    </dependency>
   	<dependency>
   		<groupId>swt</groupId>
       <artifactId>jface</artifactId><!-- TODO needed ? used only for dialogs -->

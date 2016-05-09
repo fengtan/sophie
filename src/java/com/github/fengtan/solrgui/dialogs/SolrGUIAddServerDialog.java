@@ -51,7 +51,7 @@ public class SolrGUIAddServerDialog extends Dialog {
 		if (buttonId == 0) {
 			// TODO do not create if server already exists.
 	    	// TODO validate connection/url before saving
-            SolrGUIConfig.addServer(url.getText());
+            SolrGUIConfig.addURL(url.getText());
             tabFolder.addTabItem(url.getText());
 		}
 		super.buttonPressed(buttonId);

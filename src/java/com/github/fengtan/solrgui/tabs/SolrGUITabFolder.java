@@ -66,7 +66,7 @@ public class SolrGUITabFolder extends CTabFolder {
 		addCTabFolder2Listener(new CTabFolder2Adapter() {
 			@Override
 			public void close(CTabFolderEvent event) {
-				// TODO drop from config: SolrGUIConfig.removeServer(((SolrGUITabItem) event.item).getServer());
+				SolrGUIConfig.removeURL(((SolrGUITabItem) event.item).getURL());
 				if (getItemCount() == 1) {
 					for (ISolrGUITabFolderListener listener:listeners) {
 						listener.noTabItem();
