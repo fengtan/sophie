@@ -36,7 +36,8 @@ public class SolrGUIConfig {
 	
 	public static List<String> getURLs() {
 		try {
-			return getIni().get("global").getAll("urls");
+			Section section = getIni().get("global");
+			return section.containsKey("urls") ? section.getAll("urls") : Collections.EMPTY_LIST;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -58,12 +59,16 @@ public class SolrGUIConfig {
 	public static void removeURL(String url) {
 		try {
 			Ini ini = getIni();
-			List<String> urls = ini.get("global").getAll("urls");
-			int index = urls.indexOf(url);
-			if (index != -1) {
-				ini.get("global").remove("urls", index);
-				ini.store();
+			Section section = ini.get("global");
+			if (!section.containsKey("urls")) {
+				return;
 			}
+			int index = section.getAll("urls").indexOf(url);
+			if (index == -1) {
+				return;
+			}
+			section.remove("urls", index);
+			ini.store();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
