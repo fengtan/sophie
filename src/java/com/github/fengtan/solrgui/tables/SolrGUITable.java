@@ -52,6 +52,9 @@ public class SolrGUITable { // TODO extend Composite ?
 	// Fetch 50 documents at a time. TODO make this configurable ?
 	private static final int PAGE_SIZE = 50;
 	
+	// Display 50 facet values at most. TODO make this configurable ?
+	private static final int FACET_LIMIT = 50;
+	
 	private Map<Integer, SolrDocumentList> pages;
 	private List<FieldInfo> fields;
 	private Map<String, FacetField> facets;
@@ -145,47 +148,50 @@ public class SolrGUITable { // TODO extend Composite ?
 		TableItem[] items = table.getItems(); // TODO do we need to load all items ?
 		TableEditor editor = new TableEditor(table);
 		for(int i=0; i<fields.size(); i++) {
-			final CCombo combo = new CCombo(table, SWT.NONE);
-			combo.add("");
 			// TODO check if map contains field ?
-			// TODO no need to use facets for tm_body for instance
 			FacetField facet = facets.get(fields.get(i).getName());
-			for(Count count:facet.getValues()) {
-				combo.add(count.getName()); // TODO use count.getCount() too ?
-			}
-			combo.setData("field", facet.getName());
-			/*
-			 * TODO could use this instead of storing field name in setData() 
-			 * Point point = new Point(event.x, event.y);
-		     * TableItem item = table.getItem(point);
-		     * if (item == null) {
-		     *   return;
-		     * }
-		     * for (int i=0; i<fields.size(); i++) {
-		     *   Rectangle rect = item.getBounds(i);
-		     *   if (rect.contains(point)) {
-		     *     SolrDocument document = (SolrDocument) item.getData("document");
-		     *     dialog.open(item.getText(i), fields.get(i).getName(), document);
-		     *   }
-		     * }
-			 */
-			// Filter results when user selects a facet value.
-			combo.addModifyListener(new ModifyListener() {
-				@Override
-				public void modifyText(ModifyEvent event) {
-					String filterName = combo.getData("field").toString();
-					String filterValue = combo.getText();
-					if (StringUtils.isEmpty(filterValue)) {
-						filters.remove(filterName);
-					} else {
-						filters.put(filterName, filterValue);
-					}
-					refresh();
+			// If the number of facet values is the max, then the list of facet values might not be complete. Hence we use a free text field instead of populating the combo.  
+			// TODO else add free text field
+			if (facet.getValueCount() < FACET_LIMIT) {
+				final CCombo combo = new CCombo(table, SWT.NONE);
+				combo.add("");
+				for(Count count:facet.getValues()) {
+					combo.add(count.getName()); // TODO use count.getCount() too ?
 				}
-			});
-		    editor.grabHorizontal = true;
-		    editor.setEditor(combo, items[0], i);
-		    editor = new TableEditor(table);
+				combo.setData("field", facet.getName());
+				/*
+				 * TODO could use this instead of storing field name in setData() 
+				 * Point point = new Point(event.x, event.y);
+			     * TableItem item = table.getItem(point);
+			     * if (item == null) {
+			     *   return;
+			     * }
+			     * for (int i=0; i<fields.size(); i++) {
+			     *   Rectangle rect = item.getBounds(i);
+			     *   if (rect.contains(point)) {
+			     *     SolrDocument document = (SolrDocument) item.getData("document");
+			     *     dialog.open(item.getText(i), fields.get(i).getName(), document);
+			     *   }
+			     * }
+				 */
+				// Filter results when user selects a facet value.
+				combo.addModifyListener(new ModifyListener() {
+					@Override
+					public void modifyText(ModifyEvent event) {
+						String filterName = combo.getData("field").toString();
+						String filterValue = combo.getText();
+						if (StringUtils.isEmpty(filterValue)) {
+							filters.remove(filterName);
+						} else {
+							filters.put(filterName, filterValue);
+						}
+						refresh();
+					}
+				});
+			    editor.grabHorizontal = true;
+			    editor.setEditor(combo, items[0], i);
+			    editor = new TableEditor(table);
+			}
 		}
 		
 		// Add editor dialog.
@@ -250,7 +256,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		SolrQuery query = getBaseQuery(0, 0);
 		query.setFacet(true);
 		query.setFacetSort("index");
-		query.setFacetLimit(-1); // TODO or set a limit ? no limit could be bad for perf
+		query.setFacetLimit(FACET_LIMIT);
 		for(FieldInfo field:fields) {
 			// TODO we don't want facets on fields with too many values
 			query.addFacetField(field.getName());	
