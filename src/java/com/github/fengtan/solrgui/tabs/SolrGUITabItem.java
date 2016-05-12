@@ -10,6 +10,7 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 import com.github.fengtan.solrgui.tables.SolrGUITable;
 
@@ -35,7 +36,16 @@ public class SolrGUITabItem extends CTabItem {
 		tabFolder.forceFocus();
 		
 		// Fill in tab.
-		table = new SolrGUITable(composite, server);
+		try {
+			server.ping(); // TODO check that response is "OK" ?
+			table = new SolrGUITable(composite, server);
+		} catch (Throwable t) {
+			// TODO add button "retry"
+			// TODO what if server works and then goes down
+			t.printStackTrace();
+			new Label(composite, SWT.NULL).setText(t.getMessage());
+		}
+		composite.pack();
 	}
 	
 	private String formatTabTitle(String url) {
