@@ -292,8 +292,9 @@ public class SolrGUITable { // TODO extend Composite ?
 		query.setStart(start);
 		query.setRows(rows);
 		// Add filters. TODO move filters outside of this function ? no need to set fq for facets
+		// We escape colons in the field value to avoid a syntax error from Solr.
 		for (Entry<String, String> filter:filters.entrySet()) {
-			query.addFilterQuery(filter.getKey()+":"+filter.getValue());
+			query.addFilterQuery(filter.getKey()+":"+filter.getValue().replace(":", "\\:"));
 		}
 		return query;
 	}
