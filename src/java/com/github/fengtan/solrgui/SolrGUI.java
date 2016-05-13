@@ -98,5 +98,6 @@ public class SolrGUI {
 	// TODO allow to select multiple values for each filter
 	// TODO test modifying 2 documents and then commiting
 	// TODO interface to crud cores (if multicores is turned on)
+	// TODO doc cannot filter on unindexed fields
 	
 }

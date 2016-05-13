@@ -22,6 +22,7 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.luke.FieldFlag;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
@@ -50,7 +51,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	private static final Color GREEN = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 	
 	// Fetch 50 documents at a time. TODO make this configurable ?
-	private static final int PAGE_SIZE = 50;
+	private static final int PAGE_SIZE = 25;
 	
 	// Display 50 facet values at most. TODO make this configurable ?
 	private static final int FACET_LIMIT = 50;
@@ -152,7 +153,8 @@ public class SolrGUITable { // TODO extend Composite ?
 			FacetField facet = facets.get(fields.get(i).getName());
 			// If the number of facet values is the max, then the list of facet values might not be complete. Hence we use a free text field instead of populating the combo.  
 			// TODO else add free text field
-			if (facet.getValueCount() < FACET_LIMIT) {
+			// TODO if facet = null then no filter possible (e.g. field is not indexed) -> grey out cell
+			if ((facet != null) && (facet.getValueCount() < FACET_LIMIT)) {
 				final CCombo combo = new CCombo(table, SWT.NONE);
 				combo.add("");
 				for(Count count:facet.getValues()) {
@@ -218,6 +220,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	
 	private List<FieldInfo> getRemoteFields() {
 		LukeRequest request = new LukeRequest();
+		request.setShowSchema(true);
 		try {
 			LukeResponse response = request.process(server);
 			return new ArrayList<FieldInfo>(response.getFieldInfo().values());
@@ -258,8 +261,10 @@ public class SolrGUITable { // TODO extend Composite ?
 		query.setFacetSort("index");
 		query.setFacetLimit(FACET_LIMIT);
 		for(FieldInfo field:fields) {
-			// TODO we don't want facets on fields with too many values
-			query.addFacetField(field.getName());	
+			// fq works only on indexed fields. 
+			if (field.getFlags().contains(FieldFlag.INDEXED)) {
+				query.addFacetField(field.getName());	
+			}	
 		}
 		Map<String, FacetField> facets = new HashMap<String, FacetField>();
 		try {
