@@ -35,12 +35,14 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.dialogs.SolrGUIEditValueDialog;
 
@@ -151,11 +153,13 @@ public class SolrGUITable { // TODO extend Composite ?
 		for(int i=0; i<fields.size(); i++) {
 			// TODO check if map contains field ?
 			FacetField facet = facets.get(fields.get(i).getName());
-			// If the number of facet values is the max, then the list of facet values might not be complete. Hence we use a free text field instead of populating the combo.  
-			// TODO else add free text field
-			// TODO if facet = null then no filter possible (e.g. field is not indexed) -> grey out cell
-			if ((facet != null) && (facet.getValueCount() < FACET_LIMIT)) {
-				final CCombo combo = new CCombo(table, SWT.NONE);
+			// If facet is null then we cannot filter on this field (e.g. the field is not indexed).
+			if (facet == null) {
+				// TODO grey out items[0] columns i
+				continue;
+			}
+			if (facet.getValueCount() < FACET_LIMIT) {
+				final CCombo combo = new CCombo(table, SWT.BORDER);
 				combo.add("");
 				for(Count count:facet.getValues()) {
 					combo.add(count.getName()); // TODO use count.getCount() too ?
@@ -192,6 +196,43 @@ public class SolrGUITable { // TODO extend Composite ?
 				});
 			    editor.grabHorizontal = true;
 			    editor.setEditor(combo, items[0], i);
+			    editor = new TableEditor(table);
+			} else {
+				// TODO merge with code for Combo.
+				final Text text = new Text(table, SWT.BORDER);
+				text.setData("field", facet.getName());
+				/*
+				 * TODO could use this instead of storing field name in setData() 
+				 * Point point = new Point(event.x, event.y);
+			     * TableItem item = table.getItem(point);
+			     * if (item == null) {
+			     *   return;
+			     * }
+			     * for (int i=0; i<fields.size(); i++) {
+			     *   Rectangle rect = item.getBounds(i);
+			     *   if (rect.contains(point)) {
+			     *     SolrDocument document = (SolrDocument) item.getData("document");
+			     *     dialog.open(item.getText(i), fields.get(i).getName(), document);
+			     *   }
+			     * }
+				 */
+				// Filter results when user selects a facet value.
+				text.addModifyListener(new ModifyListener() {
+					@Override
+					public void modifyText(ModifyEvent event) {
+						String filterName = text.getData("field").toString();
+						String filterValue = text.getText();
+						if (StringUtils.isEmpty(filterValue)) {
+							filters.remove(filterName);
+						} else {
+							filters.put(filterName, filterValue);
+						}
+						refresh();
+					}
+				});
+				// If the number of facet values is the max, then the list of facet values might not be complete. Hence we use a free text field instead of populating the combo.
+			    editor.grabHorizontal = true;
+			    editor.setEditor(text, items[0], i);
 			    editor = new TableEditor(table);
 			}
 		}

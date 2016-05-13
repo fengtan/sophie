@@ -82,7 +82,6 @@ public class SolrGUI {
 	// TODO allow to clone a document
 	// TODO are all jars required ?
 	// TODO allow to revert a specific document
-	// TODO what if Luke handler is not available
 	// TODO allow not to use the default request handler
 	// TODO status line + possibly show last solr query
 	// TODO measure table items http://www.eclipse.org/articles/article.php?file=Article-CustomDrawingTableAndTreeItems/index.html
@@ -99,5 +98,6 @@ public class SolrGUI {
 	// TODO test modifying 2 documents and then commiting
 	// TODO interface to crud cores (if multicores is turned on)
 	// TODO doc cannot filter on unindexed fields
+	// TODO travis
 	
 }
