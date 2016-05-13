@@ -158,33 +158,35 @@ public class SolrGUITable { // TODO extend Composite ?
 				// TODO grey out items[0] columns i
 				continue;
 			}
+			final Control widget;
+			/*
+			 * TODO could use this instead of storing field name in setData() 
+			 * Point point = new Point(event.x, event.y);
+		     * TableItem item = table.getItem(point);
+		     * if (item == null) {
+		     *   return;
+		     * }
+		     * for (int i=0; i<fields.size(); i++) {
+		     *   Rectangle rect = item.getBounds(i);
+		     *   if (rect.contains(point)) {
+		     *     SolrDocument document = (SolrDocument) item.getData("document");
+		     *     dialog.open(item.getText(i), fields.get(i).getName(), document);
+		     *   }
+		     * }
+			 */
+			// If the number of facet values is the max, then the list of facet values might not be complete. Hence we use a free text field instead of populating the combo.
 			if (facet.getValueCount() < FACET_LIMIT) {
 				final CCombo combo = new CCombo(table, SWT.BORDER);
 				combo.add("");
 				for(Count count:facet.getValues()) {
 					combo.add(count.getName()); // TODO use count.getCount() too ?
 				}
-				combo.setData("field", facet.getName());
-				/*
-				 * TODO could use this instead of storing field name in setData() 
-				 * Point point = new Point(event.x, event.y);
-			     * TableItem item = table.getItem(point);
-			     * if (item == null) {
-			     *   return;
-			     * }
-			     * for (int i=0; i<fields.size(); i++) {
-			     *   Rectangle rect = item.getBounds(i);
-			     *   if (rect.contains(point)) {
-			     *     SolrDocument document = (SolrDocument) item.getData("document");
-			     *     dialog.open(item.getText(i), fields.get(i).getName(), document);
-			     *   }
-			     * }
-				 */
+				widget = combo;
 				// Filter results when user selects a facet value.
 				combo.addModifyListener(new ModifyListener() {
 					@Override
 					public void modifyText(ModifyEvent event) {
-						String filterName = combo.getData("field").toString();
+						String filterName = widget.getData("field").toString();
 						String filterValue = combo.getText();
 						if (StringUtils.isEmpty(filterValue)) {
 							filters.remove(filterName);
@@ -194,33 +196,14 @@ public class SolrGUITable { // TODO extend Composite ?
 						refresh();
 					}
 				});
-			    editor.grabHorizontal = true;
-			    editor.setEditor(combo, items[0], i);
-			    editor = new TableEditor(table);
 			} else {
-				// TODO merge with code for Combo.
 				final Text text = new Text(table, SWT.BORDER);
-				text.setData("field", facet.getName());
-				/*
-				 * TODO could use this instead of storing field name in setData() 
-				 * Point point = new Point(event.x, event.y);
-			     * TableItem item = table.getItem(point);
-			     * if (item == null) {
-			     *   return;
-			     * }
-			     * for (int i=0; i<fields.size(); i++) {
-			     *   Rectangle rect = item.getBounds(i);
-			     *   if (rect.contains(point)) {
-			     *     SolrDocument document = (SolrDocument) item.getData("document");
-			     *     dialog.open(item.getText(i), fields.get(i).getName(), document);
-			     *   }
-			     * }
-				 */
+				widget = text;
 				// Filter results when user selects a facet value.
 				text.addModifyListener(new ModifyListener() {
 					@Override
 					public void modifyText(ModifyEvent event) {
-						String filterName = text.getData("field").toString();
+						String filterName = widget.getData("field").toString();
 						String filterValue = text.getText();
 						if (StringUtils.isEmpty(filterValue)) {
 							filters.remove(filterName);
@@ -230,11 +213,11 @@ public class SolrGUITable { // TODO extend Composite ?
 						refresh();
 					}
 				});
-				// If the number of facet values is the max, then the list of facet values might not be complete. Hence we use a free text field instead of populating the combo.
-			    editor.grabHorizontal = true;
-			    editor.setEditor(text, items[0], i);
-			    editor = new TableEditor(table);
 			}
+			widget.setData("field", facet.getName());
+		    editor.grabHorizontal = true;
+		    editor.setEditor(widget, items[0], i);
+		    editor = new TableEditor(table);
 		}
 		
 		// Add editor dialog.
