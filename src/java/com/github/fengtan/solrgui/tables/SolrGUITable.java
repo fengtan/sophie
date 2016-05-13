@@ -230,6 +230,10 @@ public class SolrGUITable { // TODO extend Composite ?
 		    	if (item == null) {
 		    		return;
 		    	}
+		    	// The first row is used for filters.
+		    	if (table.indexOf(item) == 0) {
+		    		return;
+		    	}
 		    	for (int i=0; i<fields.size(); i++) {
 		    		Rectangle rect = item.getBounds(i);
 		    		if (rect.contains(point)) {
