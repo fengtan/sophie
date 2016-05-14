@@ -99,5 +99,9 @@ public class SolrGUI {
 	// TODO interface to crud cores (if multicores is turned on)
 	// TODO doc cannot filter on unindexed fields
 	// TODO travis
+    // TODO unstored fields = empty data
+	// TODO doc assume luke handler + select is available
+	// TODO control level of logging of solrj
+	// TODO log solr requests
 	
 }

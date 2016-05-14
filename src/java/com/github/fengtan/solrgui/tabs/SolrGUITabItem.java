@@ -1,10 +1,11 @@
 package com.github.fengtan.solrgui.tabs;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -17,13 +18,13 @@ import com.github.fengtan.solrgui.tables.SolrGUITable;
 public class SolrGUITabItem extends CTabItem {
 
 	private SolrGUITable table;
-	private SolrServer server; // TODO move into SolrGUITable ? so we do not store both this.server and this.url
+	private SolrClient client; // TODO move into SolrGUITable ? so we do not store both this.server and this.url
 	private String url; // TODO needed ? should be gettable from this.server
 	
 	public SolrGUITabItem(CTabFolder tabFolder, String url) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
 		this.url = url;
-		server = new HttpSolrServer(url);
+		client = new HttpSolrClient(url);
 		setText(formatTabTitle(url));
 		
 		// Prepare layout.
@@ -37,8 +38,8 @@ public class SolrGUITabItem extends CTabItem {
 		
 		// Fill in tab.
 		try {
-			server.ping(); // TODO check that response is "OK" ?
-			table = new SolrGUITable(composite, server);
+			client.ping(); // TODO check that response is "OK" ?
+			table = new SolrGUITable(composite, client);
 		} catch (Throwable t) {
 			// TODO add button "retry"
 			// TODO what if server works and then goes down
@@ -61,7 +62,12 @@ public class SolrGUITabItem extends CTabItem {
 	
 	@Override
 	public void dispose() {
-		server.shutdown();
+		try {
+			client.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		super.dispose();
 	}
 	

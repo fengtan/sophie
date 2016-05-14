@@ -9,16 +9,15 @@ import java.util.Map.Entry;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
-import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
@@ -70,10 +69,10 @@ public class SolrGUITable { // TODO extend Composite ?
 	private List<SolrDocument> documentsAdded;
 	
 	private Table table;
-	private SolrServer server;
+	private SolrClient client;
 
-	public SolrGUITable(Composite parent, SolrServer server) {
-		this.server = server;
+	public SolrGUITable(Composite parent, SolrClient client) {
+		this.client = client;
 		this.fields = getRemoteFields(); // TODO what if new fields get created ? refresh ?
 		this.facets = getRemoteFacets();
 		this.table = createTable(parent);
@@ -248,9 +247,8 @@ public class SolrGUITable { // TODO extend Composite ?
 	
 	private List<FieldInfo> getRemoteFields() {
 		LukeRequest request = new LukeRequest();
-		request.setShowSchema(true);
 		try {
-			LukeResponse response = request.process(server);
+			LukeResponse response = request.process(client);
 			return new ArrayList<FieldInfo>(response.getFieldInfo().values());
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
@@ -271,9 +269,13 @@ public class SolrGUITable { // TODO extend Composite ?
 		SolrQuery query = getBaseQuery(0, 0);
 		try {
 			// Solr returns a long, table expects an int.
-			long count = server.query(query).getResults().getNumFound();
+			long count = client.query(query).getResults().getNumFound();
 			return Integer.parseInt(String.valueOf(count));
 		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return 0;
@@ -289,17 +291,21 @@ public class SolrGUITable { // TODO extend Composite ?
 		query.setFacetSort("index");
 		query.setFacetLimit(FACET_LIMIT);
 		for(FieldInfo field:fields) {
-			// fq works only on indexed fields. 
-			if (field.getFlags().contains(FieldFlag.INDEXED)) {
+			// fq works only on indexed fields.
+			// field.getFlags() is not populated when lukeRequest.setSchema(false) so we parse flags ourselves based on field.getSchema() TODO open ticket
+			if (FieldInfo.parseFlags(field.getSchema()).contains(FieldFlag.INDEXED)) {
 				query.addFacetField(field.getName());	
 			}	
 		}
 		Map<String, FacetField> facets = new HashMap<String, FacetField>();
 		try {
-			for(FacetField facet:server.query(query).getFacetFields()) {
+			for(FacetField facet:client.query(query).getFacetFields()) {
 				facets.put(facet.getName(), facet);
 			}
 		} catch(SolrServerException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return facets;
@@ -317,9 +323,12 @@ public class SolrGUITable { // TODO extend Composite ?
 			// TODO user should be able to change sort column. 
 			query.setSort("id", ORDER.asc);
 			try {
-				pages.put(page, server.query(query).getResults());	
+				pages.put(page, client.query(query).getResults());	
 			} catch(SolrServerException e) {
 				// TODO handle exception
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -360,9 +369,12 @@ public class SolrGUITable { // TODO extend Composite ?
 		// TODO does not seem to be possible to update multiple documents.
 		for (TableItem item:documentsUpdated) {
 			SolrDocument document = (SolrDocument) item.getData("document");
-			SolrInputDocument input = ClientUtils.toSolrInputDocument(document);
+			SolrInputDocument input = new SolrInputDocument();
+		    for (String name:document.getFieldNames()) {
+		    	input.addField(name, document.getFieldValue(name), 1.0f);
+		    }
 			try {
-				server.add(input); // Returned object seems to have no relevant information.
+				client.add(input); // Returned object seems to have no relevant information.
 			} catch (SolrServerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -377,7 +389,7 @@ public class SolrGUITable { // TODO extend Composite ?
 			SolrDocument document = (SolrDocument) item.getData("document");
 			String id = document.getFieldValue("id").toString(); // TODO what if no field named "id"
 			try {
-				server.deleteById(id);
+				client.deleteById(id);
 			} catch (SolrServerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -388,9 +400,12 @@ public class SolrGUITable { // TODO extend Composite ?
 		}
 		// Commit local additions.
 		for (SolrDocument document:documentsAdded) {
-			SolrInputDocument input = ClientUtils.toSolrInputDocument(document);
+			SolrInputDocument input = new SolrInputDocument();
+		    for (String name:document.getFieldNames()) {
+		    	input.addField(name, document.getFieldValue(name), 1.0f);
+		    }
 			try {
-				server.add(input); // Returned object seems to have no relevant information.
+				client.add(input); // Returned object seems to have no relevant information.
 			} catch (SolrServerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -401,7 +416,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		}
 		// Commit on server.
 		try {
-			server.commit();
+			client.commit();
 			// TODO allow to revert a specific document
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
@@ -419,8 +434,8 @@ public class SolrGUITable { // TODO extend Composite ?
 	 */
 	public void clear() {
 		try {
-			server.deleteByQuery("*:*");
-			server.commit();
+			client.deleteByQuery("*:*");
+			client.commit();
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
