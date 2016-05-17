@@ -51,10 +51,12 @@ public class SolrGUIEditValueDialog extends Dialog {
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
+			// TODO move into table.updateDocument() ?
 			if (!StringUtils.equals(oldValue, newValue.getText())) {
-				item.setText(columnIndex, newValue.getText());
 				SolrDocument document = (SolrDocument) item.getData("document");
-				document.setField(table.getFields().get(columnIndex).getName(), newValue.getText());
+				// We reduce by 1 since the first column is used for row ID.
+				document.setField(table.getFields().get(columnIndex-1).getName(), newValue.getText());
+				item.setText(columnIndex, newValue.getText());
 				table.updateDocument(item);
 			}
 		}

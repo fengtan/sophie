@@ -128,9 +128,12 @@ public class SolrGUITable { // TODO extend Composite ?
 		            // TODO make sure the last document gets displayed.
 		            document = getRemoteDocument(rowIndex - 1);
 	            }
-		        for(int i=0; i<fields.size(); i++) {
+	            // First column is used to show the row ID.
+	            item.setText(0, Integer.toString(rowIndex));
+	            // Subsequent columns are used to show field values.
+		        for (int i=0; i<fields.size(); i++) {
 		        	String fieldName = fields.get(i).getName();
-		            item.setText(i, Objects.toString(document.getFieldValue(fieldName), ""));
+		            item.setText(i+1, Objects.toString(document.getFieldValue(fieldName), ""));
 		        }
 		        // Store document in item.
 		        item.setData("document", document);
@@ -139,7 +142,10 @@ public class SolrGUITable { // TODO extend Composite ?
 			}
 		});
 		
-		// Add columns
+		// Add columns. First one is used to show row IDs.
+		TableColumn columnNumber = new TableColumn(table, SWT.LEFT);
+		columnNumber.setText("#");
+		columnNumber.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
 		for (FieldInfo field:fields) {
 			TableColumn column = new TableColumn(table, SWT.LEFT);
 			column.setText(field.getName());
@@ -215,7 +221,8 @@ public class SolrGUITable { // TODO extend Composite ?
 			}
 			widget.setData("field", facet.getName());
 		    editor.grabHorizontal = true;
-		    editor.setEditor(widget, items[0], i);
+		    // We add one since the first column is used for row ID.
+		    editor.setEditor(widget, items[0], i+1);
 		    editor = new TableEditor(table);
 		}
 		
@@ -233,10 +240,11 @@ public class SolrGUITable { // TODO extend Composite ?
 		    	if (table.indexOf(item) == 0) {
 		    		return;
 		    	}
+		    	// We add 1 since the first column is used for row ID's.
 		    	for (int i=0; i<fields.size(); i++) {
-		    		Rectangle rect = item.getBounds(i);
+		    		Rectangle rect = item.getBounds(i+1);
 		    		if (rect.contains(point)) {
-		    			dialog.open(item.getText(i), item, i, tmp);
+		    			dialog.open(item.getText(i+1), item, i+1, tmp);
 		    		}
 		    	}
 			}
