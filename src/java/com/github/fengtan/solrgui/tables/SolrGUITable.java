@@ -52,7 +52,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	private static final Color GREEN = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 	
 	// Fetch 50 documents at a time. TODO make this configurable ?
-	private static final int PAGE_SIZE = 25;
+	private static final int PAGE_SIZE = 50;
 	
 	// Display 50 facet values at most. TODO make this configurable ?
 	private static final int FACET_LIMIT = 50;
