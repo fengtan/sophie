@@ -1,7 +1,6 @@
 package com.github.fengtan.solrgui.dialogs;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.solr.common.SolrDocument;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -51,13 +50,8 @@ public class SolrGUIEditValueDialog extends Dialog {
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
-			// TODO move into table.updateDocument() ?
 			if (!StringUtils.equals(oldValue, newValue.getText())) {
-				SolrDocument document = (SolrDocument) item.getData("document");
-				// We reduce by 1 since the first column is used for row ID.
-				document.setField(table.getFields().get(columnIndex-1).getName(), newValue.getText());
-				item.setText(columnIndex, newValue.getText());
-				table.updateDocument(item);
+				table.updateDocument(item, columnIndex, newValue.getText());
 			}
 		}
 		super.buttonPressed(buttonId);

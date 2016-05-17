@@ -454,7 +454,11 @@ public class SolrGUITable { // TODO extend Composite ?
 		refresh();
 	}
 
-	public void updateDocument(TableItem item) {
+	public void updateDocument(TableItem item, int columnIndex, String newValue) {
+		SolrDocument document = (SolrDocument) item.getData("document");
+		// We reduce by 1 since the first column is used for row ID.
+		document.setField(fields.get(columnIndex-1).getName(), newValue);
+		item.setText(columnIndex, newValue);
 		// TODO if new record, then leave green
 		if (!documentsUpdated.contains(item)) {
 			documentsUpdated.add(item);	
@@ -506,12 +510,7 @@ public class SolrGUITable { // TODO extend Composite ?
 			addDocument(document);
 		}
 	}
-	
-	// TODO not ideal
-	public List<FieldInfo> getFields() {
-		return fields;
-	}
-	
+
 	// TODO allow to filter value on empty value (e.g. value not set)
 	
 }
