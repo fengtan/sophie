@@ -68,7 +68,7 @@ public class SolrGUI {
 	// TODO about page + github.io
 	// TODO document all methods
 	// TODO README mvn clean install; java -jar target/solr-gui-{version}-SNAPSHOT-jar-with-dependencies.jar
-	// TODO drop .settings, .classpath etc + README import into eclipse
+	// TODO doc import into eclipse
 	// TODO README showing/hiding a column will refresh the table (and wipe out local modifications)
 	// TODO rename solrgui
 	// TODO test Solr < 4
@@ -99,11 +99,11 @@ public class SolrGUI {
 	// TODO interface to crud cores (if multicores is turned on)
 	// TODO doc cannot filter on unindexed fields
 	// TODO travis
-  // TODO unstored fields = empty data
+    // TODO unstored fields = empty data
 	// TODO doc assume luke handler + select is available
 	// TODO control level of logging of solrj
 	// TODO log solr requests
-  // TODO doc https://issues.apache.org/jira/browse/SOLR-20
-  // TODO doc log4j.prop + ubuntu package should expose it in /etc
+    // TODO doc https://issues.apache.org/jira/browse/SOLR-20
+    // TODO doc log4j.prop + ubuntu package should expose it in /etc
 	
 }
