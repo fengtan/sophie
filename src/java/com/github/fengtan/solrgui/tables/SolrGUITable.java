@@ -2,6 +2,7 @@ package com.github.fengtan.solrgui.tables;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,6 +150,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		        	// TODO disable doubleclick on unstored fields ?
 		        	// TODO verify "(not stored)" is not sent to Solr when updating/creating a new document
 		        	// TODO prepopulate if create a new document ?
+					// field.getFlags() is not populated when lukeRequest.setSchema(false) so we parse flags ourselves based on field.getSchema() TODO open ticket
 		        	if (!FieldInfo.parseFlags(fields.get(i).getSchema()).contains(FieldFlag.STORED)) {
 		        		item.setText(i+1, LABEL_NOT_STORED);
 		        	} else {
@@ -169,12 +171,17 @@ public class SolrGUITable { // TODO extend Composite ?
 		for (final FieldInfo field:fields) {
 			final TableColumn column = new TableColumn(table, SWT.LEFT);
 			// Add space padding so we can see the sort signifier.
-			column.setText(field.getName()+"     "); // TODO set signifier on uniqueKey by default ?
-			column.setData("field", field.getName());
+			// TODO set sort signifier on uniqueKey by default ?
+			// TODO refactor with selection listener
+			column.setText(field.getName()+(isFieldSortable(field) ? "     " : " \u2205")); // TODO constant unicode
+			column.setData("field", field);
 			// Sort column when click on the header
-			// TODO cannot sort on all fields (unstored, unindexed, dates, etc)
 			column.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
+					if (!isFieldSortable(field)) {
+						// TODO show edit dialog or log info or show tooltip
+						return;
+					}
 					// Clicking on the current sort field toggles the direction.
 					// Clicking on a new field changes the sort field.
 					if (StringUtils.equals(sortField, field.getName())) {
@@ -182,16 +189,20 @@ public class SolrGUITable { // TODO extend Composite ?
 					} else {
 						sortField = field.getName();
 					}
-					// Clear signifier on all columns, set signifier on sort column.
+					// Clear signifier on all columns, add signifier on sorted column.
 					char signifier = ORDER.asc.equals(sortOrder) ? '\u25B4' : '\u25BE';
 					for (TableColumn c:table.getColumns()) {
-						String fieldName = (String) c.getData("field");
-						if (fieldName != null) {
-							c.setText(fieldName+((column == c) ? " "+signifier : ""));
+						FieldInfo f = (FieldInfo) c.getData("field");
+						if (f != null) {
+							if (!isFieldSortable(f)) {
+								c.setText(f.getName()+" \u2205");
+							} else {
+								c.setText(f.getName()+((column == c) ? " "+signifier : ""));	
+							}
 						}
 
 					}
-					// Populate table with new sort field/order.
+					// Re-populate table.
 					refresh();
 				}
 			});
@@ -302,6 +313,19 @@ public class SolrGUITable { // TODO extend Composite ?
 		});
 		
 		return table;
+	}
+	
+	/**
+	 * A field is sortable if:
+	 * - it is indexed
+	 * - it is not multivalued
+	 * - it does not have docvalues
+	 */
+	private static boolean isFieldSortable(FieldInfo field) {
+		// field.getFlags() is not populated when lukeRequest.setSchema(false) so we parse flags ourselves based on field.getSchema() TODO open ticket ->)
+		// TODO ^ unless SchemaRequest parses flags ?
+		EnumSet<FieldFlag> flags = FieldInfo.parseFlags(field.getSchema());
+		return (flags.contains(FieldFlag.INDEXED) && !flags.contains(FieldFlag.DOC_VALUES) && !flags.contains(FieldFlag.MULTI_VALUED));		
 	}
 	
 	private List<FieldInfo> getRemoteFields() {

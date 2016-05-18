@@ -107,5 +107,7 @@ public class SolrGUI {
     // TODO doc log4j.prop + ubuntu package should expose it in /etc
 	// TODO doc "(not stored)"
 	// TODO doc sort by clicking on header
+	// TODO toolbar buttons commit/optimize
+	// TODO selecting filter "foo (1)" genates "foo (1)" in textfield 
 	
 }
