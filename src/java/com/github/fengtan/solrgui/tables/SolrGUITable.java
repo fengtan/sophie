@@ -179,11 +179,13 @@ public class SolrGUITable { // TODO extend Composite ?
 			// TODO refactor with selection listener
 			column.setText(field.getName()+(isFieldSortable(field) ? "     " : " "+SIGNIFIER_UNSORTABLE));
 			column.setData("field", field);
+			if (!isFieldSortable(field)) {
+				column.setToolTipText("Cannot sort on a field that is not indexed, multivalued or has doc values");
+			}
 			// Sort column when click on the header
 			column.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
 					if (!isFieldSortable(field)) {
-						// TODO show edit dialog or log info or show tooltip
 						return;
 					}
 					// Clicking on the current sort field toggles the direction.

@@ -62,34 +62,25 @@ public class SolrGUI {
 		return tabFolder;
 	}
 	
-	// TODO keyboard shortcuts
 	// TODO test Solr 5
+	// TODO test Solr < 4
 	// TODO elasticsearch
 	// TODO about page + github.io
 	// TODO document all methods
-	// TODO README mvn clean install; java -jar target/solr-gui-{version}-SNAPSHOT-jar-with-dependencies.jar
+	// TODO dov mvn
 	// TODO doc import into eclipse
-	// TODO README showing/hiding a column will refresh the table (and wipe out local modifications)
 	// TODO rename solrgui
-	// TODO test Solr < 4
 	// TODO allow to create documents with new fields
 	// TODO measure memory footprint
-	// TODO see luke ui
 	// TODO measure table items http://www.eclipse.org/articles/article.php?file=Article-CustomDrawingTableAndTreeItems/index.html
-	// TODO allow to export in xls (may require org.eclipse.nebula.widgets.nattable.extension.poi*.jar)
-	// TODO document in readme: typing 'Suppr' deletes a row.
-	// TODO sort using setSortDirection ?
-	// TODO allow to clone a document
+	// TODO doc typing 'Suppr' deletes a row.
 	// TODO are all jars required ?
 	// TODO allow to revert a specific document
 	// TODO allow not to use the default request handler
-	// TODO status line + possibly show last solr query
-	// TODO measure table items http://www.eclipse.org/articles/article.php?file=Article-CustomDrawingTableAndTreeItems/index.html
+	// TODO show last solr query
 	// TODO allow to export in xls (may require org.eclipse.nebula.widgets.nattable.extension.poi*.jar)
 	// TODO icon in ubuntu launcher
 	// TODO license
-	// TODO sort by ID field by default ? so rows remain the same when modify one
-	// TODO if server empty and click on table viewer -> seems to crash
 	// TODO dismax, spellcheck, debug etc
 	// TODO support HttpSolrServer/CloudSolrServer
 	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
@@ -102,12 +93,14 @@ public class SolrGUI {
 	// TODO travis
 	// TODO doc assume luke handler + select is available
 	// TODO control level of logging of solrj
-	// TODO log solr requests
     // TODO doc https://issues.apache.org/jira/browse/SOLR-20
     // TODO doc log4j.prop + ubuntu package should expose it in /etc
 	// TODO doc "(not stored)"
+	// TODO doc unsortable fields
 	// TODO doc sort by clicking on header
 	// TODO toolbar buttons commit/optimize
 	// TODO selecting filter "foo (1)" genates "foo (1)" in textfield 
+	// TODO support empty facet values
+	// TODO doc add sop(rowIndex) in getDocument() seems to fix table fetching all rows
 	
 }
