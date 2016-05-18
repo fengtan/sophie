@@ -552,6 +552,20 @@ public class SolrGUITable { // TODO extend Composite ?
 		}
 		refresh();
 	}
+	
+	public void optimize() {
+		try {
+			client.optimize();
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// Optimizing drops obsolete documents, obsolete facet values, etc.
+		refresh();
+	}
 
 	public void updateDocument(TableItem item, int columnIndex, String newValue) {
 		SolrDocument document = (SolrDocument) item.getData("document");

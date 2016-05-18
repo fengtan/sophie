@@ -102,5 +102,7 @@ public class SolrGUI {
 	// TODO selecting filter "foo (1)" genates "foo (1)" in textfield 
 	// TODO support empty facet values
 	// TODO doc add sop(rowIndex) in getDocument() seems to fix table fetching all rows
+	// TODO confirm before commiting ?
+	// TODO create button just to commit() ?
 	
 }

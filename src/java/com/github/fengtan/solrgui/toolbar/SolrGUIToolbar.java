@@ -22,6 +22,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
     private Image imgRefresh;
     private Image imgCommit;
     private Image imgClear;
+    private Image imgOptimize;
     
     private ToolItem itemAdd;
     private ToolItem itemDelete;
@@ -29,6 +30,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
     private ToolItem itemRefresh;
     private ToolItem itemCommit;
     private ToolItem itemClear;
+    private ToolItem itemOptimize;
     
     private SolrGUI solrGUI;
     
@@ -46,6 +48,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
         imgCommit = new Image(display, loader.getResourceAsStream("toolbar/commit.png")); // TODO find a better icon ?
         imgClear = new Image(display, loader.getResourceAsStream("toolbar/clear.png"));
+        imgOptimize = new Image(display, loader.getResourceAsStream("toolbar/optimize.png"));
 
         ToolBar toolBar = new ToolBar(shell, SWT.BORDER);
 
@@ -107,19 +110,38 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 			}
 		});
         
+        new ToolItem(toolBar, SWT.SEPARATOR);
+        
         itemClear = new ToolItem(toolBar, SWT.PUSH);
         itemClear.setEnabled(false);
         itemClear.setImage(imgClear);
-        itemClear.setToolTipText("Clear the index");
+        itemClear.setToolTipText("Clear index");
         itemClear.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 		        MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		        messageBox.setText("Clear the index");
+		        messageBox.setText("Clear index");
 		        messageBox.setMessage("Do you really want to clear the index? This will wipe out all documents on the server.");
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
 		        	SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
 					tabItem.getTable().clear();
+		        }
+			}
+		});
+        
+        itemOptimize = new ToolItem(toolBar, SWT.PUSH);
+        itemOptimize.setEnabled(false);
+        itemOptimize.setImage(imgOptimize);
+        itemOptimize.setToolTipText("Optimize index");
+        itemOptimize.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+		        MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		        messageBox.setText("Optimize index");
+		        messageBox.setMessage("Do you really want to optimize the index? This may take several hours on a large index and will slow down requests.");
+		        int response = messageBox.open();
+		        if (response == SWT.YES) {
+		        	SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
+					tabItem.getTable().optimize();
 		        }
 			}
 		});
@@ -135,6 +157,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         imgRefresh.dispose();
         imgCommit.dispose();
         imgClear.dispose();
+        imgOptimize.dispose();
     }
 
 	// TODO a row should be selected for itemAdd/delete/clone to be enabled
@@ -146,7 +169,8 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 		itemClone.setEnabled(enabled);
 		itemRefresh.setEnabled(enabled);
 		itemCommit.setEnabled(enabled);
-		itemClear.setEnabled(enabled);	
+		itemClear.setEnabled(enabled);
+		itemOptimize.setEnabled(enabled);
 	}
 
 }
