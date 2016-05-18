@@ -32,6 +32,8 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -66,8 +68,9 @@ public class SolrGUITable { // TODO extend Composite ?
 	private List<FieldInfo> fields;
 	private Map<String, FacetField> facets;
 	private Map<String, String> filters = new HashMap<String, String>();
+	private String uniqueField; // TODO update when refresh ?()
 	private String sortField; // TODO support sort on multiple fields ?
-	private String uniqueField; // TODO update when refresh ?() 
+	private ORDER sortOrder = ORDER.asc;
 
 	// List of documents locally updated/deleted/added.
 	// TODO use List<SolrDocument> instead of List<TableItem> ?
@@ -163,9 +166,24 @@ public class SolrGUITable { // TODO extend Composite ?
 		TableColumn columnNumber = new TableColumn(table, SWT.LEFT);
 		columnNumber.setText("#");
 		columnNumber.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
-		for (FieldInfo field:fields) {
+		for (final FieldInfo field:fields) {
 			TableColumn column = new TableColumn(table, SWT.LEFT);
 			column.setText(field.getName());
+			// Sort column when click on the header
+			// TODO cannot sort on all fields (unstored, unindexed, dates, etc)
+			// TODO add signifier to show the direction
+			column.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					// Clicking on the current sort field toggles the direction.
+					// Clicking on a new field changes the sort field.
+					if (StringUtils.equals(sortField, field.getName())) {
+						sortOrder = sortOrder.equals(ORDER.asc) ? ORDER.desc : ORDER.asc;
+					} else {
+						sortField = field.getName();
+					}
+					refresh();
+				}
+			});
 			column.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
 		}
 		
@@ -368,7 +386,7 @@ public class SolrGUITable { // TODO extend Composite ?
 			SolrQuery query = getBaseQuery(page * PAGE_SIZE, PAGE_SIZE);
 			// TODO user should be able to change sort column.
 			// TODO what if sortField is not valid anymore
-			query.setSort(sortField, ORDER.asc);
+			query.setSort(sortField, sortOrder);
 			try {
 				pages.put(page, client.query(query).getResults());	
 			} catch(SolrServerException e) {
@@ -399,6 +417,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	 */
 	public void refresh() {
 		// TODO re-populate columns/filters ?
+		// TODO re-populate unique field / sort field ?
 		documentsUpdated = new ArrayList<TableItem>();
 		documentsDeleted = new ArrayList<TableItem>();
 		documentsAdded = new ArrayList<SolrDocument>();

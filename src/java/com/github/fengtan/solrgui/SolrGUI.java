@@ -106,5 +106,6 @@ public class SolrGUI {
     // TODO doc https://issues.apache.org/jira/browse/SOLR-20
     // TODO doc log4j.prop + ubuntu package should expose it in /etc
 	// TODO doc "(not stored)"
+	// TODO doc sort by clicking on header
 	
 }
