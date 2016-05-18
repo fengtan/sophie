@@ -167,20 +167,31 @@ public class SolrGUITable { // TODO extend Composite ?
 		columnNumber.setText("#");
 		columnNumber.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
 		for (final FieldInfo field:fields) {
-			TableColumn column = new TableColumn(table, SWT.LEFT);
-			column.setText(field.getName());
+			final TableColumn column = new TableColumn(table, SWT.LEFT);
+			// Add space padding so we can see the sort signifier.
+			column.setText(field.getName()+"     "); // TODO set signifier on uniqueKey by default ?
+			column.setData("field", field.getName());
 			// Sort column when click on the header
 			// TODO cannot sort on all fields (unstored, unindexed, dates, etc)
-			// TODO add signifier to show the direction
 			column.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
 					// Clicking on the current sort field toggles the direction.
 					// Clicking on a new field changes the sort field.
 					if (StringUtils.equals(sortField, field.getName())) {
-						sortOrder = sortOrder.equals(ORDER.asc) ? ORDER.desc : ORDER.asc;
+						sortOrder = ORDER.asc.equals(sortOrder) ? ORDER.desc : ORDER.asc;
 					} else {
 						sortField = field.getName();
 					}
+					// Clear signifier on all columns, set signifier on sort column.
+					char signifier = ORDER.asc.equals(sortOrder) ? '\u25B4' : '\u25BE';
+					for (TableColumn c:table.getColumns()) {
+						String fieldName = (String) c.getData("field");
+						if (fieldName != null) {
+							c.setText(fieldName+((column == c) ? " "+signifier : ""));
+						}
+
+					}
+					// Populate table with new sort field/order.
 					refresh();
 				}
 			});
