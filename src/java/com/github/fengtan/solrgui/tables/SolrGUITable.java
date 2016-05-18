@@ -62,6 +62,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	private static final char SIGNIFIER_UNSORTABLE = '\u2205';
 	
 	private static final String LABEL_NOT_STORED = "(not stored)";
+	private static final String LABEL_EMPTY = "(empty)";
 	
 	// Fetch 50 documents at a time. TODO make this configurable ?
 	private static final int PAGE_SIZE = 50;
@@ -247,7 +248,7 @@ public class SolrGUITable { // TODO extend Composite ?
 				final CCombo combo = new CCombo(table, SWT.BORDER);
 				combo.add("");
 				for(Count count:facet.getValues()) {
-					combo.add(count.getName()+" ("+count.getCount()+")");
+					combo.add(Objects.toString(count.getName(), LABEL_EMPTY)+" ("+count.getCount()+")");
 				}
 				widget = combo;
 				// Filter results when user selects a facet value.
@@ -396,6 +397,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		query.setFacet(true);
 		query.setFacetSort("index");
 		query.setFacetLimit(FACET_LIMIT);
+		query.setFacetMissing(true);
 		for(FieldInfo field:fields) {
 			// fq works only on indexed fields.
 			// field.getFlags() is not populated when lukeRequest.setSchema(false) so we parse flags ourselves based on field.getSchema() TODO open ticket
@@ -446,9 +448,14 @@ public class SolrGUITable { // TODO extend Composite ?
 		query.setStart(start);
 		query.setRows(rows);
 		// Add filters. TODO move filters outside of this function ? no need to set fq for facets
-		// We escape colons in the field value to avoid a syntax error from Solr.
 		for (Entry<String, String> filter:filters.entrySet()) {
-			query.addFilterQuery(filter.getKey()+":"+filter.getValue().replace(":", "\\:"));
+			if (StringUtils.equals(filter.getValue(), LABEL_EMPTY)) {
+				// Empty value needs a special syntax. 
+				query.addFilterQuery("-"+filter.getKey()+":[* TO *]");
+			} else {
+				// Colons in value need to be escaped to avoid a syntax error.
+				query.addFilterQuery(filter.getKey()+":"+filter.getValue().replace(":", "\\:"));	
+			}
 		}
 		return query;
 	}

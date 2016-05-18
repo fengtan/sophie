@@ -100,7 +100,9 @@ public class SolrGUI {
 	// TODO doc sort by clicking on header
 	// TODO toolbar buttons commit/optimize
 	// TODO selecting filter "foo (1)" genates "foo (1)" in textfield 
-	// TODO support empty facet values
 	// TODO doc add sop(rowIndex) in getDocument() seems to fix table fetching all rows
+	// TODO support empty facets on free text fields
+	// TODO what if field contains value "(empty)" ?
+	// TODO show "(empty)" at the top
 	
 }
