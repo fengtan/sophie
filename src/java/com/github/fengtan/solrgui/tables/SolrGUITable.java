@@ -57,6 +57,10 @@ public class SolrGUITable { // TODO extend Composite ?
 	private static final Color RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 	private static final Color GREEN = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 	
+	private static final char SIGNIFIER_SORTED_ASC = '\u25B4';
+	private static final char SIGNIFIER_SORTED_DESC = '\u25BE';
+	private static final char SIGNIFIER_UNSORTABLE = '\u2205';
+	
 	private static final String LABEL_NOT_STORED = "(not stored)";
 	
 	// Fetch 50 documents at a time. TODO make this configurable ?
@@ -173,7 +177,7 @@ public class SolrGUITable { // TODO extend Composite ?
 			// Add space padding so we can see the sort signifier.
 			// TODO set sort signifier on uniqueKey by default ?
 			// TODO refactor with selection listener
-			column.setText(field.getName()+(isFieldSortable(field) ? "     " : " \u2205")); // TODO constant unicode
+			column.setText(field.getName()+(isFieldSortable(field) ? "     " : " "+SIGNIFIER_UNSORTABLE));
 			column.setData("field", field);
 			// Sort column when click on the header
 			column.addSelectionListener(new SelectionAdapter() {
@@ -190,12 +194,12 @@ public class SolrGUITable { // TODO extend Composite ?
 						sortField = field.getName();
 					}
 					// Clear signifier on all columns, add signifier on sorted column.
-					char signifier = ORDER.asc.equals(sortOrder) ? '\u25B4' : '\u25BE';
+					char signifier = ORDER.asc.equals(sortOrder) ? SIGNIFIER_SORTED_ASC : SIGNIFIER_SORTED_DESC;
 					for (TableColumn c:table.getColumns()) {
 						FieldInfo f = (FieldInfo) c.getData("field");
 						if (f != null) {
 							if (!isFieldSortable(f)) {
-								c.setText(f.getName()+" \u2205");
+								c.setText(f.getName()+" "+SIGNIFIER_UNSORTABLE);
 							} else {
 								c.setText(f.getName()+((column == c) ? " "+signifier : ""));	
 							}
