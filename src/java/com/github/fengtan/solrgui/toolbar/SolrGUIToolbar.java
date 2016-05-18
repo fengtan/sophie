@@ -20,16 +20,18 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
     private Image imgDelete;
     private Image imgClone;
     private Image imgRefresh;
-    private Image imgCommit;
+    private Image imgUpload;
     private Image imgClear;
+    private Image imgCommit;
     private Image imgOptimize;
     
     private ToolItem itemAdd;
     private ToolItem itemDelete;
     private ToolItem itemClone;
     private ToolItem itemRefresh;
-    private ToolItem itemCommit;
+    private ToolItem itemUpload;
     private ToolItem itemClear;
+    private ToolItem itemCommit;
     private ToolItem itemOptimize;
     
     private SolrGUI solrGUI;
@@ -46,8 +48,9 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
         imgClone = new Image(display, loader.getResourceAsStream("toolbar/clone.png"));
         imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
-        imgCommit = new Image(display, loader.getResourceAsStream("toolbar/commit.png")); // TODO find a better icon ?
+        imgUpload = new Image(display, loader.getResourceAsStream("toolbar/upload.png")); // TODO find a better icon ?
         imgClear = new Image(display, loader.getResourceAsStream("toolbar/clear.png"));
+        imgCommit = new Image(display, loader.getResourceAsStream("toolbar/commit.png"));
         imgOptimize = new Image(display, loader.getResourceAsStream("toolbar/optimize.png"));
 
         ToolBar toolBar = new ToolBar(shell, SWT.BORDER);
@@ -99,14 +102,14 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 			}
 		});
         
-        itemCommit = new ToolItem(toolBar, SWT.PUSH);
-        itemCommit.setEnabled(false);
-        itemCommit.setImage(imgCommit);
-        itemCommit.setToolTipText("Commit local modifications to server");
-        itemCommit.addSelectionListener(new SelectionAdapter() {
+        itemUpload = new ToolItem(toolBar, SWT.PUSH);
+        itemUpload.setEnabled(false);
+        itemUpload.setImage(imgUpload);
+        itemUpload.setToolTipText("Upload local modifications to server");
+        itemUpload.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
-				tabItem.getTable().commit();
+				tabItem.getTable().upload();
 			}
 		});
         
@@ -128,6 +131,17 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 		        }
 			}
 		});
+
+        itemCommit = new ToolItem(toolBar, SWT.PUSH);
+        itemCommit.setEnabled(false);
+        itemCommit.setImage(imgCommit);
+        itemCommit.setToolTipText("Commit index");
+        itemCommit.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+		        SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
+				tabItem.getTable().commit();
+			}
+		});
         
         itemOptimize = new ToolItem(toolBar, SWT.PUSH);
         itemOptimize.setEnabled(false);
@@ -137,7 +151,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 			public void widgetSelected(SelectionEvent e) {
 		        MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		        messageBox.setText("Optimize index");
-		        messageBox.setMessage("Do you really want to optimize the index? This may take several hours on a large index and will slow down requests.");
+		        messageBox.setMessage("Do you really want to optimize the index? If the index is highly segmented, this may take several hours and will slow down requests.");
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
 		        	SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
@@ -155,8 +169,9 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         imgDelete.dispose();
         imgClone.dispose();
         imgRefresh.dispose();
-        imgCommit.dispose();
+        imgUpload.dispose();
         imgClear.dispose();
+        imgCommit.dispose();
         imgOptimize.dispose();
     }
 
@@ -168,8 +183,9 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 		itemDelete.setEnabled(enabled);
 		itemClone.setEnabled(enabled);
 		itemRefresh.setEnabled(enabled);
-		itemCommit.setEnabled(enabled);
+		itemUpload.setEnabled(enabled);
 		itemClear.setEnabled(enabled);
+		itemCommit.setEnabled(enabled);
 		itemOptimize.setEnabled(enabled);
 	}
 

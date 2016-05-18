@@ -471,7 +471,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	/*
 	 * Commit local changes to the Solr server.
 	 */
-	public void commit() {
+	public void upload() {
 		// Commit local updates.
 		// TODO does not seem to be possible to update multiple documents.
 		for (TableItem item:documentsUpdated) {
@@ -542,6 +542,20 @@ public class SolrGUITable { // TODO extend Composite ?
 	public void clear() {
 		try {
 			client.deleteByQuery("*:*");
+			client.commit();
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		refresh();
+	}
+	
+
+	public void commit() {
+		try {
 			client.commit();
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
