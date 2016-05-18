@@ -53,6 +53,8 @@ public class SolrGUITable { // TODO extend Composite ?
 	private static final Color RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 	private static final Color GREEN = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 	
+	private static final String NOT_STORED = "(not stored)";
+	
 	// Fetch 50 documents at a time. TODO make this configurable ?
 	private static final int PAGE_SIZE = 50;
 	
@@ -135,7 +137,13 @@ public class SolrGUITable { // TODO extend Composite ?
 	            // Subsequent columns are used to show field values.
 		        for (int i=0; i<fields.size(); i++) {
 		        	String fieldName = fields.get(i).getName();
-		            item.setText(i+1, Objects.toString(document.getFieldValue(fieldName), ""));
+		        	// If field is not stored, display message.
+		        	// TODO disable doubleclick on unstored fields ?
+		        	if (!FieldInfo.parseFlags(fields.get(i).getSchema()).contains(FieldFlag.STORED)) {
+		        		item.setText(i+1, NOT_STORED);
+		        	} else {
+		            	item.setText(i+1, Objects.toString(document.getFieldValue(fieldName), ""));
+		            }
 		        }
 		        // Store document in item.
 		        item.setData("document", document);
