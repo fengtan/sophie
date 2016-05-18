@@ -16,6 +16,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.LukeRequest;
+import org.apache.solr.client.solrj.request.schema.SchemaRequest;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.LukeResponse;
@@ -65,6 +66,8 @@ public class SolrGUITable { // TODO extend Composite ?
 	private List<FieldInfo> fields;
 	private Map<String, FacetField> facets;
 	private Map<String, String> filters = new HashMap<String, String>();
+	private String sortField; // TODO support sort on multiple fields ?
+	private String uniqueField; // TODO update when refresh ?() 
 
 	// List of documents locally updated/deleted/added.
 	// TODO use List<SolrDocument> instead of List<TableItem> ?
@@ -79,6 +82,8 @@ public class SolrGUITable { // TODO extend Composite ?
 		this.client = client;
 		this.fields = getRemoteFields(); // TODO what if new fields get created ? refresh ?
 		this.facets = getRemoteFacets();
+		this.uniqueField = getRemoteUniqueField(); // TODO what if uniquefield is not defined ?
+		this.sortField = uniqueField; // By default we sort documents by uniqueKey TODO what if uniqueKey is not sortable ?
 		this.table = createTable(parent);
 		// Initialize cache + row count.
 		refresh();
@@ -271,6 +276,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	}
 	
 	private List<FieldInfo> getRemoteFields() {
+		// TODO use SchemaRequest instead of LukeRequest
 		LukeRequest request = new LukeRequest();
 		try {
 			LukeResponse response = request.process(client);
@@ -290,6 +296,22 @@ public class SolrGUITable { // TODO extend Composite ?
 		*/
 	}
 
+	// TODO could merge with getRemoteFields() to make less queries.
+	private String getRemoteUniqueField() {
+		SchemaRequest.UniqueKey request = new SchemaRequest.UniqueKey();
+		try {
+			return request.process(client).getUniqueKey();
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ""; // TODO log WARNING
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ""; // TODO log WARNING
+		}
+	}
+	
 	private int getRemoteCount() {
 		SolrQuery query = getBaseQuery(0, 0);
 		try {
@@ -344,9 +366,9 @@ public class SolrGUITable { // TODO extend Composite ?
 		// If page has not be fetched yet, then fetch it.
 		if (!pages.containsKey(page)) {
 			SolrQuery query = getBaseQuery(page * PAGE_SIZE, PAGE_SIZE);
-			// TODO "id" should be fetched using query.getInt("uniqueKey")
-			// TODO user should be able to change sort column. 
-			query.setSort("id", ORDER.asc);
+			// TODO user should be able to change sort column.
+			// TODO what if sortField is not valid anymore
+			query.setSort(sortField, ORDER.asc);
 			try {
 				pages.put(page, client.query(query).getResults());	
 			} catch(SolrServerException e) {
@@ -412,7 +434,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		for (TableItem item:documentsDeleted) {
 			// TODO
 			SolrDocument document = (SolrDocument) item.getData("document");
-			String id = document.getFieldValue("id").toString(); // TODO what if no field named "id"
+			String id = document.getFieldValue(uniqueField).toString(); // TODO what if no uniquekey
 			try {
 				client.deleteById(id);
 			} catch (SolrServerException e) {
@@ -427,7 +449,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		for (SolrDocument document:documentsAdded) {
 			SolrInputDocument input = new SolrInputDocument();
 		    for (String name:document.getFieldNames()) {
-		    	input.addField(name, document.getFieldValue(name), 1.0f);
+		    	input.addField(name, document.getFieldValue(name), 1.0f); // TODO 1.0f move to constant
 		    }
 			try {
 				client.add(input); // Returned object seems to have no relevant information.
