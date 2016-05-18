@@ -93,17 +93,18 @@ public class SolrGUI {
 	// TODO dismax, spellcheck, debug etc
 	// TODO support HttpSolrServer/CloudSolrServer
 	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
-	// TODO provide original value for stored fields ?
+	// TODO adapt edit dialog to support multi fields
+	// TODO add calendar to edit dialog / filters
 	// TODO allow to select multiple values for each filter
 	// TODO test modifying 2 documents and then commiting
 	// TODO interface to crud cores (if multicores is turned on)
 	// TODO doc cannot filter on unindexed fields
 	// TODO travis
-    // TODO unstored fields = empty data
 	// TODO doc assume luke handler + select is available
 	// TODO control level of logging of solrj
 	// TODO log solr requests
     // TODO doc https://issues.apache.org/jira/browse/SOLR-20
     // TODO doc log4j.prop + ubuntu package should expose it in /etc
+	// TODO doc "(not stored)"
 	
 }
