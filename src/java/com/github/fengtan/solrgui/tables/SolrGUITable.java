@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrClient;
@@ -184,7 +186,7 @@ public class SolrGUITable { // TODO extend Composite ?
 				final CCombo combo = new CCombo(table, SWT.BORDER);
 				combo.add("");
 				for(Count count:facet.getValues()) {
-					combo.add(count.getName()); // TODO use count.getCount() too ?
+					combo.add(count.getName()+" ("+count.getCount()+")");
 				}
 				widget = combo;
 				// Filter results when user selects a facet value.
@@ -192,7 +194,11 @@ public class SolrGUITable { // TODO extend Composite ?
 					@Override
 					public void modifyText(ModifyEvent event) {
 						String filterName = widget.getData("field").toString();
-						String filterValue = combo.getText();
+						// TODO regex is not ideal be seems to be the only way to extract "foo" from "foo (5)".
+						Pattern pattern = Pattern.compile("^(.*) \\([0-9]+\\)$");
+						Matcher matcher = pattern.matcher(combo.getText());
+						// TODO if cannot find pattern, then should log WARNING
+						String filterValue = matcher.find() ? matcher.group(1) : "";
 						if (StringUtils.isEmpty(filterValue)) {
 							filters.remove(filterName);
 						} else {
@@ -219,6 +225,7 @@ public class SolrGUITable { // TODO extend Composite ?
 					}
 				});
 			}
+			// TODO switch to final objects and do not use setData() ?
 			widget.setData("field", facet.getName());
 		    editor.grabHorizontal = true;
 		    // We add one since the first column is used for row ID.

@@ -50,6 +50,7 @@ public class SolrGUIEditValueDialog extends Dialog {
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
+			// TODO move StringUtils.equals() into table.updateDocument() ?
 			if (!StringUtils.equals(oldValue, newValue.getText())) {
 				table.updateDocument(item, columnIndex, newValue.getText());
 			}
