@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.dialogs.SolrGUIBackupIndexDialog;
+import com.github.fengtan.solrgui.dialogs.SolrGUIRestoreIndexDialog;
 import com.github.fengtan.solrgui.tabs.ISolrGUITabFolderListener;
 import com.github.fengtan.solrgui.tabs.SolrGUITabItem;
 
@@ -176,7 +177,6 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         itemBackup.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 	        	SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
-	        	// TODO allow to set empty names
 	        	new  SolrGUIBackupIndexDialog(shell, tabItem.getTable()).open();
 			}
 		});
@@ -187,7 +187,8 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         itemRestore.setToolTipText("Restore index from a backup");
         itemRestore.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				// TODO restore index + refresh table
+	        	SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
+	        	new  SolrGUIRestoreIndexDialog(shell, tabItem.getTable()).open();
 			}
 		});
         

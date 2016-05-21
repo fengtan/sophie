@@ -619,6 +619,32 @@ public class SolrGUITable { // TODO extend Composite ?
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	/*
+	 * Restore index from a backup
+	 */
+	public void restore(String backupName) {
+		ModifiableSolrParams params = new ModifiableSolrParams();
+		params.set("command", "restore");
+		params.set("name", backupName);
+		QueryRequest request = new QueryRequest(params);
+		request.setPath("/replication");
+		try {
+			client.request(request);
+			// TODO work only for solr >= 5.2 (mention) => disable button if solr < 5.2 https://issues.apache.org/jira/browse/SOLR-6637
+			// TODO get /replication?command=restorestatus and provide feedback to user (asynchronous call), possibly with a progress bar
+			// TODO test backup/restore
+			refresh();
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public void updateDocument(TableItem item, int columnIndex, String newValue) {
 		SolrDocument document = (SolrDocument) item.getData("document");
