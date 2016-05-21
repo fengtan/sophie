@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Text;
 import com.github.fengtan.solrgui.config.SolrGUIConfig;
 import com.github.fengtan.solrgui.tabs.SolrGUITabFolder;
 
+// TODO use messagebox instead of dialog so we get rid of jface dependency
 public class SolrGUIAddServerDialog extends Dialog {
 
 	private static final String DEFAULT_URL = "http://localhost:8983/solr/collection1";

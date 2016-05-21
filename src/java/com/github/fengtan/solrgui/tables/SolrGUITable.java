@@ -17,6 +17,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.LukeRequest;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.request.schema.SchemaRequest;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
@@ -26,6 +27,8 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.luke.FieldFlag;
+import org.apache.solr.common.params.ModifiableSolrParams;
+import org.apache.solr.common.util.NamedList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
@@ -586,6 +589,35 @@ public class SolrGUITable { // TODO extend Composite ?
 		}
 		// Optimizing drops obsolete documents, obsolete facet values, etc.
 		refresh();
+	}
+	
+	/*
+	 * Backup index on solr server
+	 * 
+	 * TODO notify user name/place of backup
+	 */
+	public void backup(String backupName) {
+		ModifiableSolrParams params = new ModifiableSolrParams();
+		params.set("command", "backup");
+		params.set("name", backupName);
+		QueryRequest request = new QueryRequest(params);
+		request.setPath("/replication");
+		try {
+			NamedList<Object> response = client.request(request);
+			// TODO progress bar with /replication?command=details ?
+			// TODO "OK" solrj constant ?
+			if (StringUtils.equals(response.get("status").toString(), "OK")) {
+				// TODO notify user OK + name/place of backup file
+			} else {
+				// TODO notify user NOK + exception details
+			}
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void updateDocument(TableItem item, int columnIndex, String newValue) {

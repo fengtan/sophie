@@ -110,6 +110,10 @@ public class SolrGUI {
 	// TODO support empty facets on free text fields (workaround: add "(empty) (1)" in free text 
 	// TODO what if field contains value "(empty)" ?
 	// TODO show "(empty)" at the top
-  // TODO backup/restore buttons
-	
+	// TODO allow to delete backups ? 
+	// TODO button reload config, CoreAdminRequest, CollectionAdminRequest, replicate to slave / pull from master, etc see admin handler
+	// TODO contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
+	// TODO wording server/index/collection/core
+	// TODO allow to reload config on all cores
+	// TODO doc backup stored on *server*
 }
