@@ -80,7 +80,7 @@ public class SolrGUI {
 	// TODO show last solr query
 	// TODO allow to export in xls (may require org.eclipse.nebula.widgets.nattable.extension.poi*.jar)
 	// TODO icon in ubuntu launcher
-	// TODO license
+	// TODO license (depends on swt, solrj, icons, other dependencies)
 	// TODO dismax, spellcheck, debug etc
 	// TODO support HttpSolrServer/CloudSolrServer
 	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
@@ -94,15 +94,22 @@ public class SolrGUI {
 	// TODO doc assume luke handler + select is available
 	// TODO control level of logging of solrj
     // TODO doc https://issues.apache.org/jira/browse/SOLR-20
-    // TODO doc log4j.prop + ubuntu package should expose it in /etc
+    // TODO doc log4j.prop
+    // TODO ubuntu package
+    // TODO - install jar into /opt or /usr/local
+    // TODO - export SOLRGUI_HOME=/usr/local/solr-gui-x.y.z
+    // TODO - export PATH=$PATH:$SOLRGUI_HOME/bin
+    // TODO - expose log4j.prop in /etc
+    // TODO - logs in /var/log
 	// TODO doc "(not stored)"
 	// TODO doc unsortable fields
 	// TODO doc sort by clicking on header
 	// TODO toolbar buttons commit/optimize
 	// TODO selecting filter "foo (1)" genates "foo (1)" in textfield 
 	// TODO doc add sop(rowIndex) in getDocument() seems to fix table fetching all rows
-	// TODO support empty facets on free text fields
+	// TODO support empty facets on free text fields (workaround: add "(empty) (1)" in free text 
 	// TODO what if field contains value "(empty)" ?
 	// TODO show "(empty)" at the top
+  // TODO backup/restore buttons
 	
 }

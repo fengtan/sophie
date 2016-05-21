@@ -24,6 +24,8 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
     private Image imgClear;
     private Image imgCommit;
     private Image imgOptimize;
+    private Image imgBackup;
+    private Image imgRestore;
     
     private ToolItem itemAdd;
     private ToolItem itemDelete;
@@ -33,6 +35,8 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
     private ToolItem itemClear;
     private ToolItem itemCommit;
     private ToolItem itemOptimize;
+    private ToolItem itemBackup;
+    private ToolItem itemRestore;
     
     private SolrGUI solrGUI;
     
@@ -52,6 +56,8 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         imgClear = new Image(display, loader.getResourceAsStream("toolbar/clear.png"));
         imgCommit = new Image(display, loader.getResourceAsStream("toolbar/commit.png"));
         imgOptimize = new Image(display, loader.getResourceAsStream("toolbar/optimize.png"));
+        imgBackup = new Image(display, loader.getResourceAsStream("toolbar/backup.png")); // TODO find better icon
+        imgRestore = new Image(display, loader.getResourceAsStream("toolbar/restore.png")); // TODO find better icon
 
         ToolBar toolBar = new ToolBar(shell, SWT.BORDER);
 
@@ -160,6 +166,28 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 			}
 		});
         
+        new ToolItem(toolBar, SWT.SEPARATOR);
+        
+        itemBackup = new ToolItem(toolBar, SWT.PUSH);
+        itemBackup.setEnabled(false);
+        itemBackup.setImage(imgBackup);
+        itemBackup.setToolTipText("Make a backup of the index");
+        itemBackup.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				// TODO
+			}
+		});
+        
+        itemRestore = new ToolItem(toolBar, SWT.PUSH);
+        itemRestore.setEnabled(false);
+        itemRestore.setImage(imgRestore);
+        itemRestore.setToolTipText("Restore index from a backup");
+        itemRestore.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				// TODO
+			}
+		});
+        
         toolBar.pack();
     }
     
@@ -173,6 +201,8 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         imgClear.dispose();
         imgCommit.dispose();
         imgOptimize.dispose();
+        imgBackup.dispose();
+        imgRestore.dispose();
     }
 
 	// TODO a row should be selected for itemAdd/delete/clone to be enabled
@@ -187,6 +217,8 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 		itemClear.setEnabled(enabled);
 		itemCommit.setEnabled(enabled);
 		itemOptimize.setEnabled(enabled);
+		itemBackup.setEnabled(enabled);
+		itemRestore.setEnabled(enabled);
 	}
 
 }

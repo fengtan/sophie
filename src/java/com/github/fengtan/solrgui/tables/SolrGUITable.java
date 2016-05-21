@@ -181,7 +181,7 @@ public class SolrGUITable { // TODO extend Composite ?
 			column.setText(field.getName()+(isFieldSortable(field) ? "     " : " "+SIGNIFIER_UNSORTABLE));
 			column.setData("field", field);
 			if (!isFieldSortable(field)) {
-				column.setToolTipText("Cannot sort on a field that is not indexed, multivalued or has doc values");
+				column.setToolTipText("Cannot sort on a field that is not indexed, is multivalued or has doc values");
 			}
 			// Sort column when click on the header
 			column.addSelectionListener(new SelectionAdapter() {
