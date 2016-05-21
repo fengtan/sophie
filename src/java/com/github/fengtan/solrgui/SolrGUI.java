@@ -46,7 +46,7 @@ public class SolrGUI {
 					display.sleep();	
 				}	
 			} catch (RuntimeException e) { // TODO is this the right way to handle runtime exceptions ?
-		    	e.printStackTrace(); // TODO log stack trace somewhere
+		    	e.printStackTrace(); // TODO log stack trace slf4j
 				MessageBox box = new MessageBox(shell, SWT.ICON_ERROR);
 			    box.setText("An error happened");
 			    box.setMessage(e.getMessage());
@@ -62,58 +62,55 @@ public class SolrGUI {
 		return tabFolder;
 	}
 	
-	// TODO test Solr 5
-	// TODO test Solr < 4
-	// TODO elasticsearch
-	// TODO about page + github.io
-	// TODO document all methods
-	// TODO dov mvn
-	// TODO doc import into eclipse
-	// TODO rename solrgui
-	// TODO allow to create documents with new fields
-	// TODO measure memory footprint
-	// TODO measure table items http://www.eclipse.org/articles/article.php?file=Article-CustomDrawingTableAndTreeItems/index.html
-	// TODO doc typing 'Suppr' deletes a row.
-	// TODO are all jars required ?
-	// TODO allow to revert a specific document
-	// TODO allow not to use the default request handler
-	// TODO show last solr query
-	// TODO allow to export in xls (may require org.eclipse.nebula.widgets.nattable.extension.poi*.jar)
-	// TODO icon in ubuntu launcher
-	// TODO license (depends on swt, solrj, icons, other dependencies)
-	// TODO dismax, spellcheck, debug etc
-	// TODO support HttpSolrServer/CloudSolrServer
-	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
-	// TODO adapt edit dialog to support multi fields
-	// TODO add calendar to edit dialog / filters
-	// TODO allow to select multiple values for each filter
+	// TODO test exotic Solr versions
+	// TODO test elasticsearch
 	// TODO test modifying 2 documents and then commiting
-	// TODO interface to crud cores (if multicores is turned on)
-	// TODO doc cannot filter on unindexed fields
-	// TODO travis
-	// TODO doc assume luke handler + select is available
-	// TODO control level of logging of solrj
-    // TODO doc https://issues.apache.org/jira/browse/SOLR-20
-    // TODO doc log4j.prop
-    // TODO ubuntu package
+	
+	// TODO meta about page + github.io
+	// TODO meta document all methods
+	// TODO meta rename solrgui
+	// TODO meta measure memory footprint
+	// TODO meta are all jars required ?
+	// TODO meta icon in ubuntu launcher
+	// TODO meta license (depends on swt, solrj, icons, other dependencies)
+	// TODO meta wording server/index/collection/core
+	// TODO meta travis
+    // TODO meta .deb package
     // TODO - install jar into /opt or /usr/local
     // TODO - export SOLRGUI_HOME=/usr/local/solr-gui-x.y.z
     // TODO - export PATH=$PATH:$SOLRGUI_HOME/bin
     // TODO - expose log4j.prop in /etc
     // TODO - logs in /var/log
+	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
+	
+	// TODO feat allow to create documents with new fields
+	// TODO feat show "(empty)" at the top	
+	// TODO feat allow to revert a specific document
+	// TODO feat allow not to use the default request handler
+	// TODO feat allow to export in xls (POI)
+	// TODO feat selecting filter "foo (1)" genates "foo (1)" in textfield
+	// TODO feat dismax, spellcheck, debug etc
+	// TODO feat support HttpSolrServer/CloudSolrServer
+	// TODO feat adapt edit dialog to support multi fields
+	// TODO feat add calendar to edit dialog / filters
+	// TODO feat allow to select multiple values for each filter
+	// TODO feat opening new server makes virtual handler display all rows
+	// TODO feat support empty facets on free text fields (workaround: add "(empty) (1)" in free text 
+	// TODO feat what if field contains value "(empty)" ?
+	// TODO feat button reload config, CoreAdminRequest, CollectionAdminRequest, replicate to slave / pull from master, etc see admin handler, crud cores (if multicore turned on)
+	// TODO feat allow to reload config on all cores
+	// TODO feat get elevation, debug, score, shard, etc
+	
+	// TODO doc cannot filter on unindexed fields
+	// TODO doc assume luke handler + select is available
+    // TODO doc https://issues.apache.org/jira/browse/SOLR-20
+    // TODO doc log4j.prop
 	// TODO doc "(not stored)"
 	// TODO doc unsortable fields
 	// TODO doc sort by clicking on header
-	// TODO toolbar buttons commit/optimize
-	// TODO selecting filter "foo (1)" genates "foo (1)" in textfield 
-	// TODO doc add sop(rowIndex) in getDocument() seems to fix table fetching all rows
-	// TODO support empty facets on free text fields (workaround: add "(empty) (1)" in free text 
-	// TODO what if field contains value "(empty)" ?
-	// TODO show "(empty)" at the top
-	// TODO allow to delete backups ? 
-	// TODO button reload config, CoreAdminRequest, CollectionAdminRequest, replicate to slave / pull from master, etc see admin handler
-	// TODO contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
-	// TODO wording server/index/collection/core
-	// TODO allow to reload config on all cores
 	// TODO doc backup stored on *server*
+	// TODO dov mvn
+	// TODO doc import into eclipse
+	// TODO doc typing 'Suppr' deletes a row.
+	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
 }
