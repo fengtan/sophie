@@ -1,0 +1,32 @@
+{
+  "name": "solr-gui",
+  "version": "1.0.0",
+  "description": "An admin GUI for Apache Solr, based on Electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fengtan/solr-gui.git"
+  },
+  "keywords": [
+    "admin",
+    "gui",
+    "apache",
+    "solr",
+    "electron"
+  ],
+  "author": "fengtan",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/fengtan/solr-gui/issues"
+  },
+  "homepage": "https://github.com/fengtan/solr-gui",
+  "devDependencies": {
+    "electron-prebuilt": "^1.2.6",
+    "solr-client": "^0.6.0",
+    "bootstrap": "^3.3.6",
+    "jquery": "^3.1.0"
+  }
+}

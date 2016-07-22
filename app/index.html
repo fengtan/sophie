@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Solr GUI</title>
+  </head>
+  <body>
+    <h1>Solr GUI</h1>
+    <div>
+      <nav class="navbar navbar-inverse" role="navigation" style="padding-left:130px;">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/">Home<span class="sr-only">(current)</span></a></li>
+          <li><a href="/about">About us</a></li>
+          <li><a href="/contact">Contact us</a></li>
+        </ul>
+      </nav>
+    </div>
+  </body>
+
+  <script>
+    // You can also require other files to run in this process
+    require('./renderer.js')
+    // Solr stuff
+    var solr = require('solr-client');
+    var client = solr.createClient('localhost', '8983', 'collection1', '/solr');
+    client.get('admin/luke', null, function(err, obj){ // TODO what if luke not available
+      if(err){
+        console.log(err); // TODO handle
+      }else{
+        console.log('Solr response:', obj.fields);
+      }
+    });
+    // npm requires to set the global jQuery variable since Bootstrap is a jQuery plugin.
+    var jquery = require('jquery');
+    global.jQuery = require('jquery');
+    var bootstrap = require('bootstrap');
+  </script>
+</html>
