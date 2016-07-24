@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <title>Solr GUI</title>
+
+<!-- TODO put JS into separate file: require('./renderer.js') -->
+
 <!-- TODO should use bootsrap/jquery as downloaded by npm -->
 
 <script>
@@ -76,25 +79,29 @@ global.jQuery = require('jquery');
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
+                  <script>
+    var solr = require('solr-client');
+    var client = solr.createClient('localhost', '8983', 'collection1', '/solr');
+    client.get('admin/luke', null, function(err, obj){ // TODO what if luke not available
+      if(err){
+        console.log(err); // TODO handle
+      }else{
+        for (var field in obj.fields) {
+          document.write("<th>"+field+"</th>"); // TODO should manipulate the DOM
+        }
+      }
+    });
+  </script>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>1,001</td>
                   <td>Lorem</td>
                   <td>ipsum</td>
                   <td>dolor</td>
-                  <td>sit</td>
                 </tr>
                 <tr>
-                  <td>1,002</td>
                   <td>amet</td>
-                  <td>consectetur</td>
                   <td>adipiscing</td>
                   <td>elit</td>
                 </tr>
@@ -106,19 +113,4 @@ global.jQuery = require('jquery');
     </div>
 
   </body>
-
-  <script>
-    // You can also require other files to run in this process
-    require('./renderer.js')
-    // Solr stuff
-    var solr = require('solr-client');
-    var client = solr.createClient('localhost', '8983', 'collection1', '/solr');
-    client.get('admin/luke', null, function(err, obj){ // TODO what if luke not available
-      if(err){
-        console.log(err); // TODO handle
-      }else{
-        console.log('Solr response:', obj.fields);
-      }
-    });
-  </script>
 </html>
