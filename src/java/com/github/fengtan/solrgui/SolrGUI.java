@@ -25,12 +25,13 @@ public class SolrGUI {
 
 	public void run() {
 		Shell shell = new Shell();
+		shell.setMaximized(true);
 		shell.setText("Solr GUI");
 
 		// Set layout for shell.
 		GridLayout layout = new GridLayout();
 		shell.setLayout(layout);
-		
+
 		// Add toolbar + tab folder.
 		toolbar = new SolrGUIToolbar(shell, this); // TODO passing the SolrGUI object is ugly
 		Set<ISolrGUITabFolderListener> listeners = new HashSet<ISolrGUITabFolderListener>();
@@ -61,17 +62,17 @@ public class SolrGUI {
 	public CTabFolder getTabFolder() { // TODO drop ? could use a static tabfolder
 		return tabFolder;
 	}
-	
+
 	// TODO test exotic Solr versions
 	// TODO test elasticsearch
 	// TODO test modifying 2 documents and then commiting
 	
+	// TODO meta screenshot 0.4
 	// TODO meta about page + github.io
 	// TODO meta document all methods
 	// TODO meta rename solrgui
 	// TODO meta measure memory footprint
 	// TODO meta are all jars required ?
-	// TODO meta icon in ubuntu launcher
 	// TODO meta license (depends on swt, solrj, icons, other dependencies)
 	// TODO meta wording server/index/collection/core
 	// TODO meta travis
@@ -83,6 +84,9 @@ public class SolrGUI {
     // TODO - logs in /var/log
 	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
+	// TODO feat importing into eclipse (no .project/.classpath)
+	// TODO feat selecting first row and commiting should not NPE
+	// TODO feat opening new tab triggers repetitive requests
 	// TODO feat allow to create documents with new fields
 	// TODO feat show "(empty)" at the top	
 	// TODO feat allow to revert a specific document
@@ -113,4 +117,7 @@ public class SolrGUI {
 	// TODO doc import into eclipse
 	// TODO doc typing 'Suppr' deletes a row.
 	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
+	// TODO doc luke + javasoze/clue
+
+	// TODO obs trayitem - not supported by ubuntu https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
 }
