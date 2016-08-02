@@ -84,7 +84,6 @@ public class SolrGUI {
     // TODO - logs in /var/log
 	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
-	// TODO feat importing into eclipse (no .project/.classpath)
 	// TODO feat selecting first row and commiting should not NPE
 	// TODO feat opening new tab triggers repetitive requests
 	// TODO feat allow to create documents with new fields
