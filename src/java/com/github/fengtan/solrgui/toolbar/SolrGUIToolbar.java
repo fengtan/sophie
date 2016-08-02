@@ -28,6 +28,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
     private Image imgOptimize;
     private Image imgBackup;
     private Image imgRestore;
+    private Image imgSpreadsheet;
     
     private ToolItem itemAdd;
     private ToolItem itemDelete;
@@ -39,6 +40,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
     private ToolItem itemOptimize;
     private ToolItem itemBackup;
     private ToolItem itemRestore;
+    private ToolItem itemSpreadsheet;
     
     private SolrGUI solrGUI;
     
@@ -60,6 +62,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         imgOptimize = new Image(display, loader.getResourceAsStream("toolbar/optimize.png"));
         imgBackup = new Image(display, loader.getResourceAsStream("toolbar/backup.png")); // TODO find better icon
         imgRestore = new Image(display, loader.getResourceAsStream("toolbar/restore.png")); // TODO find better icon
+        imgSpreadsheet = new Image(display, loader.getResourceAsStream("toolbar/spreadsheet.png")); // TODO find better icon ?
 
         ToolBar toolBar = new ToolBar(shell, SWT.BORDER);
 
@@ -192,6 +195,18 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 			}
 		});
         
+        new ToolItem(toolBar, SWT.SEPARATOR);
+        
+        itemSpreadsheet = new ToolItem(toolBar, SWT.PUSH);
+        itemSpreadsheet.setEnabled(false);
+        itemSpreadsheet.setImage(imgSpreadsheet);
+        itemSpreadsheet.setToolTipText("Export as CSV file");
+        itemSpreadsheet.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				// TODO export CSV
+			}
+		});
+        
         toolBar.pack();
     }
     
@@ -207,6 +222,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         imgOptimize.dispose();
         imgBackup.dispose();
         imgRestore.dispose();
+        imgSpreadsheet.dispose();
     }
 
 	// TODO a row should be selected for itemAdd/delete/clone to be enabled
@@ -223,6 +239,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 		itemOptimize.setEnabled(enabled);
 		itemBackup.setEnabled(enabled);
 		itemRestore.setEnabled(enabled);
+		itemSpreadsheet.setEnabled(enabled);
 	}
 
 }

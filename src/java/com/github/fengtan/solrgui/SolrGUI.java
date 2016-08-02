@@ -88,10 +88,10 @@ public class SolrGUI {
 	// TODO feat selecting first row and commiting should not NPE
 	// TODO feat opening new tab triggers repetitive requests
 	// TODO feat allow to create documents with new fields
-	// TODO feat show "(empty)" at the top	
+	// TODO feat show "(empty)" at the top
+	// TODO feat fire filter only when hit enter
 	// TODO feat allow to revert a specific document
 	// TODO feat allow not to use the default request handler
-	// TODO feat allow to export in xls (POI)
 	// TODO feat selecting filter "foo (1)" genates "foo (1)" in textfield
 	// TODO feat dismax, spellcheck, debug etc
 	// TODO feat support HttpSolrServer/CloudSolrServer
@@ -104,6 +104,7 @@ public class SolrGUI {
 	// TODO feat button reload config, CoreAdminRequest, CollectionAdminRequest, replicate to slave / pull from master, etc see admin handler, crud cores (if multicore turned on)
 	// TODO feat allow to reload config on all cores
 	// TODO feat get elevation, debug, score, shard, etc
+	// TODO feat export/import documents
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc assume luke handler + select is available
