@@ -88,9 +88,8 @@ public class SolrGUITable { // TODO extend Composite ?
 	private ORDER sortOrder = ORDER.asc;
 
 	// List of documents locally updated/deleted/added.
-	// TODO use List<SolrDocument> instead of List<TableItem> ?
-	private List<TableItem> documentsUpdated;
-	private List<TableItem> documentsDeleted;
+	private List<SolrDocument> documentsUpdated;
+	private List<SolrDocument> documentsDeleted;
 	private List<SolrDocument> documentsAdded;
 	
 	private Table table;
@@ -475,8 +474,8 @@ public class SolrGUITable { // TODO extend Composite ?
 	public void refresh() {
 		// TODO re-populate columns/filters ?
 		// TODO re-populate unique field / sort field ?
-		documentsUpdated = new ArrayList<TableItem>();
-		documentsDeleted = new ArrayList<TableItem>();
+		documentsUpdated = new ArrayList<SolrDocument>();
+		documentsDeleted = new ArrayList<SolrDocument>();
 		documentsAdded = new ArrayList<SolrDocument>();
 		pages = new HashMap<Integer, SolrDocumentList>();
 		// First row is for filters, the rest is for documents (remote + locally added - though no local addition since we have just refreshed documents).
@@ -495,7 +494,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	    dialog.setFileName("documents_"+date+".csv");
 	    String path = dialog.open();
 	    // TODO what if the file already exists ?
-		SolrQuery query = getBaseQuery(0, getRemoteCount());
+		SolrQuery query = getBaseQuery(0, table.getItemCount());
 		QueryRequest request = new QueryRequest(query);
 		request.setResponseParser(new NoOpResponseParser("csv"));
 		// TODO notify user export success (export may take time).
@@ -520,8 +519,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	public void upload() {
 		// Commit local updates.
 		// TODO does not seem to be possible to update multiple documents.
-		for (TableItem item:documentsUpdated) {
-			SolrDocument document = (SolrDocument) item.getData("document");
+		for (SolrDocument document:documentsUpdated) {
 			SolrInputDocument input = new SolrInputDocument();
 		    for (String name:document.getFieldNames()) {
 		    	input.addField(name, document.getFieldValue(name), 1.0f);
@@ -537,9 +535,7 @@ public class SolrGUITable { // TODO extend Composite ?
 			}
 		}
 		// Commit local deletions.
-		for (TableItem item:documentsDeleted) {
-			// TODO
-			SolrDocument document = (SolrDocument) item.getData("document");
+		for (SolrDocument document:documentsDeleted) {
 			String id = document.getFieldValue(uniqueField).toString(); // TODO what if no uniquekey
 			try {
 				client.deleteById(id);
@@ -684,20 +680,29 @@ public class SolrGUITable { // TODO extend Composite ?
 
 	public void updateDocument(TableItem item, int columnIndex, String newValue) {
 		SolrDocument document = (SolrDocument) item.getData("document");
+		// The row may not contain any document (e.g. the first row, which contains the filters).
+		if (document == null) {
+			return;
+		}
 		// We reduce by 1 since the first column is used for row ID.
 		document.setField(fields.get(columnIndex-1).getName(), newValue);
 		item.setText(columnIndex, newValue);
 		// TODO if new record, then leave green
-		if (!documentsUpdated.contains(item)) {
-			documentsUpdated.add(item);	
+		if (!documentsUpdated.contains(document)) {
+			documentsUpdated.add(document);	
 		}
 		item.setBackground(YELLOW);
 	}
 	
 	private void deleteDocument(TableItem item) {
 		// TODO if local item (i.e. does not exist on server), then just drop the row + update rowcount.
-		if (!documentsDeleted.contains(item)) {
-			documentsDeleted.add(item);
+		SolrDocument document = (SolrDocument) item.getData("document");
+		// The row may not contain any document (e.g. the first row, which contains the filters).
+		if (document == null) {
+			return;
+		}
+		if (!documentsDeleted.contains(document)) {
+			documentsDeleted.add(document);
 		}
 		item.setBackground(RED);
 	}
