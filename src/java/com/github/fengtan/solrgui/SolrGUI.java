@@ -76,12 +76,12 @@ public class SolrGUI {
 	// TODO meta license (depends on swt, solrj, icons, other dependencies)
 	// TODO meta wording server/index/collection/core
 	// TODO meta travis
-    // TODO meta .deb package
-    // TODO - install jar into /opt or /usr/local
-    // TODO - export SOLRGUI_HOME=/usr/local/solr-gui-x.y.z
-    // TODO - export PATH=$PATH:$SOLRGUI_HOME/bin
-    // TODO - expose log4j.prop in /etc
-    // TODO - logs in /var/log
+  // TODO meta .deb package
+  // TODO - install jar into /opt or /usr/local
+  // TODO - export SOLRGUI_HOME=/usr/local/solr-gui-x.y.z
+  // TODO - export PATH=$PATH:$SOLRGUI_HOME/bin
+  // TODO - expose log4j.prop in /etc
+  // TODO - logs in /var/log
 	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
 	// TODO feat selecting first row and commiting should not NPE
@@ -92,7 +92,7 @@ public class SolrGUI {
 	// TODO feat allow to revert a specific document
 	// TODO feat allow not to use the default request handler
 	// TODO feat selecting filter "foo (1)" genates "foo (1)" in textfield
-	// TODO feat dismax, spellcheck, debug etc
+	// TODO feat dismax, spellcheck, debug, score, shard, elevation etc
 	// TODO feat support HttpSolrServer/CloudSolrServer
 	// TODO feat adapt edit dialog to support multi fields
 	// TODO feat add calendar to edit dialog / filters
@@ -102,13 +102,13 @@ public class SolrGUI {
 	// TODO feat what if field contains value "(empty)" ?
 	// TODO feat button reload config, CoreAdminRequest, CollectionAdminRequest, replicate to slave / pull from master, etc see admin handler, crud cores (if multicore turned on)
 	// TODO feat allow to reload config on all cores
-	// TODO feat get elevation, debug, score, shard, etc
 	// TODO feat export/import documents
+  // TODO feat see what luke and solr native ui provide
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc assume luke handler + select is available
-    // TODO doc https://issues.apache.org/jira/browse/SOLR-20
-    // TODO doc log4j.prop
+  // TODO doc https://issues.apache.org/jira/browse/SOLR-20
+  // TODO doc log4j.prop
 	// TODO doc "(not stored)"
 	// TODO doc unsortable fields
 	// TODO doc sort by clicking on header
@@ -117,7 +117,8 @@ public class SolrGUI {
 	// TODO doc import into eclipse
 	// TODO doc typing 'Suppr' deletes a row.
 	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
-	// TODO doc luke + javasoze/clue
+	// TODO doc luke + javasoze/clue + solarium + projectblacklight.org
+  // TODO doc publish javadoc
 
 	// TODO obs trayitem - not supported by ubuntu https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
 }

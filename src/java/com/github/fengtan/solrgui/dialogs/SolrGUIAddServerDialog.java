@@ -43,7 +43,7 @@ public class SolrGUIAddServerDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Add new server");
+		newShell.setText("Connect to server");
 	}
 	
 	@Override

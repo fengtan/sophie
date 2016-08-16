@@ -21,6 +21,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
     private Image imgAdd;
     private Image imgDelete;
     private Image imgClone;
+    private Image imgExport;
     private Image imgRefresh;
     private Image imgUpload;
     private Image imgClear;
@@ -28,11 +29,11 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
     private Image imgOptimize;
     private Image imgBackup;
     private Image imgRestore;
-    private Image imgSpreadsheet;
     
     private ToolItem itemAdd;
     private ToolItem itemDelete;
     private ToolItem itemClone;
+    private ToolItem itemExport;
     private ToolItem itemRefresh;
     private ToolItem itemUpload;
     private ToolItem itemClear;
@@ -40,7 +41,6 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
     private ToolItem itemOptimize;
     private ToolItem itemBackup;
     private ToolItem itemRestore;
-    private ToolItem itemSpreadsheet;
     
     private SolrGUI solrGUI;
     
@@ -55,6 +55,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         imgAdd = new Image(display, loader.getResourceAsStream("toolbar/add.png"));
         imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
         imgClone = new Image(display, loader.getResourceAsStream("toolbar/clone.png"));
+        imgExport = new Image(display, loader.getResourceAsStream("toolbar/export.png")); // TODO find better icon ?
         imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
         imgUpload = new Image(display, loader.getResourceAsStream("toolbar/upload.png")); // TODO find a better icon ?
         imgClear = new Image(display, loader.getResourceAsStream("toolbar/clear.png"));
@@ -62,7 +63,6 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         imgOptimize = new Image(display, loader.getResourceAsStream("toolbar/optimize.png"));
         imgBackup = new Image(display, loader.getResourceAsStream("toolbar/backup.png")); // TODO find better icon
         imgRestore = new Image(display, loader.getResourceAsStream("toolbar/restore.png")); // TODO find better icon
-        imgSpreadsheet = new Image(display, loader.getResourceAsStream("toolbar/spreadsheet.png")); // TODO find better icon ?
 
         ToolBar toolBar = new ToolBar(shell, SWT.BORDER);
 
@@ -100,6 +100,17 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 			}
 		});
 
+        itemExport = new ToolItem(toolBar, SWT.PUSH);
+        itemExport.setEnabled(false);
+        itemExport.setImage(imgExport);
+        itemExport.setToolTipText("Export as CSV file");
+        itemExport.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				SolrGUITabItem tabItem = (SolrGUITabItem) solrGUI.getTabFolder().getSelection();
+				tabItem.getTable().export();
+			}
+		});
+        
         new ToolItem(toolBar, SWT.SEPARATOR);
 
         itemRefresh = new ToolItem(toolBar, SWT.PUSH);
@@ -195,18 +206,6 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 			}
 		});
         
-        new ToolItem(toolBar, SWT.SEPARATOR);
-        
-        itemSpreadsheet = new ToolItem(toolBar, SWT.PUSH);
-        itemSpreadsheet.setEnabled(false);
-        itemSpreadsheet.setImage(imgSpreadsheet);
-        itemSpreadsheet.setToolTipText("Export as CSV file");
-        itemSpreadsheet.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				// TODO export CSV
-			}
-		});
-        
         toolBar.pack();
     }
     
@@ -215,6 +214,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         imgAdd.dispose();
         imgDelete.dispose();
         imgClone.dispose();
+        imgExport.dispose();
         imgRefresh.dispose();
         imgUpload.dispose();
         imgClear.dispose();
@@ -222,7 +222,6 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
         imgOptimize.dispose();
         imgBackup.dispose();
         imgRestore.dispose();
-        imgSpreadsheet.dispose();
     }
 
 	// TODO a row should be selected for itemAdd/delete/clone to be enabled
@@ -232,6 +231,7 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 		itemAdd.setEnabled(enabled);
 		itemDelete.setEnabled(enabled);
 		itemClone.setEnabled(enabled);
+		itemExport.setEnabled(enabled);
 		itemRefresh.setEnabled(enabled);
 		itemUpload.setEnabled(enabled);
 		itemClear.setEnabled(enabled);
@@ -239,7 +239,6 @@ public class SolrGUIToolbar implements ISolrGUITabFolderListener {
 		itemOptimize.setEnabled(enabled);
 		itemBackup.setEnabled(enabled);
 		itemRestore.setEnabled(enabled);
-		itemSpreadsheet.setEnabled(enabled);
 	}
 
 }

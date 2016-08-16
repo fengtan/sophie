@@ -1,7 +1,11 @@
 package com.github.fengtan.solrgui.tables;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +20,7 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.request.schema.SchemaRequest;
@@ -46,6 +51,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -476,6 +482,36 @@ public class SolrGUITable { // TODO extend Composite ?
 		// First row is for filters, the rest is for documents (remote + locally added - though no local addition since we have just refreshed documents).
 		table.setItemCount(1 + getRemoteCount());
 		table.clearAll();
+	}
+	
+	/*
+	 * Export documents into CSV file.
+	 */
+	public void export() {
+		FileDialog dialog = new FileDialog(table.getShell(), SWT.SAVE);
+	    dialog.setFilterNames(new String[] { "CSV Files (*.csv)", "All Files (*.*)" });
+	    dialog.setFilterExtensions(new String[] { "*.csv", "*.*" });
+	    String date = new SimpleDateFormat("yyyy-MM-dd-HH:mm").format(new Date());
+	    dialog.setFileName("documents_"+date+".csv");
+	    String path = dialog.open();
+	    // TODO what if the file already exists ?
+		SolrQuery query = getBaseQuery(0, getRemoteCount());
+		QueryRequest request = new QueryRequest(query);
+		request.setResponseParser(new NoOpResponseParser("csv"));
+		// TODO notify user export success (export may take time).
+		try {
+			NamedList<Object> response = client.request(request);
+			String csv = (String) response.get("response"); // TODO 1M lines into a String will fill the ram - is there a way to buffer solr's response ?
+			Writer writer = new PrintWriter(path, "UTF-8");
+			writer.write(csv);
+			writer.close();
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/*
