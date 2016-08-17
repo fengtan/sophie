@@ -1,8 +1,5 @@
 package com.github.fengtan.solrgui.toolbar;
 
-import java.io.IOException;
-
-import org.apache.solr.client.solrj.SolrServerException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -127,23 +124,13 @@ public class SolrGUIToolbar {
         itemClear.setImage(imgClear);
         itemClear.setToolTipText("Clear index");
         itemClear.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(SelectionEvent e) {
 		        MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		        messageBox.setText("Clear index");
 		        messageBox.setMessage("Do you really want to clear the index? This will wipe out all documents on the server.");
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
-		    		try {
-		    			SolrGUI.client.deleteByQuery("*:*");
-		    			SolrGUI.client.commit();
-		    		} catch (SolrServerException e) {
-		    			// TODO Auto-generated catch block
-		    			e.printStackTrace();
-		    		} catch (IOException e) {
-		    			// TODO Auto-generated catch block
-		    			e.printStackTrace();
-		    		}
-		    		SolrGUI.tabFolder.getDocumentsTabItem().getTable().refresh();
+		        	SolrGUI.tabFolder.getDocumentsTabItem().getTable().clear();
 		        }
 			}
 		});
@@ -152,17 +139,8 @@ public class SolrGUIToolbar {
         itemCommit.setImage(imgCommit);
         itemCommit.setToolTipText("Commit index");
         itemCommit.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				try {
-					SolrGUI.client.commit();
-				} catch (SolrServerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				SolrGUI.tabFolder.getDocumentsTabItem().getTable().refresh();
+			public void widgetSelected(SelectionEvent e) {
+				SolrGUI.tabFolder.getDocumentsTabItem().getTable().commit();
 			}
 		});
         
@@ -170,23 +148,13 @@ public class SolrGUIToolbar {
         itemOptimize.setImage(imgOptimize);
         itemOptimize.setToolTipText("Optimize index");
         itemOptimize.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(SelectionEvent e) {
 		        MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		        messageBox.setText("Optimize index");
 		        messageBox.setMessage("Do you really want to optimize the index? If the index is highly segmented, this may take several hours and will slow down requests.");
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
-		    		try {
-		    			SolrGUI.client.optimize();
-		    		} catch (SolrServerException e) {
-		    			// TODO Auto-generated catch block
-		    			e.printStackTrace();
-		    		} catch (IOException e) {
-		    			// TODO Auto-generated catch block
-		    			e.printStackTrace();
-		    		}
-		    		// Optimizing drops obsolete documents, obsolete facet values, etc.
-		        	SolrGUI.tabFolder.getDocumentsTabItem().getTable().refresh();
+		        	SolrGUI.tabFolder.getDocumentsTabItem().getTable().optimize();
 		        }
 			}
 		});
