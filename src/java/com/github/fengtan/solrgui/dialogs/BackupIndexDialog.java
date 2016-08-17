@@ -9,13 +9,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.tabs.DocumentsTabItem;
+import com.github.fengtan.solrgui.SolrGUI;
 
-public class SolrGUIRestoreIndexDialog extends Dialog {
+public class BackupIndexDialog extends Dialog {
 	
 	private Text backupName;
 	
-	public SolrGUIRestoreIndexDialog(Shell parentShell) {
+	public BackupIndexDialog(Shell parentShell) {
 		super(parentShell);
 	}
 
@@ -26,8 +26,7 @@ public class SolrGUIRestoreIndexDialog extends Dialog {
 		
 		new Label(composite, SWT.NULL).setText("Backup name");
 		backupName = new Text(composite, SWT.BORDER);
-		// TODO "Available backup names"
-		// TODO leave empty for xxx
+		// TODO "Leave empty to use the default format (yyyyMMddHHmmssSSS)."
 		// TODO set minimum size of textarea
 	    
 	    return composite;
@@ -36,14 +35,14 @@ public class SolrGUIRestoreIndexDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Restore index from a backup");
+		newShell.setText("Make a backup of the index");
 	}
 	
 	@Override
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
-			DocumentsTabItem.table.restore(backupName.getText());
+			SolrGUI.tabFolder.getDocumentsTabItem().getTable().backup(backupName.getText());
 		}
 		super.buttonPressed(buttonId);
 	}

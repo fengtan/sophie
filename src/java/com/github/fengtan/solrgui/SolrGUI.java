@@ -116,6 +116,7 @@ public class SolrGUI {
 	// TODO feat export/import documents
     // TODO feat see what luke and solr native ui provide
 	// TODO feat look for unused/obsolete methods
+	// TODO feat drop SolrGUI form class names
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc assume luke handler + select is available

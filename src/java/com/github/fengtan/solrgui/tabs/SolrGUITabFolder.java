@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.Shell;
 
 public class SolrGUITabFolder extends CTabFolder {
 	
+	private DocumentsTabItem documentsTabItem;
+	
 	public SolrGUITabFolder(Shell shell) {
 		// Create the tabs.
 		super(shell, SWT.TOP | SWT.CLOSE | SWT.BORDER);
@@ -32,8 +34,16 @@ public class SolrGUITabFolder extends CTabFolder {
 			true
 		);
 		
-		// Initialize tabs from config file.
-		new DocumentsTabItem(this);
+		// Set tabs.
+		documentsTabItem = new DocumentsTabItem(this);
+		
+		// Set focus on documents tab.
+		setSelection(documentsTabItem);
+		setFocus();
+	}
+	
+	public DocumentsTabItem getDocumentsTabItem() {
+		return documentsTabItem;
 	}
 
 }

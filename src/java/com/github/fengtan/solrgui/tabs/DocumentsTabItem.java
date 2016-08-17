@@ -10,7 +10,7 @@ import com.github.fengtan.solrgui.tables.SolrGUITable;
 
 public class DocumentsTabItem extends CTabItem {
 
-	public static SolrGUITable table; // TODO should not be static
+	private SolrGUITable table; // TODO should not be static
 	
 	public DocumentsTabItem(CTabFolder tabFolder) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
@@ -22,14 +22,14 @@ public class DocumentsTabItem extends CTabItem {
 		composite.setLayout(new GridLayout());
 		setControl(composite);
 		
-		// Set focus on this tab.
-		tabFolder.setSelection(this);
-		tabFolder.setFocus();
-		
 		// Fill in tab.
 		table = new SolrGUITable(composite); // TODO not the best place to instantiate table
 
 		composite.pack();
+	}
+	
+	public SolrGUITable getTable() {
+		return table;
 	}
 	
 }
