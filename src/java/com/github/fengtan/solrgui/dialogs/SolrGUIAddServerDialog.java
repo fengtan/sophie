@@ -19,12 +19,9 @@ public class SolrGUIAddServerDialog extends Dialog {
 
 	private Text url;
 	
-	private SolrGUITabFolder tabFolder;
-	
 	// TODO allow http auth
-	public SolrGUIAddServerDialog(Shell parentShell, SolrGUITabFolder tabFolder) {
-		super(parentShell);
-		this.tabFolder = tabFolder;
+	public SolrGUIAddServerDialog(Shell shell) {
+		super(shell);
 	}
 		
 	@Override
@@ -52,8 +49,8 @@ public class SolrGUIAddServerDialog extends Dialog {
 		if (buttonId == 0) {
 			// TODO do not create if server already exists.
 	    	// TODO validate connection/url before saving
-            SolrGUIConfig.addURL(url.getText());
-            tabFolder.addTabItem(url.getText());
+            SolrGUIConfig.setURL(url.getText());
+            // TODO open solrgui with URL entered
 		}
 		super.buttonPressed(buttonId);
 	}

@@ -9,16 +9,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.tables.SolrGUITable;
+import com.github.fengtan.solrgui.SolrGUI;
 
 public class SolrGUIRestoreIndexDialog extends Dialog {
 	
 	private Text backupName;
-	private SolrGUITable table;
 	
-	public SolrGUIRestoreIndexDialog(Shell parentShell, SolrGUITable table) {
+	public SolrGUIRestoreIndexDialog(Shell parentShell) {
 		super(parentShell);
-		this.table = table;
 	}
 
 	@Override
@@ -45,7 +43,7 @@ public class SolrGUIRestoreIndexDialog extends Dialog {
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
-			table.restore(backupName.getText());
+			SolrGUI.table.restore(backupName.getText());
 		}
 		super.buttonPressed(buttonId);
 	}

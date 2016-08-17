@@ -16,7 +16,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -58,6 +57,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.dialogs.SolrGUIEditValueDialog;
 
 public class SolrGUITable { // TODO extend Composite ?
@@ -93,10 +93,8 @@ public class SolrGUITable { // TODO extend Composite ?
 	private List<SolrDocument> documentsAdded;
 	
 	private Table table;
-	private SolrClient client;
 
-	public SolrGUITable(Composite parent, SolrClient client) {
-		this.client = client;
+	public SolrGUITable(Composite parent) {
 		this.fields = getRemoteFields(); // TODO what if new fields get created ? refresh ?
 		this.facets = getRemoteFacets();
 		this.uniqueField = getRemoteUniqueField(); // TODO what if uniquefield is not defined ?
@@ -347,7 +345,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		// TODO use SchemaRequest instead of LukeRequest
 		LukeRequest request = new LukeRequest();
 		try {
-			LukeResponse response = request.process(client);
+			LukeResponse response = request.process(SolrGUI.client);
 			return new ArrayList<FieldInfo>(response.getFieldInfo().values());
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
@@ -368,7 +366,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	private String getRemoteUniqueField() {
 		SchemaRequest.UniqueKey request = new SchemaRequest.UniqueKey();
 		try {
-			return request.process(client).getUniqueKey();
+			return request.process(SolrGUI.client).getUniqueKey();
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -384,7 +382,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		SolrQuery query = getBaseQuery(0, 0);
 		try {
 			// Solr returns a long, table expects an int.
-			long count = client.query(query).getResults().getNumFound();
+			long count = SolrGUI.client.query(query).getResults().getNumFound();
 			return Integer.parseInt(String.valueOf(count));
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
@@ -415,7 +413,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		}
 		Map<String, FacetField> facets = new HashMap<String, FacetField>();
 		try {
-			for(FacetField facet:client.query(query).getFacetFields()) {
+			for(FacetField facet:SolrGUI.client.query(query).getFacetFields()) {
 				facets.put(facet.getName(), facet);
 			}
 		} catch(SolrServerException e) {
@@ -439,7 +437,7 @@ public class SolrGUITable { // TODO extend Composite ?
 			// TODO what if sortField is not valid anymore
 			query.setSort(sortField, sortOrder);
 			try {
-				pages.put(page, client.query(query).getResults());	
+				pages.put(page, SolrGUI.client.query(query).getResults());	
 			} catch(SolrServerException e) {
 				// TODO handle exception
 				e.printStackTrace();
@@ -500,7 +498,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		request.setResponseParser(new NoOpResponseParser("csv"));
 		// TODO notify user export success (export may take time).
 		try {
-			NamedList<Object> response = client.request(request);
+			NamedList<Object> response = SolrGUI.client.request(request);
 			String csv = (String) response.get("response"); // TODO 1M lines into a String will fill the ram - is there a way to buffer solr's response ?
 			Writer writer = new PrintWriter(path, "UTF-8");
 			writer.write(csv);
@@ -526,7 +524,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		    	input.addField(name, document.getFieldValue(name), 1.0f);
 		    }
 			try {
-				client.add(input); // Returned object seems to have no relevant information.
+				SolrGUI.client.add(input); // Returned object seems to have no relevant information.
 			} catch (SolrServerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -539,7 +537,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		for (SolrDocument document:documentsDeleted) {
 			String id = document.getFieldValue(uniqueField).toString(); // TODO what if no uniquekey
 			try {
-				client.deleteById(id);
+				SolrGUI.client.deleteById(id);
 			} catch (SolrServerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -555,7 +553,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		    	input.addField(name, document.getFieldValue(name), 1.0f); // TODO 1.0f move to constant
 		    }
 			try {
-				client.add(input); // Returned object seems to have no relevant information.
+				SolrGUI.client.add(input); // Returned object seems to have no relevant information.
 			} catch (SolrServerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -566,7 +564,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		}
 		// Commit on server.
 		try {
-			client.commit();
+			SolrGUI.client.commit();
 			// TODO allow to revert a specific document
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
@@ -584,8 +582,8 @@ public class SolrGUITable { // TODO extend Composite ?
 	 */
 	public void clear() {
 		try {
-			client.deleteByQuery("*:*");
-			client.commit();
+			SolrGUI.client.deleteByQuery("*:*");
+			SolrGUI.client.commit();
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -599,7 +597,7 @@ public class SolrGUITable { // TODO extend Composite ?
 
 	public void commit() {
 		try {
-			client.commit();
+			SolrGUI.client.commit();
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -612,7 +610,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	
 	public void optimize() {
 		try {
-			client.optimize();
+			SolrGUI.client.optimize();
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -636,7 +634,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		QueryRequest request = new QueryRequest(params);
 		request.setPath("/replication");
 		try {
-			NamedList<Object> response = client.request(request);
+			NamedList<Object> response = SolrGUI.client.request(request);
 			// TODO progress bar with /replication?command=details ?
 			// TODO "OK" solrj constant ?
 			if (StringUtils.equals(response.get("status").toString(), "OK")) {
@@ -665,7 +663,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		QueryRequest request = new QueryRequest(params);
 		request.setPath("/replication");
 		try {
-			client.request(request);
+			SolrGUI.client.request(request);
 			// TODO work only for solr >= 5.2 (mention) => disable button if solr < 5.2 https://issues.apache.org/jira/browse/SOLR-6637
 			// TODO get /replication?command=restorestatus and provide feedback to user (asynchronous call), possibly with a progress bar
 			// TODO test backup/restore

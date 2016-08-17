@@ -13,7 +13,6 @@ import org.eclipse.swt.widgets.ToolItem;
 import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.dialogs.SolrGUIBackupIndexDialog;
 import com.github.fengtan.solrgui.dialogs.SolrGUIRestoreIndexDialog;
-import com.github.fengtan.solrgui.tabs.SolrGUITabItem;
 
 public class SolrGUIToolbar {
 
@@ -68,8 +67,7 @@ public class SolrGUIToolbar {
         itemAdd.setToolTipText("Add new document");
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUITabItem tabItem = (SolrGUITabItem) SolrGUI.getTabFolder().getSelection();
-				tabItem.getTable().addEmptyDocument();
+				SolrGUI.table.addEmptyDocument(); // TODO is table the right place to put upload(), clear(), etc ?
 			}
 		});
 
@@ -78,8 +76,7 @@ public class SolrGUIToolbar {
         itemDelete.setToolTipText("Delete document");
         itemDelete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUITabItem tabItem = (SolrGUITabItem) SolrGUI.getTabFolder().getSelection();
-				tabItem.getTable().deleteSelectedDocument();
+				SolrGUI.table.deleteSelectedDocument();
 			}
 		});
 
@@ -88,8 +85,7 @@ public class SolrGUIToolbar {
         itemClone.setToolTipText("Clone document");
         itemClone.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUITabItem tabItem = (SolrGUITabItem) SolrGUI.getTabFolder().getSelection();
-				tabItem.getTable().cloneSelectedDocument();
+				SolrGUI.table.cloneSelectedDocument();
 			}
 		});
 
@@ -98,8 +94,7 @@ public class SolrGUIToolbar {
         itemExport.setToolTipText("Export as CSV file");
         itemExport.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUITabItem tabItem = (SolrGUITabItem) SolrGUI.getTabFolder().getSelection();
-				tabItem.getTable().export();
+				SolrGUI.table.export();
 			}
 		});
         
@@ -110,8 +105,7 @@ public class SolrGUIToolbar {
         itemRefresh.setToolTipText("Refresh from server: this will wipe out local modifications");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUITabItem tabItem = (SolrGUITabItem) SolrGUI.getTabFolder().getSelection();
-				tabItem.getTable().refresh();
+				SolrGUI.table.refresh();
 			}
 		});
         
@@ -120,8 +114,7 @@ public class SolrGUIToolbar {
         itemUpload.setToolTipText("Upload local modifications to server");
         itemUpload.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUITabItem tabItem = (SolrGUITabItem) SolrGUI.getTabFolder().getSelection();
-				tabItem.getTable().upload();
+				SolrGUI.table.upload();
 			}
 		});
         
@@ -137,8 +130,7 @@ public class SolrGUIToolbar {
 		        messageBox.setMessage("Do you really want to clear the index? This will wipe out all documents on the server.");
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
-		        	SolrGUITabItem tabItem = (SolrGUITabItem) SolrGUI.getTabFolder().getSelection();
-					tabItem.getTable().clear();
+					SolrGUI.table.clear();
 		        }
 			}
 		});
@@ -148,8 +140,7 @@ public class SolrGUIToolbar {
         itemCommit.setToolTipText("Commit index");
         itemCommit.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-		        SolrGUITabItem tabItem = (SolrGUITabItem) SolrGUI.getTabFolder().getSelection();
-				tabItem.getTable().commit();
+				SolrGUI.table.commit();
 			}
 		});
         
@@ -163,8 +154,7 @@ public class SolrGUIToolbar {
 		        messageBox.setMessage("Do you really want to optimize the index? If the index is highly segmented, this may take several hours and will slow down requests.");
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
-		        	SolrGUITabItem tabItem = (SolrGUITabItem) SolrGUI.getTabFolder().getSelection();
-					tabItem.getTable().optimize();
+					SolrGUI.table.optimize();
 		        }
 			}
 		});
@@ -176,8 +166,7 @@ public class SolrGUIToolbar {
         itemBackup.setToolTipText("Make a backup of the index");
         itemBackup.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-	        	SolrGUITabItem tabItem = (SolrGUITabItem) SolrGUI.getTabFolder().getSelection();
-	        	new  SolrGUIBackupIndexDialog(shell, tabItem.getTable()).open();
+	        	new  SolrGUIBackupIndexDialog(shell).open();
 			}
 		});
         
@@ -186,8 +175,7 @@ public class SolrGUIToolbar {
         itemRestore.setToolTipText("Restore index from a backup");
         itemRestore.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-	        	SolrGUITabItem tabItem = (SolrGUITabItem) SolrGUI.getTabFolder().getSelection();
-	        	new  SolrGUIRestoreIndexDialog(shell, tabItem.getTable()).open();
+	        	new  SolrGUIRestoreIndexDialog(shell).open();
 			}
 		});
         

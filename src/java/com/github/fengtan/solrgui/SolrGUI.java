@@ -1,23 +1,44 @@
 package com.github.fengtan.solrgui;
 
+import java.io.IOException;
+
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
+import com.github.fengtan.solrgui.tables.SolrGUITable;
 import com.github.fengtan.solrgui.tabs.SolrGUITabFolder;
 import com.github.fengtan.solrgui.toolbar.SolrGUIToolbar;
 
 public class SolrGUI {
 	
-	private static SolrGUIToolbar toolbar; // TODO put toolbar inside tabFolder ?
-	private static SolrGUITabFolder tabFolder;
+	public static SolrGUIToolbar toolbar; // TODO put toolbar inside tabFolder ?
+	public static SolrGUITabFolder tabFolder;
+	public static SolrGUITable table;
+	public static SolrClient client; // TODO move into SolrGUITable ? so we do not store both this.server and this.url
 
 	public static void main(String[] args) { // TODO convert into static { code } ?
+		String url = "http://localhost:8983/solr/collection1"; // TODO get from args[0] or prompt when launch or from .ini/.properties
+		
+		// Connect to Solr.
+		try {
+			client = new HttpSolrClient(url);
+			client.ping(); // TODO check that response is "OK" ?
+		} catch (Throwable t) {
+			// TODO add button "retry"
+			// TODO what if server works and then goes down
+			t.printStackTrace();
+			// new Label(shell, SWT.NULL).setText(t.getMessage()); // TODO may require shell.open() to fire before
+		}
+		
+		// Create GUI.
 		Shell shell = new Shell();
 		shell.setMaximized(true);
-		shell.setText("Solr GUI");
+		shell.setText("Solr GUI - "+url);
 
 		// Set layout for shell.
 		GridLayout layout = new GridLayout();
@@ -43,13 +64,15 @@ public class SolrGUI {
 			    box.open();
 			}
 		}
+		try {
+			client.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		toolbar.finalize();
 		display.dispose();
 		shell.dispose();
-	}
-	
-	public static SolrGUITabFolder getTabFolder() {
-		return tabFolder;
 	}
 
 	// TODO test exotic Solr versions
@@ -73,7 +96,7 @@ public class SolrGUI {
     // TODO - logs in /var/log
 	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
-	// TODO feat all constants overridable using .properties file or -Dpage.size=20
+	// TODO feat all constants overridable using .properties file or -Dpage.size=20 + provide a default .properties
 	// TODO feat tab "documents", "stats", "fields"
 	// TODO feat opening new tab triggers repetitive requests
 	// TODO feat allow to create documents with new fields
@@ -94,6 +117,7 @@ public class SolrGUI {
 	// TODO feat allow to reload config on all cores
 	// TODO feat export/import documents
     // TODO feat see what luke and solr native ui provide
+	// TODO feat look for unused/obsolete methods
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc assume luke handler + select is available
