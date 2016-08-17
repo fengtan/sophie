@@ -6,12 +6,13 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.tables.SolrGUITable;
 
-public class SolrGUITabItem extends CTabItem {
+public class DocumentsTabItem extends CTabItem {
 
-	public SolrGUITabItem(CTabFolder tabFolder) {
+	public static SolrGUITable table; // TODO should not be static
+	
+	public DocumentsTabItem(CTabFolder tabFolder) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
 
 		setText("Documents");
@@ -23,11 +24,10 @@ public class SolrGUITabItem extends CTabItem {
 		
 		// Set focus on this tab.
 		tabFolder.setSelection(this);
-		tabFolder.forceFocus();
+		tabFolder.setFocus();
 		
 		// Fill in tab.
-		SolrGUI.table = new SolrGUITable(composite); // TODO not the best place to instantiate table
-
+		table = new SolrGUITable(composite); // TODO not the best place to instantiate table
 
 		composite.pack();
 	}

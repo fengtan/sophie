@@ -33,7 +33,7 @@ public class SolrGUITabFolder extends CTabFolder {
 		);
 		
 		// Initialize tabs from config file.
-		new SolrGUITabItem(this);
+		new DocumentsTabItem(this);
 	}
 
 }

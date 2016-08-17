@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.SolrGUI;
+import com.github.fengtan.solrgui.tabs.DocumentsTabItem;
 
 public class SolrGUIRestoreIndexDialog extends Dialog {
 	
@@ -43,7 +43,7 @@ public class SolrGUIRestoreIndexDialog extends Dialog {
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
-			SolrGUI.table.restore(backupName.getText());
+			DocumentsTabItem.table.restore(backupName.getText());
 		}
 		super.buttonPressed(buttonId);
 	}

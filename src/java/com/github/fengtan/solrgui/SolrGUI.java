@@ -10,7 +10,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-import com.github.fengtan.solrgui.tables.SolrGUITable;
 import com.github.fengtan.solrgui.tabs.SolrGUITabFolder;
 import com.github.fengtan.solrgui.toolbar.SolrGUIToolbar;
 
@@ -18,7 +17,6 @@ public class SolrGUI {
 	
 	public static SolrGUIToolbar toolbar; // TODO put toolbar inside tabFolder ?
 	public static SolrGUITabFolder tabFolder;
-	public static SolrGUITable table;
 	public static SolrClient client; // TODO move into SolrGUITable ? so we do not store both this.server and this.url
 
 	public static void main(String[] args) { // TODO convert into static { code } ?
