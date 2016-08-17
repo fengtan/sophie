@@ -578,51 +578,6 @@ public class SolrGUITable { // TODO extend Composite ?
 	}
 	
 	/*
-	 * Delete all documents on server.
-	 */
-	public void clear() {
-		try {
-			SolrGUI.client.deleteByQuery("*:*");
-			SolrGUI.client.commit();
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		refresh();
-	}
-	
-
-	public void commit() {
-		try {
-			SolrGUI.client.commit();
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		refresh();
-	}
-	
-	public void optimize() {
-		try {
-			SolrGUI.client.optimize();
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// Optimizing drops obsolete documents, obsolete facet values, etc.
-		refresh();
-	}
-	
-	/*
 	 * Backup index on solr server
 	 * 
 	 * TODO notify user name/place of backup
