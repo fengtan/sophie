@@ -1,29 +1,20 @@
 package com.github.fengtan.solrgui;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-import com.github.fengtan.solrgui.tabs.ISolrGUITabFolderListener;
 import com.github.fengtan.solrgui.tabs.SolrGUITabFolder;
 import com.github.fengtan.solrgui.toolbar.SolrGUIToolbar;
 
 public class SolrGUI {
 	
-	private SolrGUIToolbar toolbar;
-	private SolrGUITabFolder tabFolder;
+	private static SolrGUIToolbar toolbar; // TODO put toolbar inside tabFolder ?
+	private static SolrGUITabFolder tabFolder;
 
-	public static void main(String[] args) {
-		new SolrGUI().run();
-	}
-
-	public void run() {
+	public static void main(String[] args) { // TODO convert into static { code } ?
 		Shell shell = new Shell();
 		shell.setMaximized(true);
 		shell.setText("Solr GUI");
@@ -33,10 +24,8 @@ public class SolrGUI {
 		shell.setLayout(layout);
 
 		// Add toolbar + tab folder.
-		toolbar = new SolrGUIToolbar(shell, this); // TODO passing the SolrGUI object is ugly
-		Set<ISolrGUITabFolderListener> listeners = new HashSet<ISolrGUITabFolderListener>();
-		listeners.add(toolbar);
-		tabFolder = new SolrGUITabFolder(shell, listeners); // TODO could refactor and not use a Set.
+		toolbar = new SolrGUIToolbar(shell);
+		tabFolder = new SolrGUITabFolder(shell);
 		
 		// Make the shell to display its content.
 		shell.open();
@@ -59,7 +48,7 @@ public class SolrGUI {
 		shell.dispose();
 	}
 	
-	public CTabFolder getTabFolder() { // TODO drop ? could use a static tabfolder
+	public static SolrGUITabFolder getTabFolder() {
 		return tabFolder;
 	}
 
@@ -84,6 +73,8 @@ public class SolrGUI {
     // TODO - logs in /var/log
 	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
+	// TODO feat all constants overridable using .properties file or -Dpage.size=20
+	// TODO feat tab "documents", "stats", "fields"
 	// TODO feat opening new tab triggers repetitive requests
 	// TODO feat allow to create documents with new fields
 	// TODO feat show "(empty)" at the top

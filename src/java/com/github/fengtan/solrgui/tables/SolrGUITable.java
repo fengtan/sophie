@@ -494,6 +494,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	    dialog.setFileName("documents_"+date+".csv");
 	    String path = dialog.open();
 	    // TODO what if the file already exists ?
+	    // TODO NPE if user does not select any folder
 		SolrQuery query = getBaseQuery(0, table.getItemCount());
 		QueryRequest request = new QueryRequest(query);
 		request.setResponseParser(new NoOpResponseParser("csv"));
@@ -512,7 +513,7 @@ public class SolrGUITable { // TODO extend Composite ?
 			e.printStackTrace();
 		}
 	}
-	
+
 	/*
 	 * Commit local changes to the Solr server.
 	 */
