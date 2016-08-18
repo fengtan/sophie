@@ -6,11 +6,11 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.github.fengtan.solrgui.tables.SolrGUITable;
+import com.github.fengtan.solrgui.tables.DocumentsTable;
 
 public class DocumentsTabItem extends CTabItem {
 
-	private SolrGUITable table; // TODO should not be static
+	private DocumentsTable table; // TODO should not be static
 	
 	public DocumentsTabItem(CTabFolder tabFolder) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());
@@ -23,12 +23,12 @@ public class DocumentsTabItem extends CTabItem {
 		setControl(composite);
 		
 		// Fill in tab.
-		table = new SolrGUITable(composite); // TODO not the best place to instantiate table
+		table = new DocumentsTable(composite); // TODO not the best place to instantiate table ?
 
 		composite.pack();
 	}
 	
-	public SolrGUITable getTable() {
+	public DocumentsTable getTable() {
 		return table;
 	}
 	

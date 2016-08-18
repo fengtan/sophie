@@ -60,7 +60,7 @@ import org.eclipse.swt.widgets.Text;
 import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.dialogs.EditValueDialog;
 
-public class SolrGUITable { // TODO extend Composite ?
+public class DocumentsTable { // TODO extend Composite ?
 
 	private static final Color YELLOW = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
 	private static final Color RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
@@ -94,7 +94,7 @@ public class SolrGUITable { // TODO extend Composite ?
 	
 	private Table table;
 
-	public SolrGUITable(Composite parent) {
+	public DocumentsTable(Composite parent) {
 		this.fields = getRemoteFields(); // TODO what if new fields get created ? refresh ?
 		this.facets = getRemoteFacets();
 		this.uniqueField = getRemoteUniqueField(); // TODO what if uniquefield is not defined ?
@@ -120,7 +120,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		table.setHeaderVisible(true);
 		
 		// Add KeyListener to delete documents.
-		// TODO hitting "suppr" or clicking the button a second time should remove the deletion.
+		// TODO hitting "suppr" or clicking the button (in the toolbar) a second time should remove the deletion.
 		table.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
@@ -303,7 +303,7 @@ public class SolrGUITable { // TODO extend Composite ?
 		
 		// Add editor dialog.
 		final EditValueDialog dialog = new EditValueDialog(table.getShell());
-		final SolrGUITable tmp = this; // TODO not very elegant
+		final DocumentsTable tmp = this; // TODO not very elegant
 		table.addListener(SWT.MouseDoubleClick, new Listener() {
 			public void handleEvent(Event event) {
 				Point point = new Point(event.x, event.y);

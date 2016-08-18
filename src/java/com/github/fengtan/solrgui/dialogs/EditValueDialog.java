@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.tables.SolrGUITable;
+import com.github.fengtan.solrgui.tables.DocumentsTable;
 
 public class EditValueDialog extends Dialog {
 	
@@ -19,7 +19,7 @@ public class EditValueDialog extends Dialog {
 	private String oldValue;
 	private TableItem item;
 	private int columnIndex;
-	private SolrGUITable table;
+	private DocumentsTable table;
 	
 	public EditValueDialog(Shell parentShell) {
 		super(parentShell);
@@ -58,7 +58,7 @@ public class EditValueDialog extends Dialog {
 		super.buttonPressed(buttonId);
 	}
 
-	public int open(String oldValue, TableItem item, int columnIndex, SolrGUITable table) {
+	public int open(String oldValue, TableItem item, int columnIndex, DocumentsTable table) {
 		this.oldValue = oldValue;
 		this.item = item;
 		this.columnIndex = columnIndex;
