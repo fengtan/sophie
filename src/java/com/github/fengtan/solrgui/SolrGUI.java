@@ -11,13 +11,12 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import com.github.fengtan.solrgui.tabs.SolrGUITabFolder;
-import com.github.fengtan.solrgui.toolbar.SolrGUIToolbar;
 
 public class SolrGUI {
-	
-	public static SolrGUIToolbar toolbar; // TODO put toolbar inside tabFolder ?
-	public static SolrGUITabFolder tabFolder;
+
 	public static SolrClient client; // TODO move into SolrGUITable ? so we do not store both this.server and this.url
+	public static SolrGUITabFolder tabFolder;
+	public static Shell shell; // TODO keeping shell as attribute (+public static) is ugly
 
 	public static void main(String[] args) { // TODO convert into static { code } ?
 		String url = "http://localhost:8983/solr/collection1"; // TODO get from args[0] or prompt when launch or from .ini/.properties
@@ -34,7 +33,7 @@ public class SolrGUI {
 		}
 		
 		// Create GUI.
-		Shell shell = new Shell();
+		shell = new Shell();
 		shell.setMaximized(true);
 		shell.setText("Solr GUI - "+url);
 
@@ -42,8 +41,7 @@ public class SolrGUI {
 		GridLayout layout = new GridLayout();
 		shell.setLayout(layout);
 
-		// Add toolbar + tab folder.
-		toolbar = new SolrGUIToolbar(shell);
+		// Add tabfolder.
 		tabFolder = new SolrGUITabFolder(shell);
 		
 		// Make the shell to display its content.
@@ -68,7 +66,6 @@ public class SolrGUI {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		toolbar.finalize();
 		display.dispose();
 		shell.dispose();
 	}
@@ -77,7 +74,7 @@ public class SolrGUI {
 	// TODO test elasticsearch
 	// TODO test modifying 2 documents and then commiting
 	
-	// TODO meta screenshot 0.4
+	// TODO meta screenshot 0.5
 	// TODO meta about page + github.io
 	// TODO meta document all methods
 	// TODO meta rename solrgui
@@ -108,7 +105,6 @@ public class SolrGUI {
 	// TODO feat adapt edit dialog to support multi fields
 	// TODO feat add calendar to edit dialog / filters
 	// TODO feat allow to select multiple values for each filter
-	// TODO feat opening new server makes virtual handler display all rows
 	// TODO feat support empty facets on free text fields (workaround: add "(empty) (1)" in free text 
 	// TODO feat what if field contains value "(empty)" ?
 	// TODO feat button reload config, CoreAdminRequest, CollectionAdminRequest, replicate to slave / pull from master, etc see admin handler, crud cores (if multicore turned on)
@@ -118,6 +114,7 @@ public class SolrGUI {
 	// TODO feat look for unused/obsolete methods
 	// TODO feat drop SolrGUI form class names
 	// TODO feat "favorites/recently opened servers"
+	// TODO feat "open new connection/new server
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc assume luke handler + select is available

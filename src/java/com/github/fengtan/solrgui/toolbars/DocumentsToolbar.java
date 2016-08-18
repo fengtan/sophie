@@ -1,12 +1,12 @@
-package com.github.fengtan.solrgui.toolbar;
+package com.github.fengtan.solrgui.toolbars;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -14,7 +14,7 @@ import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.dialogs.BackupIndexDialog;
 import com.github.fengtan.solrgui.dialogs.RestoreIndexDialog;
 
-public class SolrGUIToolbar {
+public class DocumentsToolbar {
 
     private Image imgAdd;
     private Image imgDelete;
@@ -40,12 +40,12 @@ public class SolrGUIToolbar {
     private ToolItem itemBackup;
     private ToolItem itemRestore;
     
-    public SolrGUIToolbar(Shell shell) {
-    	initToolbar(shell);
+    public DocumentsToolbar(Composite composite) {
+    	initToolbar(composite);
     }
     
-    protected void initToolbar(final Shell shell) {
-        Display display = shell.getDisplay();
+    protected void initToolbar(final Composite composite) {
+        Display display = composite.getDisplay();
         ClassLoader loader = getClass().getClassLoader();
         imgAdd = new Image(display, loader.getResourceAsStream("toolbar/add.png"));
         imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
@@ -59,7 +59,7 @@ public class SolrGUIToolbar {
         imgBackup = new Image(display, loader.getResourceAsStream("toolbar/backup.png")); // TODO find better icon
         imgRestore = new Image(display, loader.getResourceAsStream("toolbar/restore.png")); // TODO find better icon
 
-        ToolBar toolBar = new ToolBar(shell, SWT.BORDER);
+        ToolBar toolBar = new ToolBar(composite, SWT.BORDER);
 
         // TODO allow to create documents with new fields
         itemAdd = new ToolItem(toolBar, SWT.PUSH);
@@ -125,7 +125,7 @@ public class SolrGUIToolbar {
         itemClear.setToolTipText("Clear index");
         itemClear.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-		        MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		        MessageBox messageBox = new MessageBox(SolrGUI.shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		        messageBox.setText("Clear index");
 		        messageBox.setMessage("Do you really want to clear the index? This will wipe out all documents on the server.");
 		        int response = messageBox.open();
@@ -149,7 +149,7 @@ public class SolrGUIToolbar {
         itemOptimize.setToolTipText("Optimize index");
         itemOptimize.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-		        MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		        MessageBox messageBox = new MessageBox(SolrGUI.shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		        messageBox.setText("Optimize index");
 		        messageBox.setMessage("Do you really want to optimize the index? If the index is highly segmented, this may take several hours and will slow down requests.");
 		        int response = messageBox.open();
@@ -166,7 +166,7 @@ public class SolrGUIToolbar {
         itemBackup.setToolTipText("Make a backup of the index");
         itemBackup.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-	        	new  BackupIndexDialog(shell).open();
+	        	new  BackupIndexDialog(SolrGUI.shell).open();
 			}
 		});
         
@@ -175,7 +175,7 @@ public class SolrGUIToolbar {
         itemRestore.setToolTipText("Restore index from a backup");
         itemRestore.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-	        	new  RestoreIndexDialog(shell).open();
+	        	new RestoreIndexDialog(SolrGUI.shell).open();
 			}
 		});
         

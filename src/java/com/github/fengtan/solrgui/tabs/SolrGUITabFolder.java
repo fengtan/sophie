@@ -11,6 +11,7 @@ public class SolrGUITabFolder extends CTabFolder {
 	
 	private DocumentsTabItem documentsTabItem;
 	private FieldsTabItem fieldsTabItem;
+	private CoresTabItem coresTabItem;
 	
 	public SolrGUITabFolder(Shell shell) {
 		// Create the tabs.
@@ -38,6 +39,7 @@ public class SolrGUITabFolder extends CTabFolder {
 		// Set tabs.
 		documentsTabItem = new DocumentsTabItem(this);
 		fieldsTabItem = new FieldsTabItem(this);
+		coresTabItem = new CoresTabItem(this);
 		
 		// Set focus on documents tab.
 		setSelection(documentsTabItem);

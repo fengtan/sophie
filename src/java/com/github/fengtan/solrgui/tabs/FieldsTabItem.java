@@ -31,7 +31,7 @@ public class FieldsTabItem extends CTabItem {
 		// Add table.
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
 
-		final Table table = new Table(composite, style);
+		final Table table = new Table(composite, style); // TODO turn into a FieldsTable class ?
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
