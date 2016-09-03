@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class SolrGUIConfig {
+public class Config {
 
 	// TODO make sure hidden file works on windows
 	// TODO what if file is not properties format

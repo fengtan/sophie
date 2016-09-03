@@ -95,9 +95,9 @@ public class DocumentsTable { // TODO extend Composite ?
 	private Table table;
 
 	public DocumentsTable(Composite parent) {
-		this.fields = getRemoteFields(); // TODO what if new fields get created ? refresh ?
+		this.fields = SolrGUI.getRemoteFields();
 		this.facets = getRemoteFacets();
-		this.uniqueField = getRemoteUniqueField(); // TODO what if uniquefield is not defined ?
+		this.uniqueField = SolrGUI.getRemoteUniqueField();
 		this.sortField = uniqueField; // By default we sort documents by uniqueKey TODO what if uniqueKey is not sortable ?
 		this.table = createTable(parent);
 		// Initialize cache + row count.
@@ -339,43 +339,6 @@ public class DocumentsTable { // TODO extend Composite ?
 		// TODO ^ unless SchemaRequest parses flags ?
 		EnumSet<FieldFlag> flags = FieldInfo.parseFlags(field.getSchema());
 		return (flags.contains(FieldFlag.INDEXED) && !flags.contains(FieldFlag.DOC_VALUES) && !flags.contains(FieldFlag.MULTI_VALUED));		
-	}
-	
-	private List<FieldInfo> getRemoteFields() {
-		// TODO use SchemaRequest instead of LukeRequest
-		LukeRequest request = new LukeRequest();
-		try {
-			LukeResponse response = request.process(SolrGUI.client);
-			return new ArrayList<FieldInfo>(response.getFieldInfo().values());
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return new ArrayList<FieldInfo>(); // TODO Collections.EMPTY_LIST
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return new ArrayList<FieldInfo>(); // TODO Collections.EMPTY_LIST
-		}
-		/* TODO provide option to use this in case Luke handler is not available? requires at least 1 document in the server
-		Collection<String> fields = getAllDocuments().get(0).getFieldNames();
-		return fields.toArray(new String[fields.size()]);
-		*/
-	}
-
-	// TODO could merge with getRemoteFields() to make less queries.
-	private String getRemoteUniqueField() {
-		SchemaRequest.UniqueKey request = new SchemaRequest.UniqueKey();
-		try {
-			return request.process(SolrGUI.client).getUniqueKey();
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return ""; // TODO log WARNING
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return ""; // TODO log WARNING
-		}
 	}
 	
 	private int getRemoteCount() {

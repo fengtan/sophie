@@ -12,7 +12,7 @@ import com.github.fengtan.solrgui.toolbars.DocumentsToolbar;
 public class DocumentsTabItem extends CTabItem {
 
 	private DocumentsToolbar toolbar;
-	private DocumentsTable table; // TODO should not be static
+	private DocumentsTable table;
 	
 	public DocumentsTabItem(CTabFolder tabFolder) {
 		super(tabFolder, SWT.NONE, tabFolder.getItemCount());

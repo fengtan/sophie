@@ -9,8 +9,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.config.SolrGUIConfig;
-import com.github.fengtan.solrgui.tabs.SolrGUITabFolder;
+import com.github.fengtan.solrgui.config.Config;
 
 // TODO use messagebox instead of dialog so we get rid of jface dependency
 public class AddServerDialog extends Dialog {
@@ -49,7 +48,7 @@ public class AddServerDialog extends Dialog {
 		if (buttonId == 0) {
 			// TODO do not create if server already exists.
 	    	// TODO validate connection/url before saving
-            SolrGUIConfig.setURL(url.getText());
+            Config.setURL(url.getText());
             // TODO open solrgui with URL entered
 		}
 		super.buttonPressed(buttonId);

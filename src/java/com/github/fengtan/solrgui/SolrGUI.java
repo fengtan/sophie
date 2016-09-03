@@ -1,21 +1,28 @@
 package com.github.fengtan.solrgui;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.request.LukeRequest;
+import org.apache.solr.client.solrj.request.schema.SchemaRequest;
+import org.apache.solr.client.solrj.response.LukeResponse;
+import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-import com.github.fengtan.solrgui.tabs.SolrGUITabFolder;
+import com.github.fengtan.solrgui.tabs.TabFolder;
 
 public class SolrGUI {
 
 	public static SolrClient client; // TODO move into SolrGUITable ? so we do not store both this.server and this.url
-	public static SolrGUITabFolder tabFolder;
+	public static TabFolder tabFolder;
 	public static Shell shell; // TODO keeping shell as attribute (+public static) is ugly
 
 	public static void main(String[] args) { // TODO convert into static { code } ?
@@ -42,7 +49,7 @@ public class SolrGUI {
 		shell.setLayout(layout);
 
 		// Add tabfolder.
-		tabFolder = new SolrGUITabFolder(shell);
+		tabFolder = new TabFolder(shell);
 		
 		// Make the shell to display its content.
 		shell.open();
@@ -70,6 +77,52 @@ public class SolrGUI {
 		shell.dispose();
 	}
 
+
+	/**
+	 * Helper to get remote fields
+	 * TODO should move somethere else
+	 * TODO what if new fields get created ? refresh ? should update tables accordingly when refresh
+	 */
+	public static List<FieldInfo> getRemoteFields() {
+		// TODO use SchemaRequest instead of LukeRequest
+		LukeRequest request = new LukeRequest();
+		try {
+			LukeResponse response = request.process(client);
+			return new ArrayList<FieldInfo>(response.getFieldInfo().values());
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new ArrayList<FieldInfo>(); // TODO Collections.EMPTY_LIST
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new ArrayList<FieldInfo>(); // TODO Collections.EMPTY_LIST
+		}
+		/* TODO provide option to use this in case Luke handler is not available? requires at least 1 document in the server
+		Collection<String> fields = getAllDocuments().get(0).getFieldNames();
+		return fields.toArray(new String[fields.size()]);
+		*/
+	}
+	
+
+	// TODO could merge with getRemoteFields() to make less queries.
+	// TODO what if uniquefield is not defined ?
+	// TODO should move somethere else
+	public static String getRemoteUniqueField() {
+		SchemaRequest.UniqueKey request = new SchemaRequest.UniqueKey();
+		try {
+			return request.process(client).getUniqueKey();
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ""; // TODO log WARNING
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return ""; // TODO log WARNING
+		}
+	}
+	
 	// TODO test exotic Solr versions
 	// TODO test elasticsearch
 	// TODO test modifying 2 documents and then commiting
@@ -91,6 +144,7 @@ public class SolrGUI {
     // TODO - logs in /var/log
 	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
+	// TODO sort by field name (fields+documents)
 	// TODO feat all constants overridable using .properties file or -Dpage.size=20 + provide a default .properties
 	// TODO feat tab "documents", "stats", "fields"
 	// TODO feat opening new tab triggers repetitive requests

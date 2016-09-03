@@ -7,13 +7,13 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-public class SolrGUITabFolder extends CTabFolder {
+public class TabFolder extends CTabFolder {
 	
 	private DocumentsTabItem documentsTabItem;
 	private FieldsTabItem fieldsTabItem;
 	private CoresTabItem coresTabItem;
 	
-	public SolrGUITabFolder(Shell shell) {
+	public TabFolder(Shell shell) {
 		// Create the tabs.
 		super(shell, SWT.TOP | SWT.CLOSE | SWT.BORDER);
 
