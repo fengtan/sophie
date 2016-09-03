@@ -26,7 +26,7 @@ public class SolrGUI {
 	public static Shell shell; // TODO keeping shell as attribute (+public static) is ugly
 
 	public static void main(String[] args) { // TODO convert into static { code } ?
-		String url = "http://localhost:8983/solr/collection1"; // TODO get from args[0] or prompt when launch or from .ini/.properties
+		String url = "http://localhost:8983/solr"; // TODO get from args[0] or prompt when launch or from .ini/.properties
 		
 		// Connect to Solr.
 		try {
