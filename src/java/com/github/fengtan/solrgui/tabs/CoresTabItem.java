@@ -6,7 +6,6 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.tables.CoresTable;
 
 public class CoresTabItem extends CTabItem {
@@ -22,7 +21,7 @@ public class CoresTabItem extends CTabItem {
 		setControl(composite);
 		
 		// Add table.
-		new CoresTable(composite, SolrGUI.client);
+		new CoresTable(composite);
 		
 		// Pack.
 		composite.pack();

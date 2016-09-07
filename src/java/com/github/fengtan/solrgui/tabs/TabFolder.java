@@ -15,7 +15,7 @@ public class TabFolder extends CTabFolder {
 	
 	public TabFolder(Shell shell) {
 		// Create the tabs.
-		super(shell, SWT.TOP | SWT.CLOSE | SWT.BORDER);
+		super(shell, SWT.TOP | SWT.BORDER);
 
 		// Configure tab folder.
 		setBorderVisible(true);

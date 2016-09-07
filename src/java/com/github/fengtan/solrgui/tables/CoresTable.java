@@ -17,13 +17,15 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.github.fengtan.solrgui.SolrGUI;
+
 
 public class CoresTable {
 	
 	private Table table;
 	private Map<String, Integer> colNames = new HashMap<String, Integer>();
 	
-	public CoresTable(Composite parent, SolrClient client) {
+	public CoresTable(Composite parent) {
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
 
 		table = new Table(parent, style);
@@ -39,7 +41,7 @@ public class CoresTable {
 		CoreAdminRequest request = new CoreAdminRequest();
 		request.setAction(CoreAdminAction.STATUS);
 		try {
-			CoreAdminResponse response = request.process(client); // TODO throws RemoteSolrException if query on /solr/collection1 instead of /solr
+			CoreAdminResponse response = request.process(SolrGUI.client); // TODO throws RemoteSolrException if query on /solr/collection1 instead of /solr
 			for (Map.Entry<String, NamedList<Object>> core:response.getCoreStatus()) {
 				populateLine(core.getValue(), new TableItem(table, SWT.NULL));
 			}
