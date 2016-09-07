@@ -101,15 +101,12 @@ public class SolrGUI {
 	
 	// TODO sort by field name (fields+documents)
 	// TODO feat all constants overridable using .properties file or -Dpage.size=20 + provide a default .properties
-	// TODO feat tab "documents", "stats", "fields"
-	// TODO feat opening new tab triggers repetitive requests
 	// TODO feat allow to create documents with new fields
 	// TODO feat show "(empty)" at the top
 	// TODO feat fire filter only when hit enter
 	// TODO feat allow to revert a specific document
 	// TODO feat allow not to use the default request handler
 	// TODO feat selecting filter "foo (1)" genates "foo (1)" in textfield
-	// TODO feat dismax, spellcheck, debug, score, shard, elevation etc
 	// TODO feat support HttpSolrServer/CloudSolrServer
 	// TODO feat adapt edit dialog to support multi fields
 	// TODO feat add calendar to edit dialog / filters
@@ -118,15 +115,14 @@ public class SolrGUI {
 	// TODO feat what if field contains value "(empty)" ?
 	// TODO feat button reload config, CoreAdminRequest, CollectionAdminRequest, replicate to slave / pull from master, etc see admin handler, crud cores (if multicore turned on)
 	// TODO feat allow to reload config on all cores
-	// TODO feat export/import documents
-    // TODO feat see what luke and solr native ui provide
+    // TODO feat see what luke and solr native ui provide (dismax, spellcheck, debug, score, shard, elevation etc)
 	// TODO feat look for unused/obsolete methods
 	// TODO feat drop SolrGUI form class names
 	// TODO feat "favorites/recently opened servers"
 	// TODO feat "open new connection/new server
 	
 	// TODO doc cannot filter on unindexed fields
-	// TODO doc assume luke handler + select is available
+	// TODO doc assume luke handler + select + admin/cores is available
     // TODO doc https://issues.apache.org/jira/browse/SOLR-20
     // TODO doc log4j.prop
 	// TODO doc "(not stored)"

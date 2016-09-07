@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.apache.solr.client.solrj.response.CoreAdminResponse;
@@ -58,7 +57,7 @@ public class CoresTable {
 			column.pack();// TODO needed ? might be worth to setLayout() to get rid of this
 		}
 	}
-		
+
 	private void populateLine(NamedList namedList, TableItem item) {
 		for (int idx = 0; idx < namedList.size(); idx++) {
 			Object object = namedList.getVal(idx);
