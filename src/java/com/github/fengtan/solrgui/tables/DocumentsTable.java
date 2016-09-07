@@ -20,12 +20,9 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
-import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.request.QueryRequest;
-import org.apache.solr.client.solrj.request.schema.SchemaRequest;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
-import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -59,6 +56,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.dialogs.EditValueDialog;
+import com.github.fengtan.solrgui.utils.SolrUtils;
 
 public class DocumentsTable { // TODO extend Composite ?
 
@@ -95,9 +93,9 @@ public class DocumentsTable { // TODO extend Composite ?
 	private Table table;
 
 	public DocumentsTable(Composite parent) {
-		this.fields = SolrGUI.getRemoteFields();
+		this.fields = SolrUtils.getRemoteFields(SolrGUI.client);
 		this.facets = getRemoteFacets();
-		this.uniqueField = SolrGUI.getRemoteUniqueField();
+		this.uniqueField = SolrUtils.getRemoteUniqueField(SolrGUI.client);
 		this.sortField = uniqueField; // By default we sort documents by uniqueKey TODO what if uniqueKey is not sortable ?
 		this.table = createTable(parent);
 		// Initialize cache + row count.
