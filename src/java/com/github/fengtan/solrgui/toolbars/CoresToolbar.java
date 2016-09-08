@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import com.github.fengtan.solrgui.SolrGUI;
+
 public class CoresToolbar {
 
     private Image imgAdd;
@@ -43,10 +45,11 @@ public class CoresToolbar {
 
         itemDelete = new ToolItem(toolBar, SWT.PUSH);
         itemDelete.setImage(imgDelete);
-        itemDelete.setToolTipText("Delete core");
+        itemDelete.setToolTipText("Delete core"); //TODO disable when no core selected
         itemDelete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				// TODO
+				// TODO prompt confirmation ?
+				SolrGUI.tabFolder.getCoresTabItem().getTable().deleteSelectedCore();
 			}
 		});
         

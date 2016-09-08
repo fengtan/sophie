@@ -78,4 +78,28 @@ public class CoresTable {
 		}		
 	}
 	
+	public void deleteSelectedCore() {
+		TableItem[] items = table.getSelection();
+		if (items.length > 0) {
+			// Core name is in the first column
+			deleteCore(items[0].getText(0));
+		}
+	}
+		
+	protected void deleteCore(String coreName) {
+		CoreAdminRequest request = new CoreAdminRequest();
+		request.setAction(CoreAdminAction.UNLOAD);
+		request.setCoreName(coreName);
+		try {
+			request.process(SolrGUI.client);
+		} catch (SolrServerException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		// TODO refresh table
+	}
+	
 }

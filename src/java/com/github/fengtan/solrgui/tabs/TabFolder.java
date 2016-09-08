@@ -63,5 +63,9 @@ public class TabFolder extends CTabFolder {
 	public DocumentsTabItem getDocumentsTabItem() {
 		return documentsTabItem;
 	}
+	
+	public CoresTabItem getCoresTabItem() {
+		return coresTabItem;
+	}
 
 }

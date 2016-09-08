@@ -7,11 +7,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.github.fengtan.solrgui.tables.CoresTable;
+import com.github.fengtan.solrgui.tables.DocumentsTable;
 import com.github.fengtan.solrgui.toolbars.CoresToolbar;
 
 public class CoresTabItem extends CTabItem {
 	
 	private CoresToolbar toolbar;
+	private CoresTable table;
 	
 	// TODO what if admin/cores is not available ? what if available on a different path ?
 	public CoresTabItem(CTabFolder tabFolder) {
@@ -25,7 +27,7 @@ public class CoresTabItem extends CTabItem {
 		
 		// Add toolbar and table.
 		toolbar = new CoresToolbar(composite);
-		new CoresTable(composite);
+		table = new CoresTable(composite);
 		
 		// Pack.
 		composite.pack();
@@ -35,6 +37,11 @@ public class CoresTabItem extends CTabItem {
 	public void dispose() {
 		toolbar.finalize();
 		super.dispose();
+	}
+	
+	// TODO needed ? ugly
+	public CoresTable getTable() {
+		return table;
 	}
 	
 }
