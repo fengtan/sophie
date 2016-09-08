@@ -39,7 +39,7 @@ public class CoresToolbar {
         itemAdd.setToolTipText("Add new core");
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				// TODO
+				SolrGUI.tabFolder.getCoresTabItem().getTable().addCore("foobar", "/home/workuser/solr/example/solr/collection2/"); // TODO foobar + instanceDir
 			}
 		});
 

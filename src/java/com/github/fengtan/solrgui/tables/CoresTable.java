@@ -78,6 +78,20 @@ public class CoresTable {
 		}		
 	}
 	
+	public void addCore(String name, String instanceDir) {
+		// TODO createCore is overloaded with additional params (schema file etc).
+		try {
+			CoreAdminRequest.createCore(name, instanceDir, SolrGUI.client);
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// TODO refresh table
+	}
+	
 	public void deleteSelectedCore() {
 		TableItem[] items = table.getSelection();
 		if (items.length > 0) {
@@ -86,18 +100,15 @@ public class CoresTable {
 		}
 	}
 		
-	protected void deleteCore(String coreName) {
-		CoreAdminRequest request = new CoreAdminRequest();
-		request.setAction(CoreAdminAction.UNLOAD);
-		request.setCoreName(coreName);
+	protected void deleteCore(String name) {
 		try {
-			request.process(SolrGUI.client);
-		} catch (SolrServerException e1) {
+			CoreAdminRequest.unloadCore(name, SolrGUI.client);
+		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
 		// TODO refresh table
 	}

@@ -87,7 +87,8 @@ public class SolrGUI {
     // TODO - logs in /var/log
 	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
-	// TODO sort by field name (fields+documents)
+	// TODO feat rename cores etc https://wiki.apache.org/solr/CoreAdmin
+	// TODO feat sort by field name (fields+documents)
 	// TODO feat all constants overridable using .properties file or -Dpage.size=20 + provide a default .properties
 	// TODO feat allow to create documents with new fields
 	// TODO feat show "(empty)" at the top
