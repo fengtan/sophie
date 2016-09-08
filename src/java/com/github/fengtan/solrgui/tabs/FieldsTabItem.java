@@ -7,8 +7,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.github.fengtan.solrgui.tables.FieldsTable;
+import com.github.fengtan.solrgui.toolbars.FieldsToolbar;
 
 public class FieldsTabItem extends CTabItem {
+	
+	private FieldsToolbar toolbar;
 	
 	// TODO add filter to get only indexed/stored fields
 	public FieldsTabItem(CTabFolder tabFolder) {
@@ -21,11 +24,18 @@ public class FieldsTabItem extends CTabItem {
 		composite.setLayout(new GridLayout());
 		setControl(composite);
 		
-		// Add table.
+		// Add toolbar and table.
+		toolbar = new FieldsToolbar(composite);
 		new FieldsTable(composite);
 		
 		// Pack.
 		composite.pack();
+	}
+	
+	@Override
+	public void dispose() {
+		toolbar.finalize();
+		super.dispose();
 	}
 	
 }

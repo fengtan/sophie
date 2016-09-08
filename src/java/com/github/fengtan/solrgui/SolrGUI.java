@@ -123,6 +123,7 @@ public class SolrGUI {
 	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
 	// TODO doc luke + javasoze/clue + solarium + projectblacklight.org
     // TODO doc publish javadoc
+	// TODO doc CLI args[0]
 
 	// TODO obs trayitem - not supported by ubuntu https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
 }
