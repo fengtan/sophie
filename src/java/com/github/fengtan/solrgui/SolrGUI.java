@@ -1,16 +1,9 @@
 package com.github.fengtan.solrgui;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.apache.solr.client.solrj.request.LukeRequest;
-import org.apache.solr.client.solrj.request.schema.SchemaRequest;
-import org.apache.solr.client.solrj.response.LukeResponse;
-import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
@@ -20,38 +13,31 @@ import org.eclipse.swt.widgets.Shell;
 import com.github.fengtan.solrgui.tabs.TabFolder;
 
 public class SolrGUI {
-
+	
 	public static SolrClient client; // TODO move into SolrGUITable ? so we do not store both this.server and this.url
 	public static TabFolder tabFolder;
 	public static Shell shell; // TODO keeping shell as attribute (+public static) is ugly
 
+	// TODO load url from .properties
 	public static void main(String[] args) { // TODO convert into static { code } ?
-		String url = "http://localhost:8983/solr"; // TODO get from args[0] or prompt when launch or from .ini/.properties
-		
-		// Connect to Solr.
-		try {
-			client = new HttpSolrClient(url);
-			client.ping(); // TODO check that response is "OK" ?
-		} catch (Throwable t) {
-			// TODO add button "retry"
-			// TODO what if server works and then goes down
-			t.printStackTrace();
-			// new Label(shell, SWT.NULL).setText(t.getMessage()); // TODO may require shell.open() to fire before
+		if (args.length != 1) {
+			System.err.println("Usage: java -jar SolrGUI.jar <solr-url>");
+			System.exit(1);
 		}
+		String url = args[0];
 		
-		// Create GUI.
+		// Create shell.
 		shell = new Shell();
 		shell.setMaximized(true);
+		shell.setLayout(new GridLayout());
 		shell.setText("Solr GUI - "+url);
-
-		// Set layout for shell.
-		GridLayout layout = new GridLayout();
-		shell.setLayout(layout);
-
-		// Add tabfolder.
-		tabFolder = new TabFolder(shell);
 		
-		// Make the shell to display its content.
+		// Prompt user for url.
+		client = new HttpSolrClient(url);
+		tabFolder = new TabFolder(shell);
+		// TODO what if server works and then goes down
+		
+		// Make the shell display its content.
 		shell.open();
 		Display display = shell.getDisplay();
 		while (!shell.isDisposed()) {
@@ -67,11 +53,13 @@ public class SolrGUI {
 			    box.open();
 			}
 		}
-		try {
-			client.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (client != null) {
+			try {
+				client.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
 		}
 		display.dispose();
 		shell.dispose();

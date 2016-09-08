@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.request.schema.SchemaRequest;
 import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
+
+import com.github.fengtan.solrgui.SolrGUI;
 
 public class SolrUtils {
 
@@ -18,11 +19,11 @@ public class SolrUtils {
 	 * TODO should move somethere else
 	 * TODO what if new fields get created ? refresh ? should update tables accordingly when refresh
 	 */
-	public static List<FieldInfo> getRemoteFields(SolrClient client) {
+	public static List<FieldInfo> getRemoteFields() {
 		// TODO use SchemaRequest instead of LukeRequest
 		LukeRequest request = new LukeRequest();
 		try {
-			LukeResponse response = request.process(client);
+			LukeResponse response = request.process(SolrGUI.client);
 			return new ArrayList<FieldInfo>(response.getFieldInfo().values());
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
@@ -43,10 +44,10 @@ public class SolrUtils {
 	// TODO could merge with getRemoteFields() to make less queries.
 	// TODO what if uniquefield is not defined ?
 	// TODO should move somethere else
-	public static String getRemoteUniqueField(SolrClient client) {
+	public static String getRemoteUniqueField() {
 		SchemaRequest.UniqueKey request = new SchemaRequest.UniqueKey();
 		try {
-			return request.process(client).getUniqueKey();
+			return request.process(SolrGUI.client).getUniqueKey();
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

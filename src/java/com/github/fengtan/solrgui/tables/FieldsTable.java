@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.utils.SolrUtils;
 
 public class FieldsTable {
@@ -49,8 +48,8 @@ public class FieldsTable {
 		
 		// Add data.
 		// TODO cache uniqueKey ? 2 identical requests (fields+tables), should remove 1 of the 2 and invalidate when hit refresh
-		String uniqueField = SolrUtils.getRemoteUniqueField(SolrGUI.client);
-		for (FieldInfo field:SolrUtils.getRemoteFields(SolrGUI.client)) {
+		String uniqueField = SolrUtils.getRemoteUniqueField();
+		for (FieldInfo field:SolrUtils.getRemoteFields()) {
 			TableItem item = new TableItem(table, SWT.NULL);
 			item.setText(0, field.getName());
 			item.setText(1, field.getType());

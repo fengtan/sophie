@@ -9,18 +9,31 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.config.Config;
 
 // TODO use messagebox instead of dialog so we get rid of jface dependency
-public class AddServerDialog extends Dialog {
+public class NewConnectionDialog extends Dialog {
 
 	private static final String DEFAULT_URL = "http://localhost:8983/solr/collection1";
-
+	
+	private static NewConnectionDialog dialog = null; 
+	
 	private Text url;
 	
 	// TODO allow http auth
-	public AddServerDialog(Shell shell) {
-		super(shell);
+	private NewConnectionDialog() {
+		super(SolrGUI.shell);
+	}
+	
+	/**
+	 * Singleton
+	 */
+	public static NewConnectionDialog getDialog() {
+		if (dialog == null) {
+			dialog = new NewConnectionDialog();
+		}
+		return dialog;
 	}
 		
 	@Override
@@ -39,7 +52,7 @@ public class AddServerDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Connect to server");
+		newShell.setText("New Solr connection");
 	}
 	
 	@Override
@@ -49,7 +62,7 @@ public class AddServerDialog extends Dialog {
 			// TODO do not create if server already exists.
 	    	// TODO validate connection/url before saving
             Config.setURL(url.getText());
-            // TODO open solrgui with URL entered
+            // TODO connect to new URL
 		}
 		super.buttonPressed(buttonId);
 	}

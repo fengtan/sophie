@@ -93,9 +93,9 @@ public class DocumentsTable { // TODO extend Composite ?
 	private Table table;
 
 	public DocumentsTable(Composite parent) {
-		this.fields = SolrUtils.getRemoteFields(SolrGUI.client);
+		this.fields = SolrUtils.getRemoteFields();
 		this.facets = getRemoteFacets();
-		this.uniqueField = SolrUtils.getRemoteUniqueField(SolrGUI.client);
+		this.uniqueField = SolrUtils.getRemoteUniqueField();
 		this.sortField = uniqueField; // By default we sort documents by uniqueKey TODO what if uniqueKey is not sortable ?
 		this.table = createTable(parent);
 		// Initialize cache + row count.
