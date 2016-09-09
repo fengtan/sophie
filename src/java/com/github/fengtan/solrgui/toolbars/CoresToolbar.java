@@ -61,7 +61,7 @@ public class CoresToolbar {
         itemRefresh.setToolTipText("Refresh list of cores");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				// TODO
+				SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
 			}
 		});
         

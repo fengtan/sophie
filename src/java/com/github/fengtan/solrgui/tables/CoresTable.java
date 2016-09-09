@@ -36,52 +36,13 @@ public class CoresTable {
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 
-		// Add columns + data.
-		CoreAdminRequest request = new CoreAdminRequest();
-		request.setAction(CoreAdminAction.STATUS);
-		try {
-			CoreAdminResponse response = request.process(SolrGUI.client); // TODO throws RemoteSolrException if query on /solr/collection1 instead of /solr
-			for (Map.Entry<String, NamedList<Object>> core:response.getCoreStatus()) {
-				populateLine(core.getValue(), new TableItem(table, SWT.NULL));
-			}
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		// Pack.
-		for(TableColumn column:table.getColumns()) {
-			column.pack();// TODO needed ? might be worth to setLayout() to get rid of this
-		}
-	}
-
-	private void populateLine(NamedList namedList, TableItem item) {
-		for (int idx = 0; idx < namedList.size(); idx++) {
-			Object object = namedList.getVal(idx);
-			if (object instanceof NamedList) {
-				// NamedList: go through all elements recursively.
-				populateLine((NamedList) object, item);
-			} else {
-				// Not a NamedList: add it to the table.
-				String name = namedList.getName(idx);
-				// If column does not exist yet, create it.
-				if (!colNames.containsKey(name)) {
-					TableColumn col = new TableColumn(table, SWT.LEFT);
-					col.setText(name);
-					colNames.put(name, colNames.size());
-				}
-				item.setText(colNames.get(name), object.toString());	
-			}
-		}		
+		populate();
 	}
 	
 	public void addCore(String name, String instanceDir) throws SolrServerException, IOException {
 		// TODO createCore is overloaded with additional params (schema file etc).
 		CoreAdminRequest.createCore(name, instanceDir, SolrGUI.client);
-		// TODO refresh table
+		refresh();
 	}
 	
 	// TODO what if delete default core
@@ -103,8 +64,56 @@ public class CoresTable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// TODO refresh table
+		refresh();
 	}
 	
+	public void refresh() {
+		table.removeAll();
+		populate();
+	}
+	
+	/**
+	 * Add columns + data.
+	 */
+	private void populate() {
+		CoreAdminRequest request = new CoreAdminRequest();
+		request.setAction(CoreAdminAction.STATUS);
+		try {
+			CoreAdminResponse response = request.process(SolrGUI.client); // TODO throws RemoteSolrException if query on /solr/collection1 instead of /solr
+			for (Map.Entry<String, NamedList<Object>> core:response.getCoreStatus()) {
+				populateLine(core.getValue(), new TableItem(table, SWT.NULL));
+			}
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		// Pack.
+		for(TableColumn column:table.getColumns()) {
+			column.pack();// TODO needed ? might be worth to setLayout() to get rid of this
+		}
+	}
+	
+	private void populateLine(NamedList namedList, TableItem item) {
+		for (int idx = 0; idx < namedList.size(); idx++) {
+			Object object = namedList.getVal(idx);
+			if (object instanceof NamedList) {
+				// NamedList: go through all elements recursively.
+				populateLine((NamedList) object, item);
+			} else {
+				// Not a NamedList: add it to the table.
+				String name = namedList.getName(idx);
+				// If column does not exist yet, create it.
+				if (!colNames.containsKey(name)) {
+					TableColumn col = new TableColumn(table, SWT.LEFT);
+					col.setText(name);
+					colNames.put(name, colNames.size());
+				}
+				item.setText(colNames.get(name), object.toString());	
+			}
+		}		
+	}
 	
 }
