@@ -84,6 +84,7 @@ public class CoresTable {
 		// TODO refresh table
 	}
 	
+	// TODO what if delete default core
 	public void deleteSelectedCore() {
 		TableItem[] items = table.getSelection();
 		if (items.length > 0) {

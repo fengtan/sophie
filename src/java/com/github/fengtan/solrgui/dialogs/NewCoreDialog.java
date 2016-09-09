@@ -13,7 +13,8 @@ import com.github.fengtan.solrgui.SolrGUI;
 
 public class NewCoreDialog extends Dialog {
 	
-	private static final String DEFAULT_NAME = "collection1";
+	private static final String DEFAULT_NAME = "collectionX";
+	private static final String DEFAULT_INSTANCE_DIR = "/path/to/solr/collectionX";
 	
 	private static NewCoreDialog dialog = null; 
 	
@@ -46,7 +47,7 @@ public class NewCoreDialog extends Dialog {
 		
 		new Label(composite, SWT.NULL).setText("Instance directory");
 		instanceDir = new Text(composite, SWT.BORDER);
-		// TODO set default value for instanceDir ?
+		instanceDir.setText(DEFAULT_INSTANCE_DIR);
 	    
 	    return composite;
 	}
