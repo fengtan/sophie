@@ -163,7 +163,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		        	if (!FieldInfo.parseFlags(fields.get(i).getSchema()).contains(FieldFlag.STORED)) {
 		        		item.setText(i+1, LABEL_NOT_STORED);
 		        	} else {
-		            	item.setText(i+1, Objects.toString(document.getFieldValue(fieldName), ""));
+		            	item.setText(i+1, Objects.toString(document.getFieldValue(fieldName), StringUtils.EMPTY));
 		            }
 		        }
 		        // Store document in item.
@@ -208,7 +208,7 @@ public class DocumentsTable { // TODO extend Composite ?
 							if (!isFieldSortable(f)) {
 								c.setText(f.getName()+" "+SIGNIFIER_UNSORTABLE);
 							} else {
-								c.setText(f.getName()+((column == c) ? " "+signifier : ""));	
+								c.setText(f.getName()+((column == c) ? " "+signifier : StringUtils.EMPTY));	
 							}
 						}
 
@@ -250,7 +250,7 @@ public class DocumentsTable { // TODO extend Composite ?
 			// If the number of facet values is the max, then the list of facet values might not be complete. Hence we use a free text field instead of populating the combo.
 			if (facet.getValueCount() < FACET_LIMIT) {
 				final CCombo combo = new CCombo(table, SWT.BORDER);
-				combo.add("");
+				combo.add(StringUtils.EMPTY);
 				for(Count count:facet.getValues()) {
 					combo.add(Objects.toString(count.getName(), LABEL_EMPTY)+" ("+count.getCount()+")");
 				}
@@ -264,7 +264,7 @@ public class DocumentsTable { // TODO extend Composite ?
 						Pattern pattern = Pattern.compile("^(.*) \\([0-9]+\\)$");
 						Matcher matcher = pattern.matcher(combo.getText());
 						// TODO if cannot find pattern, then should log WARNING
-						String filterValue = matcher.find() ? matcher.group(1) : "";
+						String filterValue = matcher.find() ? matcher.group(1) : StringUtils.EMPTY;
 						if (StringUtils.isEmpty(filterValue)) {
 							filters.remove(filterName);
 						} else {

@@ -2,8 +2,10 @@ package com.github.fengtan.solrgui.utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.request.schema.SchemaRequest;
@@ -28,11 +30,11 @@ public class SolrUtils {
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return new ArrayList<FieldInfo>(); // TODO Collections.EMPTY_LIST
+			return Collections.emptyList();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return new ArrayList<FieldInfo>(); // TODO Collections.EMPTY_LIST
+			return Collections.emptyList();
 		}
 		/* TODO provide option to use this in case Luke handler is not available? requires at least 1 document in the server
 		Collection<String> fields = getAllDocuments().get(0).getFieldNames();
@@ -51,11 +53,11 @@ public class SolrUtils {
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return ""; // TODO log WARNING
+			return StringUtils.EMPTY;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return ""; // TODO log WARNING
+			return StringUtils.EMPTY;
 		}
 	}
 	
