@@ -16,24 +16,24 @@ import com.github.fengtan.solrgui.dialogs.RestoreIndexDialog;
 
 public class DocumentsToolbar {
 
+    private Image imgRefresh;
     private Image imgAdd;
     private Image imgDelete;
     private Image imgClone;
-    private Image imgExport;
-    private Image imgRefresh;
     private Image imgUpload;
+    private Image imgExport;
     private Image imgClear;
     private Image imgCommit;
     private Image imgOptimize;
     private Image imgBackup;
     private Image imgRestore;
     
+    private ToolItem itemRefresh;
     private ToolItem itemAdd;
     private ToolItem itemDelete;
     private ToolItem itemClone;
-    private ToolItem itemExport;
-    private ToolItem itemRefresh;
     private ToolItem itemUpload;
+    private ToolItem itemExport;
     private ToolItem itemClear;
     private ToolItem itemCommit;
     private ToolItem itemOptimize;
@@ -47,12 +47,12 @@ public class DocumentsToolbar {
     protected void initToolbar(final Composite composite) {
         Display display = composite.getDisplay();
         ClassLoader loader = getClass().getClassLoader();
+        imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
         imgAdd = new Image(display, loader.getResourceAsStream("toolbar/add.png"));
         imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
         imgClone = new Image(display, loader.getResourceAsStream("toolbar/clone.png"));
-        imgExport = new Image(display, loader.getResourceAsStream("toolbar/export.png")); // TODO find better icon ?
-        imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
         imgUpload = new Image(display, loader.getResourceAsStream("toolbar/upload.png")); // TODO find a better icon ?
+        imgExport = new Image(display, loader.getResourceAsStream("toolbar/export.png")); // TODO find better icon ?
         imgClear = new Image(display, loader.getResourceAsStream("toolbar/clear.png"));
         imgCommit = new Image(display, loader.getResourceAsStream("toolbar/commit.png"));
         imgOptimize = new Image(display, loader.getResourceAsStream("toolbar/optimize.png"));
@@ -61,6 +61,17 @@ public class DocumentsToolbar {
 
         ToolBar toolBar = new ToolBar(composite, SWT.BORDER);
 
+        itemRefresh = new ToolItem(toolBar, SWT.PUSH);
+        itemRefresh.setImage(imgRefresh);
+        itemRefresh.setToolTipText("Refresh from server: this will wipe out local modifications");
+        itemRefresh.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				SolrGUI.tabFolder.getDocumentsTabItem().getTable().refresh();
+			}
+		});
+        
+        new ToolItem(toolBar, SWT.SEPARATOR);
+        
         // TODO allow to create documents with new fields
         itemAdd = new ToolItem(toolBar, SWT.PUSH);
         itemAdd.setImage(imgAdd);
@@ -88,26 +99,6 @@ public class DocumentsToolbar {
 				SolrGUI.tabFolder.getDocumentsTabItem().getTable().cloneSelectedDocument();
 			}
 		});
-
-        itemExport = new ToolItem(toolBar, SWT.PUSH);
-        itemExport.setImage(imgExport);
-        itemExport.setToolTipText("Export as CSV file");
-        itemExport.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				SolrGUI.tabFolder.getDocumentsTabItem().getTable().export();
-			}
-		});
-        
-        new ToolItem(toolBar, SWT.SEPARATOR);
-
-        itemRefresh = new ToolItem(toolBar, SWT.PUSH);
-        itemRefresh.setImage(imgRefresh);
-        itemRefresh.setToolTipText("Refresh from server: this will wipe out local modifications");
-        itemRefresh.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				SolrGUI.tabFolder.getDocumentsTabItem().getTable().refresh();
-			}
-		});
         
         itemUpload = new ToolItem(toolBar, SWT.PUSH);
         itemUpload.setImage(imgUpload);
@@ -120,6 +111,15 @@ public class DocumentsToolbar {
         
         new ToolItem(toolBar, SWT.SEPARATOR);
         
+        itemExport = new ToolItem(toolBar, SWT.PUSH);
+        itemExport.setImage(imgExport);
+        itemExport.setToolTipText("Export as CSV file");
+        itemExport.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				SolrGUI.tabFolder.getDocumentsTabItem().getTable().export();
+			}
+		});
+                
         itemClear = new ToolItem(toolBar, SWT.PUSH);
         itemClear.setImage(imgClear);
         itemClear.setToolTipText("Clear index");
@@ -184,12 +184,12 @@ public class DocumentsToolbar {
     
     @Override
     public void finalize() {
+        imgRefresh.dispose();
         imgAdd.dispose();
         imgDelete.dispose();
         imgClone.dispose();
-        imgExport.dispose();
-        imgRefresh.dispose();
         imgUpload.dispose();
+        imgExport.dispose();
         imgClear.dispose();
         imgCommit.dispose();
         imgOptimize.dispose();

@@ -16,15 +16,15 @@ import com.github.fengtan.solrgui.tables.CoresTable;
 
 public class CoresToolbar {
 
+    private Image imgRefresh;
     private Image imgAdd;
     private Image imgDelete;
     private Image imgRename;
-    private Image imgRefresh;
     
+    private ToolItem itemRefresh;
     private ToolItem itemAdd;
     private ToolItem itemDelete;
     private ToolItem itemRename;
-    private ToolItem itemRefresh;
     
     public CoresToolbar(Composite composite) {
     	initToolbar(composite);
@@ -34,13 +34,24 @@ public class CoresToolbar {
         Display display = composite.getDisplay();
         ClassLoader loader = getClass().getClassLoader();
 
+        imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
         imgAdd = new Image(display, loader.getResourceAsStream("toolbar/add.png"));
         imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
         imgRename = new Image(display, loader.getResourceAsStream("toolbar/clone.png")); // TODO find a better icon?
-        imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
 
         ToolBar toolBar = new ToolBar(composite, SWT.BORDER);
 
+        itemRefresh = new ToolItem(toolBar, SWT.PUSH);
+        itemRefresh.setImage(imgRefresh);
+        itemRefresh.setToolTipText("Refresh list of cores");
+        itemRefresh.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
+			}
+		});
+        
+        new ToolItem(toolBar, SWT.SEPARATOR);
+        
         itemAdd = new ToolItem(toolBar, SWT.PUSH);
         itemAdd.setImage(imgAdd);
         itemAdd.setToolTipText("Add new core");
@@ -73,25 +84,15 @@ public class CoresToolbar {
 			}
 		});
         
-        new ToolItem(toolBar, SWT.SEPARATOR);
-        
-        itemRefresh = new ToolItem(toolBar, SWT.PUSH);
-        itemRefresh.setImage(imgRefresh);
-        itemRefresh.setToolTipText("Refresh list of cores");
-        itemRefresh.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
-			}
-		});
-        
         toolBar.pack();
     }
     
     @Override
     public void finalize() {
+        imgRefresh.dispose();
     	imgAdd.dispose();
     	imgDelete.dispose();
-        imgRefresh.dispose();
+    	imgRename.dispose();
     }
 	
 }
