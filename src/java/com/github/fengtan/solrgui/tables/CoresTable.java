@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.apache.solr.client.solrj.response.CoreAdminResponse;
@@ -45,18 +46,29 @@ public class CoresTable {
 		refresh();
 	}
 	
-	// TODO what if delete default core
-	public void deleteSelectedCore() {
+	public String getSelectedCore() {
 		TableItem[] items = table.getSelection();
-		if (items.length > 0) {
-			// Core name is in the first column
-			deleteCore(items[0].getText(0));
-		}
+		// Core name is in the first column
+		return (items.length > 0) ? items[0].getText(0) : StringUtils.EMPTY;
 	}
-		
-	protected void deleteCore(String name) {
+
+	// TODO what if delete default core
+	public void deleteCore(String name) {
 		try {
 			CoreAdminRequest.unloadCore(name, SolrGUI.client);
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		refresh();
+	}
+	
+	public void renameCore(String oldCoreName, String newCoreName) {
+		try {
+			CoreAdminRequest.renameCore(oldCoreName, newCoreName, SolrGUI.client);
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

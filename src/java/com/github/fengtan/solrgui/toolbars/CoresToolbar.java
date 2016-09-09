@@ -11,15 +11,19 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.dialogs.NewCoreDialog;
+import com.github.fengtan.solrgui.dialogs.RenameCoreDialog;
+import com.github.fengtan.solrgui.tables.CoresTable;
 
 public class CoresToolbar {
 
     private Image imgAdd;
     private Image imgDelete;
+    private Image imgRename;
     private Image imgRefresh;
     
     private ToolItem itemAdd;
     private ToolItem itemDelete;
+    private ToolItem itemRename;
     private ToolItem itemRefresh;
     
     public CoresToolbar(Composite composite) {
@@ -32,6 +36,7 @@ public class CoresToolbar {
 
         imgAdd = new Image(display, loader.getResourceAsStream("toolbar/add.png"));
         imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
+        imgRename = new Image(display, loader.getResourceAsStream("toolbar/clone.png")); // TODO find a better icon?
         imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
 
         ToolBar toolBar = new ToolBar(composite, SWT.BORDER);
@@ -51,7 +56,20 @@ public class CoresToolbar {
         itemDelete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				// TODO prompt confirmation ?
-				SolrGUI.tabFolder.getCoresTabItem().getTable().deleteSelectedCore();
+				CoresTable table = SolrGUI.tabFolder.getCoresTabItem().getTable();
+				String coreName = table.getSelectedCore();
+				table.deleteCore(coreName);
+			}
+		});
+        
+        itemRename = new ToolItem(toolBar, SWT.PUSH);
+        itemRename.setImage(imgRename);
+        itemRename.setToolTipText("Rename core"); //TODO disable when no core selected
+        itemRename.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				CoresTable table = SolrGUI.tabFolder.getCoresTabItem().getTable();
+				String coreName = table.getSelectedCore();
+				new RenameCoreDialog(coreName).open();
 			}
 		});
         
