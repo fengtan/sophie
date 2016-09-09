@@ -10,27 +10,27 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.SolrGUI;
-import com.github.fengtan.solrgui.config.Config;
 
-public class NewConnectionDialog extends Dialog {
-
-	private static final String DEFAULT_URL = "http://localhost:8983/solr/collection1";
+public class NewCoreDialog extends Dialog {
 	
-	private static NewConnectionDialog dialog = null; 
+	private static final String DEFAULT_NAME = "collection1";
 	
-	private Text url;
+	private static NewCoreDialog dialog = null; 
+	
+	private Text coreName;
+	private Text instanceDir;
 	
 	// TODO allow http auth
-	private NewConnectionDialog() {
+	private NewCoreDialog() {
 		super(SolrGUI.shell);
 	}
 	
 	/**
 	 * Singleton
 	 */
-	public static NewConnectionDialog getDialog() {
+	public static NewCoreDialog getDialog() {
 		if (dialog == null) {
-			dialog = new NewConnectionDialog();
+			dialog = new NewCoreDialog();
 		}
 		return dialog;
 	}
@@ -40,30 +40,36 @@ public class NewConnectionDialog extends Dialog {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setLayout(new GridLayout(2, false));
 		
-		new Label(composite, SWT.NULL).setText("URL");
-		url = new Text(composite, SWT.BORDER);
-		url.setText(DEFAULT_URL);
+		new Label(composite, SWT.NULL).setText("Name");
+		coreName = new Text(composite, SWT.BORDER);
+		coreName.setText(DEFAULT_NAME);
+		
+		new Label(composite, SWT.NULL).setText("Instance directory");
+		instanceDir = new Text(composite, SWT.BORDER);
+		// TODO set default value for instanceDir ?
 	    
 	    return composite;
 	}
 
-	// Set title of the custom dialog.
+	/**
+	 * Set title of the custom dialog.
+	 */
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("New Solr connection");
+		newShell.setText("Add new core");
 	}
 	
 	@Override
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
-			// TODO do not create if server already exists.
-	    	// TODO validate connection/url before saving
-            Config.setURL(url.getText());
-            // TODO connect to new URL
+			try {
+				SolrGUI.tabFolder.getCoresTabItem().getTable().addCore(coreName.getText(), instanceDir.getText());	
+			} catch (Exception e) {
+				SolrGUI.showException(e);
+			}
 		}
 		super.buttonPressed(buttonId);
 	}
-
 }

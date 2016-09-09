@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.solrgui.SolrGUI;
+import com.github.fengtan.solrgui.dialogs.NewCoreDialog;
 
 public class CoresToolbar {
 
@@ -39,7 +40,7 @@ public class CoresToolbar {
         itemAdd.setToolTipText("Add new core");
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUI.tabFolder.getCoresTabItem().getTable().addCore("foobar", "/home/workuser/solr/example/solr/collection2/"); // TODO foobar + instanceDir
+				NewCoreDialog.getDialog().open();
 			}
 		});
 

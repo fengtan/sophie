@@ -45,12 +45,8 @@ public class SolrGUI {
 				if (!display.readAndDispatch()) {
 					display.sleep();	
 				}	
-			} catch (RuntimeException e) { // TODO is this the right way to handle runtime exceptions ?
-		    	e.printStackTrace(); // TODO log stack trace slf4j
-				MessageBox box = new MessageBox(shell, SWT.ICON_ERROR);
-			    box.setText("An error happened");
-			    box.setMessage(e.getMessage());
-			    box.open();
+			} catch (Exception e) {
+				showException(e);
 			}
 		}
 		if (client != null) {
@@ -63,6 +59,14 @@ public class SolrGUI {
 		}
 		display.dispose();
 		shell.dispose();
+	}
+	
+	public static void showException(Exception e) {
+    	e.printStackTrace(); // TODO log stack trace slf4j
+		MessageBox box = new MessageBox(shell, SWT.ICON_ERROR);
+	    box.setText("An error happened");
+	    box.setMessage(e.getMessage());
+	    box.open();
 	}
 
 	

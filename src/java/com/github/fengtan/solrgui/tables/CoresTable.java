@@ -74,21 +74,13 @@ public class CoresTable {
 					colNames.put(name, colNames.size());
 				}
 				item.setText(colNames.get(name), object.toString());	
-			}	
+			}
 		}		
 	}
 	
-	public void addCore(String name, String instanceDir) {
+	public void addCore(String name, String instanceDir) throws SolrServerException, IOException {
 		// TODO createCore is overloaded with additional params (schema file etc).
-		try {
-			CoreAdminRequest.createCore(name, instanceDir, SolrGUI.client);
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		CoreAdminRequest.createCore(name, instanceDir, SolrGUI.client);
 		// TODO refresh table
 	}
 	
