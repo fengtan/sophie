@@ -68,7 +68,6 @@ public class SolrGUI {
 	    box.setMessage(e.getMessage());
 	    box.open();
 	}
-
 	
 	// TODO test exotic Solr versions
 	// TODO test elasticsearch

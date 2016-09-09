@@ -89,7 +89,7 @@ public class CoresTable {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}
 		// Pack.
 		for(TableColumn column:table.getColumns()) {
 			column.pack();// TODO needed ? might be worth to setLayout() to get rid of this

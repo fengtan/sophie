@@ -25,6 +25,7 @@ public class CoresToolbar {
     public CoresToolbar(Composite composite) {
     	initToolbar(composite);
     }
+    
     protected void initToolbar(final Composite composite) {
         Display display = composite.getDisplay();
         ClassLoader loader = getClass().getClassLoader();

@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import com.github.fengtan.solrgui.SolrGUI;
+
 public class FieldsToolbar {
 
     private Image imgRefresh;
@@ -31,7 +33,7 @@ public class FieldsToolbar {
         itemRefresh.setToolTipText("Refresh list of fields");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				// TODO
+				SolrGUI.tabFolder.getFieldsTabItem().getTable().refresh();
 			}
 		});
         

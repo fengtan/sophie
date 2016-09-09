@@ -12,6 +12,7 @@ import com.github.fengtan.solrgui.toolbars.FieldsToolbar;
 public class FieldsTabItem extends CTabItem {
 	
 	private FieldsToolbar toolbar;
+	private FieldsTable table;
 	
 	// TODO add filter to get only indexed/stored fields
 	public FieldsTabItem(CTabFolder tabFolder) {
@@ -26,7 +27,7 @@ public class FieldsTabItem extends CTabItem {
 		
 		// Add toolbar and table.
 		toolbar = new FieldsToolbar(composite);
-		new FieldsTable(composite);
+		table = new FieldsTable(composite);
 		
 		// Pack.
 		composite.pack();
@@ -36,6 +37,11 @@ public class FieldsTabItem extends CTabItem {
 	public void dispose() {
 		toolbar.finalize();
 		super.dispose();
+	}
+	
+	// TODO needed ? ugly
+	public FieldsTable getTable() {
+		return table;
 	}
 	
 }

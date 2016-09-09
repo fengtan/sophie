@@ -16,7 +16,7 @@ import com.github.fengtan.solrgui.utils.SolrUtils;
 
 public class FieldsTable {
 	
-	private String[] columnNames = new String[]{
+	private static final String[] columnNames = new String[]{
 		"Name",
 		"Type",
 		"Unique",
@@ -24,10 +24,12 @@ public class FieldsTable {
 		"Schema"
 	};
 	
+	private Table table;
+	
 	public FieldsTable(Composite parent) {
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
 
-		final Table table = new Table(parent, style); // TODO turn into a FieldsTable class ?
+		table = new Table(parent, style); // TODO turn into a FieldsTable class ?
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
@@ -47,6 +49,20 @@ public class FieldsTable {
 		}
 		
 		// Add data.
+		populate();
+		
+		// Pack.
+		for(TableColumn column:table.getColumns()) {
+			column.pack();// TODO needed ? might be worth to setLayout() to get rid of this
+		}
+	}
+	
+	public void refresh() {
+		table.removeAll();
+		populate();
+	}
+	
+	private void populate() {
 		// TODO cache uniqueKey ? 2 identical requests (fields+tables), should remove 1 of the 2 and invalidate when hit refresh
 		String uniqueField = SolrUtils.getRemoteUniqueField();
 		for (FieldInfo field:SolrUtils.getRemoteFields()) {
@@ -63,11 +79,6 @@ public class FieldsTable {
 				item.setText(i, Boolean.toString(flags.contains(flag)));
 				i++;
 			}
-		}
-		
-		// Pack.
-		for(TableColumn column:table.getColumns()) {
-			column.pack();// TODO needed ? might be worth to setLayout() to get rid of this
 		}
 	}
 
