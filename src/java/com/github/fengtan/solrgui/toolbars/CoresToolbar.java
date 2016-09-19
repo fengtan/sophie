@@ -7,6 +7,7 @@ import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -20,7 +21,7 @@ import com.github.fengtan.solrgui.dialogs.CoreRenameDialog;
 import com.github.fengtan.solrgui.dialogs.CoreSwapDialog;
 import com.github.fengtan.solrgui.tables.CoresTable;
 
-public class CoresToolbar {
+public class CoresToolbar implements SelectionListener {
 
     private Image imgRefresh;
     private Image imgAdd;
@@ -101,6 +102,7 @@ public class CoresToolbar {
 		        }
 			}
 		});
+        itemDelete.setEnabled(false);
 
         itemRename = new ToolItem(toolBar, SWT.PUSH);
         itemRename.setImage(imgRename);
@@ -113,6 +115,7 @@ public class CoresToolbar {
 				new CoreRenameDialog(coreName).open();
 			}
 		});
+        itemRename.setEnabled(false);
         
         itemSwap = new ToolItem(toolBar, SWT.PUSH);
         itemSwap.setImage(imgSwap);
@@ -125,6 +128,7 @@ public class CoresToolbar {
 				new CoreSwapDialog(coreName).open();
 			}
 		});
+        itemSwap.setEnabled(false);
         
         itemReload = new ToolItem(toolBar, SWT.PUSH);
         itemReload.setImage(imgReload);
@@ -146,6 +150,7 @@ public class CoresToolbar {
 				}
 			}
 		});
+        itemReload.setEnabled(false);
         
         toolBar.pack();
     }
@@ -159,5 +164,21 @@ public class CoresToolbar {
     	imgSwap.dispose();
     	imgReload.dispose();
     }
+
+	@Override
+	public void widgetDefaultSelected(SelectionEvent e) {
+		// Do nothing.
+	}
+
+	/**
+	 * Toggle TabItems that require a row to be selected.
+	 */
+	@Override
+	public void widgetSelected(SelectionEvent e) {
+		itemDelete.setEnabled(true);
+		itemRename.setEnabled(true);
+		itemSwap.setEnabled(true);
+		itemReload.setEnabled(true);
+	}
 	
 }

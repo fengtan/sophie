@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.common.util.NamedList;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -20,7 +21,7 @@ public class CoresTable {
 	private Table table;
 	private Map<String, Integer> colNames = new HashMap<String, Integer>();
 	
-	public CoresTable(Composite parent) {
+	public CoresTable(Composite parent, SelectionListener listener) {
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
 
 		table = new Table(parent, style);
@@ -31,6 +32,7 @@ public class CoresTable {
 
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
+		table.addSelectionListener(listener);
 
 		populate();
 	}
