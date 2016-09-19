@@ -171,7 +171,7 @@ public class CoresToolbar implements SelectionListener {
 	}
 
 	/**
-	 * Toggle TabItems that require a row to be selected.
+	 * Toggle buttons that require a core to be selected.
 	 */
 	@Override
 	public void widgetSelected(SelectionEvent e) {

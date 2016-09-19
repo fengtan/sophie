@@ -39,6 +39,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -92,12 +93,12 @@ public class DocumentsTable { // TODO extend Composite ?
 	
 	private Table table;
 
-	public DocumentsTable(Composite parent) {
+	public DocumentsTable(Composite parent, SelectionListener listener) {
 		this.fields = SolrUtils.getRemoteFields();
 		this.facets = getRemoteFacets();
 		this.uniqueField = SolrUtils.getRemoteUniqueField();
 		this.sortField = uniqueField; // By default we sort documents by uniqueKey TODO what if uniqueKey is not sortable ?
-		this.table = createTable(parent);
+		this.table = createTable(parent, listener);
 		// Initialize cache + row count.
 		refresh();
 	}
@@ -105,7 +106,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	/**
 	 * Create the Table
 	 */
-	private Table createTable(Composite parent) {
+	private Table createTable(Composite parent, SelectionListener listener) {
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
 
 		final Table table = new Table(parent, style);
@@ -116,6 +117,7 @@ public class DocumentsTable { // TODO extend Composite ?
 
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
+		table.addSelectionListener(listener);
 		
 		// Add KeyListener to delete documents.
 		// TODO hitting "suppr" or clicking the button (in the toolbar) a second time should remove the deletion.

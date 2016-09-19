@@ -3,6 +3,7 @@ package com.github.fengtan.solrgui.toolbars;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -14,7 +15,7 @@ import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.dialogs.IndexBackupDialog;
 import com.github.fengtan.solrgui.dialogs.IndexRestoreDialog;
 
-public class DocumentsToolbar {
+public class DocumentsToolbar implements SelectionListener {
 
     private Image imgRefresh;
     private Image imgAdd;
@@ -93,6 +94,7 @@ public class DocumentsToolbar {
 				SolrGUI.tabFolder.getDocumentsTabItem().getTable().deleteSelectedDocument();
 			}
 		});
+        itemDelete.setEnabled(false);
 
         itemClone = new ToolItem(toolBar, SWT.PUSH);
         itemClone.setImage(imgClone);
@@ -103,6 +105,7 @@ public class DocumentsToolbar {
 				SolrGUI.tabFolder.getDocumentsTabItem().getTable().cloneSelectedDocument();
 			}
 		});
+        itemClone.setEnabled(false);
         
         itemUpload = new ToolItem(toolBar, SWT.PUSH);
         itemUpload.setImage(imgUpload);
@@ -208,4 +211,18 @@ public class DocumentsToolbar {
         imgRestore.dispose();
     }
 
+	@Override
+	public void widgetDefaultSelected(SelectionEvent e) {
+		// Do nothing.
+	}
+
+	/**
+	 * Toggle buttons that require a document to be selected.
+	 */
+	@Override
+	public void widgetSelected(SelectionEvent e) {
+		itemDelete.setEnabled(true);
+		itemClone.setEnabled(true);
+	}
+    
 }

@@ -5,7 +5,6 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.tables.DocumentsTable;
 import com.github.fengtan.solrgui.toolbars.DocumentsToolbar;
@@ -27,7 +26,7 @@ public class DocumentsTabItem extends CTabItem {
 		
 		// Add toolbar and table.
 		toolbar = new DocumentsToolbar(composite);
-		table = new DocumentsTable(composite);	
+		table = new DocumentsTable(composite, toolbar);	
 		
 		composite.pack();
 	}

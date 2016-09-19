@@ -110,6 +110,7 @@ public class SolrGUI {
 	// TODO feat look for unused/obsolete methods
 	// TODO feat drop SolrGUI from class names
 	// TODO feat "favorites/recently opened servers"
+	// TODO feat toggle "upload" only when there are changes
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc assume luke handler + select + admin/cores is available
