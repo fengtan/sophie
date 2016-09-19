@@ -3,6 +3,7 @@ package com.github.fengtan.solrgui.dialogs;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -23,19 +24,28 @@ public class DocumentEditValueDialog extends Dialog {
 	
 	public DocumentEditValueDialog(Shell parentShell) {
 		super(parentShell);
+		// Allow user to resize the dialog window.
+		setShellStyle(getShellStyle() | SWT.RESIZE);
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(1, false));
 		
 		// TODO support multiple-value fields.
-		new Label(composite, SWT.NULL).setText("New value");
-		newValue = new Text(composite, SWT.BORDER);
+		new Label(composite, SWT.NULL).setText("New value:");
+		newValue = new Text(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		newValue.setText(oldValue);
-		// TODO set minimum size of textarea
-	    
+		GridData grid = new GridData();
+		grid.widthHint = 500;
+		grid.heightHint = 50;
+		grid.horizontalAlignment = GridData.FILL;;
+		grid.verticalAlignment = GridData.FILL;;
+		grid.grabExcessHorizontalSpace = true;
+		grid.grabExcessVerticalSpace = true;
+		newValue.setLayoutData(grid);
+
 	    return composite;
 	}
 	

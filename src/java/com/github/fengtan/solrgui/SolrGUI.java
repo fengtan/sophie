@@ -89,7 +89,7 @@ public class SolrGUI {
     // TODO - logs in /var/log
 	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
-	// TODO feat CoreAdmin split/mergeindexes https://wiki.apache.org/solr/CoreAdmin
+	// TODO feat CoreAdmin split/mergeindexes https://wiki.apache.org/solr/CoreAdmin, CollectionAdminRequest, replicate to slave / pull from master
 	// TODO feat sort by field name (fields+documents)
 	// TODO feat all constants overridable using .properties file or -Dpage.size=20 + provide a default .properties
 	// TODO feat allow to create documents with new fields
@@ -104,13 +104,11 @@ public class SolrGUI {
 	// TODO feat allow to select multiple values for each filter
 	// TODO feat support empty facets on free text fields (workaround: add "(empty) (1)" in free text 
 	// TODO feat what if field contains value "(empty)" ?
-	// TODO feat button reload config, CoreAdminRequest, CollectionAdminRequest, replicate to slave / pull from master, etc see admin handler, crud cores (if multicore turned on)
 	// TODO feat allow to reload config on all cores
     // TODO feat see what luke and solr native ui provide (dismax, spellcheck, debug, score, shard, elevation etc)
 	// TODO feat look for unused/obsolete methods
 	// TODO feat drop SolrGUI from class names
 	// TODO feat "favorites/recently opened servers"
-	// TODO feat toggle "upload" only when there are changes
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc assume luke handler + select + admin/cores is available
