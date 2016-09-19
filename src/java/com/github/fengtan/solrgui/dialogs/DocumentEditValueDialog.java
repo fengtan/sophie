@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.tables.DocumentsTable;
 
-public class EditValueDialog extends Dialog {
+public class DocumentEditValueDialog extends Dialog {
 	
 	private Text newValue;
 	private String oldValue;
@@ -21,7 +21,7 @@ public class EditValueDialog extends Dialog {
 	private int columnIndex;
 	private DocumentsTable table;
 	
-	public EditValueDialog(Shell parentShell) {
+	public DocumentEditValueDialog(Shell parentShell) {
 		super(parentShell);
 	}
 

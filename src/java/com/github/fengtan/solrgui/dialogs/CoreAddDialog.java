@@ -15,25 +15,44 @@ import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.SolrGUI;
 
-public class RenameCoreDialog extends Dialog {
+public class CoreAddDialog extends Dialog {
 	
-	private String oldCoreName;
-	private Text newCoreName;
-
-	public RenameCoreDialog(String oldCoreName) {
+	private static final String DEFAULT_NAME = "collectionX";
+	private static final String DEFAULT_INSTANCE_DIR = "/path/to/solr/collectionX";
+	
+	private static CoreAddDialog dialog = null; 
+	
+	private Text coreName;
+	private Text instanceDir;
+	
+	// TODO allow http auth
+	private CoreAddDialog() {
 		super(SolrGUI.shell);
-		this.oldCoreName = oldCoreName;
 	}
-
+	
+	/**
+	 * Singleton
+	 */
+	public static CoreAddDialog getDialog() {
+		if (dialog == null) {
+			dialog = new CoreAddDialog();
+		}
+		return dialog;
+	}
+		
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setLayout(new GridLayout(2, false));
 		
-		new Label(composite, SWT.NULL).setText("New name ("+oldCoreName+")");
-		newCoreName = new Text(composite, SWT.BORDER);
-		newCoreName.setText(oldCoreName);
-
+		new Label(composite, SWT.NULL).setText("Name");
+		coreName = new Text(composite, SWT.BORDER);
+		coreName.setText(DEFAULT_NAME);
+		
+		new Label(composite, SWT.NULL).setText("Instance directory");
+		instanceDir = new Text(composite, SWT.BORDER);
+		instanceDir.setText(DEFAULT_INSTANCE_DIR);
+	    
 	    return composite;
 	}
 
@@ -43,15 +62,16 @@ public class RenameCoreDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Rename core");
+		newShell.setText("Add new core");
 	}
-
+	
 	@Override
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
 			try {
-				CoreAdminRequest.renameCore(oldCoreName, newCoreName.getText(), SolrGUI.client);
+				// TODO createCore is overloaded with additional params (schema file etc).
+				CoreAdminRequest.createCore(coreName.getText(), instanceDir.getText(), SolrGUI.client);
 				SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
 			} catch (SolrServerException e) {
 				// TODO Auto-generated catch block
@@ -59,7 +79,7 @@ public class RenameCoreDialog extends Dialog {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}			
 		}
 		super.buttonPressed(buttonId);
 	}

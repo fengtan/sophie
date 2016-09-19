@@ -2,15 +2,12 @@ package com.github.fengtan.solrgui.tabs;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-
-import com.github.fengtan.solrgui.dialogs.ConnectDialog;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 
 public class TabFolder extends CTabFolder {
 	
@@ -18,7 +15,7 @@ public class TabFolder extends CTabFolder {
 	private FieldsTabItem fieldsTabItem;
 	private CoresTabItem coresTabItem;
 	
-	public TabFolder(Shell shell) {
+	public TabFolder(Shell shell, String url) {
 		// Create the tabs.
 		super(shell, SWT.TOP | SWT.BORDER);
 
@@ -48,16 +45,13 @@ public class TabFolder extends CTabFolder {
 			new int[] {100},
 			true
 		);
-		
-		// Create the 'Add server button
-		Button button = new Button(this, SWT.PUSH | SWT.CENTER);
-		button.setText("&Connect to Solr");
-		button.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				ConnectDialog.getDialog().open();
-			}
-		});
-		setTopRight(button);
+
+		// Add Solr URL.
+		ToolBar toolbar = new ToolBar(this, SWT.NULL);
+		ToolItem item = new ToolItem(toolbar, SWT.NULL);
+		item.setText(url);
+		item.setEnabled(false);
+		setTopRight(toolbar);
 	}
 	
 	public DocumentsTabItem getDocumentsTabItem() {

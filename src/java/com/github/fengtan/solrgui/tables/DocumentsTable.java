@@ -55,7 +55,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.SolrGUI;
-import com.github.fengtan.solrgui.dialogs.EditValueDialog;
+import com.github.fengtan.solrgui.dialogs.DocumentEditValueDialog;
 import com.github.fengtan.solrgui.utils.SolrUtils;
 
 public class DocumentsTable { // TODO extend Composite ?
@@ -300,7 +300,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		}
 		
 		// Add editor dialog.
-		final EditValueDialog dialog = new EditValueDialog(table.getShell());
+		final DocumentEditValueDialog dialog = new DocumentEditValueDialog(table.getShell());
 		final DocumentsTable tmp = this; // TODO not very elegant
 		table.addListener(SWT.MouseDoubleClick, new Listener() {
 			public void handleEvent(Event event) {

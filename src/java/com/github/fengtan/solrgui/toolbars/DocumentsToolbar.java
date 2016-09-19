@@ -11,8 +11,8 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.solrgui.SolrGUI;
-import com.github.fengtan.solrgui.dialogs.BackupIndexDialog;
-import com.github.fengtan.solrgui.dialogs.RestoreIndexDialog;
+import com.github.fengtan.solrgui.dialogs.IndexBackupDialog;
+import com.github.fengtan.solrgui.dialogs.IndexRestoreDialog;
 
 public class DocumentsToolbar {
 
@@ -64,7 +64,7 @@ public class DocumentsToolbar {
         itemRefresh = new ToolItem(toolBar, SWT.PUSH);
         itemRefresh.setImage(imgRefresh);
         itemRefresh.setText("Refresh");
-        itemRefresh.setToolTipText("Refresh from server: this will wipe out local modifications");
+        itemRefresh.setToolTipText("Refresh from Solr: this will wipe out local modifications");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUI.tabFolder.getDocumentsTabItem().getTable().refresh();
@@ -107,7 +107,7 @@ public class DocumentsToolbar {
         itemUpload = new ToolItem(toolBar, SWT.PUSH);
         itemUpload.setImage(imgUpload);
         itemUpload.setText("Upload");
-        itemUpload.setToolTipText("Upload local modifications to server");
+        itemUpload.setToolTipText("Upload local modifications to Solr");
         itemUpload.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				SolrGUI.tabFolder.getDocumentsTabItem().getTable().upload();
@@ -124,7 +124,7 @@ public class DocumentsToolbar {
 			public void widgetSelected(SelectionEvent e) {
 		        MessageBox messageBox = new MessageBox(SolrGUI.shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		        messageBox.setText("Clear index");
-		        messageBox.setMessage("Do you really want to clear the index? This will wipe out all documents on the server.");
+		        messageBox.setMessage("Do you really want to clear the index? This will remove all documents from the index.");
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
 		        	SolrGUI.tabFolder.getDocumentsTabItem().getTable().clear();
@@ -176,7 +176,7 @@ public class DocumentsToolbar {
         itemBackup.setToolTipText("Make a backup of the index");
         itemBackup.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-	        	new  BackupIndexDialog(SolrGUI.shell).open();
+	        	new  IndexBackupDialog(SolrGUI.shell).open();
 			}
 		});
         
@@ -186,7 +186,7 @@ public class DocumentsToolbar {
         itemRestore.setToolTipText("Restore index from a backup");
         itemRestore.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-	        	new RestoreIndexDialog(SolrGUI.shell).open();
+	        	new IndexRestoreDialog(SolrGUI.shell).open();
 			}
 		});
         

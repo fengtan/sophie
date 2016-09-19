@@ -2,7 +2,6 @@ package com.github.fengtan.solrgui;
 
 import java.io.IOException;
 
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -14,7 +13,7 @@ import com.github.fengtan.solrgui.tabs.TabFolder;
 
 public class SolrGUI {
 	
-	public static SolrClient client; // TODO move into SolrGUITable ? so we do not store both this.server and this.url
+	public static HttpSolrClient client; // TODO move into SolrGUITable ? so we do not store both this.server and this.url
 	public static TabFolder tabFolder;
 	public static Shell shell; // TODO keeping shell as attribute (+public static) is ugly
 
@@ -34,7 +33,7 @@ public class SolrGUI {
 		
 		// Prompt user for url.
 		client = new HttpSolrClient(url);
-		tabFolder = new TabFolder(shell);
+		tabFolder = new TabFolder(shell, url);
 		// TODO what if server works and then goes down
 		
 		// Make the shell display its content.
@@ -90,7 +89,7 @@ public class SolrGUI {
     // TODO - logs in /var/log
 	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
-	// TODO feat rename cores etc https://wiki.apache.org/solr/CoreAdmin
+	// TODO feat CoreAdmin split/mergeindexes https://wiki.apache.org/solr/CoreAdmin
 	// TODO feat sort by field name (fields+documents)
 	// TODO feat all constants overridable using .properties file or -Dpage.size=20 + provide a default .properties
 	// TODO feat allow to create documents with new fields
@@ -99,7 +98,7 @@ public class SolrGUI {
 	// TODO feat allow to revert a specific document
 	// TODO feat allow not to use the default request handler
 	// TODO feat selecting filter "foo (1)" genates "foo (1)" in textfield
-	// TODO feat support HttpSolrServer/CloudSolrServer
+	// TODO feat support CloudSolrServer
 	// TODO feat adapt edit dialog to support multi fields
 	// TODO feat add calendar to edit dialog / filters
 	// TODO feat allow to select multiple values for each filter
@@ -109,9 +108,8 @@ public class SolrGUI {
 	// TODO feat allow to reload config on all cores
     // TODO feat see what luke and solr native ui provide (dismax, spellcheck, debug, score, shard, elevation etc)
 	// TODO feat look for unused/obsolete methods
-	// TODO feat drop SolrGUI form class names
+	// TODO feat drop SolrGUI from class names
 	// TODO feat "favorites/recently opened servers"
-	// TODO feat "open new connection/new server
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc assume luke handler + select + admin/cores is available

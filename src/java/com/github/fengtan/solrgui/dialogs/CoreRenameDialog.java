@@ -1,31 +1,28 @@
 package com.github.fengtan.solrgui.dialogs;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
-import org.apache.solr.common.params.CoreAdminParams.CoreAdminAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.SolrGUI;
-import com.github.fengtan.solrgui.utils.SolrUtils;
 
-public class SwapCoreDialog extends Dialog {
+public class CoreRenameDialog extends Dialog {
 	
-	private String coreName;
-	private Combo otherCoreName;
+	private String oldCoreName;
+	private Text newCoreName;
 
-	public SwapCoreDialog(String core1) {
+	public CoreRenameDialog(String oldCoreName) {
 		super(SolrGUI.shell);
-		this.coreName = core1;
+		this.oldCoreName = oldCoreName;
 	}
 
 	@Override
@@ -33,12 +30,9 @@ public class SwapCoreDialog extends Dialog {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setLayout(new GridLayout(2, false));
 		
-		new Label(composite, SWT.NULL).setText("Swap core ("+coreName+") with:");
-		otherCoreName = new Combo(parent, SWT.DROP_DOWN);
-		Object[] coreObjects = SolrUtils.getCores().keySet().toArray();
-		String[] coreStrings = Arrays.copyOf(coreObjects, coreObjects.length, String[].class); 
-		otherCoreName.setItems(coreStrings);
-		// TODO include some spacing (left-hand side).
+		new Label(composite, SWT.NULL).setText("New name ("+oldCoreName+")");
+		newCoreName = new Text(composite, SWT.BORDER);
+		newCoreName.setText(oldCoreName);
 
 	    return composite;
 	}
@@ -49,20 +43,15 @@ public class SwapCoreDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Swap cores");
+		newShell.setText("Rename core");
 	}
 
 	@Override
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
-			// TODO contrib CoreAdminRequest.swapCores() - similar to CoreAdminRequest.renameCore().
-			CoreAdminRequest request = new CoreAdminRequest();
-			request.setCoreName(coreName);
-			request.setOtherCoreName(otherCoreName.getText());
-			request.setAction(CoreAdminAction.SWAP);
 			try {
-				request.process(SolrGUI.client);
+				CoreAdminRequest.renameCore(oldCoreName, newCoreName.getText(), SolrGUI.client);
 				SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
 			} catch (SolrServerException e) {
 				// TODO Auto-generated catch block

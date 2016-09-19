@@ -1,58 +1,45 @@
 package com.github.fengtan.solrgui.dialogs;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
+import org.apache.solr.common.params.CoreAdminParams.CoreAdminAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.SolrGUI;
+import com.github.fengtan.solrgui.utils.SolrUtils;
 
-public class AddCoreDialog extends Dialog {
+public class CoreSwapDialog extends Dialog {
 	
-	private static final String DEFAULT_NAME = "collectionX";
-	private static final String DEFAULT_INSTANCE_DIR = "/path/to/solr/collectionX";
-	
-	private static AddCoreDialog dialog = null; 
-	
-	private Text coreName;
-	private Text instanceDir;
-	
-	// TODO allow http auth
-	private AddCoreDialog() {
+	private String coreName;
+	private Combo otherCoreName;
+
+	public CoreSwapDialog(String core1) {
 		super(SolrGUI.shell);
+		this.coreName = core1;
 	}
-	
-	/**
-	 * Singleton
-	 */
-	public static AddCoreDialog getDialog() {
-		if (dialog == null) {
-			dialog = new AddCoreDialog();
-		}
-		return dialog;
-	}
-		
+
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setLayout(new GridLayout(2, false));
 		
-		new Label(composite, SWT.NULL).setText("Name");
-		coreName = new Text(composite, SWT.BORDER);
-		coreName.setText(DEFAULT_NAME);
-		
-		new Label(composite, SWT.NULL).setText("Instance directory");
-		instanceDir = new Text(composite, SWT.BORDER);
-		instanceDir.setText(DEFAULT_INSTANCE_DIR);
-	    
+		new Label(composite, SWT.NULL).setText("Swap core ("+coreName+") with:");
+		otherCoreName = new Combo(parent, SWT.DROP_DOWN);
+		Object[] coreObjects = SolrUtils.getCores().keySet().toArray();
+		String[] coreStrings = Arrays.copyOf(coreObjects, coreObjects.length, String[].class); 
+		otherCoreName.setItems(coreStrings);
+		// TODO include some spacing (left-hand side).
+
 	    return composite;
 	}
 
@@ -62,16 +49,20 @@ public class AddCoreDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("Add new core");
+		newShell.setText("Swap cores");
 	}
-	
+
 	@Override
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
+			// TODO contrib CoreAdminRequest.swapCores() - similar to CoreAdminRequest.renameCore().
+			CoreAdminRequest request = new CoreAdminRequest();
+			request.setCoreName(coreName);
+			request.setOtherCoreName(otherCoreName.getText());
+			request.setAction(CoreAdminAction.SWAP);
 			try {
-				// TODO createCore is overloaded with additional params (schema file etc).
-				CoreAdminRequest.createCore(coreName.getText(), instanceDir.getText(), SolrGUI.client);
+				request.process(SolrGUI.client);
 				SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
 			} catch (SolrServerException e) {
 				// TODO Auto-generated catch block
@@ -79,7 +70,7 @@ public class AddCoreDialog extends Dialog {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}			
+			}
 		}
 		super.buttonPressed(buttonId);
 	}

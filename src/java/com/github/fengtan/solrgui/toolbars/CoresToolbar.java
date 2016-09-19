@@ -14,9 +14,9 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.solrgui.SolrGUI;
-import com.github.fengtan.solrgui.dialogs.AddCoreDialog;
-import com.github.fengtan.solrgui.dialogs.RenameCoreDialog;
-import com.github.fengtan.solrgui.dialogs.SwapCoreDialog;
+import com.github.fengtan.solrgui.dialogs.CoreAddDialog;
+import com.github.fengtan.solrgui.dialogs.CoreRenameDialog;
+import com.github.fengtan.solrgui.dialogs.CoreSwapDialog;
 import com.github.fengtan.solrgui.tables.CoresTable;
 
 public class CoresToolbar {
@@ -70,7 +70,7 @@ public class CoresToolbar {
         itemAdd.setToolTipText("Add new core");
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				AddCoreDialog.getDialog().open();
+				CoreAddDialog.getDialog().open();
 			}
 		});
 
@@ -105,7 +105,7 @@ public class CoresToolbar {
 			public void widgetSelected(SelectionEvent e) {
 				CoresTable table = SolrGUI.tabFolder.getCoresTabItem().getTable();
 				String coreName = table.getSelectedCore();
-				new RenameCoreDialog(coreName).open();
+				new CoreRenameDialog(coreName).open();
 			}
 		});
         
@@ -117,7 +117,7 @@ public class CoresToolbar {
 			public void widgetSelected(SelectionEvent e) {
 				CoresTable table = SolrGUI.tabFolder.getCoresTabItem().getTable();
 				String coreName = table.getSelectedCore();
-				new SwapCoreDialog(coreName).open();
+				new CoreSwapDialog(coreName).open();
 			}
 		});
         
