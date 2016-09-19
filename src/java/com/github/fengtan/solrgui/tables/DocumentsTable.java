@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
@@ -56,6 +57,9 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.SolrGUI;
+import com.github.fengtan.solrgui.dialogs.DocumentEditDateValueDialog;
+import com.github.fengtan.solrgui.dialogs.DocumentEditListValueDialog;
+import com.github.fengtan.solrgui.dialogs.DocumentEditTextValueDialog;
 import com.github.fengtan.solrgui.dialogs.DocumentEditValueDialog;
 import com.github.fengtan.solrgui.toolbars.ChangeListener;
 import com.github.fengtan.solrgui.utils.SolrUtils;
@@ -307,8 +311,6 @@ public class DocumentsTable { // TODO extend Composite ?
 		    editor = new TableEditor(table);
 		}
 		
-		// Add editor dialog.
-		final DocumentEditValueDialog dialog = new DocumentEditValueDialog(SolrGUI.shell);
 		table.addListener(SWT.MouseDoubleClick, new Listener() {
 			public void handleEvent(Event event) {
 				Point point = new Point(event.x, event.y);
@@ -326,6 +328,19 @@ public class DocumentsTable { // TODO extend Composite ?
 		    		if (rect.contains(point)) {
 		    			SolrDocument document = (SolrDocument) item.getData("document");
 		    			Object oldValue = document.getFieldValue(fields.get(i).getName());
+		    			// Add editor dialog:
+		    			// - datepicker if we are dealing with a date field.
+		    			// - list widget if we are dealing with a multi-valued field.
+		    			// - text if we are dealing with any other field type.
+		    			DocumentEditValueDialog dialog;
+		    			if (oldValue instanceof Date) {
+		    				dialog = new DocumentEditDateValueDialog((Date) oldValue);
+		    			} else if (oldValue instanceof AbstractList) {
+		    				dialog = new DocumentEditListValueDialog((AbstractList) oldValue);
+		    			} else {
+		    				String oldValueString = Objects.toString(oldValue, StringUtils.EMPTY);
+		    				dialog = new DocumentEditTextValueDialog(oldValueString);
+		    			}
 		    			dialog.open(oldValue, item, i+1);
 		    		}
 		    	}
@@ -649,7 +664,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		refresh();
 	}
 
-	public void updateDocument(TableItem item, int columnIndex, String newValue) {
+	public void updateDocument(TableItem item, int columnIndex, Object newValue) {
 		SolrDocument document = (SolrDocument) item.getData("document");
 		// The row may not contain any document (e.g. the first row, which contains the filters).
 		if (document == null) {
@@ -657,7 +672,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		}
 		// We reduce by 1 since the first column is used for row ID.
 		document.setField(fields.get(columnIndex-1).getName(), newValue);
-		item.setText(columnIndex, newValue);
+		item.setText(columnIndex, Objects.toString(newValue, StringUtils.EMPTY));
 		// TODO if new record, then leave green
 		if (!documentsUpdated.contains(document)) {
 			documentsUpdated.add(document);	
