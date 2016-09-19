@@ -1,11 +1,13 @@
 package com.github.fengtan.solrgui.dialogs;
 
+import java.util.AbstractList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.preference.ListEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -37,11 +39,12 @@ public class DocumentEditValueDialog extends Dialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		Composite composite = (Composite) super.createDialogArea(parent);
+		final Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setLayout(new GridLayout(1, false));
 		
 		new Label(composite, SWT.NULL).setText("New value:");
 		
+		// Add text to let the user set the new value.
 		newValue = new Text(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		newValue.setText(oldValueString);
 		GridData grid = new GridData();
@@ -53,6 +56,7 @@ public class DocumentEditValueDialog extends Dialog {
 		grid.grabExcessVerticalSpace = true;
 		newValue.setLayoutData(grid);
 		
+		// Add datepicker if we are dealing with a date field.
 		if (oldValueObject instanceof Date) {
 			Date oldValueDate = (Date) oldValueObject;
 			final Calendar calendar = Calendar.getInstance();
@@ -83,6 +87,16 @@ public class DocumentEditValueDialog extends Dialog {
 					newValue.setText(calendar.getTime().toString());
 				}
 			});
+			// TODO cannot commit dates edited by datepicker
+		}
+		
+		// Add list widget if we are dealing with a multi-valued field.
+		// List is not iterable - we need to use AbstractList.
+		if (oldValueObject instanceof AbstractList) {
+			AbstractList oldValueList = (AbstractList) oldValueObject;
+			// TODO support editing values http://sandipchitale.blogspot.ca/2008/09/enhanced-listeditor-implementation.html
+			// TODO seems to be buggy when many values
+			ListEditor listEditor = new MultiValueFieldListEditor(composite, oldValueList);
 		}
 
 	    return composite;

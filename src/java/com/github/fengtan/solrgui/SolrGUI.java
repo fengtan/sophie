@@ -108,7 +108,8 @@ public class SolrGUI {
     // TODO feat see what luke and solr native ui provide (dismax, spellcheck, debug, score, shard, elevation etc)
 	// TODO feat look for unused/obsolete methods
 	// TODO feat "favorites/recently opened servers"
-
+    // TODO feat use InputDialog instead of custom dialogs
+	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc if value is a date then calendar shows up when editing
 	// TODO doc assume luke handler + select + admin/cores is available

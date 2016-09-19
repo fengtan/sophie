@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.fengtan</groupId>
   <artifactId>solr-gui</artifactId>
-  <version>0.5-SNAPSHOT</version>
+  <version>0.5</version>
   <name>solr-gui</name>
   <description></description>
   <build>
@@ -78,7 +78,7 @@
     </dependency>
   	<dependency>
   		<groupId>swt</groupId>
-      <artifactId>jface</artifactId><!-- TODO needed ? used only for dialogs -->
+      <artifactId>jface</artifactId>
       <version>3.0.1</version>
   	</dependency>
   	<dependency><!-- TODO linux -->
