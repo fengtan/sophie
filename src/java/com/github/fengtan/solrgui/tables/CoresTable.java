@@ -39,30 +39,10 @@ public class CoresTable {
 		populate();
 	}
 	
-	public void addCore(String name, String instanceDir) throws SolrServerException, IOException {
-		// TODO createCore is overloaded with additional params (schema file etc).
-		CoreAdminRequest.createCore(name, instanceDir, SolrGUI.client);
-		refresh();
-	}
-	
 	public String getSelectedCore() {
 		TableItem[] items = table.getSelection();
 		// Core name is in the first column
 		return (items.length > 0) ? items[0].getText(0) : StringUtils.EMPTY;
-	}
-
-	// TODO what if delete default core
-	public void deleteCore(String name) {
-		try {
-			CoreAdminRequest.unloadCore(name, SolrGUI.client);
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		refresh();
 	}
 	
 	public void refresh() {

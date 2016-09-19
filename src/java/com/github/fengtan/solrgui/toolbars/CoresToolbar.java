@@ -1,5 +1,9 @@
 package com.github.fengtan.solrgui.toolbars;
 
+import java.io.IOException;
+
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -76,7 +80,17 @@ public class CoresToolbar {
 				// TODO prompt confirmation ?
 				CoresTable table = SolrGUI.tabFolder.getCoresTabItem().getTable();
 				String coreName = table.getSelectedCore();
-				table.deleteCore(coreName);
+				// TODO what if delete default core
+				try {
+					CoreAdminRequest.unloadCore(coreName, SolrGUI.client);
+					SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
+				} catch (SolrServerException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 

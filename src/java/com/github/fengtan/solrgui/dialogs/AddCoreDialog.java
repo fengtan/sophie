@@ -1,5 +1,9 @@
 package com.github.fengtan.solrgui.dialogs;
 
+import java.io.IOException;
+
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -66,10 +70,16 @@ public class AddCoreDialog extends Dialog {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
 			try {
-				SolrGUI.tabFolder.getCoresTabItem().getTable().addCore(coreName.getText(), instanceDir.getText());	
-			} catch (Exception e) {
-				SolrGUI.showException(e);
-			}
+				// TODO createCore is overloaded with additional params (schema file etc).
+				CoreAdminRequest.createCore(coreName.getText(), instanceDir.getText(), SolrGUI.client);
+				SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
+			} catch (SolrServerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
 		}
 		super.buttonPressed(buttonId);
 	}
