@@ -21,10 +21,10 @@ public class DocumentsToolbar {
     private Image imgDelete;
     private Image imgClone;
     private Image imgUpload;
-    private Image imgExport;
     private Image imgClear;
     private Image imgCommit;
     private Image imgOptimize;
+    private Image imgExport;
     private Image imgBackup;
     private Image imgRestore;
     
@@ -33,10 +33,10 @@ public class DocumentsToolbar {
     private ToolItem itemDelete;
     private ToolItem itemClone;
     private ToolItem itemUpload;
-    private ToolItem itemExport;
     private ToolItem itemClear;
     private ToolItem itemCommit;
     private ToolItem itemOptimize;
+    private ToolItem itemExport;
     private ToolItem itemBackup;
     private ToolItem itemRestore;
     
@@ -52,10 +52,10 @@ public class DocumentsToolbar {
         imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
         imgClone = new Image(display, loader.getResourceAsStream("toolbar/clone.png"));
         imgUpload = new Image(display, loader.getResourceAsStream("toolbar/upload.png")); // TODO find a better icon ?
-        imgExport = new Image(display, loader.getResourceAsStream("toolbar/export.png")); // TODO find better icon ?
         imgClear = new Image(display, loader.getResourceAsStream("toolbar/clear.png"));
         imgCommit = new Image(display, loader.getResourceAsStream("toolbar/commit.png"));
         imgOptimize = new Image(display, loader.getResourceAsStream("toolbar/optimize.png"));
+        imgExport = new Image(display, loader.getResourceAsStream("toolbar/export.png")); // TODO find better icon ?
         imgBackup = new Image(display, loader.getResourceAsStream("toolbar/backup.png")); // TODO find better icon
         imgRestore = new Image(display, loader.getResourceAsStream("toolbar/restore.png")); // TODO find better icon
 
@@ -63,6 +63,7 @@ public class DocumentsToolbar {
 
         itemRefresh = new ToolItem(toolBar, SWT.PUSH);
         itemRefresh.setImage(imgRefresh);
+        itemRefresh.setText("Refresh");
         itemRefresh.setToolTipText("Refresh from server: this will wipe out local modifications");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -75,6 +76,7 @@ public class DocumentsToolbar {
         // TODO allow to create documents with new fields
         itemAdd = new ToolItem(toolBar, SWT.PUSH);
         itemAdd.setImage(imgAdd);
+        itemAdd.setText("Add");
         itemAdd.setToolTipText("Add new document");
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -84,6 +86,7 @@ public class DocumentsToolbar {
 
         itemDelete = new ToolItem(toolBar, SWT.PUSH);
         itemDelete.setImage(imgDelete);
+        itemDelete.setText("Delete");
         itemDelete.setToolTipText("Delete document");
         itemDelete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -93,6 +96,7 @@ public class DocumentsToolbar {
 
         itemClone = new ToolItem(toolBar, SWT.PUSH);
         itemClone.setImage(imgClone);
+        itemClone.setText("Clone");
         itemClone.setToolTipText("Clone document");
         itemClone.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -102,6 +106,7 @@ public class DocumentsToolbar {
         
         itemUpload = new ToolItem(toolBar, SWT.PUSH);
         itemUpload.setImage(imgUpload);
+        itemUpload.setText("Upload");
         itemUpload.setToolTipText("Upload local modifications to server");
         itemUpload.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -110,18 +115,10 @@ public class DocumentsToolbar {
 		});
         
         new ToolItem(toolBar, SWT.SEPARATOR);
-        
-        itemExport = new ToolItem(toolBar, SWT.PUSH);
-        itemExport.setImage(imgExport);
-        itemExport.setToolTipText("Export as CSV file");
-        itemExport.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				SolrGUI.tabFolder.getDocumentsTabItem().getTable().export();
-			}
-		});
                 
         itemClear = new ToolItem(toolBar, SWT.PUSH);
         itemClear.setImage(imgClear);
+        itemClear.setText("Clear");
         itemClear.setToolTipText("Clear index");
         itemClear.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -137,6 +134,7 @@ public class DocumentsToolbar {
 
         itemCommit = new ToolItem(toolBar, SWT.PUSH);
         itemCommit.setImage(imgCommit);
+        itemCommit.setText("Commit");
         itemCommit.setToolTipText("Commit index");
         itemCommit.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -146,6 +144,7 @@ public class DocumentsToolbar {
         
         itemOptimize = new ToolItem(toolBar, SWT.PUSH);
         itemOptimize.setImage(imgOptimize);
+        itemOptimize.setText("Optimize");
         itemOptimize.setToolTipText("Optimize index");
         itemOptimize.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -161,8 +160,19 @@ public class DocumentsToolbar {
         
         new ToolItem(toolBar, SWT.SEPARATOR);
         
+        itemExport = new ToolItem(toolBar, SWT.PUSH);
+        itemExport.setImage(imgExport);
+        itemExport.setText("Export");
+        itemExport.setToolTipText("Export as CSV file");
+        itemExport.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				SolrGUI.tabFolder.getDocumentsTabItem().getTable().export();
+			}
+		});
+        
         itemBackup = new ToolItem(toolBar, SWT.PUSH);
         itemBackup.setImage(imgBackup);
+        itemBackup.setText("Backup");
         itemBackup.setToolTipText("Make a backup of the index");
         itemBackup.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -172,6 +182,7 @@ public class DocumentsToolbar {
         
         itemRestore = new ToolItem(toolBar, SWT.PUSH);
         itemRestore.setImage(imgRestore);
+        itemRestore.setText("Restore");
         itemRestore.setToolTipText("Restore index from a backup");
         itemRestore.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -189,10 +200,10 @@ public class DocumentsToolbar {
         imgDelete.dispose();
         imgClone.dispose();
         imgUpload.dispose();
-        imgExport.dispose();
         imgClear.dispose();
         imgCommit.dispose();
         imgOptimize.dispose();
+        imgExport.dispose();
         imgBackup.dispose();
         imgRestore.dispose();
     }

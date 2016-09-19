@@ -30,6 +30,7 @@ public class FieldsToolbar {
         
         itemRefresh = new ToolItem(toolBar, SWT.PUSH);
         itemRefresh.setImage(imgRefresh);
+        itemRefresh.setText("Refresh");
         itemRefresh.setToolTipText("Refresh list of fields");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {

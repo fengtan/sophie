@@ -20,11 +20,13 @@ public class CoresToolbar {
     private Image imgAdd;
     private Image imgDelete;
     private Image imgRename;
+    private Image imgSwap;
     
     private ToolItem itemRefresh;
     private ToolItem itemAdd;
     private ToolItem itemDelete;
     private ToolItem itemRename;
+    private ToolItem itemSwap;
     
     public CoresToolbar(Composite composite) {
     	initToolbar(composite);
@@ -38,11 +40,13 @@ public class CoresToolbar {
         imgAdd = new Image(display, loader.getResourceAsStream("toolbar/add.png"));
         imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
         imgRename = new Image(display, loader.getResourceAsStream("toolbar/clone.png")); // TODO find a better icon?
+        imgSwap = new Image(display, loader.getResourceAsStream("toolbar/upload.png")); // TODO find a better icon?
 
         ToolBar toolBar = new ToolBar(composite, SWT.BORDER);
 
         itemRefresh = new ToolItem(toolBar, SWT.PUSH);
         itemRefresh.setImage(imgRefresh);
+        itemRefresh.setText("Refresh");
         itemRefresh.setToolTipText("Refresh list of cores");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -54,6 +58,7 @@ public class CoresToolbar {
         
         itemAdd = new ToolItem(toolBar, SWT.PUSH);
         itemAdd.setImage(imgAdd);
+        itemAdd.setText("Add");
         itemAdd.setToolTipText("Add new core");
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -63,6 +68,7 @@ public class CoresToolbar {
 
         itemDelete = new ToolItem(toolBar, SWT.PUSH);
         itemDelete.setImage(imgDelete);
+        itemDelete.setText("Delete");
         itemDelete.setToolTipText("Delete core"); //TODO disable when no core selected
         itemDelete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -72,15 +78,26 @@ public class CoresToolbar {
 				table.deleteCore(coreName);
 			}
 		});
-        
+
         itemRename = new ToolItem(toolBar, SWT.PUSH);
         itemRename.setImage(imgRename);
+        itemRename.setText("Rename");
         itemRename.setToolTipText("Rename core"); //TODO disable when no core selected
         itemRename.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				CoresTable table = SolrGUI.tabFolder.getCoresTabItem().getTable();
 				String coreName = table.getSelectedCore();
 				new RenameCoreDialog(coreName).open();
+			}
+		});
+        
+        itemSwap = new ToolItem(toolBar, SWT.PUSH);
+        itemSwap.setImage(imgSwap);
+        itemSwap.setText("Swap");
+        itemSwap.setToolTipText("Swap cores"); //TODO disable when no core selected
+        itemSwap.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				// TODO
 			}
 		});
         
@@ -93,6 +110,7 @@ public class CoresToolbar {
     	imgAdd.dispose();
     	imgDelete.dispose();
     	imgRename.dispose();
+    	imgSwap.dispose();
     }
 	
 }
