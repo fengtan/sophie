@@ -30,8 +30,7 @@ import com.github.fengtan.solrgui.SolrGUI;
 
 public class DocumentEditValueDialog extends Dialog {
 	
-	private Object oldValueObject;
-	private String oldValueString;
+	private Object oldValue;
 	private Text newValue;
 	private TableItem item;
 	private int columnIndex;
@@ -45,11 +44,25 @@ public class DocumentEditValueDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		final Composite composite = (Composite) super.createDialogArea(parent);
-		composite.setLayout(new GridLayout(1, false));
+		composite.setLayout(new GridLayout(1, false));//TODO needed?
 		
-		new Label(composite, SWT.NULL).setText("New value:");
-		
-		// Add text to let the user set the new value.
+		if (oldValue instanceof Date) {
+			// Add datepicker if we are dealing with a date field.
+			createDatePickerWidget(composite, (Date) oldValue);
+		} else if (oldValue instanceof AbstractList) {
+			// Add list widget if we are dealing with a multi-valued field.
+			// List is not iterable - we need to use AbstractList.
+			createListWidget(composite, (AbstractList) oldValue);
+		} else {
+			// Add text to let the user set the new value.
+			createTextWidget(composite, Objects.toString(oldValue, StringUtils.EMPTY));
+		}
+
+		// TODO hide Text if Date/List field?
+	    return composite;
+	}
+	
+	private void createTextWidget(Composite composite, String oldValueString) {
 		newValue = new Text(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		newValue.setText(oldValueString);
 		GridData grid = new GridData();
@@ -61,86 +74,80 @@ public class DocumentEditValueDialog extends Dialog {
 		grid.grabExcessVerticalSpace = true;
 		newValue.setLayoutData(grid);
 		
-		// Add datepicker if we are dealing with a date field.
-		if (oldValueObject instanceof Date) {
-			Date oldValueDate = (Date) oldValueObject;
-			final Calendar calendar = Calendar.getInstance();
-			calendar.setTime(oldValueDate);
-						
-			final DateTime datePicker = new DateTime(composite, SWT.CALENDAR);
-			datePicker.setYear(calendar.get(Calendar.YEAR));
-			datePicker.setMonth(calendar.get(Calendar.MONTH));
-			datePicker.setDay(calendar.get(Calendar.DAY_OF_MONTH));
-			datePicker.addSelectionListener (new SelectionAdapter () {
-				public void widgetSelected (SelectionEvent e) {
-					calendar.set(Calendar.YEAR, datePicker.getYear());
-					calendar.set(Calendar.MONTH, datePicker.getMonth());
-					calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDay());
-					newValue.setText(calendar.getTime().toString());
-			    }
-			});
+	}
+	
+	private void createDatePickerWidget(Composite composite, Date oldValueDate) {
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(oldValueDate);
+					
+		final DateTime datePicker = new DateTime(composite, SWT.CALENDAR);
+		datePicker.setYear(calendar.get(Calendar.YEAR));
+		datePicker.setMonth(calendar.get(Calendar.MONTH));
+		datePicker.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+		datePicker.addSelectionListener (new SelectionAdapter () {
+			public void widgetSelected (SelectionEvent e) {
+				calendar.set(Calendar.YEAR, datePicker.getYear());
+				calendar.set(Calendar.MONTH, datePicker.getMonth());
+				calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDay());
+				// TODO update solr document
+		    }
+		});
 
-			final DateTime timePicker = new DateTime(composite, SWT.TIME);
-			timePicker.setHours(calendar.get(Calendar.HOUR_OF_DAY));
-			timePicker.setMinutes(calendar.get(Calendar.MINUTE));
-			timePicker.setSeconds(calendar.get(Calendar.SECOND));
-			timePicker.addSelectionListener (new SelectionAdapter () {
-				public void widgetSelected (SelectionEvent e) {
-					calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHours());
-					calendar.set(Calendar.MINUTE, timePicker.getMinutes());
-					calendar.set(Calendar.SECOND, timePicker.getSeconds());
-					newValue.setText(calendar.getTime().toString());
-				}
-			});
-			// TODO cannot commit dates edited by datepicker
+		final DateTime timePicker = new DateTime(composite, SWT.TIME);
+		timePicker.setHours(calendar.get(Calendar.HOUR_OF_DAY));
+		timePicker.setMinutes(calendar.get(Calendar.MINUTE));
+		timePicker.setSeconds(calendar.get(Calendar.SECOND));
+		timePicker.addSelectionListener (new SelectionAdapter () {
+			public void widgetSelected (SelectionEvent e) {
+				calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHours());
+				calendar.set(Calendar.MINUTE, timePicker.getMinutes());
+				calendar.set(Calendar.SECOND, timePicker.getSeconds());
+				// TODO update solr document
+			}
+		});
+		// TODO cannot commit dates edited by datepicker
+	}
+	
+	private void createListWidget(Composite composite, AbstractList oldValueList) {
+		Composite listComposite = new Composite(composite, SWT.NULL);
+		listComposite.setLayout(new RowLayout());
+
+		// TODO support editing values http://sandipchitale.blogspot.ca/2008/09/enhanced-listeditor-implementation.html
+		// TODO seems to be buggy when many values.
+		final ListViewer listViewer = new ListViewer(listComposite, SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER);
+		for (Object value:oldValueList) {
+			listViewer.add(Objects.toString(value, StringUtils.EMPTY));	
 		}
 		
-		// Add list widget if we are dealing with a multi-valued field.
-		// List is not iterable - we need to use AbstractList.
-		if (oldValueObject instanceof AbstractList) {
-			Composite listComposite = new Composite(composite, SWT.NULL);
-			listComposite.setLayout(new RowLayout());
-			AbstractList oldValueList = (AbstractList) oldValueObject;
-			// TODO support editing values http://sandipchitale.blogspot.ca/2008/09/enhanced-listeditor-implementation.html
-			// TODO seems to be buggy when many values.
-			final ListViewer listViewer = new ListViewer(listComposite, SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER);
-			for (Object value:oldValueList) {
-				listViewer.add(Objects.toString(value, StringUtils.EMPTY));	
-			}
-			
-			Composite buttonsComposite = new Composite(listComposite, SWT.NULL);
-			buttonsComposite.setLayout(new FillLayout(SWT.VERTICAL));
-			
-			Button buttonAdd = new Button(buttonsComposite, SWT.PUSH);
-		    buttonAdd.setText("Add");
-		    buttonAdd.addSelectionListener(new SelectionAdapter() {
-		    	public void widgetSelected(SelectionEvent e) {
-		    		InputDialog input = new InputDialog(SolrGUI.shell, "Add value", "Add value:", StringUtils.EMPTY, null);
-		    		input.open();
-		    		// button "OK' has ID "0".
-		    		if (input.getReturnCode() == 0) {
-			    		listViewer.add(input.getValue());
-			    		// TODO update Text
-		    		}
-		    	}
-			});
-			
-		    // TODO disable remove when no value selected.
-		    Button buttonRemove = new Button(buttonsComposite, SWT.PUSH);
-		    buttonRemove.setText("Remove");
-		    buttonRemove.addSelectionListener(new SelectionAdapter() {
-		    	public void widgetSelected(SelectionEvent e) {
-		    		IStructuredSelection selection = (IStructuredSelection) listViewer.getSelection();
-		    		if (!selection.isEmpty()) {
-		    			listViewer.remove(selection.toArray());
-			    		// TODO update Text	
-		    		}
-		    	}
-			});
-		}
-
-		// TODO hide Text if Date/List field?
-	    return composite;
+		Composite buttonsComposite = new Composite(listComposite, SWT.NULL);
+		buttonsComposite.setLayout(new FillLayout(SWT.VERTICAL));
+		
+		Button buttonAdd = new Button(buttonsComposite, SWT.PUSH);
+	    buttonAdd.setText("Add");
+	    buttonAdd.addSelectionListener(new SelectionAdapter() {
+	    	public void widgetSelected(SelectionEvent e) {
+	    		InputDialog input = new InputDialog(SolrGUI.shell, "Add value", "Add value:", StringUtils.EMPTY, null);
+	    		input.open();
+	    		// button "OK' has ID "0".
+	    		if (input.getReturnCode() == 0) {
+		    		listViewer.add(input.getValue());
+		    		// TODO update Text
+	    		}
+	    	}
+		});
+		
+	    // TODO disable remove when no value selected.
+	    Button buttonRemove = new Button(buttonsComposite, SWT.PUSH);
+	    buttonRemove.setText("Remove");
+	    buttonRemove.addSelectionListener(new SelectionAdapter() {
+	    	public void widgetSelected(SelectionEvent e) {
+	    		IStructuredSelection selection = (IStructuredSelection) listViewer.getSelection();
+	    		if (!selection.isEmpty()) {
+	    			listViewer.remove(selection.toArray());
+		    		// TODO update Text	
+	    		}
+	    	}
+		});
 	}
 	
 	// Set title of the custom dialog.
@@ -155,7 +162,7 @@ public class DocumentEditValueDialog extends Dialog {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
 			// TODO move StringUtils.equals() into table.updateDocument() ?
-			if (!StringUtils.equals(oldValueString, newValue.getText())) {
+			if (!StringUtils.equals(Objects.toString(oldValue, StringUtils.EMPTY), newValue.getText())) {// TODO support date/list
 				SolrGUI.tabFolder.getDocumentsTabItem().getTable().updateDocument(item, columnIndex, newValue.getText());
 			}
 		}
@@ -164,8 +171,7 @@ public class DocumentEditValueDialog extends Dialog {
 
 	// TODO cannot edit empty values (window closes)
 	public int open(Object oldValue, TableItem item, int columnIndex) {
-		this.oldValueObject = oldValue;
-		this.oldValueString = Objects.toString(oldValue, StringUtils.EMPTY);
+		this.oldValue = oldValue;
 		this.item = item;
 		this.columnIndex = columnIndex;
 		return super.open();
