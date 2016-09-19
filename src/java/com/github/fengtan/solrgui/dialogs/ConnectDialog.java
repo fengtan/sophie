@@ -12,25 +12,26 @@ import org.eclipse.swt.widgets.Text;
 import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.config.Config;
 
-public class NewConnectionDialog extends Dialog {
+// TODO is this class used ?
+public class ConnectDialog extends Dialog {
 
 	private static final String DEFAULT_URL = "http://localhost:8983/solr/collection1";
 	
-	private static NewConnectionDialog dialog = null; 
+	private static ConnectDialog dialog = null; 
 	
 	private Text url;
 	
 	// TODO allow http auth
-	private NewConnectionDialog() {
+	private ConnectDialog() {
 		super(SolrGUI.shell);
 	}
 	
 	/**
 	 * Singleton
 	 */
-	public static NewConnectionDialog getDialog() {
+	public static ConnectDialog getDialog() {
 		if (dialog == null) {
-			dialog = new NewConnectionDialog();
+			dialog = new ConnectDialog();
 		}
 		return dialog;
 	}
@@ -51,7 +52,7 @@ public class NewConnectionDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("New Solr connection");
+		newShell.setText("Connect to Solr");
 	}
 	
 	@Override

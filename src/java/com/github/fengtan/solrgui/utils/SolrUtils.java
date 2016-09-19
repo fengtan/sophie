@@ -7,10 +7,14 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.request.schema.SchemaRequest;
+import org.apache.solr.client.solrj.response.CoreAdminResponse;
 import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
+import org.apache.solr.common.params.CoreAdminParams.CoreAdminAction;
+import org.apache.solr.common.util.NamedList;
 
 import com.github.fengtan.solrgui.SolrGUI;
 
@@ -59,6 +63,23 @@ public class SolrUtils {
 			e.printStackTrace();
 			return StringUtils.EMPTY;
 		}
+	}
+	
+	// TODO cache result until new connection or refresh ?
+	public static NamedList<NamedList<Object>> getCores() {
+		CoreAdminRequest request = new CoreAdminRequest();
+		request.setAction(CoreAdminAction.STATUS);
+		try {
+			CoreAdminResponse response = request.process(SolrGUI.client); // TODO throws RemoteSolrException if query on /solr/collection1 instead of /solr
+			return response.getCoreStatus();
+		} catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new NamedList<NamedList<Object>>();
 	}
 	
 }

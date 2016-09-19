@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import com.github.fengtan.solrgui.dialogs.NewConnectionDialog;
+import com.github.fengtan.solrgui.dialogs.ConnectDialog;
 
 public class TabFolder extends CTabFolder {
 	
@@ -51,10 +51,10 @@ public class TabFolder extends CTabFolder {
 		
 		// Create the 'Add server button
 		Button button = new Button(this, SWT.PUSH | SWT.CENTER);
-		button.setText("&New Solr connection");
+		button.setText("&Connect to Solr");
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				NewConnectionDialog.getDialog().open();
+				ConnectDialog.getDialog().open();
 			}
 		});
 		setTopRight(button);

@@ -7,8 +7,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
-import org.apache.solr.client.solrj.response.CoreAdminResponse;
-import org.apache.solr.common.params.CoreAdminParams.CoreAdminAction;
 import org.apache.solr.common.util.NamedList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -18,6 +16,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.github.fengtan.solrgui.SolrGUI;
+import com.github.fengtan.solrgui.utils.SolrUtils;
 
 
 public class CoresTable {
@@ -88,19 +87,8 @@ public class CoresTable {
 	 * Add columns + data.
 	 */
 	private void populate() {
-		CoreAdminRequest request = new CoreAdminRequest();
-		request.setAction(CoreAdminAction.STATUS);
-		try {
-			CoreAdminResponse response = request.process(SolrGUI.client); // TODO throws RemoteSolrException if query on /solr/collection1 instead of /solr
-			for (Map.Entry<String, NamedList<Object>> core:response.getCoreStatus()) {
-				populateLine(core.getValue(), new TableItem(table, SWT.NULL));
-			}
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		for (Map.Entry<String, NamedList<Object>> core: SolrUtils.getCores()) {
+			populateLine(core.getValue(), new TableItem(table, SWT.NULL));	
 		}
 		// Pack.
 		for(TableColumn column:table.getColumns()) {

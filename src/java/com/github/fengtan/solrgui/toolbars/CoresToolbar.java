@@ -10,8 +10,9 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.solrgui.SolrGUI;
-import com.github.fengtan.solrgui.dialogs.NewCoreDialog;
+import com.github.fengtan.solrgui.dialogs.AddCoreDialog;
 import com.github.fengtan.solrgui.dialogs.RenameCoreDialog;
+import com.github.fengtan.solrgui.dialogs.SwapCoreDialog;
 import com.github.fengtan.solrgui.tables.CoresTable;
 
 public class CoresToolbar {
@@ -62,7 +63,7 @@ public class CoresToolbar {
         itemAdd.setToolTipText("Add new core");
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				NewCoreDialog.getDialog().open();
+				AddCoreDialog.getDialog().open();
 			}
 		});
 
@@ -97,7 +98,9 @@ public class CoresToolbar {
         itemSwap.setToolTipText("Swap cores"); //TODO disable when no core selected
         itemSwap.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				// TODO
+				CoresTable table = SolrGUI.tabFolder.getCoresTabItem().getTable();
+				String coreName = table.getSelectedCore();
+				new SwapCoreDialog(coreName).open();
 			}
 		});
         
