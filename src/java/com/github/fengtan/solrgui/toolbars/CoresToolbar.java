@@ -26,12 +26,14 @@ public class CoresToolbar {
     private Image imgDelete;
     private Image imgRename;
     private Image imgSwap;
+    private Image imgReload;
     
     private ToolItem itemRefresh;
     private ToolItem itemAdd;
     private ToolItem itemDelete;
     private ToolItem itemRename;
     private ToolItem itemSwap;
+    private ToolItem itemReload;
     
     public CoresToolbar(Composite composite) {
     	initToolbar(composite);
@@ -46,6 +48,7 @@ public class CoresToolbar {
         imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
         imgRename = new Image(display, loader.getResourceAsStream("toolbar/clone.png")); // TODO find a better icon?
         imgSwap = new Image(display, loader.getResourceAsStream("toolbar/upload.png")); // TODO find a better icon?
+        imgReload = new Image(display, loader.getResourceAsStream("toolbar/restore.png")); // TODO find a better icon?
 
         ToolBar toolBar = new ToolBar(composite, SWT.BORDER);
 
@@ -118,6 +121,27 @@ public class CoresToolbar {
 			}
 		});
         
+        itemReload = new ToolItem(toolBar, SWT.PUSH);
+        itemReload.setImage(imgReload);
+        itemReload.setText("Reload");
+        itemReload.setToolTipText("Reload core - this will load any configuration changes you may have made to solrconfig.xml or schema.xml"); //TODO disable when no core selected
+        itemReload.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				CoresTable table = SolrGUI.tabFolder.getCoresTabItem().getTable();
+				String coreName = table.getSelectedCore();
+				try {
+					CoreAdminRequest.reloadCore(coreName, SolrGUI.client);
+					SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
+				} catch (SolrServerException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+        
         toolBar.pack();
     }
     
@@ -128,6 +152,7 @@ public class CoresToolbar {
     	imgDelete.dispose();
     	imgRename.dispose();
     	imgSwap.dispose();
+    	imgReload.dispose();
     }
 	
 }

@@ -1,12 +1,9 @@
 package com.github.fengtan.solrgui.tables;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.apache.solr.common.util.NamedList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -15,7 +12,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.utils.SolrUtils;
 
 
