@@ -10,6 +10,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -79,21 +80,25 @@ public class CoresToolbar {
         itemDelete.setText("Delete");
         itemDelete.setToolTipText("Delete core"); //TODO disable when no core selected
         itemDelete.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				// TODO prompt confirmation ?
+			public void widgetSelected(SelectionEvent event) {
 				CoresTable table = SolrGUI.tabFolder.getCoresTabItem().getTable();
 				String coreName = table.getSelectedCore();
-				// TODO what if delete default core
-				try {
-					CoreAdminRequest.unloadCore(coreName, SolrGUI.client);
-					SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
-				} catch (SolrServerException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+		        MessageBox messageBox = new MessageBox(SolrGUI.shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		        messageBox.setText("Delete core");
+		        messageBox.setMessage("Do you really want to delete this core (\""+coreName+"\") ?");
+		        int response = messageBox.open();
+		        if (response == SWT.YES) {
+					try {
+						CoreAdminRequest.unloadCore(coreName, SolrGUI.client);
+						SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
+					} catch (SolrServerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
+		        }
 			}
 		});
 

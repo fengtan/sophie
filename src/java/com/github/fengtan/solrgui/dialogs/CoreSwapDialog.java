@@ -33,7 +33,7 @@ public class CoreSwapDialog extends Dialog {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setLayout(new GridLayout(2, false));
 		
-		new Label(composite, SWT.NULL).setText("Swap core ("+coreName+") with:");
+		new Label(composite, SWT.NULL).setText("Swap core \""+coreName+"\" with:");
 		otherCoreName = new Combo(parent, SWT.DROP_DOWN);
 		Object[] coreObjects = SolrUtils.getCores().keySet().toArray();
 		String[] coreStrings = Arrays.copyOf(coreObjects, coreObjects.length, String[].class); 
