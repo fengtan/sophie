@@ -109,6 +109,7 @@ public class SolrGUI {
 	// TODO feat look for unused/obsolete methods
 	// TODO feat "favorites/recently opened servers"
     // TODO feat use InputDialog instead of custom dialogs
+	// TODO feat allow user to edit multi-value fields (not just add/remove)
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc if value is a date then calendar shows up when editing
