@@ -1,5 +1,9 @@
 package com.github.fengtan.solrgui.dialogs;
 
+import java.io.IOException;
+
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -47,9 +51,14 @@ public class RenameCoreDialog extends Dialog {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
 			try {
-				SolrGUI.tabFolder.getCoresTabItem().getTable().renameCore(oldCoreName, newCoreName.getText());	
-			} catch (Exception e) {
-				SolrGUI.showException(e);
+				CoreAdminRequest.renameCore(oldCoreName, newCoreName.getText(), SolrGUI.client);
+				SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
+			} catch (SolrServerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		super.buttonPressed(buttonId);

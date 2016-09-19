@@ -1,8 +1,11 @@
 package com.github.fengtan.solrgui.dialogs;
 
-import java.util.Map;
+import java.io.IOException;
+import java.util.Arrays;
 
-import org.apache.solr.common.util.NamedList;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.CoreAdminRequest;
+import org.apache.solr.common.params.CoreAdminParams.CoreAdminAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -11,19 +14,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.utils.SolrUtils;
 
 public class SwapCoreDialog extends Dialog {
 	
-	private String core1;
-	private Combo core2;
+	private String coreName;
+	private Combo otherCoreName;
 
 	public SwapCoreDialog(String core1) {
 		super(SolrGUI.shell);
-		this.core1 = core1;
+		this.coreName = core1;
 	}
 
 	@Override
@@ -31,12 +33,12 @@ public class SwapCoreDialog extends Dialog {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setLayout(new GridLayout(2, false));
 		
-		new Label(composite, SWT.NULL).setText("Swap core \""+core1+"\" with:");
-		core2 = new Combo(parent, SWT.DROP_DOWN);
-		for (Map.Entry<String, NamedList<Object>> core: SolrUtils.getCores()) {
-
-		}
-		// TODO core2.setItems(SolrGUI.client.);
+		new Label(composite, SWT.NULL).setText("Swap core ("+coreName+") with:");
+		otherCoreName = new Combo(parent, SWT.DROP_DOWN);
+		Object[] coreObjects = SolrUtils.getCores().keySet().toArray();
+		String[] coreStrings = Arrays.copyOf(coreObjects, coreObjects.length, String[].class); 
+		otherCoreName.setItems(coreStrings);
+		// TODO include some spacing (left-hand side).
 
 	    return composite;
 	}
@@ -54,10 +56,20 @@ public class SwapCoreDialog extends Dialog {
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
+			// TODO contrib CoreAdminRequest.swapCores() - similar to CoreAdminRequest.renameCore().
+			CoreAdminRequest request = new CoreAdminRequest();
+			request.setCoreName(coreName);
+			request.setOtherCoreName(otherCoreName.getText());
+			request.setAction(CoreAdminAction.SWAP);
 			try {
-				// TODO SolrGUI.tabFolder.getCoresTabItem().getTable().renameCore(oldCoreName, newCoreName.getText());	
-			} catch (Exception e) {
-				SolrGUI.showException(e);
+				request.process(SolrGUI.client);
+				SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
+			} catch (SolrServerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		super.buttonPressed(buttonId);

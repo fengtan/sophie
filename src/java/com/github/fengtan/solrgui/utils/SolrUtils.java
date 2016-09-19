@@ -3,7 +3,9 @@ package com.github.fengtan.solrgui.utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -66,12 +68,15 @@ public class SolrUtils {
 	}
 	
 	// TODO cache result until new connection or refresh ?
-	public static NamedList<NamedList<Object>> getCores() {
+	/**
+	 * @return Map <core name, attributes>
+	 */
+	public static Map<String, NamedList<Object>> getCores() {
 		CoreAdminRequest request = new CoreAdminRequest();
 		request.setAction(CoreAdminAction.STATUS);
 		try {
 			CoreAdminResponse response = request.process(SolrGUI.client); // TODO throws RemoteSolrException if query on /solr/collection1 instead of /solr
-			return response.getCoreStatus();
+			return response.getCoreStatus().asMap(-1);
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -79,7 +84,7 @@ public class SolrUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new NamedList<NamedList<Object>>();
+		return Collections.EMPTY_MAP;
 	}
 	
 }

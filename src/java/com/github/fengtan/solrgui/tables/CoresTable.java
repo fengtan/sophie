@@ -65,19 +65,6 @@ public class CoresTable {
 		refresh();
 	}
 	
-	public void renameCore(String oldCoreName, String newCoreName) {
-		try {
-			CoreAdminRequest.renameCore(oldCoreName, newCoreName, SolrGUI.client);
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		refresh();
-	}
-	
 	public void refresh() {
 		table.removeAll();
 		populate();
@@ -87,8 +74,8 @@ public class CoresTable {
 	 * Add columns + data.
 	 */
 	private void populate() {
-		for (Map.Entry<String, NamedList<Object>> core: SolrUtils.getCores()) {
-			populateLine(core.getValue(), new TableItem(table, SWT.NULL));	
+		for (NamedList<Object> core: SolrUtils.getCores().values()) {
+			populateLine(core, new TableItem(table, SWT.NULL));	
 		}
 		// Pack.
 		for(TableColumn column:table.getColumns()) {
