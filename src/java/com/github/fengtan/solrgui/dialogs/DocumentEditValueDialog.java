@@ -46,15 +46,14 @@ public class DocumentEditValueDialog extends Dialog {
 		final Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setLayout(new GridLayout(1, false));//TODO needed?
 		
+		// Add datepicker if we are dealing with a date field.
 		if (oldValue instanceof Date) {
-			// Add datepicker if we are dealing with a date field.
 			createDatePickerWidget(composite, (Date) oldValue);
+		// Add list widget if we are dealing with a multi-valued field.
 		} else if (oldValue instanceof AbstractList) {
-			// Add list widget if we are dealing with a multi-valued field.
-			// List is not iterable - we need to use AbstractList.
 			createListWidget(composite, (AbstractList) oldValue);
+		// Add text to let the user set the new value.
 		} else {
-			// Add text to let the user set the new value.
 			createTextWidget(composite, Objects.toString(oldValue, StringUtils.EMPTY));
 		}
 
@@ -107,7 +106,8 @@ public class DocumentEditValueDialog extends Dialog {
 		});
 		// TODO cannot commit dates edited by datepicker
 	}
-	
+
+	// List is not iterable - we need to use AbstractList.
 	private void createListWidget(Composite composite, AbstractList oldValueList) {
 		Composite listComposite = new Composite(composite, SWT.NULL);
 		listComposite.setLayout(new RowLayout());

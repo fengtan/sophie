@@ -61,6 +61,7 @@ public class SolrGUI {
 	}
 	
 	public static void showException(Exception e) {
+		// TODO use ErrorDialog instead of MessageBox - provides button "see details" to display exception stack trace
     	e.printStackTrace(); // TODO log stack trace slf4j
 		MessageBox box = new MessageBox(shell, SWT.ICON_ERROR);
 	    box.setText("An error happened");

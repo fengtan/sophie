@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -17,7 +18,6 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.dialogs.CoreAddDialog;
-import com.github.fengtan.solrgui.dialogs.CoreRenameDialog;
 import com.github.fengtan.solrgui.dialogs.CoreSwapDialog;
 import com.github.fengtan.solrgui.tables.CoresTable;
 
@@ -109,10 +109,24 @@ public class CoresToolbar implements SelectionListener {
         itemRename.setText("Rename");
         itemRename.setToolTipText("Rename core"); //TODO disable when no core selected
         itemRename.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent event) {
 				CoresTable table = SolrGUI.tabFolder.getCoresTabItem().getTable();
-				String coreName = table.getSelectedCore();
-				new CoreRenameDialog(coreName).open();
+				String oldCoreName = table.getSelectedCore();
+				InputDialog newCoreName = new InputDialog(SolrGUI.shell, "Rename core", "New name (\""+oldCoreName+"\"):", oldCoreName, null);
+	    		newCoreName.open();
+	    		// button "OK' has ID "0".
+	    		if (newCoreName.getReturnCode() == 0) {
+	    			try {
+	    				CoreAdminRequest.renameCore(oldCoreName, newCoreName.getValue(), SolrGUI.client);
+	    				SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
+	    			} catch (SolrServerException e) {
+	    				// TODO Auto-generated catch block
+	    				e.printStackTrace();
+	    			} catch (IOException e) {
+	    				// TODO Auto-generated catch block
+	    				e.printStackTrace();
+	    			}
+	    		}
 			}
 		});
         itemRename.setEnabled(false);
