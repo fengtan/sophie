@@ -327,21 +327,21 @@ public class DocumentsTable { // TODO extend Composite ?
 		    		Rectangle rect = item.getBounds(i+1);
 		    		if (rect.contains(point)) {
 		    			SolrDocument document = (SolrDocument) item.getData("document");
-		    			Object oldValue = document.getFieldValue(fields.get(i).getName());
+		    			Object defaultValue = document.getFieldValue(fields.get(i).getName());
 		    			// Add editor dialog:
 		    			// - datepicker if we are dealing with a date field.
 		    			// - list widget if we are dealing with a multi-valued field.
 		    			// - text if we are dealing with any other field type.
 		    			DocumentEditValueDialog dialog;
-		    			if (oldValue instanceof Date) {
-		    				dialog = new DocumentEditDateValueDialog((Date) oldValue);
-		    			} else if (oldValue instanceof AbstractList) {
-		    				dialog = new DocumentEditListValueDialog((AbstractList) oldValue);
+		    			if (defaultValue instanceof Date) {
+		    				dialog = new DocumentEditDateValueDialog((Date) defaultValue);
+		    			} else if (defaultValue instanceof AbstractList) {
+		    				dialog = new DocumentEditListValueDialog((AbstractList) defaultValue);
 		    			} else {
-		    				String oldValueString = Objects.toString(oldValue, StringUtils.EMPTY);
+		    				String oldValueString = Objects.toString(defaultValue, StringUtils.EMPTY);
 		    				dialog = new DocumentEditTextValueDialog(oldValueString);
 		    			}
-		    			dialog.open(oldValue, item, i+1);
+		    			dialog.open(defaultValue, item, i+1);
 		    		}
 		    	}
 			}

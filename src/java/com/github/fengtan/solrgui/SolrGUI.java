@@ -91,7 +91,6 @@ public class SolrGUI {
 	// TODO meta solr-gui / sophie
 	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
-	// TODO feat CoreAdmin split/mergeindexes https://wiki.apache.org/solr/CoreAdmin, CollectionAdminRequest, replicate to slave / pull from master
 	// TODO feat sort by field name (fields+documents)
 	// TODO feat all constants overridable using .properties file or -Dpage.size=20 + provide a default .properties
 	// TODO feat allow to create documents with new fields
@@ -101,16 +100,15 @@ public class SolrGUI {
 	// TODO feat allow not to use the default request handler
 	// TODO feat selecting filter "foo (1)" genates "foo (1)" in textfield
 	// TODO feat support CloudSolrServer
-	// TODO feat adapt edit dialog to support multi fields
 	// TODO feat allow to select multiple values for each filter
 	// TODO feat support empty facets on free text fields (workaround: add "(empty) (1)" in free text 
 	// TODO feat what if field contains value "(empty)" ?
 	// TODO feat allow to reload config on all cores
     // TODO feat see what luke and solr native ui provide (dismax, spellcheck, debug, score, shard, elevation etc)
+	// TODO feat CoreAdmin split/mergeindexes https://wiki.apache.org/solr/CoreAdmin, CollectionAdminRequest, replicate to slave / pull from master
 	// TODO feat look for unused/obsolete methods
 	// TODO feat "favorites/recently opened servers"
     // TODO feat use InputDialog instead of custom dialogs
-	// TODO feat allow user to edit multi-value fields (not just add/remove)
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc if value is a date then calendar shows up when editing

@@ -33,6 +33,7 @@ public abstract class DocumentEditValueDialog extends Dialog {
 	@Override
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
+		// TODO NPE when editing unstored field
 		if (buttonId == 0) {
 			Object value = getValue();
 			if (!Objects.equals(defaultValue, value)) {

@@ -1,6 +1,7 @@
 package com.github.fengtan.solrgui.dialogs;
 
 import java.util.AbstractList;
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
@@ -70,15 +71,14 @@ public class DocumentEditListValueDialog extends DocumentEditValueDialog {
 	    		}
 	    	}
 		});
-				
-		// TODO cannot commit lists edited by listviewer
-	    
+		
 	    return composite;
 	}
 
 	@Override
 	protected Object getValue() {
-		return listViewer.getList(); // TODO test not updating the list does not turn the line yellow (and vice-versa)
+		String[] items = listViewer.getList().getItems();
+		return Arrays.asList(items);
 	}
 
 

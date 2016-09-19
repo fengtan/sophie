@@ -17,9 +17,9 @@ public class DocumentEditDateValueDialog extends DocumentEditValueDialog {
 	private Date defaultValue;
 	private Calendar calendar = Calendar.getInstance();
 	
-	public DocumentEditDateValueDialog(Date defaultdValue) {
+	public DocumentEditDateValueDialog(Date defaultValue) {
 		super(SolrGUI.shell);
-		this.defaultValue = defaultdValue;
+		this.defaultValue = defaultValue;
 	}
 
 	@Override
@@ -36,7 +36,6 @@ public class DocumentEditDateValueDialog extends DocumentEditValueDialog {
 				calendar.set(Calendar.YEAR, datePicker.getYear());
 				calendar.set(Calendar.MONTH, datePicker.getMonth());
 				calendar.set(Calendar.DAY_OF_MONTH, datePicker.getDay());
-				// TODO update solr document
 		    }
 		});
 
@@ -49,10 +48,8 @@ public class DocumentEditDateValueDialog extends DocumentEditValueDialog {
 				calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHours());
 				calendar.set(Calendar.MINUTE, timePicker.getMinutes());
 				calendar.set(Calendar.SECOND, timePicker.getSeconds());
-				// TODO update solr document
 			}
 		});
-		// TODO cannot commit dates edited by datepicker
 		
 		return composite;
 	}
