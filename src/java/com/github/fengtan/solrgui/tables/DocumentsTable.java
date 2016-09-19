@@ -170,7 +170,8 @@ public class DocumentsTable { // TODO extend Composite ?
 		        	if (!FieldInfo.parseFlags(fields.get(i).getSchema()).contains(FieldFlag.STORED)) {
 		        		item.setText(i+1, LABEL_NOT_STORED);
 		        	} else {
-		            	item.setText(i+1, Objects.toString(document.getFieldValue(fieldName), StringUtils.EMPTY));
+		        		Object value = document.getFieldValue(fieldName);
+		            	item.setText(i+1, value == null ? StringUtils.EMPTY : value.toString());
 		            }
 		        }
 		        // Store document in item.
@@ -307,8 +308,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		}
 		
 		// Add editor dialog.
-		final DocumentEditValueDialog dialog = new DocumentEditValueDialog(table.getShell());
-		final DocumentsTable tmp = this; // TODO not very elegant
+		final DocumentEditValueDialog dialog = new DocumentEditValueDialog(SolrGUI.shell);
 		table.addListener(SWT.MouseDoubleClick, new Listener() {
 			public void handleEvent(Event event) {
 				Point point = new Point(event.x, event.y);
@@ -324,7 +324,9 @@ public class DocumentsTable { // TODO extend Composite ?
 		    	for (int i=0; i<fields.size(); i++) {
 		    		Rectangle rect = item.getBounds(i+1);
 		    		if (rect.contains(point)) {
-		    			dialog.open(item.getText(i+1), item, i+1, tmp);
+		    			SolrDocument document = (SolrDocument) item.getData("document");
+		    			Object oldValue = document.getFieldValue(fields.get(i).getName());
+		    			dialog.open(oldValue, item, i+1);
 		    		}
 		    	}
 			}

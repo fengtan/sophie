@@ -87,6 +87,7 @@ public class SolrGUI {
     // TODO - export PATH=$PATH:$SOLRGUI_HOME/bin
     // TODO - expose log4j.prop in /etc
     // TODO - logs in /var/log
+	// TODO meta solr-gui / sophie
 	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
 	// TODO feat CoreAdmin split/mergeindexes https://wiki.apache.org/solr/CoreAdmin, CollectionAdminRequest, replicate to slave / pull from master
@@ -100,17 +101,16 @@ public class SolrGUI {
 	// TODO feat selecting filter "foo (1)" genates "foo (1)" in textfield
 	// TODO feat support CloudSolrServer
 	// TODO feat adapt edit dialog to support multi fields
-	// TODO feat add calendar to edit dialog / filters
 	// TODO feat allow to select multiple values for each filter
 	// TODO feat support empty facets on free text fields (workaround: add "(empty) (1)" in free text 
 	// TODO feat what if field contains value "(empty)" ?
 	// TODO feat allow to reload config on all cores
     // TODO feat see what luke and solr native ui provide (dismax, spellcheck, debug, score, shard, elevation etc)
 	// TODO feat look for unused/obsolete methods
-	// TODO feat drop SolrGUI from class names
 	// TODO feat "favorites/recently opened servers"
-	
+
 	// TODO doc cannot filter on unindexed fields
+	// TODO doc if value is a date then calendar shows up when editing
 	// TODO doc assume luke handler + select + admin/cores is available
     // TODO doc https://issues.apache.org/jira/browse/SOLR-20
     // TODO doc log4j.prop
