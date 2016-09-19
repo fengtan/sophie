@@ -26,7 +26,7 @@ public class DocumentsTabItem extends CTabItem {
 		
 		// Add toolbar and table.
 		toolbar = new DocumentsToolbar(composite);
-		table = new DocumentsTable(composite, toolbar);	
+		table = new DocumentsTable(composite, toolbar, toolbar);	
 		
 		composite.pack();
 	}

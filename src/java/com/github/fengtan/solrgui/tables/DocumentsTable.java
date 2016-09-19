@@ -57,6 +57,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.dialogs.DocumentEditValueDialog;
+import com.github.fengtan.solrgui.toolbars.ChangeListener;
 import com.github.fengtan.solrgui.utils.SolrUtils;
 
 public class DocumentsTable { // TODO extend Composite ?
@@ -91,14 +92,18 @@ public class DocumentsTable { // TODO extend Composite ?
 	private List<SolrDocument> documentsDeleted;
 	private List<SolrDocument> documentsAdded;
 	
+	// Change listener, allows the 'Upload' button to detect whether there are changes to send to Solr.
+	private ChangeListener changeListener;
+	
 	private Table table;
 
-	public DocumentsTable(Composite parent, SelectionListener listener) {
+	public DocumentsTable(Composite parent, SelectionListener selectionListener, ChangeListener changeListener) {
 		this.fields = SolrUtils.getRemoteFields();
 		this.facets = getRemoteFacets();
 		this.uniqueField = SolrUtils.getRemoteUniqueField();
 		this.sortField = uniqueField; // By default we sort documents by uniqueKey TODO what if uniqueKey is not sortable ?
-		this.table = createTable(parent, listener);
+		this.table = createTable(parent, selectionListener);
+		this.changeListener = changeListener;
 		// Initialize cache + row count.
 		refresh();
 	}
@@ -106,7 +111,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	/**
 	 * Create the Table
 	 */
-	private Table createTable(Composite parent, SelectionListener listener) {
+	private Table createTable(Composite parent, SelectionListener selectionListener) {
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
 
 		final Table table = new Table(parent, style);
@@ -117,7 +122,7 @@ public class DocumentsTable { // TODO extend Composite ?
 
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
-		table.addSelectionListener(listener);
+		table.addSelectionListener(selectionListener);
 		
 		// Add KeyListener to delete documents.
 		// TODO hitting "suppr" or clicking the button (in the toolbar) a second time should remove the deletion.
@@ -442,6 +447,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		// First row is for filters, the rest is for documents (remote + locally added - though no local addition since we have just refreshed documents).
 		table.setItemCount(1 + getRemoteCount());
 		table.clearAll();
+		changeListener.unchanged();
 	}
 	
 	/*
@@ -475,7 +481,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		}
 	}
 
-	/*
+	/**
 	 * Commit local changes to the Solr server.
 	 */
 	public void upload() {
@@ -638,6 +644,7 @@ public class DocumentsTable { // TODO extend Composite ?
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		refresh();
 	}
 
 	public void updateDocument(TableItem item, int columnIndex, String newValue) {
@@ -654,6 +661,7 @@ public class DocumentsTable { // TODO extend Composite ?
 			documentsUpdated.add(document);	
 		}
 		item.setBackground(YELLOW);
+		changeListener.changed();
 	}
 	
 	private void deleteDocument(TableItem item) {
@@ -667,6 +675,7 @@ public class DocumentsTable { // TODO extend Composite ?
 			documentsDeleted.add(document);
 		}
 		item.setBackground(RED);
+		changeListener.changed();
 	}
 	
 	/**
@@ -685,6 +694,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		table.setItemCount(table.getItemCount() + 1);
 		// Scroll to the bottom of the table so we reveal the new document.
 		table.setTopIndex(table.getItemCount() - 1);
+		changeListener.changed();
 	}
 	
 	public void addEmptyDocument() {

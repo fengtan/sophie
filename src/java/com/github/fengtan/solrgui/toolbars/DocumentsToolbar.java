@@ -15,7 +15,7 @@ import com.github.fengtan.solrgui.SolrGUI;
 import com.github.fengtan.solrgui.dialogs.IndexBackupDialog;
 import com.github.fengtan.solrgui.dialogs.IndexRestoreDialog;
 
-public class DocumentsToolbar implements SelectionListener {
+public class DocumentsToolbar implements SelectionListener,ChangeListener {
 
     private Image imgRefresh;
     private Image imgAdd;
@@ -116,6 +116,7 @@ public class DocumentsToolbar implements SelectionListener {
 				SolrGUI.tabFolder.getDocumentsTabItem().getTable().upload();
 			}
 		});
+        itemUpload.setEnabled(false);
         
         new ToolItem(toolBar, SWT.SEPARATOR);
                 
@@ -223,6 +224,22 @@ public class DocumentsToolbar implements SelectionListener {
 	public void widgetSelected(SelectionEvent e) {
 		itemDelete.setEnabled(true);
 		itemClone.setEnabled(true);
+	}
+	
+	/**
+	 * Enable 'Upload' button if there is at least one modification to send to Solr.
+	 */
+	@Override
+	public void changed() {
+		itemUpload.setEnabled(true);
+	}
+	
+	/**
+	 * Disable 'Upload' button if there is no modification to send to Solr.
+	 */
+	@Override
+	public void unchanged() {
+		itemUpload.setEnabled(false);
 	}
     
 }
