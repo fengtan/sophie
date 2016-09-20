@@ -17,8 +17,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-
-import com.github.fengtan.sophie.Sophie;
+import org.eclipse.swt.widgets.Shell;
 
 public class DocumentEditListValueDialog extends DocumentEditValueDialog {
 
@@ -26,13 +25,13 @@ public class DocumentEditListValueDialog extends DocumentEditValueDialog {
 	private ListViewer listViewer;
 	
 	// List is not iterable - we need to use AbstractList.
-	public DocumentEditListValueDialog(AbstractList<?> defaultValue) {
-		super(Sophie.shell);
+	public DocumentEditListValueDialog(Shell shell, AbstractList<?> defaultValue) {
+		super(shell);
 		this.defaultValue = defaultValue;
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent) {
+	protected Control createDialogArea(final Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setLayout(new RowLayout());
 
@@ -50,7 +49,7 @@ public class DocumentEditListValueDialog extends DocumentEditValueDialog {
 	    buttonAdd.setText("Add");
 	    buttonAdd.addSelectionListener(new SelectionAdapter() {
 	    	public void widgetSelected(SelectionEvent e) {
-	    		InputDialog input = new InputDialog(Sophie.shell, "Add value", "Add value:", null, null);
+	    		InputDialog input = new InputDialog(parent.getShell(), "Add value", "Add value:", null, null);
 	    		input.open();
 	    		if (input.getReturnCode() == IDialogConstants.OK_ID) {
 		    		listViewer.add(input.getValue());

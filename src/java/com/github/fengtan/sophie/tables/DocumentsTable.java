@@ -116,7 +116,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	/**
 	 * Create the Table
 	 */
-	private Table createTable(Composite parent, SelectionListener selectionListener) {
+	private Table createTable(final Composite parent, SelectionListener selectionListener) {
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
 
 		final Table table = new Table(parent, style);
@@ -335,12 +335,12 @@ public class DocumentsTable { // TODO extend Composite ?
 		    			// - text if we are dealing with any other field type.
 		    			DocumentEditValueDialog dialog;
 		    			if (defaultValue instanceof Date) {
-		    				dialog = new DocumentEditDateValueDialog((Date) defaultValue);
+		    				dialog = new DocumentEditDateValueDialog(parent.getShell(), (Date) defaultValue);
 		    			} else if (defaultValue instanceof AbstractList) {
-		    				dialog = new DocumentEditListValueDialog((AbstractList<?>) defaultValue);
+		    				dialog = new DocumentEditListValueDialog(parent.getShell(), (AbstractList<?>) defaultValue);
 		    			} else {
 		    				String oldValueString = Objects.toString(defaultValue, StringUtils.EMPTY);
-		    				dialog = new DocumentEditTextValueDialog(oldValueString);
+		    				dialog = new DocumentEditTextValueDialog(parent.getShell(), oldValueString);
 		    			}
 		    			dialog.open();
 		    			if (dialog.getReturnCode() == IDialogConstants.OK_ID) {

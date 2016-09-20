@@ -9,16 +9,15 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
-
-import com.github.fengtan.sophie.Sophie;
+import org.eclipse.swt.widgets.Shell;
 
 public class DocumentEditDateValueDialog extends DocumentEditValueDialog {
 
 	private Date defaultValue;
 	private Calendar calendar = Calendar.getInstance();
 	
-	public DocumentEditDateValueDialog(Date defaultValue) {
-		super(Sophie.shell);
+	public DocumentEditDateValueDialog(Shell shell, Date defaultValue) {
+		super(shell);
 		this.defaultValue = defaultValue;
 	}
 

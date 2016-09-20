@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.utils.SolrUtils;
 
 public class CoreSwapDialog extends Dialog {
@@ -21,8 +20,8 @@ public class CoreSwapDialog extends Dialog {
 	private Combo otherCoreName;
 	private String value = null;
 
-	public CoreSwapDialog(String core1) {
-		super(Sophie.shell);
+	public CoreSwapDialog(Shell shell, String core1) {
+		super(shell);
 		this.coreName = core1;
 	}
 

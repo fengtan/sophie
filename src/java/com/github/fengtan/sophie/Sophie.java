@@ -16,12 +16,11 @@ import com.github.fengtan.sophie.tabs.TabFolder;
 public class Sophie {
 	
 	public static HttpSolrClient client;
-	public static Shell shell; // TODO keeping shell as attribute (+public static) is ugly -> use getShell() 
-
+	
 	// TODO load url from .properties
 	public static void main(String[] args) { // TODO convert into static { code } ?
 		// Create shell.
-		shell = new Shell();
+		Shell shell = new Shell();
 		shell.setMaximized(true);
 		shell.setLayout(new GridLayout());
 		
@@ -55,7 +54,7 @@ public class Sophie {
 					display.sleep();	
 				}	
 			} catch (Exception e) {
-				showException(e);
+				showException(shell, e);
 			}
 		}
 		if (client != null) {
@@ -70,7 +69,7 @@ public class Sophie {
 		shell.dispose();
 	}
 	
-	public static void showException(Exception e) {
+	public static void showException(Shell shell, Exception e) {
 		// TODO use ErrorDialog instead of MessageBox - provides button "see details" to display exception stack trace
     	e.printStackTrace(); // TODO log stack trace slf4j
 		MessageBox box = new MessageBox(shell, SWT.ICON_ERROR);

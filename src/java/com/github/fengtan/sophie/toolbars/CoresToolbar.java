@@ -80,7 +80,7 @@ public class CoresToolbar implements SelectionListener {
         itemAdd.setToolTipText("Add new core");
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				CoreAddDialog dialog = new CoreAddDialog();
+				CoreAddDialog dialog = new CoreAddDialog(composite.getShell());
 				dialog.open();
 				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
 					try {
@@ -105,7 +105,7 @@ public class CoresToolbar implements SelectionListener {
         itemDelete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				String coreName = table.getSelectedCore();
-		        MessageBox messageBox = new MessageBox(Sophie.shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		        MessageBox messageBox = new MessageBox(composite.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		        messageBox.setText("Delete core");
 		        messageBox.setMessage("Do you really want to delete this core (\""+coreName+"\") ?");
 		        int response = messageBox.open();
@@ -132,7 +132,7 @@ public class CoresToolbar implements SelectionListener {
         itemRename.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				String oldCoreName = table.getSelectedCore();
-				InputDialog newCoreName = new InputDialog(Sophie.shell, "Rename core", "New name (\""+oldCoreName+"\"):", oldCoreName, null);
+				InputDialog newCoreName = new InputDialog(composite.getShell(), "Rename core", "New name (\""+oldCoreName+"\"):", oldCoreName, null);
 	    		newCoreName.open();
 	    		if (newCoreName.getReturnCode() == IDialogConstants.OK_ID) {
 	    			try {
@@ -157,7 +157,7 @@ public class CoresToolbar implements SelectionListener {
         itemSwap.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				String coreName = table.getSelectedCore();
-				CoreSwapDialog dialog = new CoreSwapDialog(coreName);
+				CoreSwapDialog dialog = new CoreSwapDialog(composite.getShell(), coreName);
 				dialog.open();
 				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
 					// TODO contrib CoreAdminRequest.swapCores() - similar to CoreAdminRequest.renameCore().

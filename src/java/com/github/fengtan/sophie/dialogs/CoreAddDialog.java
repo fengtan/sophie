@@ -10,8 +10,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.sophie.Sophie;
-
 public class CoreAddDialog extends Dialog {
 	
 	private static final String DEFAULT_NAME = "collectionX";
@@ -23,8 +21,8 @@ public class CoreAddDialog extends Dialog {
 	private String coreNameValue = null;
 	private String instanceDirValue = null;
 	
-	public CoreAddDialog() {
-		super(Sophie.shell);
+	public CoreAddDialog(Shell shell) {
+		super(shell);
 	}
 		
 	@Override

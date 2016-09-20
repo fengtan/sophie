@@ -133,7 +133,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemClear.setToolTipText("Clear index");
         itemClear.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-		        MessageBox messageBox = new MessageBox(Sophie.shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		        MessageBox messageBox = new MessageBox(composite.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		        messageBox.setText("Clear index");
 		        messageBox.setMessage("Do you really want to clear the index? This will remove all documents from the index.");
 		        int response = messageBox.open();
@@ -159,7 +159,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemOptimize.setToolTipText("Optimize index");
         itemOptimize.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-		        MessageBox messageBox = new MessageBox(Sophie.shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		        MessageBox messageBox = new MessageBox(composite.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		        messageBox.setText("Optimize index");
 		        messageBox.setMessage("Do you really want to optimize the index? If the index is highly segmented, this may take several hours and will slow down requests.");
 		        int response = messageBox.open();
@@ -188,7 +188,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemBackup.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				// TODO "Leave empty to use the default format (yyyyMMddHHmmssSSS)."
-				InputDialog dialog = new InputDialog(Sophie.shell, "Make a backup of the index", "Backup name:", null, null);
+				InputDialog dialog = new InputDialog(composite.getShell(), "Make a backup of the index", "Backup name:", null, null);
 				dialog.open();
 				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
 					table.backup(dialog.getValue());	
@@ -204,7 +204,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 			public void widgetSelected(SelectionEvent e) {
 				// TODO "Available backup names"
 				// TODO "leave empty for xxx"
-				InputDialog dialog = new InputDialog(Sophie.shell, "Restore index from a backup", "Backup name:", null, null);
+				InputDialog dialog = new InputDialog(composite.getShell(), "Restore index from a backup", "Backup name:", null, null);
 				dialog.open();
 				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
 					table.restore(dialog.getValue());	
