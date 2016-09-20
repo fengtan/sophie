@@ -1,4 +1,4 @@
-# Solr GUI
+# Sophie
 
 TODO Short description
 

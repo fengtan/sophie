@@ -3,6 +3,7 @@ package com.github.fengtan.sophie;
 import java.io.IOException;
 
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
@@ -19,19 +20,29 @@ public class Sophie {
 
 	// TODO load url from .properties
 	public static void main(String[] args) { // TODO convert into static { code } ?
-		if (args.length != 1) {
-			System.err.println("Usage: java Sophie <solr-url>");
-			System.exit(1);
-		}
-		String url = args[0];
-		
 		// Create shell.
 		shell = new Shell();
 		shell.setMaximized(true);
 		shell.setLayout(new GridLayout());
-		shell.setText("Solr GUI - "+url);
 		
-		// Prompt user for url.
+		// If program launched with argument(s), then get the URL from the first argument.
+		// Otherwise, launch a dialog to let the user set a URL.
+		String url;
+		if (args.length > 0) {
+			url = args[0];
+		} else {
+			InputDialog dialog = new InputDialog(shell, "Solr URL", "Solr URL:", "http://localhost:8983/solr/collection1", null);
+			dialog.open();
+			// Button 'OK' returns code 0.
+			if (dialog.getReturnCode() == 0) {
+				url = dialog.getValue();
+			} else {
+				return;
+			}
+		}
+		
+		// Initialize Solr client and UI.
+		shell.setText("Sophie - "+url);
 		client = new HttpSolrClient(url);
 		tabFolder = new TabFolder(shell, url);
 		// TODO what if server works and then goes down
@@ -108,6 +119,7 @@ public class Sophie {
 	// TODO feat look for unused/obsolete methods
 	// TODO feat "favorites/recently opened servers"
     // TODO feat use InputDialog instead of custom dialogs
+	// TODO feat support http auth
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc if value is a date then calendar shows up when editing
