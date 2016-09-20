@@ -16,7 +16,6 @@ import com.github.fengtan.sophie.tabs.TabFolder;
 public class Sophie {
 	
 	public static HttpSolrClient client;
-	public static TabFolder tabFolder;
 	public static Shell shell; // TODO keeping shell as attribute (+public static) is ugly -> use getShell() 
 
 	// TODO load url from .properties
@@ -44,7 +43,7 @@ public class Sophie {
 		// Initialize Solr client and UI.
 		shell.setText("Sophie - "+url);
 		client = new HttpSolrClient(url);
-		tabFolder = new TabFolder(shell, url);
+		new TabFolder(shell, url);
 		// TODO what if server works and then goes down
 		
 		// Make the shell display its content.

@@ -76,7 +76,7 @@ public class DocumentEditListValueDialog extends DocumentEditValueDialog {
 	}
 
 	@Override
-	protected Object getValue() {
+	protected Object fetchValue() {
 		String[] items = listViewer.getList().getItems();
 		return Arrays.asList(items);
 	}

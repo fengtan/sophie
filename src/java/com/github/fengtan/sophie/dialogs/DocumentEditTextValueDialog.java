@@ -35,7 +35,7 @@ public class DocumentEditTextValueDialog extends DocumentEditValueDialog {
 	}
 
 	@Override
-	protected Object getValue() {
+	protected Object fetchValue() {
 		return text.getText();
 	}
 

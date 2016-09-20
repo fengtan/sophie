@@ -26,7 +26,8 @@ public class DocumentsTabItem extends CTabItem {
 		
 		// Add toolbar and table.
 		toolbar = new DocumentsToolbar(composite);
-		table = new DocumentsTable(composite, toolbar, toolbar);	
+		table = new DocumentsTable(composite, toolbar, toolbar);
+		toolbar.setTable(table);
 		
 		composite.pack();
 	}
@@ -35,11 +36,6 @@ public class DocumentsTabItem extends CTabItem {
 	public void dispose() {
 		toolbar.finalize();
 		super.dispose();
-	}
-	
-	// TODO needed ? ugly
-	public DocumentsTable getTable() {
-		return table;
 	}
 	
 }

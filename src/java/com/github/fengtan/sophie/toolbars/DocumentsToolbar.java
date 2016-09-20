@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.tables.DocumentsTable;
 
 public class DocumentsToolbar implements SelectionListener,ChangeListener {
 
@@ -41,8 +42,14 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
     private ToolItem itemBackup;
     private ToolItem itemRestore;
     
+    private DocumentsTable table;
+    
     public DocumentsToolbar(Composite composite) {
     	initToolbar(composite);
+    }
+    
+    public void setTable(DocumentsTable table) {
+    	this.table = table;
     }
     
     protected void initToolbar(final Composite composite) {
@@ -68,7 +75,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemRefresh.setToolTipText("Refresh from Solr: this will wipe out local modifications");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Sophie.tabFolder.getDocumentsTabItem().getTable().refresh();
+				table.refresh();
 			}
 		});
         
@@ -81,7 +88,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemAdd.setToolTipText("Add new document");
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Sophie.tabFolder.getDocumentsTabItem().getTable().addEmptyDocument(); // TODO is table the right place to put upload(), clear(), etc ?
+				table.addEmptyDocument(); // TODO is table the right place to put upload(), clear(), etc ?
 			}
 		});
 
@@ -91,7 +98,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemDelete.setToolTipText("Delete document");
         itemDelete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Sophie.tabFolder.getDocumentsTabItem().getTable().deleteSelectedDocument();
+				table.deleteSelectedDocument();
 			}
 		});
         itemDelete.setEnabled(false);
@@ -102,7 +109,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemClone.setToolTipText("Clone document");
         itemClone.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Sophie.tabFolder.getDocumentsTabItem().getTable().cloneSelectedDocument();
+				table.cloneSelectedDocument();
 			}
 		});
         itemClone.setEnabled(false);
@@ -113,7 +120,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemUpload.setToolTipText("Upload local modifications to Solr");
         itemUpload.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Sophie.tabFolder.getDocumentsTabItem().getTable().upload();
+				table.upload();
 			}
 		});
         itemUpload.setEnabled(false);
@@ -131,7 +138,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 		        messageBox.setMessage("Do you really want to clear the index? This will remove all documents from the index.");
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
-		        	Sophie.tabFolder.getDocumentsTabItem().getTable().clear();
+		        	table.clear();
 		        }
 			}
 		});
@@ -142,7 +149,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemCommit.setToolTipText("Commit index");
         itemCommit.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Sophie.tabFolder.getDocumentsTabItem().getTable().commit();
+				table.commit();
 			}
 		});
         
@@ -157,7 +164,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 		        messageBox.setMessage("Do you really want to optimize the index? If the index is highly segmented, this may take several hours and will slow down requests.");
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
-		        	Sophie.tabFolder.getDocumentsTabItem().getTable().optimize();
+		        	table.optimize();
 		        }
 			}
 		});
@@ -170,7 +177,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemExport.setToolTipText("Export as CSV file");
         itemExport.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Sophie.tabFolder.getDocumentsTabItem().getTable().export();
+				table.export();
 			}
 		});
         
@@ -184,7 +191,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 				InputDialog dialog = new InputDialog(Sophie.shell, "Make a backup of the index", "Backup name:", null, null);
 				dialog.open();
 				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
-					Sophie.tabFolder.getDocumentsTabItem().getTable().backup(dialog.getValue());	
+					table.backup(dialog.getValue());	
 				}
 			}
 		});
@@ -200,7 +207,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 				InputDialog dialog = new InputDialog(Sophie.shell, "Restore index from a backup", "Backup name:", null, null);
 				dialog.open();
 				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
-					Sophie.tabFolder.getDocumentsTabItem().getTable().restore(dialog.getValue());	
+					table.restore(dialog.getValue());	
 				}
 			}
 		});

@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.tables.FieldsTable;
 
 public class FieldsToolbar {
 
@@ -17,9 +17,16 @@ public class FieldsToolbar {
     
     private ToolItem itemRefresh;
     
+    private FieldsTable table;
+    
     public FieldsToolbar(Composite composite) {
     	initToolbar(composite);
     }
+    
+    public void setTable(FieldsTable table) {
+    	this.table = table;
+    }
+    
     protected void initToolbar(final Composite composite) {
         Display display = composite.getDisplay();
         ClassLoader loader = getClass().getClassLoader();
@@ -34,7 +41,7 @@ public class FieldsToolbar {
         itemRefresh.setToolTipText("Refresh list of fields");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				Sophie.tabFolder.getFieldsTabItem().getTable().refresh();
+				table.refresh();
 			}
 		});
         

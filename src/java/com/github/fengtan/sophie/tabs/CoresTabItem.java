@@ -27,6 +27,7 @@ public class CoresTabItem extends CTabItem {
 		// Add toolbar and table.
 		toolbar = new CoresToolbar(composite);
 		table = new CoresTable(composite, toolbar);
+		toolbar.setTable(table);
 		
 		// Pack.
 		composite.pack();
@@ -36,11 +37,6 @@ public class CoresTabItem extends CTabItem {
 	public void dispose() {
 		toolbar.finalize();
 		super.dispose();
-	}
-	
-	// TODO needed ? ugly
-	public CoresTable getTable() {
-		return table;
 	}
 	
 }

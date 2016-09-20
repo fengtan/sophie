@@ -55,7 +55,7 @@ public class DocumentEditDateValueDialog extends DocumentEditValueDialog {
 	}
 
 	@Override
-	protected Object getValue() {
+	protected Object fetchValue() {
 		return calendar.getTime();
 	}
 

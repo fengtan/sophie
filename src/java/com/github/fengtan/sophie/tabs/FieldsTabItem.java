@@ -28,6 +28,7 @@ public class FieldsTabItem extends CTabItem {
 		// Add toolbar and table.
 		toolbar = new FieldsToolbar(composite);
 		table = new FieldsTable(composite);
+		toolbar.setTable(table);
 		
 		// Pack.
 		composite.pack();
@@ -37,11 +38,6 @@ public class FieldsTabItem extends CTabItem {
 	public void dispose() {
 		toolbar.finalize();
 		super.dispose();
-	}
-	
-	// TODO needed ? ugly
-	public FieldsTable getTable() {
-		return table;
 	}
 	
 }

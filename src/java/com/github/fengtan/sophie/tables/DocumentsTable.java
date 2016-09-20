@@ -31,6 +31,7 @@ import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.luke.FieldFlag;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.util.NamedList;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
@@ -341,7 +342,14 @@ public class DocumentsTable { // TODO extend Composite ?
 		    				String oldValueString = Objects.toString(defaultValue, StringUtils.EMPTY);
 		    				dialog = new DocumentEditTextValueDialog(oldValueString);
 		    			}
-		    			dialog.open(defaultValue, item, i+1);
+		    			dialog.open();
+		    			if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
+		    				Object value = dialog.getValue();
+		    				if (!Objects.equals(defaultValue, value)) {
+		    					updateDocument(item, i+1, value);
+		    					// TODO table cell not updated
+		    				}
+		    			}
 		    		}
 		    	}
 			}
