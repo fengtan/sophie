@@ -1,9 +1,5 @@
 package com.github.fengtan.sophie.dialogs;
 
-import java.io.IOException;
-
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -21,23 +17,14 @@ public class CoreAddDialog extends Dialog {
 	private static final String DEFAULT_NAME = "collectionX";
 	private static final String DEFAULT_INSTANCE_DIR = "/path/to/solr/collectionX";
 	
-	private static CoreAddDialog dialog = null; 
-	
 	private Text coreName;
 	private Text instanceDir;
 	
-	private CoreAddDialog() {
-		super(Sophie.shell);
-	}
+	private String coreNameValue = null;
+	private String instanceDirValue = null;
 	
-	/**
-	 * Singleton
-	 */
-	public static CoreAddDialog getDialog() {
-		if (dialog == null) {
-			dialog = new CoreAddDialog();
-		}
-		return dialog;
+	public CoreAddDialog() {
+		super(Sophie.shell);
 	}
 		
 	@Override
@@ -68,18 +55,21 @@ public class CoreAddDialog extends Dialog {
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if (buttonId == IDialogConstants.OK_ID) {
-			try {
-				// TODO createCore is overloaded with additional params (schema file etc).
-				CoreAdminRequest.createCore(coreName.getText(), instanceDir.getText(), Sophie.client);
-				Sophie.tabFolder.getCoresTabItem().getTable().refresh();
-			} catch (SolrServerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
+			coreNameValue = coreName.getText();
+			instanceDirValue = instanceDir.getText();
+		} else {
+			coreNameValue = null;
+			instanceDirValue = null;
 		}
 		super.buttonPressed(buttonId);
 	}
+	
+	public String getCoreNameValue() {
+		return coreNameValue;
+	}
+	
+	public String getInstanceDirValue() {
+		return instanceDirValue;
+	}
+
 }

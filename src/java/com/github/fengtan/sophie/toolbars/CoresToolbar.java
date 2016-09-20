@@ -73,8 +73,22 @@ public class CoresToolbar implements SelectionListener {
         itemAdd.setText("Add");
         itemAdd.setToolTipText("Add new core");
         itemAdd.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				CoreAddDialog.getDialog().open();
+			public void widgetSelected(SelectionEvent event) {
+				CoreAddDialog dialog = new CoreAddDialog();
+				dialog.open();
+				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
+					try {
+						// TODO createCore is overloaded with additional params (schema file etc).
+						CoreAdminRequest.createCore(dialog.getCoreNameValue(), dialog.getInstanceDirValue(), Sophie.client);
+						Sophie.tabFolder.getCoresTabItem().getTable().refresh();
+					} catch (SolrServerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}					
+				}
 			}
 		});
 

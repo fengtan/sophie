@@ -120,6 +120,7 @@ public class Sophie {
 	// TODO feat "favorites/recently opened servers"
     // TODO feat use InputDialog instead of custom dialogs
 	// TODO feat support http auth
+	// TODO feat Dialogs -> use validators to make sure values are not empty ?
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc if value is a date then calendar shows up when editing
