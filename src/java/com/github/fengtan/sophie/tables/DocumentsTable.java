@@ -336,7 +336,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		    			if (defaultValue instanceof Date) {
 		    				dialog = new DocumentEditDateValueDialog((Date) defaultValue);
 		    			} else if (defaultValue instanceof AbstractList) {
-		    				dialog = new DocumentEditListValueDialog((AbstractList) defaultValue);
+		    				dialog = new DocumentEditListValueDialog((AbstractList<?>) defaultValue);
 		    			} else {
 		    				String oldValueString = Objects.toString(defaultValue, StringUtils.EMPTY);
 		    				dialog = new DocumentEditTextValueDialog(oldValueString);

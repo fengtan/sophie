@@ -61,12 +61,12 @@ public class CoresTable {
 		}
 	}
 	
-	private void populateLine(NamedList namedList, TableItem item) {
+	private void populateLine(NamedList<?> namedList, TableItem item) {
 		for (int idx = 0; idx < namedList.size(); idx++) {
 			Object object = namedList.getVal(idx);
 			if (object instanceof NamedList) {
 				// NamedList: go through all elements recursively.
-				populateLine((NamedList) object, item);
+				populateLine((NamedList<?>) object, item);
 			} else {
 				// Not a NamedList: add it to the table.
 				String name = namedList.getName(idx);

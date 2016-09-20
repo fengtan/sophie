@@ -21,11 +21,11 @@ import com.github.fengtan.sophie.Sophie;
 
 public class DocumentEditListValueDialog extends DocumentEditValueDialog {
 
-	private AbstractList defaultValue;
+	private AbstractList<?> defaultValue;
 	private ListViewer listViewer;
 	
 	// List is not iterable - we need to use AbstractList.
-	public DocumentEditListValueDialog(AbstractList defaultValue) {
+	public DocumentEditListValueDialog(AbstractList<?> defaultValue) {
 		super(Sophie.shell);
 		this.defaultValue = defaultValue;
 	}
@@ -49,7 +49,7 @@ public class DocumentEditListValueDialog extends DocumentEditValueDialog {
 	    buttonAdd.setText("Add");
 	    buttonAdd.addSelectionListener(new SelectionAdapter() {
 	    	public void widgetSelected(SelectionEvent e) {
-	    		InputDialog input = new InputDialog(Sophie.shell, "Add value", "Add value:", StringUtils.EMPTY, null);
+	    		InputDialog input = new InputDialog(Sophie.shell, "Add value", "Add value:", null, null);
 	    		input.open();
 	    		// button "OK' has ID "0".
 	    		if (input.getReturnCode() == 0) {
