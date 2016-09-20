@@ -1,5 +1,7 @@
 package com.github.fengtan.sophie.toolbars;
 
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -12,8 +14,6 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.sophie.Sophie;
-import com.github.fengtan.sophie.dialogs.IndexBackupDialog;
-import com.github.fengtan.sophie.dialogs.IndexRestoreDialog;
 
 public class DocumentsToolbar implements SelectionListener,ChangeListener {
 
@@ -180,7 +180,13 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemBackup.setToolTipText("Make a backup of the index");
         itemBackup.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-	        	new  IndexBackupDialog(Sophie.shell).open();
+				// TODO "Leave empty to use the default format (yyyyMMddHHmmssSSS)."
+				InputDialog dialog = new InputDialog(Sophie.shell, "Make a backup of the index", "Backup name:", StringUtils.EMPTY, null);
+				dialog.open();
+				// Button 'OK' has ID "0".
+				if (dialog.getReturnCode() == 0) {
+					Sophie.tabFolder.getDocumentsTabItem().getTable().backup(dialog.getValue());	
+				}
 			}
 		});
         
@@ -190,7 +196,14 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemRestore.setToolTipText("Restore index from a backup");
         itemRestore.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-	        	new IndexRestoreDialog(Sophie.shell).open();
+				// TODO "Available backup names"
+				// TODO "leave empty for xxx"
+				InputDialog dialog = new InputDialog(Sophie.shell, "Restore index from a backup", "Backup name:", StringUtils.EMPTY, null);
+				dialog.open();
+				// Button 'OK' has ID "0".
+				if (dialog.getReturnCode() == 0) {
+					Sophie.tabFolder.getDocumentsTabItem().getTable().restore(dialog.getValue());	
+				}
 			}
 		});
         

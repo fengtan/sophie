@@ -25,7 +25,6 @@ public class CoreAddDialog extends Dialog {
 	private Text coreName;
 	private Text instanceDir;
 	
-	// TODO allow http auth
 	private CoreAddDialog() {
 		super(Sophie.shell);
 	}
