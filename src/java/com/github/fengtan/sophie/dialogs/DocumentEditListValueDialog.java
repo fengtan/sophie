@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ListViewer;
@@ -51,8 +52,7 @@ public class DocumentEditListValueDialog extends DocumentEditValueDialog {
 	    	public void widgetSelected(SelectionEvent e) {
 	    		InputDialog input = new InputDialog(Sophie.shell, "Add value", "Add value:", null, null);
 	    		input.open();
-	    		// button "OK' has ID "0".
-	    		if (input.getReturnCode() == 0) {
+	    		if (input.getReturnCode() == IDialogConstants.OK_ID) {
 		    		listViewer.add(input.getValue());
 		    		// TODO update Text
 	    		}

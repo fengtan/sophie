@@ -3,6 +3,7 @@ package com.github.fengtan.sophie.dialogs;
 import java.util.Objects;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
@@ -32,9 +33,8 @@ public abstract class DocumentEditValueDialog extends Dialog {
 	
 	@Override
 	protected void buttonPressed(int buttonId) {
-		// button "OK' has ID "0".
 		// TODO NPE when editing unstored field
-		if (buttonId == 0) {
+		if (buttonId == IDialogConstants.OK_ID) {
 			Object value = getValue();
 			if (!Objects.equals(defaultValue, value)) {
 				Sophie.tabFolder.getDocumentsTabItem().getTable().updateDocument(item, columnIndex, value);	

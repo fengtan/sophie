@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -66,8 +67,7 @@ public class CoreAddDialog extends Dialog {
 	
 	@Override
 	protected void buttonPressed(int buttonId) {
-		// button "OK' has ID "0".
-		if (buttonId == 0) {
+		if (buttonId == IDialogConstants.OK_ID) {
 			try {
 				// TODO createCore is overloaded with additional params (schema file etc).
 				CoreAdminRequest.createCore(coreName.getText(), instanceDir.getText(), Sophie.client);

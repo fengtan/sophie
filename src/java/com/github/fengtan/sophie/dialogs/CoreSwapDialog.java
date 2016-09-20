@@ -1,12 +1,9 @@
 package com.github.fengtan.sophie.dialogs;
 
-import java.io.IOException;
 import java.util.Arrays;
 
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.request.CoreAdminRequest;
-import org.apache.solr.common.params.CoreAdminParams.CoreAdminAction;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -22,6 +19,7 @@ public class CoreSwapDialog extends Dialog {
 	
 	private String coreName;
 	private Combo otherCoreName;
+	private String value = null;
 
 	public CoreSwapDialog(String core1) {
 		super(Sophie.shell);
@@ -54,24 +52,15 @@ public class CoreSwapDialog extends Dialog {
 
 	@Override
 	protected void buttonPressed(int buttonId) {
-		// button "OK' has ID "0".
-		if (buttonId == 0) {
-			// TODO contrib CoreAdminRequest.swapCores() - similar to CoreAdminRequest.renameCore().
-			CoreAdminRequest request = new CoreAdminRequest();
-			request.setCoreName(coreName);
-			request.setOtherCoreName(otherCoreName.getText());
-			request.setAction(CoreAdminAction.SWAP);
-			try {
-				request.process(Sophie.client);
-				Sophie.tabFolder.getCoresTabItem().getTable().refresh();
-			} catch (SolrServerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if (buttonId == IDialogConstants.OK_ID) {
+			value = otherCoreName.getText();
+		} else {
+			value = null;
 		}
 		super.buttonPressed(buttonId);
+	}
+	
+	public String getValue() {
+		return value;
 	}
 }

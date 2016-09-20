@@ -3,6 +3,7 @@ package com.github.fengtan.sophie;
 import java.io.IOException;
 
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -33,8 +34,7 @@ public class Sophie {
 		} else {
 			InputDialog dialog = new InputDialog(shell, "Solr URL", "Solr URL:", "http://localhost:8983/solr/collection1", null);
 			dialog.open();
-			// Button 'OK' returns code 0.
-			if (dialog.getReturnCode() == 0) {
+			if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
 				url = dialog.getValue();
 			} else {
 				return;

@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
+import org.apache.solr.common.params.CoreAdminParams.CoreAdminAction;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -114,8 +116,7 @@ public class CoresToolbar implements SelectionListener {
 				String oldCoreName = table.getSelectedCore();
 				InputDialog newCoreName = new InputDialog(Sophie.shell, "Rename core", "New name (\""+oldCoreName+"\"):", oldCoreName, null);
 	    		newCoreName.open();
-	    		// button "OK' has ID "0".
-	    		if (newCoreName.getReturnCode() == 0) {
+	    		if (newCoreName.getReturnCode() == IDialogConstants.OK_ID) {
 	    			try {
 	    				CoreAdminRequest.renameCore(oldCoreName, newCoreName.getValue(), Sophie.client);
 	    				Sophie.tabFolder.getCoresTabItem().getTable().refresh();
@@ -136,10 +137,28 @@ public class CoresToolbar implements SelectionListener {
         itemSwap.setText("Swap");
         itemSwap.setToolTipText("Swap cores"); //TODO disable when no core selected
         itemSwap.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent event) {
 				CoresTable table = Sophie.tabFolder.getCoresTabItem().getTable();
 				String coreName = table.getSelectedCore();
-				new CoreSwapDialog(coreName).open();
+				CoreSwapDialog dialog = new CoreSwapDialog(coreName);
+				dialog.open();
+				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
+					// TODO contrib CoreAdminRequest.swapCores() - similar to CoreAdminRequest.renameCore().
+					CoreAdminRequest request = new CoreAdminRequest();
+					request.setCoreName(coreName);
+					request.setOtherCoreName(dialog.getValue());
+					request.setAction(CoreAdminAction.SWAP);
+					try {
+						request.process(Sophie.client);
+						Sophie.tabFolder.getCoresTabItem().getTable().refresh();
+					} catch (SolrServerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
+				}
 			}
 		});
         itemSwap.setEnabled(false);

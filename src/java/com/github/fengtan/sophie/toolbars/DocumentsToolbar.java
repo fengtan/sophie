@@ -1,5 +1,6 @@
 package com.github.fengtan.sophie.toolbars;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -182,8 +183,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 				// TODO "Leave empty to use the default format (yyyyMMddHHmmssSSS)."
 				InputDialog dialog = new InputDialog(Sophie.shell, "Make a backup of the index", "Backup name:", null, null);
 				dialog.open();
-				// Button 'OK' has ID "0".
-				if (dialog.getReturnCode() == 0) {
+				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
 					Sophie.tabFolder.getDocumentsTabItem().getTable().backup(dialog.getValue());	
 				}
 			}
@@ -199,8 +199,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 				// TODO "leave empty for xxx"
 				InputDialog dialog = new InputDialog(Sophie.shell, "Restore index from a backup", "Backup name:", null, null);
 				dialog.open();
-				// Button 'OK' has ID "0".
-				if (dialog.getReturnCode() == 0) {
+				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
 					Sophie.tabFolder.getDocumentsTabItem().getTable().restore(dialog.getValue());	
 				}
 			}
