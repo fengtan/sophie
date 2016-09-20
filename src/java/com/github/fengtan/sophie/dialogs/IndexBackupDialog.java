@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.dialogs;
+package com.github.fengtan.sophie.dialogs;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.SolrGUI;
+import com.github.fengtan.sophie.Sophie;
 
 public class IndexBackupDialog extends Dialog {
 	
@@ -42,7 +42,7 @@ public class IndexBackupDialog extends Dialog {
 	protected void buttonPressed(int buttonId) {
 		// button "OK' has ID "0".
 		if (buttonId == 0) {
-			SolrGUI.tabFolder.getDocumentsTabItem().getTable().backup(backupName.getText());
+			Sophie.tabFolder.getDocumentsTabItem().getTable().backup(backupName.getText());
 		}
 		super.buttonPressed(buttonId);
 	}

@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.toolbars;
+package com.github.fengtan.sophie.toolbars;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -11,9 +11,9 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-import com.github.fengtan.solrgui.SolrGUI;
-import com.github.fengtan.solrgui.dialogs.IndexBackupDialog;
-import com.github.fengtan.solrgui.dialogs.IndexRestoreDialog;
+import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.dialogs.IndexBackupDialog;
+import com.github.fengtan.sophie.dialogs.IndexRestoreDialog;
 
 public class DocumentsToolbar implements SelectionListener,ChangeListener {
 
@@ -68,7 +68,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemRefresh.setToolTipText("Refresh from Solr: this will wipe out local modifications");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUI.tabFolder.getDocumentsTabItem().getTable().refresh();
+				Sophie.tabFolder.getDocumentsTabItem().getTable().refresh();
 			}
 		});
         
@@ -81,7 +81,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemAdd.setToolTipText("Add new document");
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUI.tabFolder.getDocumentsTabItem().getTable().addEmptyDocument(); // TODO is table the right place to put upload(), clear(), etc ?
+				Sophie.tabFolder.getDocumentsTabItem().getTable().addEmptyDocument(); // TODO is table the right place to put upload(), clear(), etc ?
 			}
 		});
 
@@ -91,7 +91,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemDelete.setToolTipText("Delete document");
         itemDelete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUI.tabFolder.getDocumentsTabItem().getTable().deleteSelectedDocument();
+				Sophie.tabFolder.getDocumentsTabItem().getTable().deleteSelectedDocument();
 			}
 		});
         itemDelete.setEnabled(false);
@@ -102,7 +102,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemClone.setToolTipText("Clone document");
         itemClone.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUI.tabFolder.getDocumentsTabItem().getTable().cloneSelectedDocument();
+				Sophie.tabFolder.getDocumentsTabItem().getTable().cloneSelectedDocument();
 			}
 		});
         itemClone.setEnabled(false);
@@ -113,7 +113,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemUpload.setToolTipText("Upload local modifications to Solr");
         itemUpload.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUI.tabFolder.getDocumentsTabItem().getTable().upload();
+				Sophie.tabFolder.getDocumentsTabItem().getTable().upload();
 			}
 		});
         itemUpload.setEnabled(false);
@@ -126,12 +126,12 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemClear.setToolTipText("Clear index");
         itemClear.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-		        MessageBox messageBox = new MessageBox(SolrGUI.shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		        MessageBox messageBox = new MessageBox(Sophie.shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		        messageBox.setText("Clear index");
 		        messageBox.setMessage("Do you really want to clear the index? This will remove all documents from the index.");
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
-		        	SolrGUI.tabFolder.getDocumentsTabItem().getTable().clear();
+		        	Sophie.tabFolder.getDocumentsTabItem().getTable().clear();
 		        }
 			}
 		});
@@ -142,7 +142,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemCommit.setToolTipText("Commit index");
         itemCommit.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUI.tabFolder.getDocumentsTabItem().getTable().commit();
+				Sophie.tabFolder.getDocumentsTabItem().getTable().commit();
 			}
 		});
         
@@ -152,12 +152,12 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemOptimize.setToolTipText("Optimize index");
         itemOptimize.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-		        MessageBox messageBox = new MessageBox(SolrGUI.shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		        MessageBox messageBox = new MessageBox(Sophie.shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		        messageBox.setText("Optimize index");
 		        messageBox.setMessage("Do you really want to optimize the index? If the index is highly segmented, this may take several hours and will slow down requests.");
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
-		        	SolrGUI.tabFolder.getDocumentsTabItem().getTable().optimize();
+		        	Sophie.tabFolder.getDocumentsTabItem().getTable().optimize();
 		        }
 			}
 		});
@@ -170,7 +170,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemExport.setToolTipText("Export as CSV file");
         itemExport.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUI.tabFolder.getDocumentsTabItem().getTable().export();
+				Sophie.tabFolder.getDocumentsTabItem().getTable().export();
 			}
 		});
         
@@ -180,7 +180,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemBackup.setToolTipText("Make a backup of the index");
         itemBackup.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-	        	new  IndexBackupDialog(SolrGUI.shell).open();
+	        	new  IndexBackupDialog(Sophie.shell).open();
 			}
 		});
         
@@ -190,7 +190,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemRestore.setToolTipText("Restore index from a backup");
         itemRestore.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-	        	new IndexRestoreDialog(SolrGUI.shell).open();
+	        	new IndexRestoreDialog(Sophie.shell).open();
 			}
 		});
         

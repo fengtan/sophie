@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.dialogs;
+package com.github.fengtan.sophie.dialogs;
 
 import java.util.Objects;
 
@@ -7,7 +7,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.github.fengtan.solrgui.SolrGUI;
+import com.github.fengtan.sophie.Sophie;
 
 public abstract class DocumentEditValueDialog extends Dialog {
 	
@@ -37,7 +37,7 @@ public abstract class DocumentEditValueDialog extends Dialog {
 		if (buttonId == 0) {
 			Object value = getValue();
 			if (!Objects.equals(defaultValue, value)) {
-				SolrGUI.tabFolder.getDocumentsTabItem().getTable().updateDocument(item, columnIndex, value);	
+				Sophie.tabFolder.getDocumentsTabItem().getTable().updateDocument(item, columnIndex, value);	
 			}
 		}
 		super.buttonPressed(buttonId);

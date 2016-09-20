@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui;
+package com.github.fengtan.sophie;
 
 import java.io.IOException;
 
@@ -9,18 +9,18 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-import com.github.fengtan.solrgui.tabs.TabFolder;
+import com.github.fengtan.sophie.tabs.TabFolder;
 
-public class SolrGUI {
+public class Sophie {
 	
-	public static HttpSolrClient client; // TODO move into SolrGUITable ? so we do not store both this.server and this.url
+	public static HttpSolrClient client;
 	public static TabFolder tabFolder;
-	public static Shell shell; // TODO keeping shell as attribute (+public static) is ugly
+	public static Shell shell; // TODO keeping shell as attribute (+public static) is ugly -> use getShell() 
 
 	// TODO load url from .properties
 	public static void main(String[] args) { // TODO convert into static { code } ?
 		if (args.length != 1) {
-			System.err.println("Usage: java -jar SolrGUI.jar <solr-url>");
+			System.err.println("Usage: java Sophie <solr-url>");
 			System.exit(1);
 		}
 		String url = args[0];
@@ -76,7 +76,6 @@ public class SolrGUI {
 	// TODO meta screenshot 0.5
 	// TODO meta about page + github.io
 	// TODO meta document all methods
-	// TODO meta rename solrgui
 	// TODO meta measure memory footprint
 	// TODO meta are all jars required ?
 	// TODO meta license (depends on swt, solrj, icons, other dependencies)
@@ -84,11 +83,11 @@ public class SolrGUI {
 	// TODO meta travis
     // TODO meta .deb package
     // TODO - install jar into /opt or /usr/local
-    // TODO - export SOLRGUI_HOME=/usr/local/solr-gui-x.y.z
-    // TODO - export PATH=$PATH:$SOLRGUI_HOME/bin
+    // TODO - export SOPHIE_HOME=/usr/local/sophie-x.y.z
+    // TODO - export PATH=$PATH:$SOPHIE_HOME/bin
     // TODO - expose log4j.prop in /etc
     // TODO - logs in /var/log
-	// TODO meta solr-gui / sophie
+	// TODO meta github sophie
 	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
 	// TODO feat sort by field name (fields+documents)

@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.tables;
+package com.github.fengtan.sophie.tables;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -56,13 +56,13 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.SolrGUI;
-import com.github.fengtan.solrgui.dialogs.DocumentEditDateValueDialog;
-import com.github.fengtan.solrgui.dialogs.DocumentEditListValueDialog;
-import com.github.fengtan.solrgui.dialogs.DocumentEditTextValueDialog;
-import com.github.fengtan.solrgui.dialogs.DocumentEditValueDialog;
-import com.github.fengtan.solrgui.toolbars.ChangeListener;
-import com.github.fengtan.solrgui.utils.SolrUtils;
+import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.dialogs.DocumentEditDateValueDialog;
+import com.github.fengtan.sophie.dialogs.DocumentEditListValueDialog;
+import com.github.fengtan.sophie.dialogs.DocumentEditTextValueDialog;
+import com.github.fengtan.sophie.dialogs.DocumentEditValueDialog;
+import com.github.fengtan.sophie.toolbars.ChangeListener;
+import com.github.fengtan.sophie.utils.SolrUtils;
 
 public class DocumentsTable { // TODO extend Composite ?
 
@@ -367,7 +367,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		SolrQuery query = getBaseQuery(0, 0);
 		try {
 			// Solr returns a long, table expects an int.
-			long count = SolrGUI.client.query(query).getResults().getNumFound();
+			long count = Sophie.client.query(query).getResults().getNumFound();
 			return Integer.parseInt(String.valueOf(count));
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
@@ -398,7 +398,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		}
 		Map<String, FacetField> facets = new HashMap<String, FacetField>();
 		try {
-			for(FacetField facet:SolrGUI.client.query(query).getFacetFields()) {
+			for(FacetField facet:Sophie.client.query(query).getFacetFields()) {
 				facets.put(facet.getName(), facet);
 			}
 		} catch(SolrServerException e) {
@@ -422,7 +422,7 @@ public class DocumentsTable { // TODO extend Composite ?
 			// TODO what if sortField is not valid anymore
 			query.setSort(sortField, sortOrder);
 			try {
-				pages.put(page, SolrGUI.client.query(query).getResults());	
+				pages.put(page, Sophie.client.query(query).getResults());	
 			} catch(SolrServerException e) {
 				// TODO handle exception
 				e.printStackTrace();
@@ -484,7 +484,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		request.setResponseParser(new NoOpResponseParser("csv"));
 		// TODO notify user export success (export may take time).
 		try {
-			NamedList<Object> response = SolrGUI.client.request(request);
+			NamedList<Object> response = Sophie.client.request(request);
 			String csv = (String) response.get("response"); // TODO 1M lines into a String will fill the ram - is there a way to buffer solr's response ?
 			Writer writer = new PrintWriter(path, "UTF-8");
 			writer.write(csv);
@@ -510,7 +510,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		    	input.addField(name, document.getFieldValue(name), 1.0f);
 		    }
 			try {
-				SolrGUI.client.add(input); // Returned object seems to have no relevant information.
+				Sophie.client.add(input); // Returned object seems to have no relevant information.
 			} catch (SolrServerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -523,7 +523,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		for (SolrDocument document:documentsDeleted) {
 			String id = document.getFieldValue(uniqueField).toString(); // TODO what if no uniquekey
 			try {
-				SolrGUI.client.deleteById(id);
+				Sophie.client.deleteById(id);
 			} catch (SolrServerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -539,7 +539,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		    	input.addField(name, document.getFieldValue(name), 1.0f); // TODO 1.0f move to constant
 		    }
 			try {
-				SolrGUI.client.add(input); // Returned object seems to have no relevant information.
+				Sophie.client.add(input); // Returned object seems to have no relevant information.
 			} catch (SolrServerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -550,7 +550,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		}
 		// Commit on server.
 		try {
-			SolrGUI.client.commit();
+			Sophie.client.commit();
 			// TODO allow to revert a specific document
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
@@ -568,8 +568,8 @@ public class DocumentsTable { // TODO extend Composite ?
 	 */
 	public void clear() {
 		try {
-			SolrGUI.client.deleteByQuery("*:*");
-			SolrGUI.client.commit();
+			Sophie.client.deleteByQuery("*:*");
+			Sophie.client.commit();
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -583,7 +583,7 @@ public class DocumentsTable { // TODO extend Composite ?
 
 	public void commit() {
 		try {
-			SolrGUI.client.commit();
+			Sophie.client.commit();
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -596,7 +596,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	
 	public void optimize() {
 		try {
-			SolrGUI.client.optimize();
+			Sophie.client.optimize();
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -620,7 +620,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		QueryRequest request = new QueryRequest(params);
 		request.setPath("/replication");
 		try {
-			NamedList<Object> response = SolrGUI.client.request(request);
+			NamedList<Object> response = Sophie.client.request(request);
 			// TODO progress bar with /replication?command=details ?
 			// TODO "OK" solrj constant ?
 			if (StringUtils.equals(response.get("status").toString(), "OK")) {
@@ -649,7 +649,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		QueryRequest request = new QueryRequest(params);
 		request.setPath("/replication");
 		try {
-			SolrGUI.client.request(request);
+			Sophie.client.request(request);
 			// TODO work only for solr >= 5.2 (mention) => disable button if solr < 5.2 https://issues.apache.org/jira/browse/SOLR-6637
 			// TODO get /replication?command=restorestatus and provide feedback to user (asynchronous call), possibly with a progress bar
 			// TODO test backup/restore

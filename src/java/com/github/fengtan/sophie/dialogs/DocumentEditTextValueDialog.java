@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.dialogs;
+package com.github.fengtan.sophie.dialogs;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.SolrGUI;
+import com.github.fengtan.sophie.Sophie;
 
 public class DocumentEditTextValueDialog extends DocumentEditValueDialog {
 
@@ -14,7 +14,7 @@ public class DocumentEditTextValueDialog extends DocumentEditValueDialog {
 	private Text text;
 	
 	public DocumentEditTextValueDialog(String defaultValue) {
-		super(SolrGUI.shell);
+		super(Sophie.shell);
 		this.defaultValue = defaultValue;
 	}
 

@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.dialogs;
+package com.github.fengtan.sophie.dialogs;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
 
-import com.github.fengtan.solrgui.SolrGUI;
+import com.github.fengtan.sophie.Sophie;
 
 public class DocumentEditDateValueDialog extends DocumentEditValueDialog {
 
@@ -18,7 +18,7 @@ public class DocumentEditDateValueDialog extends DocumentEditValueDialog {
 	private Calendar calendar = Calendar.getInstance();
 	
 	public DocumentEditDateValueDialog(Date defaultValue) {
-		super(SolrGUI.shell);
+		super(Sophie.shell);
 		this.defaultValue = defaultValue;
 	}
 

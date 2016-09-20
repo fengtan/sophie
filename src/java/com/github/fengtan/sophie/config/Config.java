@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.config;
+package com.github.fengtan.sophie.config;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,7 +12,7 @@ public class Config {
 	// TODO make sure hidden file works on windows
 	// TODO what if file is not properties format
 	// TODO could use org.eclipse.jface.preference.PreferenceStore
-	private static final String filename = ".solrgui";
+	private static final String filename = ".sophie";
 	private static final String filepath = System.getProperty("user.home") + File.separator + filename;
 	
 	public static String getURL() {

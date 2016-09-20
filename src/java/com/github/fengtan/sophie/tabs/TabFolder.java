@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.tabs;
+package com.github.fengtan.sophie.tabs;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;

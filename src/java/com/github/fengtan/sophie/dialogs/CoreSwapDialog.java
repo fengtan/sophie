@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.dialogs;
+package com.github.fengtan.sophie.dialogs;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -15,8 +15,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-import com.github.fengtan.solrgui.SolrGUI;
-import com.github.fengtan.solrgui.utils.SolrUtils;
+import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.utils.SolrUtils;
 
 public class CoreSwapDialog extends Dialog {
 	
@@ -24,7 +24,7 @@ public class CoreSwapDialog extends Dialog {
 	private Combo otherCoreName;
 
 	public CoreSwapDialog(String core1) {
-		super(SolrGUI.shell);
+		super(Sophie.shell);
 		this.coreName = core1;
 	}
 
@@ -62,8 +62,8 @@ public class CoreSwapDialog extends Dialog {
 			request.setOtherCoreName(otherCoreName.getText());
 			request.setAction(CoreAdminAction.SWAP);
 			try {
-				request.process(SolrGUI.client);
-				SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
+				request.process(Sophie.client);
+				Sophie.tabFolder.getCoresTabItem().getTable().refresh();
 			} catch (SolrServerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

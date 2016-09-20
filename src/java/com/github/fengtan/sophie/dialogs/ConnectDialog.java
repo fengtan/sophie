@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.dialogs;
+package com.github.fengtan.sophie.dialogs;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -9,8 +9,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.SolrGUI;
-import com.github.fengtan.solrgui.config.Config;
+import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.config.Config;
 
 // TODO is this class used ?
 public class ConnectDialog extends Dialog {
@@ -23,7 +23,7 @@ public class ConnectDialog extends Dialog {
 	
 	// TODO allow http auth
 	private ConnectDialog() {
-		super(SolrGUI.shell);
+		super(Sophie.shell);
 	}
 	
 	/**

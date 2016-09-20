@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.toolbars;
+package com.github.fengtan.sophie.toolbars;
 
 import org.eclipse.swt.internal.SWTEventListener;
 

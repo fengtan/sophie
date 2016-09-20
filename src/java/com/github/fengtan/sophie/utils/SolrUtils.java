@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.utils;
+package com.github.fengtan.sophie.utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.apache.solr.common.params.CoreAdminParams.CoreAdminAction;
 import org.apache.solr.common.util.NamedList;
 
-import com.github.fengtan.solrgui.SolrGUI;
+import com.github.fengtan.sophie.Sophie;
 
 public class SolrUtils {
 
@@ -31,7 +31,7 @@ public class SolrUtils {
 		// TODO use SchemaRequest instead of LukeRequest
 		LukeRequest request = new LukeRequest();
 		try {
-			LukeResponse response = request.process(SolrGUI.client);
+			LukeResponse response = request.process(Sophie.client);
 			return new ArrayList<FieldInfo>(response.getFieldInfo().values());
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
@@ -55,7 +55,7 @@ public class SolrUtils {
 	public static String getRemoteUniqueField() {
 		SchemaRequest.UniqueKey request = new SchemaRequest.UniqueKey();
 		try {
-			return request.process(SolrGUI.client).getUniqueKey();
+			return request.process(Sophie.client).getUniqueKey();
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class SolrUtils {
 		CoreAdminRequest request = new CoreAdminRequest();
 		request.setAction(CoreAdminAction.STATUS);
 		try {
-			CoreAdminResponse response = request.process(SolrGUI.client); // TODO throws RemoteSolrException if query on /solr/collection1 instead of /solr
+			CoreAdminResponse response = request.process(Sophie.client); // TODO throws RemoteSolrException if query on /solr/collection1 instead of /solr
 			return response.getCoreStatus().asMap(-1);
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block

@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.toolbars;
+package com.github.fengtan.sophie.toolbars;
 
 import java.io.IOException;
 
@@ -16,10 +16,10 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-import com.github.fengtan.solrgui.SolrGUI;
-import com.github.fengtan.solrgui.dialogs.CoreAddDialog;
-import com.github.fengtan.solrgui.dialogs.CoreSwapDialog;
-import com.github.fengtan.solrgui.tables.CoresTable;
+import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.dialogs.CoreAddDialog;
+import com.github.fengtan.sophie.dialogs.CoreSwapDialog;
+import com.github.fengtan.sophie.tables.CoresTable;
 
 public class CoresToolbar implements SelectionListener {
 
@@ -60,7 +60,7 @@ public class CoresToolbar implements SelectionListener {
         itemRefresh.setToolTipText("Refresh list of cores");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
+				Sophie.tabFolder.getCoresTabItem().getTable().refresh();
 			}
 		});
         
@@ -82,16 +82,16 @@ public class CoresToolbar implements SelectionListener {
         itemDelete.setToolTipText("Delete core"); //TODO disable when no core selected
         itemDelete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				CoresTable table = SolrGUI.tabFolder.getCoresTabItem().getTable();
+				CoresTable table = Sophie.tabFolder.getCoresTabItem().getTable();
 				String coreName = table.getSelectedCore();
-		        MessageBox messageBox = new MessageBox(SolrGUI.shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		        MessageBox messageBox = new MessageBox(Sophie.shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		        messageBox.setText("Delete core");
 		        messageBox.setMessage("Do you really want to delete this core (\""+coreName+"\") ?");
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
 					try {
-						CoreAdminRequest.unloadCore(coreName, SolrGUI.client);
-						SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
+						CoreAdminRequest.unloadCore(coreName, Sophie.client);
+						Sophie.tabFolder.getCoresTabItem().getTable().refresh();
 					} catch (SolrServerException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -110,15 +110,15 @@ public class CoresToolbar implements SelectionListener {
         itemRename.setToolTipText("Rename core"); //TODO disable when no core selected
         itemRename.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				CoresTable table = SolrGUI.tabFolder.getCoresTabItem().getTable();
+				CoresTable table = Sophie.tabFolder.getCoresTabItem().getTable();
 				String oldCoreName = table.getSelectedCore();
-				InputDialog newCoreName = new InputDialog(SolrGUI.shell, "Rename core", "New name (\""+oldCoreName+"\"):", oldCoreName, null);
+				InputDialog newCoreName = new InputDialog(Sophie.shell, "Rename core", "New name (\""+oldCoreName+"\"):", oldCoreName, null);
 	    		newCoreName.open();
 	    		// button "OK' has ID "0".
 	    		if (newCoreName.getReturnCode() == 0) {
 	    			try {
-	    				CoreAdminRequest.renameCore(oldCoreName, newCoreName.getValue(), SolrGUI.client);
-	    				SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
+	    				CoreAdminRequest.renameCore(oldCoreName, newCoreName.getValue(), Sophie.client);
+	    				Sophie.tabFolder.getCoresTabItem().getTable().refresh();
 	    			} catch (SolrServerException e) {
 	    				// TODO Auto-generated catch block
 	    				e.printStackTrace();
@@ -137,7 +137,7 @@ public class CoresToolbar implements SelectionListener {
         itemSwap.setToolTipText("Swap cores"); //TODO disable when no core selected
         itemSwap.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				CoresTable table = SolrGUI.tabFolder.getCoresTabItem().getTable();
+				CoresTable table = Sophie.tabFolder.getCoresTabItem().getTable();
 				String coreName = table.getSelectedCore();
 				new CoreSwapDialog(coreName).open();
 			}
@@ -150,11 +150,11 @@ public class CoresToolbar implements SelectionListener {
         itemReload.setToolTipText("Reload core - this will load any configuration changes you may have made to solrconfig.xml or schema.xml"); //TODO disable when no core selected
         itemReload.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				CoresTable table = SolrGUI.tabFolder.getCoresTabItem().getTable();
+				CoresTable table = Sophie.tabFolder.getCoresTabItem().getTable();
 				String coreName = table.getSelectedCore();
 				try {
-					CoreAdminRequest.reloadCore(coreName, SolrGUI.client);
-					SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
+					CoreAdminRequest.reloadCore(coreName, Sophie.client);
+					Sophie.tabFolder.getCoresTabItem().getTable().refresh();
 				} catch (SolrServerException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

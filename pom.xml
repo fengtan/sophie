@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.fengtan</groupId>
-  <artifactId>solr-gui</artifactId>
+  <artifactId>sophie</artifactId>
   <version>0.5</version>
-  <name>solr-gui</name>
+  <name>sophie</name>
   <description></description>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -30,7 +30,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>com.github.fengtan.solrgui.SolrGUI</mainClass>
+              <mainClass>com.github.fengtan.sophie.Sophie</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -40,7 +40,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.github.fengtan.solrgui.SolrGUI</mainClass>
+              <mainClass>com.github.fengtan.sophie.Sophie</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
@@ -59,7 +59,7 @@
       </plugin>
     </plugins>
   </build>
-  <url>https://github.com/fengtan/solr-gui</url>
+  <url>https://github.com/fengtan/sophie</url>
   <dependencies>
   	<dependency>
   		<groupId>org.apache.solr</groupId>

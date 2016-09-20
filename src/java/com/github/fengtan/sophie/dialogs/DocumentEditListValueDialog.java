@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.dialogs;
+package com.github.fengtan.sophie.dialogs;
 
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import com.github.fengtan.solrgui.SolrGUI;
+import com.github.fengtan.sophie.Sophie;
 
 public class DocumentEditListValueDialog extends DocumentEditValueDialog {
 
@@ -26,7 +26,7 @@ public class DocumentEditListValueDialog extends DocumentEditValueDialog {
 	
 	// List is not iterable - we need to use AbstractList.
 	public DocumentEditListValueDialog(AbstractList defaultValue) {
-		super(SolrGUI.shell);
+		super(Sophie.shell);
 		this.defaultValue = defaultValue;
 	}
 
@@ -49,7 +49,7 @@ public class DocumentEditListValueDialog extends DocumentEditValueDialog {
 	    buttonAdd.setText("Add");
 	    buttonAdd.addSelectionListener(new SelectionAdapter() {
 	    	public void widgetSelected(SelectionEvent e) {
-	    		InputDialog input = new InputDialog(SolrGUI.shell, "Add value", "Add value:", StringUtils.EMPTY, null);
+	    		InputDialog input = new InputDialog(Sophie.shell, "Add value", "Add value:", StringUtils.EMPTY, null);
 	    		input.open();
 	    		// button "OK' has ID "0".
 	    		if (input.getReturnCode() == 0) {

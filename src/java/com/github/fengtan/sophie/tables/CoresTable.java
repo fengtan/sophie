@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.tables;
+package com.github.fengtan.sophie.tables;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.github.fengtan.solrgui.utils.SolrUtils;
+import com.github.fengtan.sophie.utils.SolrUtils;
 
 
 public class CoresTable {

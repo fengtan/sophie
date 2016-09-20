@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.tabs;
+package com.github.fengtan.sophie.tabs;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -6,8 +6,8 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.github.fengtan.solrgui.tables.CoresTable;
-import com.github.fengtan.solrgui.toolbars.CoresToolbar;
+import com.github.fengtan.sophie.tables.CoresTable;
+import com.github.fengtan.sophie.toolbars.CoresToolbar;
 
 public class CoresTabItem extends CTabItem {
 	

@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.dialogs;
+package com.github.fengtan.sophie.dialogs;
 
 import java.io.IOException;
 
@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.github.fengtan.solrgui.SolrGUI;
+import com.github.fengtan.sophie.Sophie;
 
 public class CoreAddDialog extends Dialog {
 	
@@ -27,7 +27,7 @@ public class CoreAddDialog extends Dialog {
 	
 	// TODO allow http auth
 	private CoreAddDialog() {
-		super(SolrGUI.shell);
+		super(Sophie.shell);
 	}
 	
 	/**
@@ -71,8 +71,8 @@ public class CoreAddDialog extends Dialog {
 		if (buttonId == 0) {
 			try {
 				// TODO createCore is overloaded with additional params (schema file etc).
-				CoreAdminRequest.createCore(coreName.getText(), instanceDir.getText(), SolrGUI.client);
-				SolrGUI.tabFolder.getCoresTabItem().getTable().refresh();
+				CoreAdminRequest.createCore(coreName.getText(), instanceDir.getText(), Sophie.client);
+				Sophie.tabFolder.getCoresTabItem().getTable().refresh();
 			} catch (SolrServerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

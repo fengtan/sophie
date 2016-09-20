@@ -1,4 +1,4 @@
-package com.github.fengtan.solrgui.toolbars;
+package com.github.fengtan.sophie.toolbars;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-import com.github.fengtan.solrgui.SolrGUI;
+import com.github.fengtan.sophie.Sophie;
 
 public class FieldsToolbar {
 
@@ -34,7 +34,7 @@ public class FieldsToolbar {
         itemRefresh.setToolTipText("Refresh list of fields");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				SolrGUI.tabFolder.getFieldsTabItem().getTable().refresh();
+				Sophie.tabFolder.getFieldsTabItem().getTable().refresh();
 			}
 		});
         
