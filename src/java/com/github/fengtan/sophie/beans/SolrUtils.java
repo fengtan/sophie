@@ -1,4 +1,4 @@
-package com.github.fengtan.sophie.utils;
+package com.github.fengtan.sophie.beans;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient.RemoteSolrException;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.apache.solr.client.solrj.request.LukeRequest;
 import org.apache.solr.client.solrj.request.schema.SchemaRequest;
@@ -74,16 +75,14 @@ public class SolrUtils {
 		CoreAdminRequest request = new CoreAdminRequest();
 		request.setAction(CoreAdminAction.STATUS);
 		try {
-			CoreAdminResponse response = request.process(Sophie.client); // TODO throws RemoteSolrException if query on /solr/collection1 instead of /solr
+			CoreAdminResponse response = request.process(Sophie.client);
 			return response.getCoreStatus().asMap(-1);
-		} catch (SolrServerException e) {
+		} catch (SolrServerException|IOException|RemoteSolrException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO might be best to throw a SophieException and display message to user (Label "Unable to list cores from Solr")
+			return Collections.emptyMap();
 		}
-		return Collections.EMPTY_MAP;
 	}
 	
 }

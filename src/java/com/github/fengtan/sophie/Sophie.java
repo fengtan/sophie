@@ -24,7 +24,7 @@ public class Sophie {
 		shell.setMaximized(true);
 		shell.setLayout(new GridLayout());
 		
-		// If program launched with argument(s), then get the URL from the first argument.
+		// If program launched with CLI argument(s), then get the URL from the first argument.
 		// Otherwise, launch a dialog to let the user set a URL.
 		String url;
 		if (args.length > 0) {
@@ -116,7 +116,7 @@ public class Sophie {
 	// TODO feat CoreAdmin split/mergeindexes https://wiki.apache.org/solr/CoreAdmin, CollectionAdminRequest, replicate to slave / pull from master
 	// TODO feat look for unused/obsolete methods
 	// TODO feat "favorites/recently opened servers"
-    // TODO feat use InputDialog instead of custom dialogs
+    // TODO feat CoreAddDialog/CoreSwapDialog -> re-use SelectionDialog/ListSelectionDialog/ListDialog/ElementListSelectionDialog
 	// TODO feat support http auth
 	// TODO feat Dialogs -> use validators to make sure values are not empty ?
 	

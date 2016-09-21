@@ -1,4 +1,4 @@
-package com.github.fengtan.sophie.config;
+package com.github.fengtan.sophie.beans;
 
 import java.io.File;
 import java.io.FileInputStream;

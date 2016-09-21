@@ -58,12 +58,12 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.dialogs.DocumentEditDateValueDialog;
 import com.github.fengtan.sophie.dialogs.DocumentEditListValueDialog;
 import com.github.fengtan.sophie.dialogs.DocumentEditTextValueDialog;
 import com.github.fengtan.sophie.dialogs.DocumentEditValueDialog;
 import com.github.fengtan.sophie.toolbars.ChangeListener;
-import com.github.fengtan.sophie.utils.SolrUtils;
 
 public class DocumentsTable { // TODO extend Composite ?
 

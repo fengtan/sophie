@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.github.fengtan.sophie.utils.SolrUtils;
+import com.github.fengtan.sophie.beans.SolrUtils;
 
 
 public class CoresTable {

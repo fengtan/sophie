@@ -13,7 +13,6 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.tables.DocumentsTable;
 
 public class DocumentsToolbar implements SelectionListener,ChangeListener {

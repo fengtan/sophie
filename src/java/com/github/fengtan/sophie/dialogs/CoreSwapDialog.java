@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-import com.github.fengtan.sophie.utils.SolrUtils;
+import com.github.fengtan.sophie.beans.SolrUtils;
 
 public class CoreSwapDialog extends Dialog {
 	
