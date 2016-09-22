@@ -61,9 +61,6 @@ public class ConnectDialog extends Dialog {
 					break;			
 			}
 			connectionLabel = value.getText() + " ("+selectedType.getTypeName()+")";
-		} else {
-			client = null;
-			connectionLabel = null;
 		}
         super.buttonPressed(buttonId);
     }

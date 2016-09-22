@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.tables.FieldsTable;
 
 public class FieldsToolbar {
@@ -40,8 +42,12 @@ public class FieldsToolbar {
         itemRefresh.setText("Refresh");
         itemRefresh.setToolTipText("Refresh list of fields");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				table.refresh();
+			public void widgetSelected(SelectionEvent event) {
+				try {
+					table.refresh();
+				} catch (SophieException e) {
+					Sophie.showException(composite.getShell(), new SophieException("Unable to refresh fields table", e));
+				}
 			}
 		});
         

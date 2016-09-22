@@ -13,7 +13,9 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SolrUtils;
+import com.github.fengtan.sophie.beans.SophieException;
 
 
 public class CoresTable {
@@ -34,7 +36,12 @@ public class CoresTable {
 		table.setHeaderVisible(true);
 		table.addSelectionListener(listener);
 
-		populate();
+		try {
+			populate();			
+		} catch (SophieException e) {
+			Sophie.showException(parent.getShell(), new SophieException("Unable to initialize cores table", e));
+		}
+
 	}
 	
 	public String getSelectedCore() {
@@ -43,7 +50,7 @@ public class CoresTable {
 		return (items.length > 0) ? items[0].getText(0) : StringUtils.EMPTY;
 	}
 	
-	public void refresh() {
+	public void refresh() throws SophieException {
 		table.removeAll();
 		populate();
 	}
@@ -51,8 +58,14 @@ public class CoresTable {
 	/**
 	 * Add columns + data.
 	 */
-	private void populate() {
-		for (NamedList<Object> core: SolrUtils.getCores().values()) {
+	private void populate() throws SophieException {
+		Map<String, NamedList<Object>> cores;
+		try {
+			cores = SolrUtils.getCores();
+		} catch (SophieException e) {
+			throw new SophieException("Unable to populate cores table", e);
+		}
+		for (NamedList<Object> core: cores.values()) {
 			populateLine(core, new TableItem(table, SWT.NULL));	
 		}
 		// Pack.

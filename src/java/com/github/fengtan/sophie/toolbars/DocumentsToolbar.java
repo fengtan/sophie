@@ -1,5 +1,14 @@
 package com.github.fengtan.sophie.toolbars;
 
+import java.io.IOException;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrException;
+import org.apache.solr.common.params.ModifiableSolrParams;
+import org.apache.solr.common.util.NamedList;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
@@ -13,6 +22,8 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.tables.DocumentsTable;
 
 public class DocumentsToolbar implements SelectionListener,ChangeListener {
@@ -73,8 +84,12 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemRefresh.setText("Refresh");
         itemRefresh.setToolTipText("Refresh from Solr: this will wipe out local modifications");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				table.refresh();
+			public void widgetSelected(SelectionEvent event) {
+				try {
+					table.refresh();	
+				} catch(SophieException e) {
+					Sophie.showException(composite.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+				}
 			}
 		});
         
@@ -87,7 +102,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemAdd.setToolTipText("Add new document");
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				table.addEmptyDocument(); // TODO is table the right place to put upload(), clear(), etc ?
+				table.addDocument(new SolrDocument());
 			}
 		});
 
@@ -118,8 +133,12 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemUpload.setText("Upload");
         itemUpload.setToolTipText("Upload local modifications to Solr");
         itemUpload.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				table.upload();
+			public void widgetSelected(SelectionEvent event) {
+				try {
+					table.upload();	
+				} catch (SophieException e) {
+					Sophie.showException(composite.getShell(), new SophieException("Unable to upload local modifications to Solr", e));
+				}
 			}
 		});
         itemUpload.setEnabled(false);
@@ -131,13 +150,19 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemClear.setText("Clear");
         itemClear.setToolTipText("Clear index");
         itemClear.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent event) {
 		        MessageBox messageBox = new MessageBox(composite.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		        messageBox.setText("Clear index");
 		        messageBox.setMessage("Do you really want to clear the index? This will remove all documents from the index.");
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
-		        	table.clear();
+		        	try {
+	        			Sophie.client.deleteByQuery("*:*");
+	        			Sophie.client.commit();
+		        		table.refresh();	
+		        	} catch (SolrServerException|IOException|SolrException|SophieException e) {
+		        		Sophie.showException(composite.getShell(), new SophieException("Unable to clear index", e));
+		        	}
 		        }
 			}
 		});
@@ -147,8 +172,13 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemCommit.setText("Commit");
         itemCommit.setToolTipText("Commit index");
         itemCommit.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				table.commit();
+			public void widgetSelected(SelectionEvent event) {
+				try {
+					Sophie.client.commit();
+					table.refresh();
+	        	} catch (SolrServerException|IOException|SolrException|SophieException e) {
+	        		Sophie.showException(composite.getShell(), new SophieException("Unable to commit index", e));
+	        	}
 			}
 		});
         
@@ -157,13 +187,19 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemOptimize.setText("Optimize");
         itemOptimize.setToolTipText("Optimize index");
         itemOptimize.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent event) {
 		        MessageBox messageBox = new MessageBox(composite.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		        messageBox.setText("Optimize index");
 		        messageBox.setMessage("Do you really want to optimize the index? If the index is highly segmented, this may take several hours and will slow down requests.");
 		        int response = messageBox.open();
 		        if (response == SWT.YES) {
-		        	table.optimize();
+		    		try {
+		    			Sophie.client.optimize();
+		    			// Optimizing drops obsolete documents, obsolete facet values, etc so we need to refresh the table.
+			    		table.refresh();
+		    		} catch (SolrServerException|IOException|SolrException|SophieException e) {
+		    			Sophie.showException(composite.getShell(), new SophieException("Unable to optimize index", e));
+		    		}
 		        }
 			}
 		});
@@ -175,8 +211,12 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemExport.setText("Export");
         itemExport.setToolTipText("Export as CSV file");
         itemExport.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				table.export();
+			public void widgetSelected(SelectionEvent event) {
+				try {
+					table.export();	
+				} catch (SophieException e) {
+	        		Sophie.showException(composite.getShell(), e);
+				}
 			}
 		});
         
@@ -185,12 +225,31 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemBackup.setText("Backup");
         itemBackup.setToolTipText("Make a backup of the index");
         itemBackup.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent event) {
 				// TODO "Leave empty to use the default format (yyyyMMddHHmmssSSS)."
 				InputDialog dialog = new InputDialog(composite.getShell(), "Make a backup of the index", "Backup name:", null, null);
 				dialog.open();
-				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
-					table.backup(dialog.getValue());	
+				if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
+					return;
+				}
+				String backupName = dialog.getValue();
+				// TODO notify user name/place of backup
+				ModifiableSolrParams params = new ModifiableSolrParams();
+				params.set("command", "backup");
+				params.set("name", backupName);
+				QueryRequest request = new QueryRequest(params);
+				request.setPath("/replication");
+				try {
+					NamedList<Object> response = Sophie.client.request(request);
+					// TODO progress bar with /replication?command=details ?
+					// TODO "OK" solrj constant ?
+					if (StringUtils.equals(response.get("status").toString(), "OK")) {
+						// TODO notify user OK + name/place of backup file
+					} else {
+						// TODO notify user NOK + exception details
+					}
+				} catch (SolrServerException|IOException|SolrException e) {
+					Sophie.showException(composite.getShell(), new SophieException("Unable to create backup \""+backupName+"\"", e));
 				}
 			}
 		});
@@ -200,13 +259,18 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemRestore.setText("Restore");
         itemRestore.setToolTipText("Restore index from a backup");
         itemRestore.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent event) {
 				// TODO "Available backup names"
 				// TODO "leave empty for xxx"
 				InputDialog dialog = new InputDialog(composite.getShell(), "Restore index from a backup", "Backup name:", null, null);
 				dialog.open();
-				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
+				if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
+					return;
+				}
+				try {
 					table.restore(dialog.getValue());	
+				} catch (SophieException e) {
+		        	Sophie.showException(composite.getShell(), e);
 				}
 			}
 		});

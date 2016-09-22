@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
+import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.CoreAdminParams.CoreAdminAction;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -19,6 +20,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.CoreAddDialog;
 import com.github.fengtan.sophie.dialogs.CoreSwapDialog;
 import com.github.fengtan.sophie.tables.CoresTable;
@@ -67,8 +69,13 @@ public class CoresToolbar implements SelectionListener {
         itemRefresh.setText("Refresh");
         itemRefresh.setToolTipText("Refresh list of cores");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				table.refresh();
+			public void widgetSelected(SelectionEvent event) {
+				try {
+					table.refresh();	
+				} catch (SophieException e) {
+
+					Sophie.showException(composite.getShell(), new SophieException("Unable to refresh list of cores", e));	
+				}
 			}
 		});
         
@@ -82,19 +89,16 @@ public class CoresToolbar implements SelectionListener {
 			public void widgetSelected(SelectionEvent event) {
 				CoreAddDialog dialog = new CoreAddDialog(composite.getShell());
 				dialog.open();
-				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
-					try {
-						// TODO createCore is overloaded with additional params (schema file etc).
-						CoreAdminRequest.createCore(dialog.getValueCoreName(), dialog.getValueInstanceDir(), Sophie.client);
-						table.refresh();
-					} catch (SolrServerException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}					
+				if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
+					return;
 				}
+				try {
+					// TODO createCore is overloaded with additional params (schema file etc).
+					CoreAdminRequest.createCore(dialog.getValueCoreName(), dialog.getValueInstanceDir(), Sophie.client);
+					table.refresh();
+				} catch (SolrServerException|IOException|SolrException|SophieException e) {
+					Sophie.showException(composite.getShell(), new SophieException("Unable to add new core \""+dialog.getValueCoreName()+"\" with instance dir \""+dialog.getValueInstanceDir()+"\"", e));
+				}					
 			}
 		});
 
@@ -113,13 +117,9 @@ public class CoresToolbar implements SelectionListener {
 					try {
 						CoreAdminRequest.unloadCore(coreName, Sophie.client);
 						table.refresh();
-					} catch (SolrServerException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}	
+					} catch (SolrServerException|IOException|SolrException|SophieException e) {
+						Sophie.showException(composite.getShell(), new SophieException("Unable to delete core \""+coreName+"\"", e));
+					}
 		        }
 			}
 		});
@@ -134,18 +134,15 @@ public class CoresToolbar implements SelectionListener {
 				String oldCoreName = table.getSelectedCore();
 				InputDialog newCoreName = new InputDialog(composite.getShell(), "Rename core", "New name (\""+oldCoreName+"\"):", oldCoreName, null);
 	    		newCoreName.open();
-	    		if (newCoreName.getReturnCode() == IDialogConstants.OK_ID) {
-	    			try {
-	    				CoreAdminRequest.renameCore(oldCoreName, newCoreName.getValue(), Sophie.client);
-	    				table.refresh();
-	    			} catch (SolrServerException e) {
-	    				// TODO Auto-generated catch block
-	    				e.printStackTrace();
-	    			} catch (IOException e) {
-	    				// TODO Auto-generated catch block
-	    				e.printStackTrace();
-	    			}
+	    		if (newCoreName.getReturnCode() != IDialogConstants.OK_ID) {
+	    			return;
 	    		}
+    			try {
+    				CoreAdminRequest.renameCore(oldCoreName, newCoreName.getValue(), Sophie.client);
+    				table.refresh();
+				} catch (SolrServerException|IOException|SolrException|SophieException e) {
+					Sophie.showException(composite.getShell(), new SophieException("Unable to rename core \""+oldCoreName+"\" into \""+newCoreName+"\"", e));
+    			}
 			}
 		});
         itemRename.setEnabled(false);
@@ -159,22 +156,19 @@ public class CoresToolbar implements SelectionListener {
 				String coreName = table.getSelectedCore();
 				CoreSwapDialog dialog = new CoreSwapDialog(composite.getShell(), coreName);
 				dialog.open();
-				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
-					// TODO contrib CoreAdminRequest.swapCores() - similar to CoreAdminRequest.renameCore().
-					CoreAdminRequest request = new CoreAdminRequest();
-					request.setCoreName(coreName);
-					request.setOtherCoreName(dialog.getValue());
-					request.setAction(CoreAdminAction.SWAP);
-					try {
-						request.process(Sophie.client);
-						table.refresh();
-					} catch (SolrServerException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}	
+				if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
+					return;
+				}
+				// TODO contrib CoreAdminRequest.swapCores() - similar to CoreAdminRequest.renameCore().
+				CoreAdminRequest request = new CoreAdminRequest();
+				request.setCoreName(coreName);
+				request.setOtherCoreName(dialog.getValue());
+				request.setAction(CoreAdminAction.SWAP);
+				try {
+					request.process(Sophie.client);
+					table.refresh();
+				} catch (SolrServerException|IOException|SolrException|SophieException e) {
+					Sophie.showException(composite.getShell(), new SophieException("Unable to swap cores \""+coreName+"\" and \""+dialog.getValue()+"\"", e));
 				}
 			}
 		});
@@ -185,17 +179,13 @@ public class CoresToolbar implements SelectionListener {
         itemReload.setText("Reload");
         itemReload.setToolTipText("Reload core - this will load any configuration changes you may have made to solrconfig.xml or schema.xml"); //TODO disable when no core selected
         itemReload.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent event) {
 				String coreName = table.getSelectedCore();
 				try {
 					CoreAdminRequest.reloadCore(coreName, Sophie.client);
 					table.refresh();
-				} catch (SolrServerException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				} catch (SolrServerException|IOException|SolrException|SophieException e) {
+					Sophie.showException(composite.getShell(), new SophieException("Unable to reload core \""+coreName+"\"", e));
 				}
 			}
 		});

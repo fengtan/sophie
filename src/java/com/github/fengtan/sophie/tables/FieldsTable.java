@@ -1,6 +1,7 @@
 package com.github.fengtan.sophie.tables;
 
 import java.util.EnumSet;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
@@ -12,7 +13,9 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SolrUtils;
+import com.github.fengtan.sophie.beans.SophieException;
 
 public class FieldsTable {
 	
@@ -49,7 +52,11 @@ public class FieldsTable {
 		}
 		
 		// Add data.
-		populate();
+		try {
+			populate();			
+		} catch (SophieException e) {
+			Sophie.showException(parent.getShell(), new SophieException("Unable to initialize fields table", e));
+		}
 		
 		// Pack.
 		for(TableColumn column:table.getColumns()) {
@@ -57,15 +64,22 @@ public class FieldsTable {
 		}
 	}
 	
-	public void refresh() {
+	public void refresh() throws SophieException {
 		table.removeAll();
 		populate();
 	}
 	
-	private void populate() {
+	private void populate() throws SophieException {
 		// TODO cache uniqueKey ? 2 identical requests (fields+tables), should remove 1 of the 2 and invalidate when hit refresh
-		String uniqueField = SolrUtils.getRemoteUniqueField();
-		for (FieldInfo field:SolrUtils.getRemoteFields()) {
+		String uniqueField;
+		List<FieldInfo> fields;
+		try {
+			uniqueField = SolrUtils.getRemoteUniqueField();
+			fields = SolrUtils.getRemoteFields();	
+		} catch (SophieException e) {
+			throw new SophieException("Unable to populate fields table", e);
+		}
+		for (FieldInfo field:fields) {
 			TableItem item = new TableItem(table, SWT.NULL);
 			item.setText(0, field.getName());
 			item.setText(1, field.getType());

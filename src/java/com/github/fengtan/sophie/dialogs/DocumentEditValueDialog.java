@@ -28,8 +28,6 @@ public abstract class DocumentEditValueDialog extends Dialog {
 		// TODO cannot edit empty values (window closes)
 		if (buttonId == IDialogConstants.OK_ID) {
 			value = getValue();
-		} else {
-			value = null;
 		}
 		super.buttonPressed(buttonId);
 	}

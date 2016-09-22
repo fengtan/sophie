@@ -27,6 +27,7 @@ import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrException;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.luke.FieldFlag;
 import org.apache.solr.common.params.ModifiableSolrParams;
@@ -59,6 +60,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SolrUtils;
+import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.DocumentEditDateValueDialog;
 import com.github.fengtan.sophie.dialogs.DocumentEditListValueDialog;
 import com.github.fengtan.sophie.dialogs.DocumentEditTextValueDialog;
@@ -102,7 +104,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	
 	private Table table;
 
-	public DocumentsTable(Composite parent, SelectionListener selectionListener, ChangeListener changeListener) {
+	public DocumentsTable(Composite parent, SelectionListener selectionListener, ChangeListener changeListener) throws SophieException {
 		this.fields = SolrUtils.getRemoteFields();
 		this.facets = getRemoteFacets();
 		this.uniqueField = SolrUtils.getRemoteUniqueField();
@@ -116,7 +118,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	/**
 	 * Create the Table
 	 */
-	private Table createTable(final Composite parent, SelectionListener selectionListener) {
+	private Table createTable(final Composite parent, SelectionListener selectionListener) throws SophieException {
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
 
 		final Table table = new Table(parent, style);
@@ -160,7 +162,12 @@ public class DocumentsTable { // TODO extend Composite ?
 	            } else {
 		            // Use rowIndex - 1 since the first line is used for filters.
 		            // TODO make sure the last document gets displayed.
-		            document = getRemoteDocument(rowIndex - 1);
+	            	try {
+			            document = getRemoteDocument(rowIndex - 1);	            		
+	            	} catch (SophieException e) {
+						Sophie.showException(parent.getShell(), new SophieException("Unable to populate table", e));
+						return;
+	            	}
 	            }
 	            // First column is used to show the row ID.
 	            item.setText(0, Integer.toString(rowIndex));
@@ -202,7 +209,7 @@ public class DocumentsTable { // TODO extend Composite ?
 			}
 			// Sort column when click on the header
 			column.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
+				public void widgetSelected(SelectionEvent event) {
 					if (!isFieldSortable(field)) {
 						return;
 					}
@@ -227,7 +234,11 @@ public class DocumentsTable { // TODO extend Composite ?
 
 					}
 					// Re-populate table.
-					refresh();
+					try {
+						refresh();
+					} catch (SophieException e) {
+						Sophie.showException(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+					}
 				}
 			});
 			column.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
@@ -283,7 +294,11 @@ public class DocumentsTable { // TODO extend Composite ?
 						} else {
 							filters.put(filterName, filterValue);
 						}
-						refresh();
+						try {
+							refresh();
+						} catch (SophieException e) {
+							Sophie.showException(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+						}
 					}
 				});
 			} else {
@@ -300,7 +315,11 @@ public class DocumentsTable { // TODO extend Composite ?
 						} else {
 							filters.put(filterName, filterValue);
 						}
-						refresh();
+						try {
+							refresh();
+						} catch (SophieException e) {
+							Sophie.showException(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+						}							
 					}
 				});
 			}
@@ -343,13 +362,14 @@ public class DocumentsTable { // TODO extend Composite ?
 		    				dialog = new DocumentEditTextValueDialog(parent.getShell(), oldValueString);
 		    			}
 		    			dialog.open();
-		    			if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
-		    				Object value = dialog.getValue();
-		    				if (!Objects.equals(defaultValue, value)) {
-		    					updateDocument(item, i+1, value);
-		    					// TODO table cell not updated
-		    				}
+		    			if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
+		    				return;
 		    			}
+	    				Object value = dialog.getValue();
+	    				if (!Objects.equals(defaultValue, value)) {
+	    					updateDocument(item, i+1, value);
+	    					// TODO table cell not updated
+	    				}
 		    		}
 		    	}
 			}
@@ -371,27 +391,21 @@ public class DocumentsTable { // TODO extend Composite ?
 		return (flags.contains(FieldFlag.INDEXED) && !flags.contains(FieldFlag.DOC_VALUES) && !flags.contains(FieldFlag.MULTI_VALUED));		
 	}
 	
-	private int getRemoteCount() {
+	private int getRemoteCount() throws SophieException {
 		SolrQuery query = getBaseQuery(0, 0);
 		try {
 			// Solr returns a long, table expects an int.
 			long count = Sophie.client.query(query).getResults().getNumFound();
 			return Integer.parseInt(String.valueOf(count));
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return 0;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return 0;
+		} catch (SolrServerException|IOException|SolrException e) {
+			throw new SophieException("Unable to count remote documents", e);
 		}
 	}
 	
 	/*
 	 * Map facet name => facet field
 	 */
-	private Map<String, FacetField> getRemoteFacets() {
+	private Map<String, FacetField> getRemoteFacets() throws SophieException {
 		SolrQuery query = getBaseQuery(0, 0);
 		query.setFacet(true);
 		query.setFacetSort("index");
@@ -409,11 +423,8 @@ public class DocumentsTable { // TODO extend Composite ?
 			for(FacetField facet:Sophie.client.query(query).getFacetFields()) {
 				facets.put(facet.getName(), facet);
 			}
-		} catch(SolrServerException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch(SolrServerException|IOException|SolrException e) {
+			throw new SophieException("Unable to fetch remote facets", e);
 		}
 		return facets;
 	}
@@ -421,7 +432,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	/**
 	 * Not null-safe
 	 */
-	private SolrDocument getRemoteDocument(int rowIndex) {
+	private SolrDocument getRemoteDocument(int rowIndex) throws SophieException {
 		int page = rowIndex / PAGE_SIZE;
 		// If page has not be fetched yet, then fetch it.
 		if (!pages.containsKey(page)) {
@@ -431,12 +442,8 @@ public class DocumentsTable { // TODO extend Composite ?
 			query.setSort(sortField, sortOrder);
 			try {
 				pages.put(page, Sophie.client.query(query).getResults());	
-			} catch(SolrServerException e) {
-				// TODO handle exception
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch(SolrServerException|IOException|SolrException e) {
+				throw new SophieException("Unable to fetch remote document "+rowIndex, e);
 			}
 		}
 		return pages.get(page).get(rowIndex % PAGE_SIZE);
@@ -459,26 +466,58 @@ public class DocumentsTable { // TODO extend Composite ?
 		return query;
 	}
 	
+	/**
+	 * Get first selected document
+	 * 
+	 * TODO support multiple selections?
+	 */
+	private TableItem getSelection() {
+		TableItem[] items = table.getSelection();
+		return (items.length > 0) ? items[0] : null;
+	}
+	
 	/*
 	 * Re-populate table with remote data.
 	 */
-	public void refresh() {
+	public void refresh() throws SophieException {
 		// TODO re-populate columns/filters ?
 		// TODO re-populate unique field / sort field ?
 		documentsUpdated = new ArrayList<SolrDocument>();
 		documentsDeleted = new ArrayList<SolrDocument>();
 		documentsAdded = new ArrayList<SolrDocument>();
 		pages = new HashMap<Integer, SolrDocumentList>();
-		// First row is for filters, the rest is for documents (remote + locally added - though no local addition since we have just refreshed documents).
-		table.setItemCount(1 + getRemoteCount());
-		table.clearAll();
 		changeListener.unchanged();
+		try {
+			// First row is for filters, the rest is for documents (remote + locally added - though no local addition since we have just refreshed documents).
+			table.setItemCount(1 + getRemoteCount());
+			table.clearAll();
+		} catch(SophieException e) {
+			table.setItemCount(1);
+			table.clearAll();
+			throw new SophieException("Unable to refresh documents from Solr server", e);
+		}
+	}
+	
+	public void deleteSelectedDocument() {
+		// If a document is selected, then delete it.
+		TableItem item = getSelection();
+		if (item != null) {
+			deleteDocument(item);
+		}
+	}
+	
+	public void cloneSelectedDocument() {
+		// If a document is selected, then clone it.
+		TableItem item = getSelection();
+		if (item != null) {
+			cloneDocument(item);
+		}
 	}
 	
 	/*
 	 * Export documents into CSV file.
 	 */
-	public void export() {
+	public void export() throws SophieException {
 		FileDialog dialog = new FileDialog(table.getShell(), SWT.SAVE);
 	    dialog.setFilterNames(new String[] { "CSV Files (*.csv)", "All Files (*.*)" });
 	    dialog.setFilterExtensions(new String[] { "*.csv", "*.*" });
@@ -497,19 +536,15 @@ public class DocumentsTable { // TODO extend Composite ?
 			Writer writer = new PrintWriter(path, "UTF-8");
 			writer.write(csv);
 			writer.close();
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (SolrServerException|IOException|SolrException e) {
+			throw new SophieException("Unable to export documents to CSV file", e);
 		}
 	}
 
 	/**
 	 * Commit local changes to the Solr server.
 	 */
-	public void upload() {
+	public void upload() throws SophieException {
 		// Commit local updates.
 		// TODO does not seem to be possible to update multiple documents.
 		for (SolrDocument document:documentsUpdated) {
@@ -519,12 +554,8 @@ public class DocumentsTable { // TODO extend Composite ?
 		    }
 			try {
 				Sophie.client.add(input); // Returned object seems to have no relevant information.
-			} catch (SolrServerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (SolrServerException|IOException|SolrException e) {
+				throw new SophieException("Unable to update document in index: "+input.toString(), e);
 			}
 		}
 		// Commit local deletions.
@@ -532,12 +563,8 @@ public class DocumentsTable { // TODO extend Composite ?
 			String id = document.getFieldValue(uniqueField).toString(); // TODO what if no uniquekey
 			try {
 				Sophie.client.deleteById(id);
-			} catch (SolrServerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (SolrServerException|IOException|SolrException e) {
+				throw new SophieException("Unable to delete document from index: "+id, e);
 			}
 		}
 		// Commit local additions.
@@ -548,109 +575,25 @@ public class DocumentsTable { // TODO extend Composite ?
 		    }
 			try {
 				Sophie.client.add(input); // Returned object seems to have no relevant information.
-			} catch (SolrServerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (SolrServerException|IOException|SolrException e) {
+				throw new SophieException("Unable to add document to index: "+input.toString(), e);
 			}
 		}
 		// Commit on server.
 		try {
 			Sophie.client.commit();
 			// TODO allow to revert a specific document
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (SolrServerException|IOException|SolrException e) {
+			throw new SophieException("Unable to commit index", e);
 		}
 		// Refresh so user can see what the new state of the server.
 		refresh();
 	}
 	
 	/*
-	 * Delete all documents on server.
-	 */
-	public void clear() {
-		try {
-			Sophie.client.deleteByQuery("*:*");
-			Sophie.client.commit();
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		refresh();
-	}
-	
-
-	public void commit() {
-		try {
-			Sophie.client.commit();
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		refresh();
-	}
-	
-	public void optimize() {
-		try {
-			Sophie.client.optimize();
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// Optimizing drops obsolete documents, obsolete facet values, etc.
-		refresh();
-	}
-	
-	/*
-	 * Backup index on solr server
-	 * 
-	 * TODO notify user name/place of backup
-	 */
-	public void backup(String backupName) {
-		ModifiableSolrParams params = new ModifiableSolrParams();
-		params.set("command", "backup");
-		params.set("name", backupName);
-		QueryRequest request = new QueryRequest(params);
-		request.setPath("/replication");
-		try {
-			NamedList<Object> response = Sophie.client.request(request);
-			// TODO progress bar with /replication?command=details ?
-			// TODO "OK" solrj constant ?
-			if (StringUtils.equals(response.get("status").toString(), "OK")) {
-				// TODO notify user OK + name/place of backup file
-			} else {
-				// TODO notify user NOK + exception details
-			}
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	
-	
-	/*
 	 * Restore index from a backup
 	 */
-	public void restore(String backupName) {
+	public void restore(String backupName) throws SophieException {
 		ModifiableSolrParams params = new ModifiableSolrParams();
 		params.set("command", "restore");
 		params.set("name", backupName);
@@ -662,12 +605,8 @@ public class DocumentsTable { // TODO extend Composite ?
 			// TODO get /replication?command=restorestatus and provide feedback to user (asynchronous call), possibly with a progress bar
 			// TODO test backup/restore
 			refresh();
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (SolrServerException|IOException|SolrException e) {
+			throw new SophieException("Unable to restore backup \""+backupName+"\"", e);
 		}
 		refresh();
 	}
@@ -700,45 +639,28 @@ public class DocumentsTable { // TODO extend Composite ?
 			documentsDeleted.add(document);
 		}
 		item.setBackground(RED);
-		changeListener.changed();
-	}
-	
-	/**
-	 * If a document is selected, then delete it.
-	 */
-	public void deleteSelectedDocument() {
-		TableItem[] items = table.getSelection();
-		if (items.length > 0) {
-			deleteDocument(items[0]);
-		}
+		changeListener.changed(); // Handle this in DocumentsToolbar ?
 	}
 	
 	// TODO deleting a local document should decrease setItemCount + drop from this.documentsAdded.
-	private void addDocument(SolrDocument document) {
+	public void addDocument(SolrDocument document) {
 		documentsAdded.add(document);
 		table.setItemCount(table.getItemCount() + 1);
 		// Scroll to the bottom of the table so we reveal the new document.
 		table.setTopIndex(table.getItemCount() - 1);
 		changeListener.changed();
 	}
-	
-	public void addEmptyDocument() {
-		addDocument(new SolrDocument());
-	}
-	
+
 	/**
 	 * If a document is selected, then clone it.
 	 * 
 	 * The ID field is unset so we don't have 2 rows describing the same Solr document.
 	 * TODO "ID" field could be labeled something else 
 	 */
-	public void cloneSelectedDocument() {
-		TableItem[] items = table.getSelection();
-		if (items.length > 0) {
-			SolrDocument document = (SolrDocument) items[0].getData("document");
-			document.removeFields("id"); // TODO what if field "id" does not exist
-			addDocument(document);
-		}
+	private void cloneDocument(TableItem item) {
+		SolrDocument document = (SolrDocument) item.getData("document");
+		document.removeFields("id"); // TODO what if field "id" does not exist
+		addDocument(document);
 	}
 
 	// TODO allow to filter value on empty value (e.g. value not set)

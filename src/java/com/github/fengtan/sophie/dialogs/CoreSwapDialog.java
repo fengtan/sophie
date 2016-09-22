@@ -1,7 +1,10 @@
 package com.github.fengtan.sophie.dialogs;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
 
+import org.apache.solr.common.util.NamedList;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -12,7 +15,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SolrUtils;
+import com.github.fengtan.sophie.beans.SophieException;
 
 public class CoreSwapDialog extends Dialog {
 	
@@ -39,7 +44,14 @@ public class CoreSwapDialog extends Dialog {
 		
         otherCoreName = new Combo(parent, SWT.DROP_DOWN | SWT.SINGLE | SWT.BORDER);
         otherCoreName.setLayoutData(grid); // TODO add some spacing
-		Object[] coreObjects = SolrUtils.getCores().keySet().toArray();
+        Map<String, NamedList<Object>> cores;
+        try {
+        	cores = SolrUtils.getCores();
+        } catch (SophieException e) {
+        	Sophie.showException(parent.getShell(), new SophieException("Unable to suggest list of cores"));
+        	cores = Collections.emptyMap();
+        }
+        Object[] coreObjects = cores.keySet().toArray();
 		String[] coreStrings = Arrays.copyOf(coreObjects, coreObjects.length, String[].class); 
 		otherCoreName.setItems(coreStrings);
                 
@@ -60,8 +72,6 @@ public class CoreSwapDialog extends Dialog {
 	protected void buttonPressed(int buttonId) {
 		if (buttonId == IDialogConstants.OK_ID) {
 			value = otherCoreName.getText();
-		} else {
-			value = null;
 		}
 		super.buttonPressed(buttonId);
 	}

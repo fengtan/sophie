@@ -47,9 +47,6 @@ public class CoreAddDialog extends Dialog {
 		if (buttonId == IDialogConstants.OK_ID) {
 			valueCoreName = textCoreName.getText();
 			valueInstanceDir = textInstanceDir.getText();
-		} else {
-			valueCoreName = null;
-			valueInstanceDir = null;
 		}
         super.buttonPressed(buttonId);
     }

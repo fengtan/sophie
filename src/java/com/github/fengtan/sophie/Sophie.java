@@ -95,22 +95,22 @@ public class Sophie {
 	// TODO feat all constants overridable using .properties file or -Dpage.size=20 + provide a default .properties
 	// TODO feat allow to create documents with new fields
 	// TODO feat show "(empty)" at the top
+	// TODO feat what if field contains value "(empty)" ?
 	// TODO feat fire filter only when hit enter
 	// TODO feat allow to revert a specific document
 	// TODO feat allow not to use the default request handler
-	// TODO feat selecting filter "foo (1)" genates "foo (1)" in textfield
-	// TODO feat support CloudSolrServer
+	// TODO feat selecting filter "foo (1)" generates "foo (1)" in textfield
 	// TODO feat allow to select multiple values for each filter
 	// TODO feat support empty facets on free text fields (workaround: add "(empty) (1)" in free text 
-	// TODO feat what if field contains value "(empty)" ?
 	// TODO feat allow to reload config on all cores
     // TODO feat see what luke and solr native ui provide (dismax, spellcheck, debug, score, shard, elevation etc)
 	// TODO feat CoreAdmin split/mergeindexes https://wiki.apache.org/solr/CoreAdmin, CollectionAdminRequest, replicate to slave / pull from master
-	// TODO feat look for unused/obsolete methods
 	// TODO feat "favorites/recently opened servers"
     // TODO feat CoreAddDialog/CoreSwapDialog -> re-use SelectionDialog/ListSelectionDialog/ListDialog/ElementListSelectionDialog
 	// TODO feat Dialogs -> use validators to make sure values are not empty ?
-	// TODO feat should be able to set multiple zkhosts separated by comma (see solrcloud constructor)
+	
+	// TODO clean look for unused/obsolete methods
+	// TODO clean retest everything
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc if value is a date then calendar shows up when editing
