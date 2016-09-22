@@ -30,7 +30,7 @@ public class Sophie {
 		if (args.length > 0) {
 			url = args[0];
 		} else {
-			InputDialog dialog = new InputDialog(shell, "Solr URL", "Solr URL:", "http://localhost:8983/solr/collection1", null);
+			InputDialog dialog = new InputDialog(shell, "Sophie", "Solr URL:", "http://localhost:8983/solr/collection1", null);
 			dialog.open();
 			if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
 				url = dialog.getValue();
@@ -117,7 +117,6 @@ public class Sophie {
 	// TODO feat look for unused/obsolete methods
 	// TODO feat "favorites/recently opened servers"
     // TODO feat CoreAddDialog/CoreSwapDialog -> re-use SelectionDialog/ListSelectionDialog/ListDialog/ElementListSelectionDialog
-	// TODO feat support http auth
 	// TODO feat Dialogs -> use validators to make sure values are not empty ?
 	
 	// TODO doc cannot filter on unindexed fields
@@ -136,6 +135,7 @@ public class Sophie {
 	// TODO doc luke + javasoze/clue + solarium + projectblacklight.org
     // TODO doc publish javadoc
 	// TODO doc CLI args[0]
+	// TODO doc "if need to use http auth, then http://user:pass@localhost:8983/solr/collection1"
 
 	// TODO obs trayitem - not supported by ubuntu https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
 }

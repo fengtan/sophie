@@ -5,7 +5,7 @@ import java.util.Arrays;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -20,24 +20,31 @@ public class CoreSwapDialog extends Dialog {
 	private Combo otherCoreName;
 	private String value = null;
 
-	public CoreSwapDialog(Shell shell, String core1) {
+	public CoreSwapDialog(Shell shell, String coreName) {
 		super(shell);
-		this.coreName = core1;
+		this.coreName = coreName;
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		Composite composite = (Composite) super.createDialogArea(parent);
-		composite.setLayout(new GridLayout(2, false));
+        Composite composite = (Composite) super.createDialogArea(parent);
+        
+        GridData grid = new GridData(GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL | GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_CENTER);
+        grid.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
+        
+        Label label = new Label(composite, SWT.WRAP);
+        label.setText("Swap core \""+coreName+"\" with:");
+        label.setLayoutData(grid);
+        label.setFont(parent.getFont());
 		
-		new Label(composite, SWT.NULL).setText("Swap core \""+coreName+"\" with:");
-		otherCoreName = new Combo(parent, SWT.DROP_DOWN);
+        otherCoreName = new Combo(parent, SWT.DROP_DOWN | SWT.SINGLE | SWT.BORDER);
+        otherCoreName.setLayoutData(grid); // TODO add some spacing
 		Object[] coreObjects = SolrUtils.getCores().keySet().toArray();
 		String[] coreStrings = Arrays.copyOf(coreObjects, coreObjects.length, String[].class); 
 		otherCoreName.setItems(coreStrings);
-		// TODO include some spacing (left-hand side).
-
-	    return composite;
+                
+        applyDialogFont(composite);
+        return composite;
 	}
 
 	/**
@@ -62,4 +69,5 @@ public class CoreSwapDialog extends Dialog {
 	public String getValue() {
 		return value;
 	}
+	
 }

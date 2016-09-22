@@ -85,7 +85,7 @@ public class CoresToolbar implements SelectionListener {
 				if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
 					try {
 						// TODO createCore is overloaded with additional params (schema file etc).
-						CoreAdminRequest.createCore(dialog.getCoreNameValue(), dialog.getInstanceDirValue(), Sophie.client);
+						CoreAdminRequest.createCore(dialog.getValueCoreName(), dialog.getValueInstanceDir(), Sophie.client);
 						table.refresh();
 					} catch (SolrServerException e) {
 						// TODO Auto-generated catch block
@@ -101,7 +101,7 @@ public class CoresToolbar implements SelectionListener {
         itemDelete = new ToolItem(toolBar, SWT.PUSH);
         itemDelete.setImage(imgDelete);
         itemDelete.setText("Delete");
-        itemDelete.setToolTipText("Delete core"); //TODO disable when no core selected
+        itemDelete.setToolTipText("Delete core");
         itemDelete.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				String coreName = table.getSelectedCore();
@@ -128,7 +128,7 @@ public class CoresToolbar implements SelectionListener {
         itemRename = new ToolItem(toolBar, SWT.PUSH);
         itemRename.setImage(imgRename);
         itemRename.setText("Rename");
-        itemRename.setToolTipText("Rename core"); //TODO disable when no core selected
+        itemRename.setToolTipText("Rename core");
         itemRename.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				String oldCoreName = table.getSelectedCore();
@@ -153,7 +153,7 @@ public class CoresToolbar implements SelectionListener {
         itemSwap = new ToolItem(toolBar, SWT.PUSH);
         itemSwap.setImage(imgSwap);
         itemSwap.setText("Swap");
-        itemSwap.setToolTipText("Swap cores"); //TODO disable when no core selected
+        itemSwap.setToolTipText("Swap cores");
         itemSwap.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				String coreName = table.getSelectedCore();
@@ -228,6 +228,7 @@ public class CoresToolbar implements SelectionListener {
 		itemRename.setEnabled(true);
 		itemSwap.setEnabled(true);
 		itemReload.setEnabled(true);
+		// TODO click 'Reload' then no row selected but buttons are still enabled
 	}
 	
 }
