@@ -15,7 +15,7 @@ public class TabFolder extends CTabFolder {
 	private FieldsTabItem fieldsTabItem;
 	private CoresTabItem coresTabItem;
 	
-	public TabFolder(Shell shell, String url) {
+	public TabFolder(Shell shell, String connectionString) {
 		// Create the tabs.
 		super(shell, SWT.TOP | SWT.BORDER);
 
@@ -49,7 +49,7 @@ public class TabFolder extends CTabFolder {
 		// Add Solr URL.
 		ToolBar toolbar = new ToolBar(this, SWT.NULL);
 		ToolItem item = new ToolItem(toolbar, SWT.NULL);
-		item.setText(url);
+		item.setText(connectionString);
 		item.setEnabled(false);
 		setTopRight(toolbar);
 	}

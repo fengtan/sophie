@@ -2,20 +2,20 @@ package com.github.fengtan.sophie;
 
 import java.io.IOException;
 
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.SolrClient;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
+import com.github.fengtan.sophie.dialogs.ConnectDialog;
 import com.github.fengtan.sophie.tabs.TabFolder;
 
 public class Sophie {
 	
-	public static HttpSolrClient client;
+	public static SolrClient client;
 	
 	// TODO load url from .properties
 	public static void main(String[] args) { // TODO convert into static { code } ?
@@ -24,25 +24,17 @@ public class Sophie {
 		shell.setMaximized(true);
 		shell.setLayout(new GridLayout());
 		
-		// If program launched with CLI argument(s), then get the URL from the first argument.
-		// Otherwise, launch a dialog to let the user set a URL.
-		String url;
-		if (args.length > 0) {
-			url = args[0];
-		} else {
-			InputDialog dialog = new InputDialog(shell, "Sophie", "Solr URL:", "http://localhost:8983/solr/collection1", null);
-			dialog.open();
-			if (dialog.getReturnCode() == IDialogConstants.OK_ID) {
-				url = dialog.getValue();
-			} else {
-				return;
-			}
+		ConnectDialog dialog = new ConnectDialog(shell);
+		dialog.open();
+		if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
+			return;
 		}
+		client = dialog.getSolrClient();
+		String connectionLabel = dialog.getConnectionLabel();
 		
 		// Initialize Solr client and UI.
-		shell.setText("Sophie - "+url);
-		client = new HttpSolrClient(url);
-		new TabFolder(shell, url);
+		shell.setText("Sophie - "+connectionLabel);
+		new TabFolder(shell, connectionLabel);
 		// TODO what if server works and then goes down
 		
 		// Make the shell display its content.
@@ -118,6 +110,7 @@ public class Sophie {
 	// TODO feat "favorites/recently opened servers"
     // TODO feat CoreAddDialog/CoreSwapDialog -> re-use SelectionDialog/ListSelectionDialog/ListDialog/ElementListSelectionDialog
 	// TODO feat Dialogs -> use validators to make sure values are not empty ?
+	// TODO feat should be able to set multiple zkhosts separated by comma (see solrcloud constructor)
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc if value is a date then calendar shows up when editing
