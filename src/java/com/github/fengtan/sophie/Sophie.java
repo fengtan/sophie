@@ -18,7 +18,7 @@ public class Sophie {
 	public static SolrClient client;
 	
 	// TODO load url from .properties
-	public static void main(String[] args) { // TODO convert into static { code } ?
+	public static void main(String[] args) {
 		// Create shell.
 		Shell shell = new Shell();
 		shell.setMaximized(true);
@@ -78,7 +78,6 @@ public class Sophie {
 	// TODO meta about page + github.io
 	// TODO meta document all methods
 	// TODO meta measure memory footprint
-	// TODO meta are all jars required ?
 	// TODO meta license (depends on swt, solrj, icons, other dependencies)
 	// TODO meta wording server/index/collection/core
 	// TODO meta travis
@@ -90,6 +89,8 @@ public class Sophie {
     // TODO - logs in /var/log
 	// TODO meta github sophie
 	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
+	// TODO meta gif (licecap/silentcast/byzanz)
+	// TODO meta how to delete favorites (edit ~/.sophie)
 	
 	// TODO feat sort by field name (fields+documents)
 	// TODO feat all constants overridable using .properties file or -Dpage.size=20 + provide a default .properties
@@ -111,6 +112,7 @@ public class Sophie {
 	
 	// TODO clean look for unused/obsolete methods
 	// TODO clean retest everything
+	// TODO clean are all jars required ?
 	
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc if value is a date then calendar shows up when editing
@@ -127,8 +129,7 @@ public class Sophie {
 	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
 	// TODO doc luke + javasoze/clue + solarium + projectblacklight.org
     // TODO doc publish javadoc
-	// TODO doc CLI args[0]
 	// TODO doc "if need to use http auth, then http://user:pass@localhost:8983/solr/collection1"
-
+	
 	// TODO obs trayitem - not supported by ubuntu https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
 }

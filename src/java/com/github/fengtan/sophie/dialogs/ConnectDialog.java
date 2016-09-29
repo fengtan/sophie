@@ -1,5 +1,6 @@
 package com.github.fengtan.sophie.dialogs;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -10,19 +11,20 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 
+import com.github.fengtan.sophie.beans.Config;
 import com.github.fengtan.sophie.beans.SolrConnectionType;
 
 public class ConnectDialog extends Dialog {
 	
-	private Button[] buttons = new Button[SolrConnectionType.values().length];
 	private Label label;
-	private Text value;
+	private Combo value; // TODO verify swt renders Combo as free-form text in Mac OS + Windows
+	private Button[] buttons = new Button[SolrConnectionType.values().length];
 
 	private SolrConnectionType selectedType = SolrConnectionType.DIRECT_HTTP; // Select 'Direct HTTP' by default.
 	private SolrClient client = null;
@@ -60,6 +62,8 @@ public class ConnectDialog extends Dialog {
 					client = new CloudSolrClient(value.getText());
 					break;			
 			}
+			// TODO add to favorite only if successful connection ?
+			Config.addFavorite(value.getText());
 			connectionLabel = value.getText() + " ("+selectedType.getTypeName()+")";
 		}
         super.buttonPressed(buttonId);
@@ -93,9 +97,13 @@ public class ConnectDialog extends Dialog {
         grid.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
         label.setLayoutData(grid);
         label.setFont(parent.getFont());
-        value = new Text(composite, SWT.SINGLE | SWT.BORDER);
-        value.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));        
-        value.setText(selectedType.getValueDefault());
+        
+        value = new Combo(composite, SWT.SINGLE | SWT.BORDER);
+        value.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+        String[] favorites = Config.getFavorites();
+        String[] items = ArrayUtils.isNotEmpty(favorites) ? favorites : new String[]{selectedType.getValueDefault()};
+        value.setItems(items);
+        value.setText(items[0]);
         
         applyDialogFont(composite);
         return composite;
