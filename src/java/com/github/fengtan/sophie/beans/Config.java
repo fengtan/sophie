@@ -13,6 +13,12 @@ public class Config {
 	// TODO make sure hidden file works on windows
 	private static final String filename = ".sophie";
 	
+	// By default, fetch 50 documents at a time when viewing the documents table.
+	private static final int DEFAULT_DOCUMENTS_PAGE_SIZE = 50;
+	
+	// By default, show at most 50 facet values in the filters.
+	private static final int DEFAULT_DOCUMENTS_FACETS_LIMIT = 50;
+	
 	private static Configuration getConfiguration() throws ConfigurationException {
 		String filepath = System.getProperty("user.home") + File.separator + filename;
 		File file = new File(filepath);
@@ -46,6 +52,26 @@ public class Config {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			// Silently do not add the favorite and just log the exception.
+		}
+	}
+	
+	public static int getDocumentsPageSize() {
+		try {
+			return getConfiguration().getInt("documents.page.size", DEFAULT_DOCUMENTS_PAGE_SIZE);
+		} catch (ConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return DEFAULT_DOCUMENTS_PAGE_SIZE;
+		}
+	}
+	
+	public static int getDocumentsFacetsLimit() {
+		try {
+			return getConfiguration().getInt("documents.facets.limit", DEFAULT_DOCUMENTS_FACETS_LIMIT);
+		} catch (ConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return DEFAULT_DOCUMENTS_FACETS_LIMIT;
 		}
 	}
 	

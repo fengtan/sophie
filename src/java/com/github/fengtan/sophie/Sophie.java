@@ -130,6 +130,7 @@ public class Sophie {
 	// TODO doc luke + javasoze/clue + solarium + projectblacklight.org
     // TODO doc publish javadoc
 	// TODO doc "if need to use http auth, then http://user:pass@localhost:8983/solr/collection1"
+	// TODO doc "can configure DEFAULT_DOCUMENTS_PAGE_SIZE + DEFAULT_DOCUMENTS_FACETS_LIMIT" (need to update .sophie manually)
 	
 	// TODO obs trayitem - not supported by ubuntu https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
 }

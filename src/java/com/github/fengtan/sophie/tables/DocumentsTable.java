@@ -59,6 +59,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.beans.Config;
 import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.DocumentEditDateValueDialog;
@@ -80,11 +81,11 @@ public class DocumentsTable { // TODO extend Composite ?
 	private static final String LABEL_NOT_STORED = "(not stored)";
 	private static final String LABEL_EMPTY = "(empty)";
 	
-	// Fetch 50 documents at a time. TODO make this configurable ?
-	private static final int PAGE_SIZE = 50;
+	// How many documents do we fetch from Solr at a time.
+	private static final int PAGE_SIZE = Config.getDocumentsPageSize();
 	
-	// Display 50 facet values at most. TODO make this configurable ?
-	private static final int FACET_LIMIT = 50;
+	// How many facets values do we display at most.
+	private static final int FACET_LIMIT = Config.getDocumentsFacetsLimit();
 	
 	private Map<Integer, SolrDocumentList> pages;
 	private List<FieldInfo> fields;
