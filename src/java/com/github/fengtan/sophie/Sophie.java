@@ -72,24 +72,18 @@ public class Sophie {
 	// TODO test exotic Solr versions
 	// TODO test elasticsearch
 	// TODO test modifying 2 documents and then commiting
+	// TODO test win32/mac
 	
-	// TODO meta screenshot 0.5
-	// TODO meta about page + github.io
-	// TODO meta document all methods
-	// TODO meta measure memory footprint
 	// TODO meta license (depends on swt, solrj, icons, other dependencies)
 	// TODO meta wording server/index/collection/core
-	// TODO meta travis
     // TODO meta .deb package
     // TODO - install jar into /opt or /usr/local
     // TODO - export SOPHIE_HOME=/usr/local/sophie-x.y.z
     // TODO - export PATH=$PATH:$SOPHIE_HOME/bin
     // TODO - expose log4j.prop in /etc
     // TODO - logs in /var/log
-	// TODO meta github sophie
 	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
-	// TODO meta gif (licecap/silentcast/byzanz)
-	// TODO meta how to delete favorites (edit ~/.sophie)
+	// TODO meta travis win32/mac
 	
 	// TODO feat filters
 	// TODO feat - show "(empty)" at the top
@@ -111,7 +105,13 @@ public class Sophie {
 	// TODO clean look for unused/obsolete methods
 	// TODO clean retest everything
 	// TODO clean are all jars required ?
-	
+	// TODO clean document all methods
+
+	// TODO doc screenshot 0.5
+	// TODO doc about page + github.io
+	// TODO doc measure memory footprint
+	// TODO doc gif (licecap/silentcast/byzanz)
+	// TODO doc how to delete favorites (edit ~/.sophie)
 	// TODO doc cannot filter on unindexed fields
 	// TODO doc if value is a date then calendar shows up when editing
 	// TODO doc assume luke handler + select + admin/cores is available
@@ -129,6 +129,8 @@ public class Sophie {
     // TODO doc publish javadoc
 	// TODO doc "if need to use http auth, then http://user:pass@localhost:8983/solr/collection1"
 	// TODO doc "can configure DEFAULT_DOCUMENTS_PAGE_SIZE + DEFAULT_DOCUMENTS_FACETS_LIMIT" (need to update .sophie manually)
+	// TODO doc support zk/cloud
+	// TODO doc faq unable to find symbol when compile -> set -P option
 	
 	// TODO obs trayitem - not supported by ubuntu https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
 	// TODO obs allow to select multiple values for each filter
