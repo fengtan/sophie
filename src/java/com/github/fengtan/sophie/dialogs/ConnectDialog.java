@@ -1,9 +1,13 @@
 package com.github.fengtan.sophie.dialogs;
 
+import java.io.IOException;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.response.SolrPingResponse;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -17,8 +21,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
+import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.Config;
 import com.github.fengtan.sophie.beans.SolrConnectionType;
+import com.github.fengtan.sophie.beans.SophieException;
 
 public class ConnectDialog extends Dialog {
 	
@@ -50,23 +56,43 @@ public class ConnectDialog extends Dialog {
 	public String getConnectionLabel() {
 		return connectionLabel;
 	}
-
+	
     protected void buttonPressed(int buttonId) {
-		if (buttonId == IDialogConstants.OK_ID) {
-			switch(selectedType) {
-				case DIRECT_HTTP:
-				default:
-					client = new HttpSolrClient(value.getText());
-					break;
-				case SOLR_CLOUD:
-					client = new CloudSolrClient(value.getText());
-					break;			
-			}
-			// TODO add to favorite only if successful connection ?
-			Config.addFavorite(value.getText());
-			connectionLabel = value.getText() + " ("+selectedType.getTypeName()+")";
+		if (buttonId != IDialogConstants.OK_ID) {
+			super.buttonPressed(buttonId);
+			return;
 		}
-        super.buttonPressed(buttonId);
+		connectionLabel = value.getText() + " ("+selectedType.getTypeName()+")";
+		switch(selectedType) {
+			case DIRECT_HTTP:
+			default:
+				client = new HttpSolrClient(value.getText());
+				break;
+			case SOLR_CLOUD:
+				client = new CloudSolrClient(value.getText());
+				break;			
+		}
+		// If we have a valid client, then add it to the favorites.
+		// Otherwise, show dialog box.
+		try {
+			testConnection(client);
+			Config.addFavorite(value.getText());
+			super.buttonPressed(buttonId);	
+		} catch (SophieException e) {
+			Sophie.showException(getShell(), e);
+		}
+    }
+    
+    private static void testConnection(SolrClient client) throws SophieException {
+    	SolrPingResponse ping = null;
+    	try {
+    		ping = client.ping();
+    	} catch(SolrServerException|IOException|RuntimeException e) {
+    		throw new SophieException("Unable to connect to Solr", e);
+    	}
+    	if (ping != null && ping.getStatus() != 0) {
+    		throw new SophieException("Unable to connect to Solr");
+    	}
     }
 
     @Override

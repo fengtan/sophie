@@ -17,14 +17,13 @@ public class Sophie {
 	
 	public static SolrClient client;
 	
-	// TODO load url from .properties
 	public static void main(String[] args) {
 		// Create shell.
 		Shell shell = new Shell();
 		shell.setMaximized(true);
 		shell.setLayout(new GridLayout());
 		
-		ConnectDialog dialog = new ConnectDialog(shell);
+		ConnectDialog dialog = new ConnectDialog(shell); 
 		dialog.open();
 		if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
 			return;
@@ -63,7 +62,7 @@ public class Sophie {
 	
 	public static void showException(Shell shell, Exception e) {
 		// TODO use ErrorDialog instead of MessageBox - provides button "see details" to display exception stack trace
-    	e.printStackTrace(); // TODO log stack trace slf4j
+    	e.printStackTrace();
 		MessageBox box = new MessageBox(shell, SWT.ICON_ERROR);
 	    box.setText("An error happened");
 	    box.setMessage(e.getMessage());
@@ -92,23 +91,22 @@ public class Sophie {
 	// TODO meta gif (licecap/silentcast/byzanz)
 	// TODO meta how to delete favorites (edit ~/.sophie)
 	
-	// TODO feat sort by field name (fields+documents)
-	// TODO feat all constants overridable using .properties file or -Dpage.size=20 + provide a default .properties
-	// TODO feat allow to create documents with new fields
-	// TODO feat show "(empty)" at the top
-	// TODO feat what if field contains value "(empty)" ?
-	// TODO feat fire filter only when hit enter
-	// TODO feat allow to revert a specific document
-	// TODO feat allow not to use the default request handler
-	// TODO feat selecting filter "foo (1)" generates "foo (1)" in textfield
-	// TODO feat allow to select multiple values for each filter
-	// TODO feat support empty facets on free text fields (workaround: add "(empty) (1)" in free text 
-	// TODO feat allow to reload config on all cores
-    // TODO feat see what luke and solr native ui provide (dismax, spellcheck, debug, score, shard, elevation etc)
-	// TODO feat CoreAdmin split/mergeindexes https://wiki.apache.org/solr/CoreAdmin, CollectionAdminRequest, replicate to slave / pull from master
-	// TODO feat "favorites/recently opened servers"
-    // TODO feat CoreAddDialog/CoreSwapDialog -> re-use SelectionDialog/ListSelectionDialog/ListDialog/ElementListSelectionDialog
-	// TODO feat Dialogs -> use validators to make sure values are not empty ?
+	// TODO feat filters
+	// TODO feat - show "(empty)" at the top
+	// TODO feat - fire filter only when hit enter
+	// TODO feat - selecting filter "foo (1)" generates "foo (1)" in textfield
+	// TODO feat - support empty facets on free text fields (workaround: add "(empty) (1)" in free text
+	// TODO feat new functionalities
+	// TODO feat - allow to reload config on all cores
+	// TODO feat - CoreAdmin split/mergeindexes https://wiki.apache.org/solr/CoreAdmin, CollectionAdminRequest, replicate to slave 
+    // TODO feat - see what luke and solr native ui provide (dismax, spellcheck, debug, score, shard, elevation etc)/ pull from master
+	// TODO feat - allow to create documents with new fields
+	// TODO feat - allow to revert a specific document
+	// TODO feat - slf4j output into logs/ + e.printStackTrace()
+	// TODO feat refactor
+	// TODO feat - allow not to use the default request handler
+	// TODO feat - Dialogs -> use validators to make sure values are not empty ?
+    // TODO feat - CoreAddDialog/CoreSwapDialog -> re-use SelectionDialog/ListSelectionDialog/ListDialog/ElementListSelectionDialog
 	
 	// TODO clean look for unused/obsolete methods
 	// TODO clean retest everything
@@ -133,4 +131,7 @@ public class Sophie {
 	// TODO doc "can configure DEFAULT_DOCUMENTS_PAGE_SIZE + DEFAULT_DOCUMENTS_FACETS_LIMIT" (need to update .sophie manually)
 	
 	// TODO obs trayitem - not supported by ubuntu https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
+	// TODO obs allow to select multiple values for each filter
+	// TODO obs what if field contains value "(empty)" ?
+	// TODO obs sort by field name (fields+documents)
 }
