@@ -26,6 +26,9 @@ public abstract class AbstractSortableTable {
 	private List<String> columnNames = new ArrayList<String>();
 	private List<Map<String, String>> rowValues = new ArrayList<Map<String, String>>();
 	
+	private boolean sortAsc = true;
+	private String sortColumnName;
+	
 	public AbstractSortableTable(Composite parent, SelectionListener listener) {
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
 
@@ -59,27 +62,46 @@ public abstract class AbstractSortableTable {
 		column.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
+				// Clicking on the current sort field toggles the direction.
+				// Clicking on a new field changes the sort field.
+				if (StringUtils.equals(sortColumnName, columnName)) {
+					sortAsc = !sortAsc;
+				} else {
+					sortColumnName = columnName;
+				}
 				Comparator<Map<String, String>> comparator = new Comparator<Map<String, String>>() {
 					@Override
 					public int compare(Map<String, String> rowValues1, Map<String, String> rowValues2) {
 						String value1 = rowValues1.get(columnName);
 						String value2 = rowValues2.get(columnName);
-						return (value1 == null) ? -1 : value1.compareTo(value2);
+						if (sortAsc) {
+							return (value1 == null) ? -1 : value1.compareTo(value2);	
+						} else {
+							return (value2 == null) ? -1 : value2.compareTo(value1);
+						}
 					}
 				};
-				Collections.sort(rowValues, comparator);
+				Collections.sort(rowValues, comparator);	
 				table.removeAll();
 				for (Map<String, String> values:rowValues) {
 					createRow(values);
 				}
-				for (TableColumn column:table.getColumns()) {
-					String name = (String) column.getData("columnName");
-					column.setText(name+(columnName.equals(name) ? " "+Sophie.SIGNIFIER_SORTED_ASC : StringUtils.EMPTY));
-				}
+				setSortSignifier();
 			}
 		});
 		column.pack();// TODO needed ? might be worth to setLayout() to get rid of this
 		return column;
+	}
+	
+	/**
+	 * Set sort signifier on sorted column. 
+	 */
+	private void setSortSignifier() {
+		for (TableColumn column:table.getColumns()) {
+			String name = (String) column.getData("columnName");
+			char signifier = sortAsc ? Sophie.SIGNIFIER_SORTED_ASC : Sophie.SIGNIFIER_SORTED_DESC;
+			column.setText(name+(StringUtils.equals(sortColumnName, name) ? " "+signifier : StringUtils.EMPTY));
+		}
 	}
 	
 	/**
@@ -101,6 +123,9 @@ public abstract class AbstractSortableTable {
 	
 	public void refresh() throws SophieException {
 		rowValues = new ArrayList<Map<String, String>>();
+		sortAsc = true;
+		sortColumnName = null;
+		setSortSignifier();
 		table.removeAll();
 		populate();
 	}
