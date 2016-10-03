@@ -177,7 +177,6 @@ public class DocumentsTable { // TODO extend Composite ?
 		        	// If field is not stored, display message.
 		        	// TODO disable doubleclick on unstored fields ?
 		        	// TODO verify "(not stored)" is not sent to Solr when updating/creating a new document
-		        	// TODO prepopulate if create a new document ?
 					// field.getFlags() is not populated when lukeRequest.setSchema(false) so we parse flags ourselves based on field.getSchema() TODO open ticket
 		        	if (!FieldInfo.parseFlags(fields.get(i).getSchema()).contains(FieldFlag.STORED)) {
 		        		item.setText(i+1, LABEL_NOT_STORED);
@@ -688,10 +687,6 @@ public class DocumentsTable { // TODO extend Composite ?
 				}
 			}
 		});
-		
-		// TODO switch to final objects and do not use setData() ?
-		// TODO no need to setData("field") - we never call getData("field")
-		combo.setData("field", facet.getName());
 		
 		return combo;
 	}
