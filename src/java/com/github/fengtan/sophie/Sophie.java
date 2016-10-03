@@ -63,13 +63,14 @@ public class Sophie {
 	// TODO test exotic Solr versions
 	// TODO test modifying 2 documents and then commiting
 	// TODO test what if server works and then goes down
-	
+
 	// TODO meta license (depends on swt, solrj, icons, other dependencies)
 	// TODO meta wording server/index/collection/core - update class comments accordingly
 
 	// TODO contrib convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
-	
+
 	// TODO feat allow to create documents with new fields
+	// TODO feat populate dummy data
 
 	// TODO clean look for unused/obsolete methods ; lint
 	// TODO clean retest everything
@@ -103,6 +104,7 @@ public class Sophie {
 	// TODO doc support zk/cloud
 	// TODO doc mvn -P win32/macosx/linux (latter by default)
 	// TODO doc filters facet values show up only if < FACETS_LIMIT
+	// TODO doc admin/luke, admin/ping, admin/cores must be available
 	
 	// TODO obs trayitem - not supported by ubuntu https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
 	// TODO obs allow to select multiple values for each filter
@@ -118,5 +120,6 @@ public class Sophie {
 	// TODO obs allow to revert a specific document
     // TODO obs see what luke and solr native ui provide (replication, load term info, analysis, DIH, files, plugins, logs, dismax, spellcheck, debug, score, shard, elevation etc)/ pull from master
 	// TODO obs CoreAdmin split/mergeindexes https://wiki.apache.org/solr/CoreAdmin, CollectionAdminRequest, replicate to slave
-	// TODO obs allow not to use the default request handler (select, admin/ping, admin/cores)
+	// TODO obs allow not to use the default request handler (select, admin/ping, admin/cores, admin/luke)
+	// TODO obs hitting "suppr" or clicking the button (in the toolbar) a second time should remove the deletion.
 }

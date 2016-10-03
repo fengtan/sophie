@@ -101,13 +101,16 @@ public class DocumentsTable { // TODO extend Composite ?
 	private ChangeListener changeListener;
 	
 	private Table table;
+	
+	private Composite parent;
 
 	public DocumentsTable(Composite parent, SelectionListener selectionListener, ChangeListener changeListener) throws SophieException {
+		this.parent = parent;
 		this.fields = SolrUtils.getRemoteFields();
 		this.facets = getRemoteFacets();
 		this.uniqueField = SolrUtils.getRemoteUniqueField();
 		this.sortField = uniqueField; // By default we sort documents by uniqueKey TODO what if uniqueKey is not sortable ?
-		this.table = createTable(parent, selectionListener);
+		this.table = createTable(selectionListener);
 		this.changeListener = changeListener;
 		// Initialize cache + row count.
 		refresh();
@@ -116,7 +119,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	/**
 	 * Create the Table
 	 */
-	private Table createTable(final Composite parent, SelectionListener selectionListener) throws SophieException {
+	private Table createTable(SelectionListener selectionListener) throws SophieException {
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
 
 		final Table table = new Table(parent, style);
@@ -130,7 +133,6 @@ public class DocumentsTable { // TODO extend Composite ?
 		table.addSelectionListener(selectionListener);
 		
 		// Add KeyListener to delete documents.
-		// TODO hitting "suppr" or clicking the button (in the toolbar) a second time should remove the deletion.
 		table.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent event) {
@@ -195,145 +197,21 @@ public class DocumentsTable { // TODO extend Composite ?
 		TableColumn columnNumber = new TableColumn(table, SWT.LEFT);
 		columnNumber.setText("#");
 		columnNumber.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
-		for (final FieldInfo field:fields) {
-			final TableColumn column = new TableColumn(table, SWT.LEFT);
-			// Add space padding so we can see the sort signifier.
-			// TODO set sort signifier on uniqueKey by default ?
-			// TODO refactor with selection listener
-			column.setText(field.getName()+(isFieldSortable(field) ? "     " : " "+SIGNIFIER_UNSORTABLE));
-			// TODO do we getData("field") somewhere ? if not, then no need to setData("field")
-			column.setData("field", field);
-			if (!isFieldSortable(field)) {
-				column.setToolTipText("Cannot sort on a field that is not indexed, is multivalued or has doc values");
-			}
-			// Sort column when click on the header
-			column.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent event) {
-					if (!isFieldSortable(field)) {
-						return;
-					}
-					// Clicking on the current sort field toggles the direction.
-					// Clicking on a new field changes the sort field.
-					if (StringUtils.equals(sortField, field.getName())) {
-						sortOrder = ORDER.asc.equals(sortOrder) ? ORDER.desc : ORDER.asc;
-					} else {
-						sortField = field.getName();
-					}
-					// Clear signifier on all columns, add signifier on sorted column.
-					char signifier = ORDER.asc.equals(sortOrder) ? SIGNIFIER_SORTED_ASC : SIGNIFIER_SORTED_DESC;
-					for (TableColumn c:table.getColumns()) {
-						FieldInfo f = (FieldInfo) c.getData("field");
-						if (f != null) {
-							if (!isFieldSortable(f)) {
-								c.setText(f.getName()+" "+SIGNIFIER_UNSORTABLE);
-							} else {
-								c.setText(f.getName()+((column == c) ? " "+signifier : StringUtils.EMPTY));	
-							}
-						}
-
-					}
-					// Re-populate table.
-					try {
-						refresh();
-					} catch (SophieException e) {
-						ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
-					}
-				}
-			});
-			column.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
+		for (FieldInfo field:fields) {
+			addColumn(field);
 		}
 		
 		// Add filters.
 		TableItem[] items = table.getItems(); // TODO do we need to load all items ?
 		TableEditor editor = new TableEditor(table);
 		for(int i=0; i<fields.size(); i++) {
-			// TODO check if map contains field ?
-			final FacetField facet = facets.get(fields.get(i).getName());
-			// If facet is null then we cannot filter on this field (e.g. the field is not indexed).
-			if (facet == null) {
-				// TODO grey out items[0] columns i
-				continue;
+			CCombo combo = addCombo(i);
+			if (combo != null) {
+			    editor.grabHorizontal = true;
+			    // We add one since the first column is used for row ID.
+			    editor.setEditor(combo, items[0], i+1);
+			    editor = new TableEditor(table);	
 			}
-			/*
-			 * TODO could use this instead of storing field name in setData() 
-			 * Point point = new Point(event.x, event.y);
-		     * TableItem item = table.getItem(point);
-		     * if (item == null) {
-		     *   return;
-		     * }
-		     * for (int i=0; i<fields.size(); i++) {
-		     *   Rectangle rect = item.getBounds(i);
-		     *   if (rect.contains(point)) {
-		     *     SolrDocument document = (SolrDocument) item.getData("document");
-		     *     dialog.open(item.getText(i), fields.get(i).getName(), document);
-		     *   }
-		     * }
-			 */
-			final CCombo combo = new CCombo(table, SWT.BORDER);			
-			combo.add(StringUtils.EMPTY);
-			// If the number of facet values is the max, then the list of facet values might not be complete. Hence we use a free text field instead of populating the combo.
-			if (facet.getValueCount() < FACET_LIMIT) {
-				for(Count count:facet.getValues()) {
-					combo.add(Objects.toString(count.getName(), LABEL_EMPTY)+" ("+count.getCount()+")");
-				}
-				combo.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent event) {
-						// Extract original value (e.g. "Foobar") from widget value (e.g. "Foobar (3)")
-						Pattern pattern = Pattern.compile("^(.*) \\([0-9]+\\)$");
-						Matcher matcher = pattern.matcher(combo.getText());
-						// TODO if cannot find pattern, then should log WARNING
-						String filterValue = matcher.find() ? matcher.group(1) : StringUtils.EMPTY;
-						// Populate combo with original value.
-						combo.setText(filterValue);
-					};
-				});
-			} else {
-				combo.add(LABEL_EMPTY);
-			}
-			
-			// Fire filters + refresh when user selects a value.
-			combo.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(SelectionEvent event) {
-					String filterName = facet.getName();
-					String filterNewValue = combo.getText();
-					String filterOldValue = filters.get(filterName);
-					// No need to re-send a request to Solr and the user selected the same filter as the current filter. 
-					if (StringUtils.equals(filterOldValue, filterNewValue) || (StringUtils.isBlank(filterOldValue) && StringUtils.isBlank(filterNewValue))) {
-						return;
-					}
-					updateFilters(filterName, filterNewValue);
-					try {
-						refresh();
-					} catch (SophieException e) {
-						ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
-					}
-				}
-			});
-			
-			// Filter (refresh) results when user hits "Enter" while editing one of the combos.
-			combo.addListener(SWT.KeyUp, new Listener() {
-				@Override
-				public void handleEvent(Event event) {
-					if (event.character == SWT.CR) {
-						updateFilters(facet.getName(), combo.getText());
-						try {
-							refresh();
-						} catch (SophieException e) {
-							ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
-						}
-					}
-				}
-			});
-			
-			// TODO switch to final objects and do not use setData() ?
-			// TODO no need to setData("field") - we never call getData("field")
-			combo.setData("field", facet.getName());
-		    editor.grabHorizontal = true;
-		    // We add one since the first column is used for row ID.
-		    editor.setEditor(combo, items[0], i+1);
-		    editor = new TableEditor(table);
 		}
 		
 		table.addListener(SWT.MouseDoubleClick, new Listener() {
@@ -678,7 +556,145 @@ public class DocumentsTable { // TODO extend Composite ?
 		document.removeFields("id"); // TODO what if field "id" does not exist
 		addDocument(document);
 	}
+	
+	private void addColumn(final FieldInfo field) {
+		final TableColumn column = new TableColumn(table, SWT.LEFT);
+		// Add space padding so we can see the sort signifier.
+		// TODO set sort signifier on uniqueKey by default ?
+		// TODO refactor with selection listener
+		column.setText(field.getName()+(isFieldSortable(field) ? "     " : " "+SIGNIFIER_UNSORTABLE));
+		// TODO do we getData("field") somewhere ? if not, then no need to setData("field")
+		column.setData("field", field);
+		if (!isFieldSortable(field)) {
+			column.setToolTipText("Cannot sort on a field that is not indexed, is multivalued or has doc values");
+		}
+		// Sort column when click on the header
+		column.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				if (!isFieldSortable(field)) {
+					return;
+				}
+				// Clicking on the current sort field toggles the direction.
+				// Clicking on a new field changes the sort field.
+				if (StringUtils.equals(sortField, field.getName())) {
+					sortOrder = ORDER.asc.equals(sortOrder) ? ORDER.desc : ORDER.asc;
+				} else {
+					sortField = field.getName();
+				}
+				// Clear signifier on all columns, add signifier on sorted column.
+				char signifier = ORDER.asc.equals(sortOrder) ? SIGNIFIER_SORTED_ASC : SIGNIFIER_SORTED_DESC;
+				for (TableColumn c:table.getColumns()) {
+					FieldInfo f = (FieldInfo) c.getData("field");
+					if (f != null) {
+						if (!isFieldSortable(f)) {
+							c.setText(f.getName()+" "+SIGNIFIER_UNSORTABLE);
+						} else {
+							c.setText(f.getName()+((column == c) ? " "+signifier : StringUtils.EMPTY));	
+						}
+					}
 
-	// TODO allow to filter value on empty value (e.g. value not set)
+				}
+				// Re-populate table.
+				try {
+					refresh();
+				} catch (SophieException e) {
+					ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+				}
+			}
+		});
+		column.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
+	}
+
+	private CCombo addCombo(int i) {
+		// TODO check if map contains field ?
+		final FacetField facet = facets.get(fields.get(i).getName());
+		// If facet is null then we cannot filter on this field (e.g. the field is not indexed).
+		if (facet == null) {
+			// TODO grey out items[0] columns i
+			return null;
+		}
+		/*
+		 * TODO could use this instead of storing field name in setData() 
+		 * Point point = new Point(event.x, event.y);
+	     * TableItem item = table.getItem(point);
+	     * if (item == null) {
+	     *   return;
+	     * }
+	     * for (int i=0; i<fields.size(); i++) {
+	     *   Rectangle rect = item.getBounds(i);
+	     *   if (rect.contains(point)) {
+	     *     SolrDocument document = (SolrDocument) item.getData("document");
+	     *     dialog.open(item.getText(i), fields.get(i).getName(), document);
+	     *   }
+	     * }
+		 */
+		final CCombo combo = new CCombo(table, SWT.BORDER);			
+		combo.add(StringUtils.EMPTY);
+		// If the number of facet values is the max, then the list of facet values might not be complete. Hence we use a free text field instead of populating the combo.
+		if (facet.getValueCount() < FACET_LIMIT) {
+			for(Count count:facet.getValues()) {
+				combo.add(Objects.toString(count.getName(), LABEL_EMPTY)+" ("+count.getCount()+")");
+			}
+			combo.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent event) {
+					// Extract original value (e.g. "Foobar") from widget value (e.g. "Foobar (3)")
+					Pattern pattern = Pattern.compile("^(.*) \\([0-9]+\\)$");
+					Matcher matcher = pattern.matcher(combo.getText());
+					// TODO if cannot find pattern, then should log WARNING
+					String filterValue = matcher.find() ? matcher.group(1) : StringUtils.EMPTY;
+					// Populate combo with original value.
+					combo.setText(filterValue);
+				};
+			});
+		} else {
+			combo.add(LABEL_EMPTY);
+		}
+		
+		// Fire filters + refresh when user selects a value.
+		combo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				String filterName = facet.getName();
+				String filterNewValue = combo.getText();
+				String filterOldValue = filters.get(filterName);
+				// No need to re-send a request to Solr and the user selected the same filter as the current filter. 
+				if (StringUtils.equals(filterOldValue, filterNewValue) || (StringUtils.isBlank(filterOldValue) && StringUtils.isBlank(filterNewValue))) {
+					return;
+				}
+				updateFilters(filterName, filterNewValue);
+				try {
+					refresh();
+				} catch (SophieException e) {
+					ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+				}
+			}
+		});
+		
+		// Filter (refresh) results when user hits "Enter" while editing one of the combos.
+		combo.addListener(SWT.KeyUp, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				if (event.character == SWT.CR) {
+					updateFilters(facet.getName(), combo.getText());
+					try {
+						refresh();
+					} catch (SophieException e) {
+						ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+					}
+				}
+			}
+		});
+		
+		// TODO switch to final objects and do not use setData() ?
+		// TODO no need to setData("field") - we never call getData("field")
+		combo.setData("field", facet.getName());
+		
+		return combo;
+	}
+	
+	public void addField(String fieldName) {
+		// TODO
+	}
 	
 }

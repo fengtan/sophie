@@ -33,6 +33,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
     private Image imgAdd;
     private Image imgDelete;
     private Image imgClone;
+    private Image imgAddField;
     private Image imgUpload;
     private Image imgClear;
     private Image imgCommit;
@@ -45,6 +46,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
     private ToolItem itemAdd;
     private ToolItem itemDelete;
     private ToolItem itemClone;
+    private ToolItem itemAddField;
     private ToolItem itemUpload;
     private ToolItem itemClear;
     private ToolItem itemCommit;
@@ -70,6 +72,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         imgAdd = new Image(display, loader.getResourceAsStream("toolbar/add.png"));
         imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
         imgClone = new Image(display, loader.getResourceAsStream("toolbar/clone.png"));
+        imgAddField = new Image(display, loader.getResourceAsStream("toolbar/add.png")); // TODO find a better icon ?
         imgUpload = new Image(display, loader.getResourceAsStream("toolbar/upload.png")); // TODO find a better icon ?
         imgClear = new Image(display, loader.getResourceAsStream("toolbar/clear.png"));
         imgCommit = new Image(display, loader.getResourceAsStream("toolbar/commit.png"));
@@ -128,6 +131,16 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 			}
 		});
         itemClone.setEnabled(false);
+        
+        itemAddField = new ToolItem(toolBar, SWT.PUSH);
+        itemAddField.setImage(imgAddField);
+        itemAddField.setText("Add field");
+        itemAddField.setToolTipText("Add new field");
+        itemAddField.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				table.addField("foobar"); // TODO
+			}
+		});
         
         itemUpload = new ToolItem(toolBar, SWT.PUSH);
         itemUpload.setImage(imgUpload);
@@ -285,6 +298,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         imgAdd.dispose();
         imgDelete.dispose();
         imgClone.dispose();
+        imgAddField.dispose();
         imgUpload.dispose();
         imgClear.dispose();
         imgCommit.dispose();
