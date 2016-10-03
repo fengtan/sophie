@@ -63,7 +63,6 @@ public class Sophie {
 	
 	// TODO test exotic Solr versions
 	// TODO test modifying 2 documents and then commiting
-	// TODO test win32/mac
 	
 	// TODO meta license (depends on swt, solrj, icons, other dependencies)
 	// TODO meta wording server/index/collection/core - update class comments accordingly
@@ -71,23 +70,19 @@ public class Sophie {
 	// TODO contrib convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
 	// TODO feat filters
-	// TODO feat - show "(empty)" at the top
 	// TODO feat - fire filter only when hit enter
 	// TODO feat - selecting filter "foo (1)" generates "foo (1)" in textfield
 	// TODO feat - support empty facets on free text fields (workaround: add "(empty) (1)" in free text
 	// TODO feat new functionalities
-	// TODO feat - CoreAdmin split/mergeindexes https://wiki.apache.org/solr/CoreAdmin, CollectionAdminRequest, replicate to slave 
-    // TODO feat - see what luke and solr native ui provide (dismax, spellcheck, debug, score, shard, elevation etc)/ pull from master
 	// TODO feat - allow to create documents with new fields
-	// TODO feat - allow not to use the default request handler
-	
+
 	// TODO clean look for unused/obsolete methods ; lint
 	// TODO clean retest everything
 	// TODO clean are all jars required ?
 	// TODO clean document all methods
 	// TODO clean indent (xml/java)
 
-	// TODO doc screenshot 0.5
+	// TODO doc screenshot 0.5 + move screenshots/ to gh-pages
 	// TODO doc about page + github.io
 	// TODO doc measure memory footprint
 	// TODO doc gif (licecap/silentcast/byzanz)
@@ -125,4 +120,7 @@ public class Sophie {
     // TODO - logs in /var/log
 	// TODO obs Dialogs -> use validators to make sure values are not empty
 	// TODO obs allow to revert a specific document
+    // TODO obs see what luke and solr native ui provide (replication, load term info, analysis, DIH, files, plugins, logs, dismax, spellcheck, debug, score, shard, elevation etc)/ pull from master
+	// TODO obs CoreAdmin split/mergeindexes https://wiki.apache.org/solr/CoreAdmin, CollectionAdminRequest, replicate to slave
+	// TODO obs allow not to use the default request handler (select, admin/ping, admin/cores)
 }

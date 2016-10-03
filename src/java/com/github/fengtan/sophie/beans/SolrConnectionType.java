@@ -4,7 +4,7 @@ package com.github.fengtan.sophie.beans;
 public enum SolrConnectionType {
 
 	DIRECT_HTTP("Direct HTTP", "Solr URL:", "http://localhost:8983/solr/gettingstarted"),
-	SOLR_CLOUD("SolrCloud", "ZooKeeper host(s):", "localhost:9983");
+	SOLR_CLOUD("SolrCloud", "ZooKeeper host:", "localhost:9983");
 	
 	private SolrConnectionType(String typeName, String valueLabel, String valueDefault) {
 		this.typeName = typeName;

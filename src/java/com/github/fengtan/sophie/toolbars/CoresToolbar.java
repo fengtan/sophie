@@ -211,7 +211,7 @@ public class CoresToolbar implements SelectionListener {
 				}
 			}
 		});
-        
+
         toolBar.pack();
     }
     
