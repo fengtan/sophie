@@ -27,7 +27,7 @@ import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.CComboDialog;
-import com.github.fengtan.sophie.dialogs.CoreAddDialog;
+import com.github.fengtan.sophie.dialogs.DoubleInputDialog;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.tables.CoresTable;
 
@@ -95,17 +95,17 @@ public class CoresToolbar implements SelectionListener {
         itemAdd.setToolTipText("Add new core");
         itemAdd.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				CoreAddDialog dialog = new CoreAddDialog(composite.getShell());
+				DoubleInputDialog dialog = new DoubleInputDialog(composite.getShell(), "Add new core", "Name:", "collectionX", "Instance Directory:", "/path/to/solr/collectionX");
 				dialog.open();
 				if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
 					return;
 				}
 				try {
 					// TODO createCore is overloaded with additional params (schema file etc).
-					CoreAdminRequest.createCore(dialog.getValueCoreName(), dialog.getValueInstanceDir(), Sophie.client);
+					CoreAdminRequest.createCore(dialog.getValue1(), dialog.getValue2(), Sophie.client);
 					table.refresh();
 				} catch (SolrServerException|IOException|SolrException|SophieException e) {
-					ExceptionDialog.open(composite.getShell(), new SophieException("Unable to add new core \""+dialog.getValueCoreName()+"\" with instance dir \""+dialog.getValueInstanceDir()+"\"", e));
+					ExceptionDialog.open(composite.getShell(), new SophieException("Unable to add new core \""+dialog.getValue1()+"\" with instance dir \""+dialog.getValue2()+"\"", e));
 				}					
 			}
 		});
