@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+// TODO rename ListDialog ?
 public class DocumentEditListValueDialog extends DocumentEditValueDialog {
 
 	private AbstractList<?> defaultValue;

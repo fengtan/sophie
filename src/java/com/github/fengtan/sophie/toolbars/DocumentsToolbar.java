@@ -138,7 +138,14 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemAddField.setToolTipText("Add new field");
         itemAddField.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				table.addField("foobar"); // TODO
+				// TODO Suggest dynamic fields in a CCombo
+				InputDialog dialog = new InputDialog(composite.getShell(), "Add new field", "Field name:", null, null);
+				dialog.open();
+				if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
+					return;
+				}
+				String fieldName = dialog.getValue();
+				table.addField(fieldName);
 			}
 		});
         

@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+// TODO use InputDialog ?
 public class DocumentEditTextValueDialog extends DocumentEditValueDialog {
 
 	private String defaultValue;

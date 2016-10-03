@@ -694,7 +694,22 @@ public class DocumentsTable { // TODO extend Composite ?
 	}
 	
 	public void addField(String fieldName) {
-		// TODO
+		/*
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * TODO
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 */
 	}
 	
 }

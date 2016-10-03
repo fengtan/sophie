@@ -1,11 +1,15 @@
 package com.github.fengtan.sophie.toolbars;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.CoreAdminParams.CoreAdminAction;
+import org.apache.solr.common.util.NamedList;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
@@ -22,8 +26,8 @@ import org.eclipse.swt.widgets.ToolItem;
 import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
+import com.github.fengtan.sophie.dialogs.CComboDialog;
 import com.github.fengtan.sophie.dialogs.CoreAddDialog;
-import com.github.fengtan.sophie.dialogs.CoreSwapDialog;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.tables.CoresTable;
 
@@ -158,7 +162,16 @@ public class CoresToolbar implements SelectionListener {
         itemSwap.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				String coreName = table.getSelectedCore();
-				CoreSwapDialog dialog = new CoreSwapDialog(composite.getShell(), coreName);
+				Map<String, NamedList<Object>> cores;
+				try {
+					cores = SolrUtils.getCores();
+				} catch (SophieException e) {
+					Sophie.log.error("Unable to suggest list of cores", e);
+					cores = Collections.emptyMap();
+				}
+				Object[] coreObjects = cores.keySet().toArray();
+				String[] coreStrings = Arrays.copyOf(coreObjects, coreObjects.length, String[].class); 
+				CComboDialog dialog = new CComboDialog(composite.getShell(), "Swap cores", "Swap core \""+coreName+"\" with:", coreStrings);
 				dialog.open();
 				if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
 					return;
