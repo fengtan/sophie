@@ -17,6 +17,7 @@ import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 
+// TODO make sortable (using SWT built-in table sorter) - same for CoresTable
 public class FieldsTable {
 	
 	private static final String[] columnNames = new String[]{

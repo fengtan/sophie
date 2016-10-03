@@ -8,7 +8,6 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
-import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrException;

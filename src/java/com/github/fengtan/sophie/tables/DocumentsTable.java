@@ -86,7 +86,6 @@ public class DocumentsTable { // TODO extend Composite ?
 	private static final int FACET_LIMIT = Config.getDocumentsFacetsLimit();
 	
 	private Map<Integer, SolrDocumentList> pages;
-	private List<FieldInfo> fields = new ArrayList<FieldInfo>();
 	private Map<String, String> filters = new HashMap<String, String>();
 	private String uniqueField; // TODO update when refresh ?()
 	private String sortField;
@@ -134,6 +133,7 @@ public class DocumentsTable { // TODO extend Composite ?
 			addField(field, facet, i+1); // First row is used for row #.
 		}
 		
+		// TODO sort fields/columns by field name
 		// TODO do we need to setData("field") ?
 		// Initialize cache + row count.
 		refresh();
@@ -191,21 +191,26 @@ public class DocumentsTable { // TODO extend Composite ?
 						return;
 	            	}
 	            }
+	            
 	            // First column is used to show the row ID.
 	            item.setText(0, Integer.toString(rowIndex));
+	            
 	            // Subsequent columns are used to show field values.
-		        for (int i=0; i<fields.size(); i++) {
-		        	String fieldName = fields.get(i).getName();
+	            for (int index=1; index<table.getColumnCount(); index++) {
+	            	TableColumn column = table.getColumn(index);
+	            	String fieldName = (String) column.getData("fieldName");
+	            	FieldInfo field = (FieldInfo) column.getData("field");
 		        	// If field is not stored, display message.
 		        	// TODO disable doubleclick on unstored fields ?
 		        	// TODO verify "(not stored)" is not sent to Solr when updating/creating a new document
-		        	if (!SolrUtils.getFlags(fields.get(i)).contains(FieldFlag.STORED)) {
-		        		item.setText(i+1, LABEL_NOT_STORED);
-		        	} else {
+	            	if (!SolrUtils.getFlags(field).contains(FieldFlag.STORED)) {
+	            		item.setText(index, LABEL_NOT_STORED);
+	            	} else {
 		        		Object value = document.getFieldValue(fieldName);
-		            	item.setText(i+1, value == null ? StringUtils.EMPTY : value.toString());
-		            }
-		        }
+		            	item.setText(index, value == null ? StringUtils.EMPTY : value.toString());
+	            	}
+	            }
+	            
 		        // Store document in item.
 		        item.setData("document", document);
 			}
@@ -683,7 +688,6 @@ public class DocumentsTable { // TODO extend Composite ?
 	
 	// TODO test add ss_foo and ss_bar - does this create 2 entries or 1 in this.fields ?
 	public void addField(String fieldName, FieldInfo field, FacetField facet, int index) {
-		fields.add(field);
 		addColumn(fieldName, field);
 		// If field or facet is null then we cannot filter on this field (e.g. the field is not indexed).
 		if (fieldName != null && field != null && facet != null) {
