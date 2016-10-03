@@ -36,18 +36,17 @@ public class CComboDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
         Composite composite = (Composite) super.createDialogArea(parent);
         
+        Label label = new Label(composite, SWT.WRAP);
         GridData grid = new GridData(GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL | GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_CENTER);
         grid.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
-        
-        Label label = new Label(composite, SWT.WRAP);
         label.setText(text);
         label.setLayoutData(grid);
         label.setFont(parent.getFont());
 		
-        combo = new Combo(parent, SWT.DROP_DOWN | SWT.SINGLE | SWT.BORDER);
-        combo.setLayoutData(grid); // TODO add some spacing 
+        combo = new Combo(parent, SWT.SINGLE | SWT.BORDER); // TODO add some spacing
+        combo.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 		combo.setItems(items);
-                
+
         applyDialogFont(composite);
         return composite;
 	}

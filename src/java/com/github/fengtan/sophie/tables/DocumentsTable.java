@@ -89,7 +89,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	private Map<String, FacetField> facets;
 	private Map<String, String> filters = new HashMap<String, String>();
 	private String uniqueField; // TODO update when refresh ?()
-	private String sortField; // TODO support sort on multiple fields ?
+	private String sortField;
 	private ORDER sortOrder = ORDER.asc;
 
 	// List of documents locally updated/deleted/added.
@@ -110,8 +110,9 @@ public class DocumentsTable { // TODO extend Composite ?
 		this.facets = getRemoteFacets();
 		this.uniqueField = SolrUtils.getRemoteUniqueField();
 		this.sortField = uniqueField; // By default we sort documents by uniqueKey TODO what if uniqueKey is not sortable ?
-		this.table = createTable(selectionListener);
+		createTable();
 		this.changeListener = changeListener;
+		table.addSelectionListener(selectionListener);
 		// Initialize cache + row count.
 		refresh();
 	}
@@ -119,10 +120,10 @@ public class DocumentsTable { // TODO extend Composite ?
 	/**
 	 * Create the Table
 	 */
-	private Table createTable(SelectionListener selectionListener) throws SophieException {
+	private void createTable() throws SophieException {
 		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
 
-		final Table table = new Table(parent, style);
+		table = new Table(parent, style);
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
@@ -130,7 +131,6 @@ public class DocumentsTable { // TODO extend Composite ?
 
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
-		table.addSelectionListener(selectionListener);
 		
 		// Add KeyListener to delete documents.
 		table.addKeyListener(new KeyAdapter() {
@@ -187,8 +187,6 @@ public class DocumentsTable { // TODO extend Composite ?
 		        }
 		        // Store document in item.
 		        item.setData("document", document);
-		        // TODO use item.setText(String[] values) ?
-		        // TODO store status insert/update/delete using item.setData() ?
 			}
 		});
 		
@@ -225,11 +223,12 @@ public class DocumentsTable { // TODO extend Composite ?
 		    		return;
 		    	}
 		    	// We add 1 since the first column is used for row ID's.
-		    	for (int i=0; i<fields.size(); i++) {
+		    	for (int i=0; i<table.getColumnCount(); i++) {
 		    		Rectangle rect = item.getBounds(i+1);
 		    		if (rect.contains(point)) {
 		    			SolrDocument document = (SolrDocument) item.getData("document");
-		    			Object defaultValue = document.getFieldValue(fields.get(i).getName());
+		    			String fieldName = (String) table.getColumn(i).getData("fieldName");
+		    			Object defaultValue = document.getFieldValue(fieldName);
 		    			// Add editor dialog:
 		    			// - datepicker if we are dealing with a date field.
 		    			// - list widget if we are dealing with a multi-valued field.
@@ -256,8 +255,6 @@ public class DocumentsTable { // TODO extend Composite ?
 		    	}
 			}
 		});
-		
-		return table;
 	}
 	
 	/**
