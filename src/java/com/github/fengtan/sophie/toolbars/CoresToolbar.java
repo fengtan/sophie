@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.CoreAddDialog;
 import com.github.fengtan.sophie.dialogs.CoreSwapDialog;
@@ -34,6 +35,7 @@ public class CoresToolbar implements SelectionListener {
     private Image imgRename;
     private Image imgSwap;
     private Image imgReload;
+    private Image imgReloadAll;
     
     private ToolItem itemRefresh;
     private ToolItem itemAdd;
@@ -41,6 +43,7 @@ public class CoresToolbar implements SelectionListener {
     private ToolItem itemRename;
     private ToolItem itemSwap;
     private ToolItem itemReload;
+    private ToolItem itemReloadAll;
     
     private CoresTable table;
     
@@ -62,6 +65,7 @@ public class CoresToolbar implements SelectionListener {
         imgRename = new Image(display, loader.getResourceAsStream("toolbar/clone.png")); // TODO find a better icon?
         imgSwap = new Image(display, loader.getResourceAsStream("toolbar/upload.png")); // TODO find a better icon?
         imgReload = new Image(display, loader.getResourceAsStream("toolbar/restore.png")); // TODO find a better icon?
+        imgReloadAll = new Image(display, loader.getResourceAsStream("toolbar/restore.png")); // TODO find a better icon?
 
         ToolBar toolBar = new ToolBar(composite, SWT.BORDER);
 
@@ -191,6 +195,23 @@ public class CoresToolbar implements SelectionListener {
 		});
         itemReload.setEnabled(false);
         
+        itemReloadAll = new ToolItem(toolBar, SWT.PUSH);
+        itemReloadAll.setImage(imgReloadAll);
+        itemReloadAll.setText("Reload all");
+        itemReloadAll.setToolTipText("Reload all cores");
+        itemReloadAll.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				try {
+					for (String coreName:SolrUtils.getCores().keySet()) {
+						CoreAdminRequest.reloadCore(coreName, Sophie.client);
+					}
+					table.refresh();
+				} catch (SolrServerException|IOException|SolrException|SophieException e) {
+					ExceptionDialog.open(composite.getShell(), new SophieException("Unable to reload all cores", e));
+				}
+			}
+		});
+        
         toolBar.pack();
     }
     
@@ -202,6 +223,7 @@ public class CoresToolbar implements SelectionListener {
     	imgRename.dispose();
     	imgSwap.dispose();
     	imgReload.dispose();
+    	imgReloadAll.dispose();
     }
 
 	@Override
