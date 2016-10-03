@@ -1,7 +1,10 @@
 package com.github.fengtan.sophie.toolbars;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
@@ -23,7 +26,9 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
+import com.github.fengtan.sophie.dialogs.CComboDialog;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.tables.DocumentsTable;
 
@@ -138,8 +143,17 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemAddField.setToolTipText("Add new field");
         itemAddField.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				// TODO Suggest dynamic fields in a CCombo
-				InputDialog dialog = new InputDialog(composite.getShell(), "Add new field", "Field name:", null, null);
+				String[] suggestions;
+				try {
+					List<String> fields = SolrUtils.getRemoteSchemaFields();
+					suggestions = new String[fields.size()];
+					fields.toArray(suggestions);
+					Arrays.sort(suggestions);
+				} catch (SophieException e) {
+					Sophie.log.error("Unable to suggest fields", e);
+					suggestions = ArrayUtils.EMPTY_STRING_ARRAY;
+				}
+				CComboDialog dialog = new CComboDialog(composite.getShell(), "Add new field", "Field name:", suggestions);
 				dialog.open();
 				if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
 					return;

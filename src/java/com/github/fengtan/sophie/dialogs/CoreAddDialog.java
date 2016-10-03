@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+// TODO rename DoubleInputDialog
 public class CoreAddDialog extends Dialog {
 	
 	private static final String DEFAULT_CORE_NAME = "collectionX";

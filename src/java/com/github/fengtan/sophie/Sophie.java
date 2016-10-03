@@ -122,4 +122,5 @@ public class Sophie {
 	// TODO obs CoreAdmin split/mergeindexes https://wiki.apache.org/solr/CoreAdmin, CollectionAdminRequest, replicate to slave
 	// TODO obs allow not to use the default request handler (select, admin/ping, admin/cores, admin/luke)
 	// TODO obs hitting "suppr" or clicking the button (in the toolbar) a second time should remove the deletion.
+	// TODO obs schema API (e.g. add/delete fields) + SchemaRequest (provides list of copyField's etc)
 }
