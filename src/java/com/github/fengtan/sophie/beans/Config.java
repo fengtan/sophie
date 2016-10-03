@@ -1,6 +1,7 @@
 package com.github.fengtan.sophie.beans;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
@@ -31,7 +32,9 @@ public class Config {
 
 	public static String[] getFavorites() {
 		try {
-			return getConfiguration().getStringArray("favorites");
+			String[] favorites = getConfiguration().getStringArray("favorites");
+			Arrays.sort(favorites);
+			return favorites;
 		} catch (ConfigurationException e) {
 			// Silently return no favorite and log the exception.
 			Sophie.log.warn("Unable to get favorites from configuration file", e);

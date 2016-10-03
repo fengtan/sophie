@@ -36,7 +36,6 @@ public class Sophie {
 		// Initialize Solr client and UI.
 		shell.setText("Sophie - "+connectionLabel);
 		new TabFolder(shell, connectionLabel);
-		// TODO what if server works and then goes down
 		
 		// Make the shell display its content.
 		shell.open();
@@ -63,6 +62,7 @@ public class Sophie {
 	
 	// TODO test exotic Solr versions
 	// TODO test modifying 2 documents and then commiting
+	// TODO test what if server works and then goes down
 	
 	// TODO meta license (depends on swt, solrj, icons, other dependencies)
 	// TODO meta wording server/index/collection/core - update class comments accordingly

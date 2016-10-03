@@ -28,7 +28,7 @@ import com.github.fengtan.sophie.beans.SophieException;
 public class ConnectDialog extends Dialog {
 	
 	private Label label;
-	private Combo value; // TODO verify swt renders Combo as free-form text in Mac OS + Windows
+	private Combo value;
 	private Button[] buttons = new Button[SolrConnectionType.values().length];
 
 	private SolrConnectionType selectedType = SolrConnectionType.DIRECT_HTTP; // Select 'Direct HTTP' by default.
@@ -45,7 +45,7 @@ public class ConnectDialog extends Dialog {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("New Solr connection");
+		newShell.setText("Sophie - New connection");
 	}
 
 	public SolrClient getSolrClient() {
