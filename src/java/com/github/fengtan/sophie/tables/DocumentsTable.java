@@ -72,10 +72,6 @@ public class DocumentsTable { // TODO extend Composite ?
 	private static final Color RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 	private static final Color GREEN = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 	
-	private static final char SIGNIFIER_SORTED_ASC = '\u25B4';
-	private static final char SIGNIFIER_SORTED_DESC = '\u25BE';
-	private static final char SIGNIFIER_UNSORTABLE = '\u2205';
-	
 	private static final String LABEL_NOT_STORED = "(not stored)";
 	private static final String LABEL_EMPTY = "(empty)";
 	
@@ -577,7 +573,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		// TODO set sort signifier on uniqueKey by default ?
 		// TODO refactor with selection listener
 		final boolean isFieldSortable = isFieldSortable(fieldInfo);
-		column.setText(fieldName+(isFieldSortable ? "     " : " "+SIGNIFIER_UNSORTABLE));
+		column.setText(fieldName+(isFieldSortable ? "     " : " "+Sophie.SIGNIFIER_UNSORTABLE));
 		column.setData("field", fieldInfo);
 		column.setData("fieldName", fieldName);
 		if (!isFieldSortable) {
@@ -598,13 +594,13 @@ public class DocumentsTable { // TODO extend Composite ?
 					sortField = fieldName;
 				}
 				// Clear signifier on all columns, add signifier on sorted column.
-				char signifier = ORDER.asc.equals(sortOrder) ? SIGNIFIER_SORTED_ASC : SIGNIFIER_SORTED_DESC;
+				char signifier = ORDER.asc.equals(sortOrder) ? Sophie.SIGNIFIER_SORTED_ASC : Sophie.SIGNIFIER_SORTED_DESC;
 				for (TableColumn c:table.getColumns()) {
 					String fieldName = (String) c.getData("fieldName");
 					if (fieldName != null) {
 						if (!isFieldSortable) {
 							// TODO probably messed up the column title for dynamic fields
-							c.setText(fieldName+" "+SIGNIFIER_UNSORTABLE);
+							c.setText(fieldName+" "+Sophie.SIGNIFIER_UNSORTABLE);
 						} else {
 							c.setText(fieldName+((column == c) ? " "+signifier : StringUtils.EMPTY));	
 						}

@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -16,6 +17,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SophieException;
 
 public abstract class AbstractSortableTable {
@@ -51,8 +53,9 @@ public abstract class AbstractSortableTable {
 	
 	protected TableColumn addColumn(final String columnName) {
 		columnNames.add(columnName);
-		TableColumn column = new TableColumn(table, SWT.LEFT);
-		column.setText(columnName);
+		final TableColumn column = new TableColumn(table, SWT.LEFT);
+		column.setData("columnName", columnName);
+		column.setText(columnName+"     ");
 		column.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
@@ -68,6 +71,10 @@ public abstract class AbstractSortableTable {
 				table.removeAll();
 				for (Map<String, String> values:rowValues) {
 					createRow(values);
+				}
+				for (TableColumn column:table.getColumns()) {
+					String name = (String) column.getData("columnName");
+					column.setText(name+(columnName.equals(name) ? " "+Sophie.SIGNIFIER_SORTED_ASC : StringUtils.EMPTY));
 				}
 			}
 		});

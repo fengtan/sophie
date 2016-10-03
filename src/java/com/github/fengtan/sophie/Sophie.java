@@ -16,6 +16,10 @@ import com.github.fengtan.sophie.tabs.TabFolder;
 
 public class Sophie {
 	
+	public static final char SIGNIFIER_SORTED_ASC = '\u25B4';
+	public static final char SIGNIFIER_SORTED_DESC = '\u25BE';
+	public static final char SIGNIFIER_UNSORTABLE = '\u2205';
+	
 	public static SolrClient client;
 	public static Log log = LogFactory.getLog(Sophie.class);
 	
