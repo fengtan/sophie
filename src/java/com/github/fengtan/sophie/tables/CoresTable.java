@@ -5,10 +5,8 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.common.util.NamedList;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.github.fengtan.sophie.beans.SolrUtils;
@@ -18,35 +16,26 @@ import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 
 public class CoresTable extends SortableTable {
 	
-	private Map<String, Integer> colNames = new HashMap<String, Integer>();
-	
 	public CoresTable(Composite parent, SelectionListener listener) {
-		super(parent);
-		table.addSelectionListener(listener);
+		super(parent, listener);
 
 		try {
 			populate();			
 		} catch (SophieException e) {
 			ExceptionDialog.open(parent.getShell(), new SophieException("Unable to initialize cores table", e));
 		}
-
 	}
 	
 	public String getSelectedCore() {
-		TableItem[] items = table.getSelection();
+		TableItem[] items = getTableSelection();
 		// Core name is in the first column
 		return (items.length > 0) ? items[0].getText(0) : StringUtils.EMPTY;
 	}
 	
-	public void refresh() throws SophieException {
-		table.removeAll();
-		populate();
-	}
-	
 	/**
-	 * Add columns + data.
+	 * Populate columns + rows.
 	 */
-	private void populate() throws SophieException {
+	protected void populate() throws SophieException {
 		Map<String, NamedList<Object>> cores;
 		try {
 			cores = SolrUtils.getCores();
@@ -54,32 +43,31 @@ public class CoresTable extends SortableTable {
 			throw new SophieException("Unable to populate cores table", e);
 		}
 		for (NamedList<Object> core: cores.values()) {
-			populateLine(core, new TableItem(table, SWT.NULL));	
-		}
-		// Pack.
-		for(TableColumn column:table.getColumns()) {
-			column.pack();// TODO needed ? might be worth to setLayout() to get rid of this
+			Map<String, String> values = linearizeNamedList(core, new HashMap<String, String>());
+			addRow(values);
 		}
 	}
 	
-	private void populateLine(NamedList<?> namedList, TableItem item) {
+	/**
+	 * Recursively convert a NamedList into a linear Map.
+	 */
+	private Map<String, String> linearizeNamedList(NamedList<?> namedList, Map<String, String> map) {
 		for (int idx = 0; idx < namedList.size(); idx++) {
 			Object object = namedList.getVal(idx);
 			if (object instanceof NamedList) {
 				// NamedList: go through all elements recursively.
-				populateLine((NamedList<?>) object, item);
+				linearizeNamedList((NamedList<?>) object, map);
 			} else {
-				// Not a NamedList: add it to the table.
+				// Not a NamedList: add element to the map.
 				String name = namedList.getName(idx);
-				// If column does not exist yet, create it.
-				if (!colNames.containsKey(name)) {
-					TableColumn col = new TableColumn(table, SWT.LEFT);
-					col.setText(name);
-					colNames.put(name, colNames.size());
+				// Create column if it does not exist yet.
+				if (!hasColumn(name)) {
+					addColumn(name);
 				}
-				item.setText(colNames.get(name), object.toString());	
+				map.put(name, object.toString());			
 			}
-		}		
+		}
+		return map;
 	}
 	
 }

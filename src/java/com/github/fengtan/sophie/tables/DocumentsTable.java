@@ -585,6 +585,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		}
 		// Sort column when click on the header
 		column.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent event) {
 				if (!isFieldSortable) {
 					return;
