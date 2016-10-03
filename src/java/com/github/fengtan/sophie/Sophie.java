@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.github.fengtan.sophie.dialogs.ConnectDialog;
-import com.github.fengtan.sophie.dialogs.ErrorDialog;
+import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.tabs.TabFolder;
 
 public class Sophie {
@@ -44,7 +44,7 @@ public class Sophie {
 					display.sleep();	
 				}	
 			} catch (Exception e) {
-				new ErrorDialog(shell, e).open();
+				ExceptionDialog.open(shell, e);
 			}
 		}
 		if (client != null) {

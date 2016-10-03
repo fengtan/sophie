@@ -47,7 +47,7 @@ public class CoreSwapDialog extends Dialog {
         try {
         	cores = SolrUtils.getCores();
         } catch (SophieException e) {
-        	new ErrorDialog(parent.getShell(), new SophieException("Unable to suggest list of cores", e)).open();
+        	ExceptionDialog.open(parent.getShell(), new SophieException("Unable to suggest list of cores", e));
         	cores = Collections.emptyMap();
         }
         Object[] coreObjects = cores.keySet().toArray();

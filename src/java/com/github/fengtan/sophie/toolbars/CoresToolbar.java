@@ -23,7 +23,7 @@ import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.CoreAddDialog;
 import com.github.fengtan.sophie.dialogs.CoreSwapDialog;
-import com.github.fengtan.sophie.dialogs.ErrorDialog;
+import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.tables.CoresTable;
 
 public class CoresToolbar implements SelectionListener {
@@ -74,7 +74,7 @@ public class CoresToolbar implements SelectionListener {
 				try {
 					table.refresh();	
 				} catch (SophieException e) {
-					new ErrorDialog(composite.getShell(), new SophieException("Unable to refresh list of cores", e)).open();	
+					ExceptionDialog.open(composite.getShell(), new SophieException("Unable to refresh list of cores", e));	
 				}
 			}
 		});
@@ -97,7 +97,7 @@ public class CoresToolbar implements SelectionListener {
 					CoreAdminRequest.createCore(dialog.getValueCoreName(), dialog.getValueInstanceDir(), Sophie.client);
 					table.refresh();
 				} catch (SolrServerException|IOException|SolrException|SophieException e) {
-					new ErrorDialog(composite.getShell(), new SophieException("Unable to add new core \""+dialog.getValueCoreName()+"\" with instance dir \""+dialog.getValueInstanceDir()+"\"", e)).open();
+					ExceptionDialog.open(composite.getShell(), new SophieException("Unable to add new core \""+dialog.getValueCoreName()+"\" with instance dir \""+dialog.getValueInstanceDir()+"\"", e));
 				}					
 			}
 		});
@@ -118,7 +118,7 @@ public class CoresToolbar implements SelectionListener {
 						CoreAdminRequest.unloadCore(coreName, Sophie.client);
 						table.refresh();
 					} catch (SolrServerException|IOException|SolrException|SophieException e) {
-						new ErrorDialog(composite.getShell(), new SophieException("Unable to delete core \""+coreName+"\"", e)).open();
+						ExceptionDialog.open(composite.getShell(), new SophieException("Unable to delete core \""+coreName+"\"", e));
 					}
 		        }
 			}
@@ -141,7 +141,7 @@ public class CoresToolbar implements SelectionListener {
     				CoreAdminRequest.renameCore(oldCoreName, newCoreName.getValue(), Sophie.client);
     				table.refresh();
 				} catch (SolrServerException|IOException|SolrException|SophieException e) {
-					new ErrorDialog(composite.getShell(), new SophieException("Unable to rename core \""+oldCoreName+"\" into \""+newCoreName+"\"", e)).open();
+					ExceptionDialog.open(composite.getShell(), new SophieException("Unable to rename core \""+oldCoreName+"\" into \""+newCoreName+"\"", e));
     			}
 			}
 		});
@@ -168,7 +168,7 @@ public class CoresToolbar implements SelectionListener {
 					request.process(Sophie.client);
 					table.refresh();
 				} catch (SolrServerException|IOException|SolrException|SophieException e) {
-					new ErrorDialog(composite.getShell(), new SophieException("Unable to swap cores \""+coreName+"\" and \""+dialog.getValue()+"\"", e)).open();
+					ExceptionDialog.open(composite.getShell(), new SophieException("Unable to swap cores \""+coreName+"\" and \""+dialog.getValue()+"\"", e));
 				}
 			}
 		});
@@ -185,7 +185,7 @@ public class CoresToolbar implements SelectionListener {
 					CoreAdminRequest.reloadCore(coreName, Sophie.client);
 					table.refresh();
 				} catch (SolrServerException|IOException|SolrException|SophieException e) {
-					new ErrorDialog(composite.getShell(), new SophieException("Unable to reload core \""+coreName+"\"", e)).open();
+					ExceptionDialog.open(composite.getShell(), new SophieException("Unable to reload core \""+coreName+"\"", e));
 				}
 			}
 		});

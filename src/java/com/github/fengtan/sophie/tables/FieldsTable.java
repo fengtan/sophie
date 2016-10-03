@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
-import com.github.fengtan.sophie.dialogs.ErrorDialog;
+import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 
 public class FieldsTable {
 	
@@ -55,7 +55,7 @@ public class FieldsTable {
 		try {
 			populate();			
 		} catch (SophieException e) {
-			new ErrorDialog(parent.getShell(), new SophieException("Unable to initialize fields table", e)).open();
+			ExceptionDialog.open(parent.getShell(), new SophieException("Unable to initialize fields table", e));
 		}
 		
 		// Pack.

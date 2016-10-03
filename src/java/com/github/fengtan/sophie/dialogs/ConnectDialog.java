@@ -78,7 +78,7 @@ public class ConnectDialog extends Dialog {
 			Config.addFavorite(value.getText());
 			super.buttonPressed(buttonId);	
 		} catch (SophieException e) {
-			new ErrorDialog(getShell(), e).open();
+			ExceptionDialog.open(getShell(), e);
 		}
     }
     

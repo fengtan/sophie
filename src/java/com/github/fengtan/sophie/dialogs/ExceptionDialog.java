@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
-public class ErrorDialog extends Dialog {
+public class ExceptionDialog extends Dialog {
 
 	private static final int LIST_ITEM_COUNT = 7;
 
@@ -23,7 +23,11 @@ public class ErrorDialog extends Dialog {
 	private List list;
 	private boolean listCreated = false;
 
-	public ErrorDialog(Shell shell, Throwable throwable) {
+	public static void open(Shell shell, Throwable throwable) {
+		new ExceptionDialog(shell, throwable).open();
+	}
+	
+	private ExceptionDialog(Shell shell, Throwable throwable) {
 		super(shell);
 		this.throwable = throwable;
 		setShellStyle(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.APPLICATION_MODAL);
