@@ -6,6 +6,7 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -85,8 +86,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	private static final int FACET_LIMIT = Config.getDocumentsFacetsLimit();
 	
 	private Map<Integer, SolrDocumentList> pages;
-	private List<FieldInfo> fields;
-	private Map<String, FacetField> facets;
+	private List<FieldInfo> fields = new ArrayList<FieldInfo>();
 	private Map<String, String> filters = new HashMap<String, String>();
 	private String uniqueField; // TODO update when refresh ?()
 	private String sortField;
@@ -101,18 +101,40 @@ public class DocumentsTable { // TODO extend Composite ?
 	private ChangeListener changeListener;
 	
 	private Table table;
+	private TableEditor editor;
 	
 	private Composite parent;
 
 	public DocumentsTable(Composite parent, SelectionListener selectionListener, ChangeListener changeListener) throws SophieException {
 		this.parent = parent;
-		this.fields = SolrUtils.getRemoteFields();
-		this.facets = getRemoteFacets();
 		this.uniqueField = SolrUtils.getRemoteUniqueField();
 		this.sortField = uniqueField; // By default we sort documents by uniqueKey TODO what if uniqueKey is not sortable ?
 		createTable();
+		this.editor = new TableEditor(table);
 		this.changeListener = changeListener;
 		table.addSelectionListener(selectionListener);
+		
+		// Add first column (row #).
+		TableColumn columnNumber = new TableColumn(table, SWT.LEFT);
+		columnNumber.setText("#");
+		columnNumber.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
+		
+		// Add subsequent columns (fields).
+		List<FieldInfo> fields = SolrUtils.getRemoteFields();
+		Map<String, FacetField> facets;
+		try {
+			facets = getRemoteFacets(fields);
+		} catch(SophieException e) {
+			Sophie.log.warn("Unable to refresh filters", e);
+			facets = Collections.emptyMap();
+		}
+		for (int i=0; i<fields.size(); i++) {
+			FieldInfo field = fields.get(i);
+			FacetField facet = facets.get(field.getName());
+			addField(field, facet, i+1); // First row is used for row #.
+		}
+		
+		// TODO do we need to setData("field") ?
 		// Initialize cache + row count.
 		refresh();
 	}
@@ -233,20 +255,6 @@ public class DocumentsTable { // TODO extend Composite ?
 		    	}
 			}
 		});
-		
-		// Add columns. First one is used to show row IDs.
-		TableColumn columnNumber = new TableColumn(table, SWT.LEFT);
-		columnNumber.setText("#");
-		columnNumber.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
-		for (FieldInfo field:fields) {
-			addColumn(field);
-		}
-		
-		// Add filters.
-		TableEditor editor = new TableEditor(table);
-		for(int i=0; i<fields.size(); i++) {
-			addCombo(i, editor);
-		}
 	}
 	
 	public List<String> getFieldNames() {
@@ -296,7 +304,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	/*
 	 * Map facet name => facet field
 	 */
-	private Map<String, FacetField> getRemoteFacets() throws SophieException {
+	private Map<String, FacetField> getRemoteFacets(List<FieldInfo> fields) throws SophieException {
 		SolrQuery query = getBaseQuery(0, 0);
 		query.setFacet(true);
 		query.setFacetSort("index");
@@ -555,13 +563,6 @@ public class DocumentsTable { // TODO extend Composite ?
 	}
 	
 	/**
-	 * Use field name as column name.
-	 */
-	private void addColumn(final FieldInfo field) {
-		addColumn(field.getName(), field);
-	}
-	
-	/**
 	 * Use custom name as column name.
 	 * Used for dynamic fields, where field name may be "ss_*" but we want the column name to be "ss_foobar".
 	 */
@@ -614,15 +615,8 @@ public class DocumentsTable { // TODO extend Composite ?
 		});
 		column.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
 	}
-
-	private CCombo addCombo(int i, TableEditor editor) {
-		// TODO check if map contains field ?
-		final FacetField facet = facets.get(fields.get(i).getName());
-		// If facet is null then we cannot filter on this field (e.g. the field is not indexed).
-		if (facet == null) {
-			// TODO grey out items[0] columns i
-			return null;
-		}
+	
+	private void addCombo(String fieldName, FieldInfo field, final FacetField facet, int index) {
 		final CCombo combo = new CCombo(table, SWT.BORDER);			
 		combo.add(StringUtils.EMPTY);
 		// If the number of facet values is the max, then the list of facet values might not be complete. Hence we use a free text field instead of populating the combo.
@@ -680,22 +674,32 @@ public class DocumentsTable { // TODO extend Composite ?
 				}
 			}
 		});
-		
 		if (combo != null) {
 		    editor.grabHorizontal = true;
-		    editor.setEditor(combo, table.getItem(0), i);
-		    editor = new TableEditor(table);	
+		    editor.setEditor(combo, table.getItem(0), index);
+		    editor = new TableEditor(table);
 		}
-		
-		return combo;
 	}
 	
 	// TODO test add ss_foo and ss_bar - does this create 2 entries or 1 in this.fields ?
-	public void addField(String fieldName, FieldInfo field) {
+	public void addField(String fieldName, FieldInfo field, FacetField facet, int index) {
 		fields.add(field);
 		addColumn(fieldName, field);
-		// TODO add combo / filter
+		// If field or facet is null then we cannot filter on this field (e.g. the field is not indexed).
+		if (fieldName != null && field != null && facet != null) {
+			addCombo(fieldName, field, facet, index);
+		}
 		// TODO allow sorting
+	}
+	
+	public void addField(FieldInfo field, FacetField facet, int index) {
+		addField(field.getName(), field, facet, index);
+	}
+	
+	public void addField(String fieldName, FieldInfo field) {
+		FacetField facet = new FacetField(fieldName);
+		int index = table.getColumnCount(); 
+		addField(fieldName, field, facet, index);
 	}
 	
 	// TODO sorting removes unsortable signifiers
