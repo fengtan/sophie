@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/fengtan/sophie.svg?branch=master)](https://travis-ci.org/fengtan/sophie)
 
-TODO Short description
+TODO Short description ; docs/fields/cores
 
 TODO Screenshot
 

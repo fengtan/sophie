@@ -3,14 +3,14 @@ package com.github.fengtan.sophie;
 import java.io.IOException;
 
 import org.apache.solr.client.solrj.SolrClient;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import com.github.fengtan.sophie.dialogs.ConnectDialog;
+import com.github.fengtan.sophie.dialogs.ErrorDialog;
 import com.github.fengtan.sophie.tabs.TabFolder;
 
 public class Sophie {
@@ -60,30 +60,21 @@ public class Sophie {
 		shell.dispose();
 	}
 	
-	public static void showException(Shell shell, Exception e) {
-		// TODO use ErrorDialog instead of MessageBox - provides button "see details" to display exception stack trace
+	public static void showException(Shell shell, Exception e) { // TODO drop/refactor
     	e.printStackTrace();
-		MessageBox box = new MessageBox(shell, SWT.ICON_ERROR);
-	    box.setText("An error happened");
-	    box.setMessage(e.getMessage());
-	    box.open();
+    	Dialog dialog = new ErrorDialog(shell, e);
+    	dialog.open();
 	}
 	
 	// TODO test exotic Solr versions
-	// TODO test elasticsearch
 	// TODO test modifying 2 documents and then commiting
 	// TODO test win32/mac
 	
 	// TODO meta license (depends on swt, solrj, icons, other dependencies)
 	// TODO meta wording server/index/collection/core
-    // TODO meta .deb package
-    // TODO - install jar into /opt or /usr/local
-    // TODO - export SOPHIE_HOME=/usr/local/sophie-x.y.z
-    // TODO - export PATH=$PATH:$SOPHIE_HOME/bin
-    // TODO - expose log4j.prop in /etc
-    // TODO - logs in /var/log
-	// TODO meta contribute convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
-	// TODO meta travis win32/mac
+	// TODO meta travis.yml win32/mac
+
+	// TODO contrib convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
 	// TODO feat filters
 	// TODO feat - show "(empty)" at the top
@@ -106,6 +97,7 @@ public class Sophie {
 	// TODO clean retest everything
 	// TODO clean are all jars required ?
 	// TODO clean document all methods
+	// TODO clean indent (xml/java)
 
 	// TODO doc screenshot 0.5
 	// TODO doc about page + github.io
@@ -125,15 +117,21 @@ public class Sophie {
 	// TODO doc import into eclipse
 	// TODO doc typing 'Suppr' deletes a row.
 	// TODO doc "virtual i.e. remote documents are fetched as they are displayed for best perf"
-	// TODO doc luke + javasoze/clue + solarium + projectblacklight.org
+	// TODO doc similar luke + javasoze/clue + solarium + projectblacklight.org
     // TODO doc publish javadoc
 	// TODO doc "if need to use http auth, then http://user:pass@localhost:8983/solr/collection1"
 	// TODO doc "can configure DEFAULT_DOCUMENTS_PAGE_SIZE + DEFAULT_DOCUMENTS_FACETS_LIMIT" (need to update .sophie manually)
 	// TODO doc support zk/cloud
-	// TODO doc faq unable to find symbol when compile -> set -P option
+	// TODO doc mvn -P win32/macosx/linux (latter by default)
 	
 	// TODO obs trayitem - not supported by ubuntu https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
 	// TODO obs allow to select multiple values for each filter
 	// TODO obs what if field contains value "(empty)" ?
 	// TODO obs sort by field name (fields+documents)
+    // TODO meta .deb package
+    // TODO - install jar into /opt or /usr/local
+    // TODO - export SOPHIE_HOME=/usr/local/sophie-x.y.z
+    // TODO - export PATH=$PATH:$SOPHIE_HOME/bin
+    // TODO - expose log4j.prop in /etc
+    // TODO - logs in /var/log
 }
