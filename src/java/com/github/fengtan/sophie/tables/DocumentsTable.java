@@ -284,18 +284,26 @@ public class DocumentsTable { // TODO extend Composite ?
 						Matcher matcher = pattern.matcher(combo.getText());
 						// TODO if cannot find pattern, then should log WARNING
 						String filterValue = matcher.find() ? matcher.group(1) : StringUtils.EMPTY;
+						// Populate combo with original value.
 						combo.setText(filterValue);
-						updateFilters(facet.getName(), filterValue);
-						try {
-							refresh();
-						} catch (SophieException e) {
-							ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
-						}
 					};
 				});
 			} else {
 				combo.add(LABEL_EMPTY);
 			}
+			
+			// Fire filters + refresh when user selects a value.
+			combo.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent event) {
+					updateFilters(facet.getName(), combo.getText());
+					try {
+						refresh();
+					} catch (SophieException e) {
+						ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+					}
+				}
+			});
 			
 			// Filter (refresh) results when user hits "Enter" while editing one of the combos.
 			combo.addListener(SWT.KeyUp, new Listener() {
