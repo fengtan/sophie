@@ -58,10 +58,10 @@ import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.Config;
 import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
-import com.github.fengtan.sophie.dialogs.DocumentEditDateValueDialog;
-import com.github.fengtan.sophie.dialogs.DocumentEditListValueDialog;
-import com.github.fengtan.sophie.dialogs.DocumentEditTextValueDialog;
-import com.github.fengtan.sophie.dialogs.DocumentEditValueDialog;
+import com.github.fengtan.sophie.dialogs.EditDateValueDialog;
+import com.github.fengtan.sophie.dialogs.EditListValueDialog;
+import com.github.fengtan.sophie.dialogs.EditTextValueDialog;
+import com.github.fengtan.sophie.dialogs.EditValueDialog;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.toolbars.ChangeListener;
 
@@ -235,14 +235,14 @@ public class DocumentsTable { // TODO extend Composite ?
 		    			// - datepicker if we are dealing with a date field.
 		    			// - list widget if we are dealing with a multi-valued field.
 		    			// - text if we are dealing with any other field type.
-		    			DocumentEditValueDialog dialog;
+		    			EditValueDialog dialog;
 		    			if (defaultValue instanceof Date) {
-		    				dialog = new DocumentEditDateValueDialog(parent.getShell(), (Date) defaultValue);
+		    				dialog = new EditDateValueDialog(parent.getShell(), (Date) defaultValue);
 		    			} else if (defaultValue instanceof AbstractList) {
-		    				dialog = new DocumentEditListValueDialog(parent.getShell(), (AbstractList<?>) defaultValue);
+		    				dialog = new EditListValueDialog(parent.getShell(), (AbstractList<?>) defaultValue);
 		    			} else {
 		    				String oldValueString = Objects.toString(defaultValue, StringUtils.EMPTY);
-		    				dialog = new DocumentEditTextValueDialog(parent.getShell(), oldValueString);
+		    				dialog = new EditTextValueDialog(parent.getShell(), oldValueString);
 		    			}
 		    			dialog.open();
 		    			if (dialog.getReturnCode() != IDialogConstants.OK_ID) {

@@ -19,14 +19,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
-// TODO rename ListDialog ?
-public class DocumentEditListValueDialog extends DocumentEditValueDialog {
+public class EditListValueDialog extends EditValueDialog {
 
 	private AbstractList<?> defaultValue;
 	private ListViewer listViewer;
 	
 	// List is not iterable - we need to use AbstractList.
-	public DocumentEditListValueDialog(Shell shell, AbstractList<?> defaultValue) {
+	public EditListValueDialog(Shell shell, AbstractList<?> defaultValue) {
 		super(shell);
 		this.defaultValue = defaultValue;
 	}

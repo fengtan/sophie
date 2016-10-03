@@ -5,11 +5,11 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
-public abstract class DocumentEditValueDialog extends Dialog {
+public abstract class EditValueDialog extends Dialog {
 
 	private Object value = null;
 	
-	public DocumentEditValueDialog(Shell parentShell) {
+	public EditValueDialog(Shell parentShell) {
 		super(parentShell);
 		// Allow user to resize the dialog window.
 		setShellStyle(getShellStyle() | SWT.RESIZE);

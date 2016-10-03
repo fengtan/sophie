@@ -7,13 +7,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-// TODO use InputDialog ?
-public class DocumentEditTextValueDialog extends DocumentEditValueDialog {
+public class EditTextValueDialog extends EditValueDialog {
 
 	private String defaultValue;
 	private Text text;
 	
-	public DocumentEditTextValueDialog(Shell shell, String defaultValue) {
+	public EditTextValueDialog(Shell shell, String defaultValue) {
 		super(shell);
 		this.defaultValue = defaultValue;
 	}

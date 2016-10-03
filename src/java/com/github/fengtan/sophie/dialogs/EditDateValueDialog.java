@@ -11,13 +11,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Shell;
 
-// TODO rename DateDialog ?
-public class DocumentEditDateValueDialog extends DocumentEditValueDialog {
+public class EditDateValueDialog extends EditValueDialog {
 
 	private Date defaultValue;
 	private Calendar calendar = Calendar.getInstance();
 	
-	public DocumentEditDateValueDialog(Shell shell, Date defaultValue) {
+	public EditDateValueDialog(Shell shell, Date defaultValue) {
 		super(shell);
 		this.defaultValue = defaultValue;
 	}
