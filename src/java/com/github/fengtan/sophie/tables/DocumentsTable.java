@@ -189,27 +189,6 @@ public class DocumentsTable { // TODO extend Composite ?
 			}
 		});
 		
-		// Add columns. First one is used to show row IDs.
-		TableColumn columnNumber = new TableColumn(table, SWT.LEFT);
-		columnNumber.setText("#");
-		columnNumber.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
-		for (FieldInfo field:fields) {
-			addColumn(field);
-		}
-		
-		// Add filters.
-		TableItem[] items = table.getItems(); // TODO do we need to load all items ?
-		TableEditor editor = new TableEditor(table);
-		for(int i=0; i<fields.size(); i++) {
-			CCombo combo = addCombo(i);
-			if (combo != null) {
-			    editor.grabHorizontal = true;
-			    // We add one since the first column is used for row ID.
-			    editor.setEditor(combo, items[0], i+1);
-			    editor = new TableEditor(table);	
-			}
-		}
-		
 		table.addListener(SWT.MouseDoubleClick, new Listener() {
 			public void handleEvent(Event event) {
 				Point point = new Point(event.x, event.y);
@@ -254,6 +233,27 @@ public class DocumentsTable { // TODO extend Composite ?
 		    	}
 			}
 		});
+		
+		// Add columns. First one is used to show row IDs.
+		TableColumn columnNumber = new TableColumn(table, SWT.LEFT);
+		columnNumber.setText("#");
+		columnNumber.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
+		for (FieldInfo field:fields) {
+			addColumn(field);
+		}
+		
+		// Add filters.
+		TableItem[] items = table.getItems(); // TODO do we need to load all items ?
+		TableEditor editor = new TableEditor(table);
+		for(int i=0; i<fields.size(); i++) {
+			CCombo combo = addCombo(i);
+			if (combo != null) {
+			    editor.grabHorizontal = true;
+			    // We add one since the first column is used for row ID.
+			    editor.setEditor(combo, items[0], i+1);
+			    editor = new TableEditor(table);	
+			}
+		}
 	}
 	
 	public List<String> getFieldNames() {
@@ -691,7 +691,9 @@ public class DocumentsTable { // TODO extend Composite ?
 		return combo;
 	}
 	
+	// TODO test add ss_foo and ss_bar - does this create 2 entries or 1 in this.fields ?
 	public void addField(String fieldName, FieldInfo field) {
+		fields.add(field);
 		addColumn(fieldName, field);
 		// TODO add combo / filter
 		// TODO allow sorting
