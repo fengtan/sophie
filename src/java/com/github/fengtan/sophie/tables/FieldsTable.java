@@ -86,8 +86,7 @@ public class FieldsTable {
 			item.setText(2, Boolean.toString(StringUtils.equals(field.getName(), uniqueField)));
 			item.setText(3, Integer.toString(field.getDistinct()));
 			item.setText(4, field.getSchema());
-			// field.getFlags() is not populated when lukeRequest.setSchema(false) so we parse flags ourselves based on field.getSchema() - TODO update code when SOLR-9205 is closed
-			EnumSet<FieldFlag> flags = FieldInfo.parseFlags(field.getSchema());
+			EnumSet<FieldFlag> flags = SolrUtils.getFlags(field);
 			int i = columnNames.length;
 			for (FieldFlag flag:FieldFlag.values()) {
 				item.setText(i, Boolean.toString(flags.contains(flag)));

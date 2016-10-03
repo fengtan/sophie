@@ -105,6 +105,7 @@ public class Sophie {
 	// TODO doc mvn -P win32/macosx/linux (latter by default)
 	// TODO doc filters facet values show up only if < FACETS_LIMIT
 	// TODO doc admin/luke, admin/ping, admin/cores must be available
+	// TODO doc datepicker if field type contains "date"
 	
 	// TODO obs trayitem - not supported by ubuntu https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
 	// TODO obs allow to select multiple values for each filter

@@ -177,8 +177,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		        	// If field is not stored, display message.
 		        	// TODO disable doubleclick on unstored fields ?
 		        	// TODO verify "(not stored)" is not sent to Solr when updating/creating a new document
-					// field.getFlags() is not populated when lukeRequest.setSchema(false) so we parse flags ourselves based on field.getSchema() TODO open ticket
-		        	if (!FieldInfo.parseFlags(fields.get(i).getSchema()).contains(FieldFlag.STORED)) {
+		        	if (!SolrUtils.getFlags(fields.get(i)).contains(FieldFlag.STORED)) {
 		        		item.setText(i+1, LABEL_NOT_STORED);
 		        	} else {
 		        		Object value = document.getFieldValue(fieldName);
@@ -228,16 +227,17 @@ public class DocumentsTable { // TODO extend Composite ?
 		    		if (rect.contains(point)) {
 		    			SolrDocument document = (SolrDocument) item.getData("document");
 		    			String fieldName = (String) table.getColumn(i).getData("fieldName");
+		    			FieldInfo field = (FieldInfo) table.getColumn(i).getData("field");
 		    			Object defaultValue = document.getFieldValue(fieldName);
 		    			// Add editor dialog:
-		    			// - datepicker if we are dealing with a date field.
 		    			// - list widget if we are dealing with a multi-valued field.
+		    			// - datepicker if we field type contains "date".
 		    			// - text if we are dealing with any other field type.
 		    			EditValueDialog dialog;
-		    			if (defaultValue instanceof Date) {
-		    				dialog = new EditDateValueDialog(parent.getShell(), (Date) defaultValue);
-		    			} else if (defaultValue instanceof AbstractList) {
+		    			if (SolrUtils.getFlags(field).contains(FieldFlag.MULTI_VALUED)) {
 		    				dialog = new EditListValueDialog(parent.getShell(), (AbstractList<?>) defaultValue);
+		    			} else if (StringUtils.containsIgnoreCase(field.getType(), "date")) {
+		    				dialog = new EditDateValueDialog(parent.getShell(), (Date) defaultValue);
 		    			} else {
 		    				String oldValueString = Objects.toString(defaultValue, StringUtils.EMPTY);
 		    				dialog = new EditTextValueDialog(parent.getShell(), oldValueString);
@@ -285,12 +285,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	 * - it does not have docvalues
 	 */
 	private static boolean isFieldSortable(FieldInfo field) {
-		EnumSet<FieldFlag> flags = field.getFlags();
-		// field.getFlags() may not be populated if lukeRequest.setSchema(false) so we parse flags ourselves based on field.getSchema()
-		// See SOLR-9205.
-		if (flags == null) {
-			flags = FieldInfo.parseFlags(field.getSchema());	
-		}
+		EnumSet<FieldFlag> flags = SolrUtils.getFlags(field);
 		return (flags.contains(FieldFlag.INDEXED) && !flags.contains(FieldFlag.DOC_VALUES) && !flags.contains(FieldFlag.MULTI_VALUED));		
 	}
 	
@@ -316,8 +311,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		query.setFacetMissing(true);
 		for(FieldInfo field:fields) {
 			// fq works only on indexed fields.
-			// field.getFlags() is not populated when lukeRequest.setSchema(false) so we parse flags ourselves based on field.getSchema() TODO open ticket
-			if (FieldInfo.parseFlags(field.getSchema()).contains(FieldFlag.INDEXED)) {
+			if (SolrUtils.getFlags(field).contains(FieldFlag.INDEXED)) {
 				query.addFacetField(field.getName());	
 			}	
 		}
@@ -571,23 +565,21 @@ public class DocumentsTable { // TODO extend Composite ?
 	 * Use field name as column name.
 	 */
 	private void addColumn(final FieldInfo field) {
-		addColumn(field, field.getName());
+		addColumn(field.getName(), field);
 	}
 	
 	/**
 	 * Use custom name as column name.
 	 * Used for dynamic fields, where field name may be "ss_*" but we want the column name to be "ss_foobar".
 	 */
-	private void addColumn(final FieldInfo field, String columnName) {
-		addColumn(columnName, isFieldSortable(field));
-	}
-	
-	private void addColumn(final String fieldName, final boolean isFieldSortable) {
+	private void addColumn(final String fieldName, FieldInfo fieldInfo) {
 		final TableColumn column = new TableColumn(table, SWT.LEFT);
 		// Add space padding so we can see the sort signifier.
 		// TODO set sort signifier on uniqueKey by default ?
 		// TODO refactor with selection listener
+		final boolean isFieldSortable = isFieldSortable(fieldInfo);
 		column.setText(fieldName+(isFieldSortable ? "     " : " "+SIGNIFIER_UNSORTABLE));
+		column.setData("field", fieldInfo);
 		column.setData("fieldName", fieldName);
 		if (!isFieldSortable) {
 			column.setToolTipText("Cannot sort on a field that is not indexed, is multivalued or has doc values");
@@ -608,12 +600,13 @@ public class DocumentsTable { // TODO extend Composite ?
 				// Clear signifier on all columns, add signifier on sorted column.
 				char signifier = ORDER.asc.equals(sortOrder) ? SIGNIFIER_SORTED_ASC : SIGNIFIER_SORTED_DESC;
 				for (TableColumn c:table.getColumns()) {
-					String fname = (String) c.getData("fieldName");
-					if (fname != null) {
+					String fieldName = (String) c.getData("fieldName");
+					if (fieldName != null) {
 						if (!isFieldSortable) {
-							c.setText(fname+" "+SIGNIFIER_UNSORTABLE);
+							// TODO probably messed up the column title for dynamic fields
+							c.setText(fieldName+" "+SIGNIFIER_UNSORTABLE);
 						} else {
-							c.setText(fname+((column == c) ? " "+signifier : StringUtils.EMPTY));	
+							c.setText(fieldName+((column == c) ? " "+signifier : StringUtils.EMPTY));	
 						}
 					}
 
@@ -637,21 +630,6 @@ public class DocumentsTable { // TODO extend Composite ?
 			// TODO grey out items[0] columns i
 			return null;
 		}
-		/*
-		 * TODO could use this instead of storing field name in setData() 
-		 * Point point = new Point(event.x, event.y);
-	     * TableItem item = table.getItem(point);
-	     * if (item == null) {
-	     *   return;
-	     * }
-	     * for (int i=0; i<fields.size(); i++) {
-	     *   Rectangle rect = item.getBounds(i);
-	     *   if (rect.contains(point)) {
-	     *     SolrDocument document = (SolrDocument) item.getData("document");
-	     *     dialog.open(item.getText(i), fields.get(i).getName(), document);
-	     *   }
-	     * }
-		 */
 		final CCombo combo = new CCombo(table, SWT.BORDER);			
 		combo.add(StringUtils.EMPTY);
 		// If the number of facet values is the max, then the list of facet values might not be complete. Hence we use a free text field instead of populating the combo.
@@ -714,7 +692,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	}
 	
 	public void addField(String fieldName, FieldInfo field) {
-		addColumn(field, fieldName);
+		addColumn(fieldName, field);
 		// TODO add combo / filter
 		// TODO allow sorting
 	}

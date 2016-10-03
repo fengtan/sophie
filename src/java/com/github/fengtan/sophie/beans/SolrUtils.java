@@ -2,6 +2,7 @@ package com.github.fengtan.sophie.beans;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import org.apache.solr.client.solrj.response.CoreAdminResponse;
 import org.apache.solr.client.solrj.response.LukeResponse;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.apache.solr.common.SolrException;
+import org.apache.solr.common.luke.FieldFlag;
 import org.apache.solr.common.params.CoreAdminParams.CoreAdminAction;
 import org.apache.solr.common.util.NamedList;
 
@@ -33,6 +35,16 @@ public class SolrUtils {
 		} catch (SolrServerException|IOException|SolrException e) {
 			throw new SophieException("Unable to fetch list of Solr fields", e);
 		}
+	}
+	
+	public static EnumSet<FieldFlag> getFlags(FieldInfo field) {
+		EnumSet<FieldFlag> flags = field.getFlags();
+		// field.getFlags() may not be populated if lukeRequest.setSchema(false) so we parse flags ourselves based on field.getSchema()
+		// See SOLR-9205.
+		if (flags == null) {
+			flags = FieldInfo.parseFlags(field.getSchema());	
+		}
+		return flags;
 	}
 	
 	/**

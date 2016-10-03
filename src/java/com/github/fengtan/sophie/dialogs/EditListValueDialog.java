@@ -1,6 +1,7 @@
 package com.github.fengtan.sophie.dialogs;
 
 import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -27,7 +28,7 @@ public class EditListValueDialog extends EditValueDialog {
 	// List is not iterable - we need to use AbstractList.
 	public EditListValueDialog(Shell shell, AbstractList<?> defaultValue) {
 		super(shell);
-		this.defaultValue = defaultValue;
+		this.defaultValue = (defaultValue == null) ? new ArrayList<Object>() : defaultValue;
 	}
 
 	@Override
