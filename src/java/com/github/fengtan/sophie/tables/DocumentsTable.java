@@ -48,7 +48,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
@@ -56,7 +55,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 
 import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.Config;
@@ -257,7 +255,6 @@ public class DocumentsTable { // TODO extend Composite ?
 				// TODO grey out items[0] columns i
 				continue;
 			}
-			final Control widget;
 			/*
 			 * TODO could use this instead of storing field name in setData() 
 			 * Point point = new Point(event.x, event.y);
@@ -273,63 +270,44 @@ public class DocumentsTable { // TODO extend Composite ?
 		     *   }
 		     * }
 			 */
+			final CCombo combo = new CCombo(table, SWT.BORDER);			
+			combo.add(StringUtils.EMPTY);
 			// If the number of facet values is the max, then the list of facet values might not be complete. Hence we use a free text field instead of populating the combo.
 			if (facet.getValueCount() < FACET_LIMIT) {
-				final CCombo combo = new CCombo(table, SWT.BORDER);
-				combo.add(StringUtils.EMPTY);
 				for(Count count:facet.getValues()) {
 					combo.add(Objects.toString(count.getName(), LABEL_EMPTY)+" ("+count.getCount()+")");
 				}
-				widget = combo;
-				// Filter results when user selects a facet value.
-				combo.addModifyListener(new ModifyListener() {
-					@Override
-					public void modifyText(ModifyEvent event) {
-						String filterName = widget.getData("field").toString();
-						// TODO regex is not ideal be seems to be the only way to extract "foo" from "foo (5)".
-						Pattern pattern = Pattern.compile("^(.*) \\([0-9]+\\)$");
-						Matcher matcher = pattern.matcher(combo.getText());
-						// TODO if cannot find pattern, then should log WARNING
-						String filterValue = matcher.find() ? matcher.group(1) : StringUtils.EMPTY;
-						if (StringUtils.isEmpty(filterValue)) {
-							filters.remove(filterName);
-						} else {
-							filters.put(filterName, filterValue);
-						}
-						try {
-							refresh();
-						} catch (SophieException e) {
-							ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
-						}
-					}
-				});
 			} else {
-				final Text text = new Text(table, SWT.BORDER);
-				widget = text;
-				// Filter results when user selects a facet value.
-				text.addModifyListener(new ModifyListener() {
-					@Override
-					public void modifyText(ModifyEvent event) {
-						String filterName = widget.getData("field").toString();
-						String filterValue = text.getText();
-						if (StringUtils.isEmpty(filterValue)) {
-							filters.remove(filterName);
-						} else {
-							filters.put(filterName, filterValue);
-						}
-						try {
-							refresh();
-						} catch (SophieException e) {
-							ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
-						}							
-					}
-				});
+				combo.add(LABEL_EMPTY+" (N)"); // TODO N
 			}
+			// Filter results when user modifies the combo value.
+			combo.addModifyListener(new ModifyListener() {
+				@Override
+				public void modifyText(ModifyEvent event) {
+					String filterName = combo.getData("field").toString();
+					// TODO filter does not seem to work
+					// TODO regex is not ideal be seems to be the only way to extract "foo" from "foo (5)".
+					Pattern pattern = Pattern.compile("^(.*) \\([0-9]+\\)$");
+					Matcher matcher = pattern.matcher(combo.getText());
+					// TODO if cannot find pattern, then should log WARNING
+					String filterValue = matcher.find() ? matcher.group(1) : StringUtils.EMPTY;
+					if (StringUtils.isEmpty(filterValue)) {
+						filters.remove(filterName);
+					} else {
+						filters.put(filterName, filterValue);
+					}
+					try {
+						refresh();
+					} catch (SophieException e) {
+						ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+					}
+				}
+			});
 			// TODO switch to final objects and do not use setData() ?
-			widget.setData("field", facet.getName());
+			combo.setData("field", facet.getName());
 		    editor.grabHorizontal = true;
 		    // We add one since the first column is used for row ID.
-		    editor.setEditor(widget, items[0], i+1);
+		    editor.setEditor(combo, items[0], i+1);
 		    editor = new TableEditor(table);
 		}
 		

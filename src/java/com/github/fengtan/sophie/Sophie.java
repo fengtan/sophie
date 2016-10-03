@@ -72,7 +72,6 @@ public class Sophie {
 	// TODO feat filters
 	// TODO feat - fire filter only when hit enter
 	// TODO feat - selecting filter "foo (1)" generates "foo (1)" in textfield
-	// TODO feat - support empty facets on free text fields (workaround: add "(empty) (1)" in free text
 	// TODO feat new functionalities
 	// TODO feat - allow to create documents with new fields
 
@@ -107,6 +106,7 @@ public class Sophie {
 	// TODO doc "can configure DEFAULT_DOCUMENTS_PAGE_SIZE + DEFAULT_DOCUMENTS_FACETS_LIMIT" (need to update .sophie manually)
 	// TODO doc support zk/cloud
 	// TODO doc mvn -P win32/macosx/linux (latter by default)
+	// TODO doc filters facet values show up only if < FACETS_LIMIT
 	
 	// TODO obs trayitem - not supported by ubuntu https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
 	// TODO obs allow to select multiple values for each filter
