@@ -2,12 +2,13 @@ package com.github.fengtan.sophie.toolbars;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.ModifiableSolrParams;
@@ -144,24 +145,32 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
         itemAddField.setToolTipText("Add new field");
         itemAddField.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				String[] suggestions;
+				// Get field schema fields.
+				Map<String, FieldInfo> fields;
 				try {
-					Set<String> fieldNames = SolrUtils.getRemoteSchemaFields().keySet();
-					fieldNames.remove("*"); // Remove universal pattern which is not useful and will match any field name.
-					suggestions = new String[fieldNames.size()];
-					fieldNames.toArray(suggestions);
-					Arrays.sort(suggestions);
+					fields = SolrUtils.getRemoteSchemaFields(); 
 				} catch (SophieException e) {
-					Sophie.log.error("Unable to suggest fields", e);
-					suggestions = ArrayUtils.EMPTY_STRING_ARRAY;
+					ExceptionDialog.open(composite.getShell(), new SophieException("Unable to fetch schema fields", e));
+					return;
 				}
-				CComboDialog dialog = new CComboDialog(composite.getShell(), "Add new field", "Field name:", suggestions, new FieldValidator(suggestions));
+				// Remove universal pattern which is not useful and will match any field name.
+				// TODO test
+				fields.remove("*");
+				// Extract and sort field names.
+				Set<String> fieldNames = fields.keySet();
+				String[] fieldNamesArray = new String[fieldNames.size()];
+				fieldNames.toArray(fieldNamesArray);
+				Arrays.sort(fieldNamesArray);
+				// Prompt user for new field name.
+				FieldValidator validator = new FieldValidator(fields);
+				CComboDialog dialog = new CComboDialog(composite.getShell(), "Add new field", "Field name:", fieldNamesArray, validator);
 				dialog.open();
 				if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
 					return;
 				}
+				// Add new field.
 				String fieldName = dialog.getValue();
-				table.addField(fieldName);
+				table.addField(fieldName, validator.getMatchingField(fieldName));
 				// TODO do not allow to add field if already in table
 				// TODO scroll right so user sees the new field
 			}

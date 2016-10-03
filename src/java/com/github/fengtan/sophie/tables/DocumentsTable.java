@@ -274,9 +274,12 @@ public class DocumentsTable { // TODO extend Composite ?
 	 * - it does not have docvalues
 	 */
 	private static boolean isFieldSortable(FieldInfo field) {
-		// field.getFlags() is not populated when lukeRequest.setSchema(false) so we parse flags ourselves based on field.getSchema() TODO open ticket ->)
-		// TODO ^ unless SchemaRequest parses flags ?
-		EnumSet<FieldFlag> flags = FieldInfo.parseFlags(field.getSchema());
+		EnumSet<FieldFlag> flags = field.getFlags();
+		// field.getFlags() may not be populated if lukeRequest.setSchema(false) so we parse flags ourselves based on field.getSchema()
+		// See SOLR-9205.
+		if (flags == null) {
+			flags = FieldInfo.parseFlags(field.getSchema());	
+		}
 		return (flags.contains(FieldFlag.INDEXED) && !flags.contains(FieldFlag.DOC_VALUES) && !flags.contains(FieldFlag.MULTI_VALUED));		
 	}
 	
@@ -553,8 +556,19 @@ public class DocumentsTable { // TODO extend Composite ?
 		addDocument(document);
 	}
 	
+	/**
+	 * Use field name as column name.
+	 */
 	private void addColumn(final FieldInfo field) {
-		addColumn(field.getName(), isFieldSortable(field));
+		addColumn(field, field.getName());
+	}
+	
+	/**
+	 * Use custom name as column name.
+	 * Used for dynamic fields, where field name may be "ss_*" but we want the column name to be "ss_foobar".
+	 */
+	private void addColumn(final FieldInfo field, String columnName) {
+		addColumn(columnName, isFieldSortable(field));
 	}
 	
 	private void addColumn(final String fieldName, final boolean isFieldSortable) {
@@ -688,8 +702,8 @@ public class DocumentsTable { // TODO extend Composite ?
 		return combo;
 	}
 	
-	public void addField(String fieldName) {
-		addColumn(fieldName, false);
+	public void addField(String fieldName, FieldInfo field) {
+		addColumn(field, fieldName);
 		// TODO add combo / filter
 		// TODO allow sorting
 	}
