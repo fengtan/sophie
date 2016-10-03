@@ -14,7 +14,7 @@ import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 
-public class FieldsTable extends SortableTable {
+public class FieldsTable extends AbstractSortableTable {
 	
 	private static final String[] columnNames = new String[]{
 		"Name",

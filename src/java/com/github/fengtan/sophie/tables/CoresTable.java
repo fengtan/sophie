@@ -14,7 +14,7 @@ import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 
 
-public class CoresTable extends SortableTable {
+public class CoresTable extends AbstractSortableTable {
 	
 	public CoresTable(Composite parent, SelectionListener listener) {
 		super(parent, listener);
