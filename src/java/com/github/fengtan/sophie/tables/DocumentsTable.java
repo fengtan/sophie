@@ -223,8 +223,8 @@ public class DocumentsTable { // TODO extend Composite ?
 		    		return;
 		    	}
 		    	// We add 1 since the first column is used for row ID's.
-		    	for (int i=0; i<table.getColumnCount(); i++) {
-		    		Rectangle rect = item.getBounds(i+1);
+		    	for (int i=1; i<table.getColumnCount(); i++) {
+		    		Rectangle rect = item.getBounds(i);
 		    		if (rect.contains(point)) {
 		    			SolrDocument document = (SolrDocument) item.getData("document");
 		    			String fieldName = (String) table.getColumn(i).getData("fieldName");
@@ -248,7 +248,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		    			}
 	    				Object value = dialog.getValue();
 	    				if (!Objects.equals(defaultValue, value)) {
-	    					updateDocument(item, i+1, value);
+	    					updateDocument(item, i, value);
 	    					// TODO table cell not updated
 	    				}
 		    		}
