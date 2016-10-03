@@ -558,38 +558,41 @@ public class DocumentsTable { // TODO extend Composite ?
 	}
 	
 	private void addColumn(final FieldInfo field) {
+		addColumn(field.getName(), isFieldSortable(field));
+	}
+	
+	private void addColumn(final String fieldName, final boolean isFieldSortable) {
 		final TableColumn column = new TableColumn(table, SWT.LEFT);
 		// Add space padding so we can see the sort signifier.
 		// TODO set sort signifier on uniqueKey by default ?
 		// TODO refactor with selection listener
-		column.setText(field.getName()+(isFieldSortable(field) ? "     " : " "+SIGNIFIER_UNSORTABLE));
-		// TODO do we getData("field") somewhere ? if not, then no need to setData("field")
-		column.setData("field", field);
-		if (!isFieldSortable(field)) {
+		column.setText(fieldName+(isFieldSortable ? "     " : " "+SIGNIFIER_UNSORTABLE));
+		column.setData("fieldName", fieldName);
+		if (!isFieldSortable) {
 			column.setToolTipText("Cannot sort on a field that is not indexed, is multivalued or has doc values");
 		}
 		// Sort column when click on the header
 		column.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
-				if (!isFieldSortable(field)) {
+				if (!isFieldSortable) {
 					return;
 				}
 				// Clicking on the current sort field toggles the direction.
 				// Clicking on a new field changes the sort field.
-				if (StringUtils.equals(sortField, field.getName())) {
+				if (StringUtils.equals(sortField, fieldName)) {
 					sortOrder = ORDER.asc.equals(sortOrder) ? ORDER.desc : ORDER.asc;
 				} else {
-					sortField = field.getName();
+					sortField = fieldName;
 				}
 				// Clear signifier on all columns, add signifier on sorted column.
 				char signifier = ORDER.asc.equals(sortOrder) ? SIGNIFIER_SORTED_ASC : SIGNIFIER_SORTED_DESC;
 				for (TableColumn c:table.getColumns()) {
-					FieldInfo f = (FieldInfo) c.getData("field");
-					if (f != null) {
-						if (!isFieldSortable(f)) {
-							c.setText(f.getName()+" "+SIGNIFIER_UNSORTABLE);
+					String fname = (String) c.getData("fieldName");
+					if (fname != null) {
+						if (!isFieldSortable) {
+							c.setText(fname+" "+SIGNIFIER_UNSORTABLE);
 						} else {
-							c.setText(f.getName()+((column == c) ? " "+signifier : StringUtils.EMPTY));	
+							c.setText(fname+((column == c) ? " "+signifier : StringUtils.EMPTY));	
 						}
 					}
 
@@ -694,22 +697,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	}
 	
 	public void addField(String fieldName) {
-		/*
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * TODO
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 */
+		addColumn(fieldName, false);
 	}
 	
 }

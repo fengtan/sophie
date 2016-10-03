@@ -147,7 +147,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 				String[] suggestions;
 				try {
 					List<String> fields = SolrUtils.getRemoteSchemaFields();
-					fields.remove("*"); // Remove universal pattern which is not useful and will match everything.
+					fields.remove("*"); // Remove universal pattern which is not useful and will match any field name.
 					suggestions = new String[fields.size()];
 					fields.toArray(suggestions);
 					Arrays.sort(suggestions);
