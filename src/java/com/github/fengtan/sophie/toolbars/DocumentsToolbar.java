@@ -2,7 +2,7 @@ package com.github.fengtan.sophie.toolbars;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -146,10 +146,10 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 			public void widgetSelected(SelectionEvent event) {
 				String[] suggestions;
 				try {
-					List<String> fields = SolrUtils.getRemoteSchemaFields();
-					fields.remove("*"); // Remove universal pattern which is not useful and will match any field name.
-					suggestions = new String[fields.size()];
-					fields.toArray(suggestions);
+					Set<String> fieldNames = SolrUtils.getRemoteSchemaFields().keySet();
+					fieldNames.remove("*"); // Remove universal pattern which is not useful and will match any field name.
+					suggestions = new String[fieldNames.size()];
+					fieldNames.toArray(suggestions);
 					Arrays.sort(suggestions);
 				} catch (SophieException e) {
 					Sophie.log.error("Unable to suggest fields", e);
@@ -162,6 +162,8 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 				}
 				String fieldName = dialog.getValue();
 				table.addField(fieldName);
+				// TODO do not allow to add field if already in table
+				// TODO scroll right so user sees the new field
 			}
 		});
         

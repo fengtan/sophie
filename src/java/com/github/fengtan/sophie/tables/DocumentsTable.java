@@ -690,6 +690,8 @@ public class DocumentsTable { // TODO extend Composite ?
 	
 	public void addField(String fieldName) {
 		addColumn(fieldName, false);
+		// TODO add combo / filter
+		// TODO allow sorting
 	}
 	
 	// TODO sorting removes unsortable signifiers

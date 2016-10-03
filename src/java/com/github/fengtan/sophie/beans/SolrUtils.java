@@ -2,6 +2,7 @@ package com.github.fengtan.sophie.beans;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,29 +37,37 @@ public class SolrUtils {
 	
 	/**
 	 * Get fields defined in the schema (regular + dynamic).
-	 * TODO SchemaRequest.Fields and SchemaRequest.DynamicField are experimental classes
-	 * @return
+	 * TODO contrib LukeResponse.getDynamicFieldInfo() - similar to LukeResponse.getFieldInfo() - see LukeResponse.setResponse()
+	 * @return Map<field name, field info>
 	 */
-	public static List<String> getRemoteSchemaFields() throws SophieException {
-		List<String> fields = new ArrayList<String>();
-		SchemaRequest.Fields regularRequest = new SchemaRequest.Fields();
-		SchemaRequest.DynamicFields dynamicRequest = new SchemaRequest.DynamicFields();
+	public static Map<String, FieldInfo> getRemoteSchemaFields() throws SophieException {
+		Map<String, FieldInfo> fields = new HashMap<String, FieldInfo>();
+		LukeRequest request = new LukeRequest();
+		request.setShowSchema(true);
 		try {
-			List<NamedList<String>> regularFields = (List<NamedList<String>>) regularRequest.process(Sophie.client).getResponse().getVal(1);
-			for (NamedList<String> regularField:regularFields) {
-				fields.add(regularField.get("name"));
-			}
-			List<NamedList<String>> dynamicFields = (List<NamedList<String>>) dynamicRequest.process(Sophie.client).getResponse().getVal(1);
-			for (NamedList<String> dynamicField:dynamicFields) {
-				fields.add(dynamicField.get("name"));
+			LukeResponse response = request.process(Sophie.client);
+			// Get regular fields.
+			fields.putAll(response.getFieldInfo());
+			// Get dynamic fields.
+			NamedList<Object> schema = (NamedList<Object>) response.getResponse().get("schema");
+			if (schema != null) {
+				NamedList<Object> dynamicFields = (NamedList<Object>) schema.get("dynamicFields");
+				if (dynamicFields != null) {
+					for (Map.Entry<String, Object> dynamicField:dynamicFields) {
+						FieldInfo fieldInfo = new FieldInfo(dynamicField.getKey());
+						fieldInfo.read((NamedList<Object>) dynamicField.getValue());
+						fields.put(dynamicField.getKey(), fieldInfo);
+					}
+				}
 			}
 		} catch (SolrServerException|IOException|SolrException e) {
-			throw new SophieException("Unable to fetch list of schema fields", e);
+			throw new SophieException("Unable to fetch list of Solr fields", e);
 		}
 		return fields;
 	}
 	
 	// TODO could merge with getRemoteFields() to make less queries.
+	// TODO could use admin/luke?show=schema
 	public static String getRemoteUniqueField() throws SophieException {
 		SchemaRequest.UniqueKey request = new SchemaRequest.UniqueKey();
 		try {
