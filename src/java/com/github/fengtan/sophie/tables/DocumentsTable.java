@@ -243,16 +243,9 @@ public class DocumentsTable { // TODO extend Composite ?
 		}
 		
 		// Add filters.
-		TableItem[] items = table.getItems(); // TODO do we need to load all items ?
 		TableEditor editor = new TableEditor(table);
 		for(int i=0; i<fields.size(); i++) {
-			CCombo combo = addCombo(i);
-			if (combo != null) {
-			    editor.grabHorizontal = true;
-			    // We add one since the first column is used for row ID.
-			    editor.setEditor(combo, items[0], i+1);
-			    editor = new TableEditor(table);	
-			}
+			addCombo(i, editor);
 		}
 	}
 	
@@ -622,7 +615,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		column.pack(); // TODO needed ? might be worth to setLayout() to get rid of this
 	}
 
-	private CCombo addCombo(int i) {
+	private CCombo addCombo(int i, TableEditor editor) {
 		// TODO check if map contains field ?
 		final FacetField facet = facets.get(fields.get(i).getName());
 		// If facet is null then we cannot filter on this field (e.g. the field is not indexed).
@@ -687,6 +680,12 @@ public class DocumentsTable { // TODO extend Composite ?
 				}
 			}
 		});
+		
+		if (combo != null) {
+		    editor.grabHorizontal = true;
+		    editor.setEditor(combo, table.getItem(0), i);
+		    editor = new TableEditor(table);	
+		}
 		
 		return combo;
 	}
