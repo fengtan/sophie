@@ -90,6 +90,9 @@
   <profiles>
     <profile>
       <id>linux</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
       <dependencies>
   	    <dependency>
       		<groupId>org.eclipse.swt.gtk.linux</groupId>
