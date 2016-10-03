@@ -13,9 +13,9 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
+import com.github.fengtan.sophie.dialogs.ErrorDialog;
 
 
 public class CoresTable {
@@ -39,7 +39,7 @@ public class CoresTable {
 		try {
 			populate();			
 		} catch (SophieException e) {
-			Sophie.showException(parent.getShell(), new SophieException("Unable to initialize cores table", e));
+			new ErrorDialog(parent.getShell(), new SophieException("Unable to initialize cores table", e)).open();
 		}
 
 	}

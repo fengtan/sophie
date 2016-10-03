@@ -66,6 +66,7 @@ import com.github.fengtan.sophie.dialogs.DocumentEditDateValueDialog;
 import com.github.fengtan.sophie.dialogs.DocumentEditListValueDialog;
 import com.github.fengtan.sophie.dialogs.DocumentEditTextValueDialog;
 import com.github.fengtan.sophie.dialogs.DocumentEditValueDialog;
+import com.github.fengtan.sophie.dialogs.ErrorDialog;
 import com.github.fengtan.sophie.toolbars.ChangeListener;
 
 public class DocumentsTable { // TODO extend Composite ?
@@ -166,7 +167,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	            	try {
 			            document = getRemoteDocument(rowIndex - 1);	            		
 	            	} catch (SophieException e) {
-						Sophie.showException(parent.getShell(), new SophieException("Unable to populate table", e));
+						new ErrorDialog(parent.getShell(), new SophieException("Unable to populate table", e)).open();
 						return;
 	            	}
 	            }
@@ -238,7 +239,7 @@ public class DocumentsTable { // TODO extend Composite ?
 					try {
 						refresh();
 					} catch (SophieException e) {
-						Sophie.showException(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+						new ErrorDialog(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e)).open();
 					}
 				}
 			});
@@ -298,7 +299,7 @@ public class DocumentsTable { // TODO extend Composite ?
 						try {
 							refresh();
 						} catch (SophieException e) {
-							Sophie.showException(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+							new ErrorDialog(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e)).open();
 						}
 					}
 				});
@@ -319,7 +320,7 @@ public class DocumentsTable { // TODO extend Composite ?
 						try {
 							refresh();
 						} catch (SophieException e) {
-							Sophie.showException(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+							new ErrorDialog(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e)).open();
 						}							
 					}
 				});

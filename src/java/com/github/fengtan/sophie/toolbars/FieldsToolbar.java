@@ -9,8 +9,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SophieException;
+import com.github.fengtan.sophie.dialogs.ErrorDialog;
 import com.github.fengtan.sophie.tables.FieldsTable;
 
 public class FieldsToolbar {
@@ -46,7 +46,7 @@ public class FieldsToolbar {
 				try {
 					table.refresh();
 				} catch (SophieException e) {
-					Sophie.showException(composite.getShell(), new SophieException("Unable to refresh fields table", e));
+					new ErrorDialog(composite.getShell(), new SophieException("Unable to refresh fields table", e)).open();
 				}
 			}
 		});

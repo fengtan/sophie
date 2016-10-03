@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SophieException;
+import com.github.fengtan.sophie.dialogs.ErrorDialog;
 import com.github.fengtan.sophie.tables.DocumentsTable;
 
 public class DocumentsToolbar implements SelectionListener,ChangeListener {
@@ -88,7 +89,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 				try {
 					table.refresh();	
 				} catch(SophieException e) {
-					Sophie.showException(composite.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+					new ErrorDialog(composite.getShell(), new SophieException("Unable to refresh documents from Solr server", e)).open();
 				}
 			}
 		});
@@ -137,7 +138,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 				try {
 					table.upload();	
 				} catch (SophieException e) {
-					Sophie.showException(composite.getShell(), new SophieException("Unable to upload local modifications to Solr", e));
+					new ErrorDialog(composite.getShell(), new SophieException("Unable to upload local modifications to Solr", e)).open();
 				}
 			}
 		});
@@ -161,7 +162,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 	        			Sophie.client.commit();
 		        		table.refresh();	
 		        	} catch (SolrServerException|IOException|SolrException|SophieException e) {
-		        		Sophie.showException(composite.getShell(), new SophieException("Unable to clear index", e));
+		        		new ErrorDialog(composite.getShell(), new SophieException("Unable to clear index", e)).open();
 		        	}
 		        }
 			}
@@ -177,7 +178,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 					Sophie.client.commit();
 					table.refresh();
 	        	} catch (SolrServerException|IOException|SolrException|SophieException e) {
-	        		Sophie.showException(composite.getShell(), new SophieException("Unable to commit index", e));
+	        		new ErrorDialog(composite.getShell(), new SophieException("Unable to commit index", e)).open();
 	        	}
 			}
 		});
@@ -198,7 +199,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 		    			// Optimizing drops obsolete documents, obsolete facet values, etc so we need to refresh the table.
 			    		table.refresh();
 		    		} catch (SolrServerException|IOException|SolrException|SophieException e) {
-		    			Sophie.showException(composite.getShell(), new SophieException("Unable to optimize index", e));
+		    			new ErrorDialog(composite.getShell(), new SophieException("Unable to optimize index", e)).open();
 		    		}
 		        }
 			}
@@ -215,7 +216,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 				try {
 					table.export();	
 				} catch (SophieException e) {
-	        		Sophie.showException(composite.getShell(), e);
+	        		new ErrorDialog(composite.getShell(), e).open();
 				}
 			}
 		});
@@ -249,7 +250,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 						// TODO notify user NOK + exception details
 					}
 				} catch (SolrServerException|IOException|SolrException e) {
-					Sophie.showException(composite.getShell(), new SophieException("Unable to create backup \""+backupName+"\"", e));
+					new ErrorDialog(composite.getShell(), new SophieException("Unable to create backup \""+backupName+"\"", e)).open();
 				}
 			}
 		});
@@ -270,7 +271,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 				try {
 					table.restore(dialog.getValue());	
 				} catch (SophieException e) {
-		        	Sophie.showException(composite.getShell(), e);
+		        	new ErrorDialog(composite.getShell(), e).open();
 				}
 			}
 		});

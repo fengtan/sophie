@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.Config;
 import com.github.fengtan.sophie.beans.SolrConnectionType;
 import com.github.fengtan.sophie.beans.SophieException;
@@ -79,7 +78,7 @@ public class ConnectDialog extends Dialog {
 			Config.addFavorite(value.getText());
 			super.buttonPressed(buttonId);	
 		} catch (SophieException e) {
-			Sophie.showException(getShell(), e);
+			new ErrorDialog(getShell(), e).open();
 		}
     }
     

@@ -15,7 +15,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
 
@@ -48,7 +47,7 @@ public class CoreSwapDialog extends Dialog {
         try {
         	cores = SolrUtils.getCores();
         } catch (SophieException e) {
-        	Sophie.showException(parent.getShell(), new SophieException("Unable to suggest list of cores"));
+        	new ErrorDialog(parent.getShell(), new SophieException("Unable to suggest list of cores", e)).open();
         	cores = Collections.emptyMap();
         }
         Object[] coreObjects = cores.keySet().toArray();

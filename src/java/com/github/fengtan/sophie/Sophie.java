@@ -3,7 +3,6 @@ package com.github.fengtan.sophie;
 import java.io.IOException;
 
 import org.apache.solr.client.solrj.SolrClient;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
@@ -45,7 +44,7 @@ public class Sophie {
 					display.sleep();	
 				}	
 			} catch (Exception e) {
-				showException(shell, e);
+				new ErrorDialog(shell, e).open();
 			}
 		}
 		if (client != null) {
@@ -58,12 +57,6 @@ public class Sophie {
 		}
 		display.dispose();
 		shell.dispose();
-	}
-	
-	public static void showException(Shell shell, Exception e) { // TODO drop/refactor
-    	e.printStackTrace();
-    	Dialog dialog = new ErrorDialog(shell, e);
-    	dialog.open();
 	}
 	
 	// TODO test exotic Solr versions
