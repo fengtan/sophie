@@ -69,11 +69,7 @@ public class Sophie {
 
 	// TODO contrib convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
-	// TODO feat filters
-	// TODO feat - fire filter only when hit enter
-	// TODO feat - selecting filter "foo (1)" generates "foo (1)" in textfield
-	// TODO feat new functionalities
-	// TODO feat - allow to create documents with new fields
+	// TODO feat allow to create documents with new fields
 
 	// TODO clean look for unused/obsolete methods ; lint
 	// TODO clean retest everything
@@ -82,7 +78,7 @@ public class Sophie {
 	// TODO clean indent (xml/java)
 
 	// TODO doc screenshot 0.5 + move screenshots/ to gh-pages
-	// TODO doc about page + github.io
+	// TODO doc gh-pages
 	// TODO doc measure memory footprint
 	// TODO doc gif (licecap/silentcast/byzanz)
 	// TODO doc how to delete favorites (edit ~/.sophie)

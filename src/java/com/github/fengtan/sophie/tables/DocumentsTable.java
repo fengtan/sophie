@@ -38,8 +38,6 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -203,6 +201,7 @@ public class DocumentsTable { // TODO extend Composite ?
 			// TODO set sort signifier on uniqueKey by default ?
 			// TODO refactor with selection listener
 			column.setText(field.getName()+(isFieldSortable(field) ? "     " : " "+SIGNIFIER_UNSORTABLE));
+			// TODO do we getData("field") somewhere ? if not, then no need to setData("field")
 			column.setData("field", field);
 			if (!isFieldSortable(field)) {
 				column.setToolTipText("Cannot sort on a field that is not indexed, is multivalued or has doc values");
@@ -249,7 +248,7 @@ public class DocumentsTable { // TODO extend Composite ?
 		TableEditor editor = new TableEditor(table);
 		for(int i=0; i<fields.size(); i++) {
 			// TODO check if map contains field ?
-			FacetField facet = facets.get(fields.get(i).getName());
+			final FacetField facet = facets.get(fields.get(i).getName());
 			// If facet is null then we cannot filter on this field (e.g. the field is not indexed).
 			if (facet == null) {
 				// TODO grey out items[0] columns i
@@ -277,33 +276,44 @@ public class DocumentsTable { // TODO extend Composite ?
 				for(Count count:facet.getValues()) {
 					combo.add(Objects.toString(count.getName(), LABEL_EMPTY)+" ("+count.getCount()+")");
 				}
+				combo.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent event) {
+						// Extract original value (e.g. "Foobar") from widget value (e.g. "Foobar (3)")
+						Pattern pattern = Pattern.compile("^(.*) \\([0-9]+\\)$");
+						Matcher matcher = pattern.matcher(combo.getText());
+						// TODO if cannot find pattern, then should log WARNING
+						String filterValue = matcher.find() ? matcher.group(1) : StringUtils.EMPTY;
+						combo.setText(filterValue);
+						updateFilters(facet.getName(), filterValue);
+						try {
+							refresh();
+						} catch (SophieException e) {
+							ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+						}
+					};
+				});
 			} else {
-				combo.add(LABEL_EMPTY+" (N)"); // TODO N
+				combo.add(LABEL_EMPTY);
 			}
-			// Filter results when user modifies the combo value.
-			combo.addModifyListener(new ModifyListener() {
+			
+			// Filter (refresh) results when user hits "Enter" while editing one of the combos.
+			combo.addListener(SWT.KeyUp, new Listener() {
 				@Override
-				public void modifyText(ModifyEvent event) {
-					String filterName = combo.getData("field").toString();
-					// TODO filter does not seem to work
-					// TODO regex is not ideal be seems to be the only way to extract "foo" from "foo (5)".
-					Pattern pattern = Pattern.compile("^(.*) \\([0-9]+\\)$");
-					Matcher matcher = pattern.matcher(combo.getText());
-					// TODO if cannot find pattern, then should log WARNING
-					String filterValue = matcher.find() ? matcher.group(1) : StringUtils.EMPTY;
-					if (StringUtils.isEmpty(filterValue)) {
-						filters.remove(filterName);
-					} else {
-						filters.put(filterName, filterValue);
-					}
-					try {
-						refresh();
-					} catch (SophieException e) {
-						ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+				public void handleEvent(Event event) {
+					if (event.character == SWT.CR) {
+						updateFilters(facet.getName(), combo.getText());
+						try {
+							refresh();
+						} catch (SophieException e) {
+							ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+						}
 					}
 				}
 			});
+			
 			// TODO switch to final objects and do not use setData() ?
+			// TODO no need to setData("field") - we never call getData("field")
 			combo.setData("field", facet.getName());
 		    editor.grabHorizontal = true;
 		    // We add one since the first column is used for row ID.
@@ -356,6 +366,17 @@ public class DocumentsTable { // TODO extend Composite ?
 		});
 		
 		return table;
+	}
+	
+	/**
+	 * Add/remove a filter depending on the combo value
+	 */
+	private void updateFilters(String filterName, String filterValue) {
+		if (StringUtils.isEmpty(filterValue)) {
+			filters.remove(filterName);
+		} else {
+			filters.put(filterName, filterValue);
+		}
 	}
 	
 	/**
