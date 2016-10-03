@@ -177,7 +177,7 @@ public class CoresToolbar implements SelectionListener {
         itemReload = new ToolItem(toolBar, SWT.PUSH);
         itemReload.setImage(imgReload);
         itemReload.setText("Reload");
-        itemReload.setToolTipText("Reload core - this will load any configuration changes you may have made to solrconfig.xml or schema.xml"); //TODO disable when no core selected
+        itemReload.setToolTipText("Reload core - this will reload any configuration changes you may have made to solrconfig.xml or schema.xml"); //TODO disable when no core selected
         itemReload.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				String coreName = table.getSelectedCore();

@@ -82,6 +82,7 @@ public class ConnectDialog extends Dialog {
 		}
     }
     
+    // TODO what if admin/ping does not exist ?
     private static void testConnection(SolrClient client) throws SophieException {
     	SolrPingResponse ping = null;
     	try {

@@ -2,6 +2,8 @@ package com.github.fengtan.sophie;
 
 import java.io.IOException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.solr.client.solrj.SolrClient;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.layout.GridLayout;
@@ -15,6 +17,7 @@ import com.github.fengtan.sophie.tabs.TabFolder;
 public class Sophie {
 	
 	public static SolrClient client;
+	public static Log log = LogFactory.getLog(Sophie.class);
 	
 	public static void main(String[] args) {
 		// Create shell.
@@ -51,8 +54,7 @@ public class Sophie {
 			try {
 				client.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.info("Unable to close Solr client", e);
 			}	
 		}
 		display.dispose();
@@ -64,8 +66,7 @@ public class Sophie {
 	// TODO test win32/mac
 	
 	// TODO meta license (depends on swt, solrj, icons, other dependencies)
-	// TODO meta wording server/index/collection/core
-	// TODO meta travis.yml win32/mac
+	// TODO meta wording server/index/collection/core - update class comments accordingly
 
 	// TODO contrib convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 	
@@ -80,11 +81,7 @@ public class Sophie {
     // TODO feat - see what luke and solr native ui provide (dismax, spellcheck, debug, score, shard, elevation etc)/ pull from master
 	// TODO feat - allow to create documents with new fields
 	// TODO feat - allow to revert a specific document
-	// TODO feat - slf4j output into logs/ + e.printStackTrace()
-	// TODO feat refactor
 	// TODO feat - allow not to use the default request handler
-	// TODO feat - Dialogs -> use validators to make sure values are not empty ?
-    // TODO feat - CoreAddDialog/CoreSwapDialog -> re-use SelectionDialog/ListSelectionDialog/ListDialog/ElementListSelectionDialog
 	
 	// TODO clean look for unused/obsolete methods
 	// TODO clean retest everything
@@ -101,7 +98,8 @@ public class Sophie {
 	// TODO doc if value is a date then calendar shows up when editing
 	// TODO doc assume luke handler + select + admin/cores is available
     // TODO doc https://issues.apache.org/jira/browse/SOLR-20
-    // TODO doc log4j.prop
+    // TODO doc log4j.prop can set level to info not to trace http calls
+	// TODO doc mvn generate:doc
 	// TODO doc "(not stored)"
 	// TODO doc unsortable fields
 	// TODO doc sort by clicking on header
@@ -121,10 +119,11 @@ public class Sophie {
 	// TODO obs allow to select multiple values for each filter
 	// TODO obs what if field contains value "(empty)" ?
 	// TODO obs sort by field name (fields+documents)
-    // TODO meta .deb package
+    // TODO obs .deb package
     // TODO - install jar into /opt or /usr/local
     // TODO - export SOPHIE_HOME=/usr/local/sophie-x.y.z
     // TODO - export PATH=$PATH:$SOPHIE_HOME/bin
-    // TODO - expose log4j.prop in /etc
+    // TODO - expose log4j.prop in /etc ; slf4j
     // TODO - logs in /var/log
+	// TODO obs Dialogs -> use validators to make sure values are not empty
 }

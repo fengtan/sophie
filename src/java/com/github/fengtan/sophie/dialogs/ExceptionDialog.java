@@ -14,10 +14,15 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
+import com.github.fengtan.sophie.Sophie;
+
 public class ExceptionDialog extends Dialog {
+	
+	private static final String TITLE = "An error happened";
 
-	private static final int LIST_ITEM_COUNT = 7;
-
+	// TODO add image
+	// TODO do we need everything in this class ?
+	
 	private Button detailsButton;
 	private Throwable throwable;
 	private List list;
@@ -31,6 +36,7 @@ public class ExceptionDialog extends Dialog {
 		super(shell);
 		this.throwable = throwable;
 		setShellStyle(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.APPLICATION_MODAL);
+		Sophie.log.error(TITLE, throwable);
 	}
 
 	protected void buttonPressed(int id) {
@@ -43,7 +49,7 @@ public class ExceptionDialog extends Dialog {
 
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
-		shell.setText("An error happened");
+		shell.setText(TITLE);
 	}
 
 
@@ -73,7 +79,7 @@ public class ExceptionDialog extends Dialog {
 		}
 			
 		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
-		data.heightHint = list.getItemHeight() * LIST_ITEM_COUNT;
+		data.heightHint = list.getItemHeight() * 7;
 		list.setLayoutData(data);
 		listCreated = true;
 		return list;
