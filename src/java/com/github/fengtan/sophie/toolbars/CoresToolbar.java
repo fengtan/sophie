@@ -80,7 +80,7 @@ public class CoresToolbar implements SelectionListener {
         itemRefresh.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				try {
-					table.refresh();	
+					table.refresh();
 				} catch (SophieException e) {
 					ExceptionDialog.open(composite.getShell(), new SophieException("Unable to refresh list of cores", e));	
 				}

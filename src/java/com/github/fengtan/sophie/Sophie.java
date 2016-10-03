@@ -69,7 +69,6 @@ public class Sophie {
 
 	// TODO contrib convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
 
-	// TODO feat allow to create documents with new fields
 	// TODO feat button populate dummy data
 
 	// TODO clean look for unused/obsolete methods ; lint

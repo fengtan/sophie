@@ -7,9 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.common.util.NamedList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -18,22 +16,12 @@ import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 
 
-public class CoresTable {
+public class CoresTable extends SortableTable {
 	
-	private Table table;
 	private Map<String, Integer> colNames = new HashMap<String, Integer>();
 	
 	public CoresTable(Composite parent, SelectionListener listener) {
-		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
-
-		table = new Table(parent, style);
-
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.grabExcessVerticalSpace = true;
-		table.setLayoutData(gridData);
-
-		table.setLinesVisible(true);
-		table.setHeaderVisible(true);
+		super(parent);
 		table.addSelectionListener(listener);
 
 		try {

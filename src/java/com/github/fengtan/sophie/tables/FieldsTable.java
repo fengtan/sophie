@@ -7,9 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.apache.solr.common.luke.FieldFlag;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -17,8 +15,7 @@ import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 
-// TODO make sortable (using SWT built-in table sorter) - same for CoresTable
-public class FieldsTable {
+public class FieldsTable extends SortableTable {
 	
 	private static final String[] columnNames = new String[]{
 		"Name",
@@ -28,19 +25,8 @@ public class FieldsTable {
 		"Schema"
 	};
 	
-	private Table table;
-	
 	public FieldsTable(Composite parent) {
-		int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
-
-		table = new Table(parent, style); // TODO turn into a FieldsTable class ?
-
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.grabExcessVerticalSpace = true;
-		table.setLayoutData(gridData);
-
-		table.setLinesVisible(true);
-		table.setHeaderVisible(true);
+		super(parent);
 
 		// Add columns
 		for (String columnName:columnNames) {
@@ -54,9 +40,9 @@ public class FieldsTable {
 		
 		// Add data.
 		try {
-			populate();			
+			populate();	
 		} catch (SophieException e) {
-			ExceptionDialog.open(parent.getShell(), new SophieException("Unable to initialize fields table", e));
+			ExceptionDialog.open(parent.getShell(), new SophieException("Unable to populate fields table", e));
 		}
 		
 		// Pack.
@@ -70,16 +56,12 @@ public class FieldsTable {
 		populate();
 	}
 	
-	private void populate() throws SophieException {
+	protected void populate() throws SophieException {
 		// TODO cache uniqueKey ? 2 identical requests (fields+tables), should remove 1 of the 2 and invalidate when hit refresh
 		String uniqueField;
 		List<FieldInfo> fields;
-		try {
-			uniqueField = SolrUtils.getRemoteUniqueField();
-			fields = SolrUtils.getRemoteFields();	
-		} catch (SophieException e) {
-			throw new SophieException("Unable to populate fields table", e);
-		}
+		uniqueField = SolrUtils.getRemoteUniqueField();
+		fields = SolrUtils.getRemoteFields();	
 		for (FieldInfo field:fields) {
 			TableItem item = new TableItem(table, SWT.NULL);
 			item.setText(0, field.getName());
