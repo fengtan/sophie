@@ -296,7 +296,14 @@ public class DocumentsTable { // TODO extend Composite ?
 			combo.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(SelectionEvent event) {
-					updateFilters(facet.getName(), combo.getText());
+					String filterName = facet.getName();
+					String filterNewValue = combo.getText();
+					String filterOldValue = filters.get(filterName);
+					// No need to re-send a request to Solr and the user selected the same filter as the current filter. 
+					if (StringUtils.equals(filterOldValue, filterNewValue) || (StringUtils.isBlank(filterOldValue) && StringUtils.isBlank(filterNewValue))) {
+						return;
+					}
+					updateFilters(filterName, filterNewValue);
 					try {
 						refresh();
 					} catch (SophieException e) {
