@@ -2,28 +2,34 @@ package com.github.fengtan.sophie.dialogs;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 public class CComboDialog extends Dialog {
 	
+	private Shell shell;
 	private String title;
 	private String text;
 	private String[] items;
+	private IInputValidator validator;
 	
 	private Combo combo;
 	private String value = null;
 
-	public CComboDialog(Shell shell, String title, String text, String[] items) {
+	public CComboDialog(Shell shell, String title, String text, String[] items, IInputValidator validator) {
 		super(shell);
+		this.shell = shell;
 		this.title = title;
 		this.text = text;
 		this.items = items;
+		this.validator = validator;
 	}
 
 	@Override
@@ -58,6 +64,16 @@ public class CComboDialog extends Dialog {
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if (buttonId == IDialogConstants.OK_ID) {
+			if (validator != null) {
+				String errorMessage = validator.isValid(combo.getText());
+				if (errorMessage != null) {
+					MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR | SWT.OK);
+					messageBox.setText("Invalid value");
+					messageBox.setMessage(errorMessage);
+					messageBox.open();
+					return;	
+				}
+			}
 			value = combo.getText();
 		}
 		super.buttonPressed(buttonId);

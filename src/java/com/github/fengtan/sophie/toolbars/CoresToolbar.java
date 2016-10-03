@@ -171,7 +171,7 @@ public class CoresToolbar implements SelectionListener {
 				}
 				Object[] coreObjects = cores.keySet().toArray();
 				String[] coreStrings = Arrays.copyOf(coreObjects, coreObjects.length, String[].class); 
-				CComboDialog dialog = new CComboDialog(composite.getShell(), "Swap cores", "Swap core \""+coreName+"\" with:", coreStrings);
+				CComboDialog dialog = new CComboDialog(composite.getShell(), "Swap cores", "Swap core \""+coreName+"\" with:", coreStrings, null);
 				dialog.open();
 				if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
 					return;

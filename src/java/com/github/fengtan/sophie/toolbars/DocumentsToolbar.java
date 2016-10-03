@@ -31,6 +31,7 @@ import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.CComboDialog;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.tables.DocumentsTable;
+import com.github.fengtan.sophie.validators.FieldValidator;
 
 public class DocumentsToolbar implements SelectionListener,ChangeListener {
 
@@ -146,6 +147,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 				String[] suggestions;
 				try {
 					List<String> fields = SolrUtils.getRemoteSchemaFields();
+					fields.remove("*"); // Remove universal pattern which is not useful and will match everything.
 					suggestions = new String[fields.size()];
 					fields.toArray(suggestions);
 					Arrays.sort(suggestions);
@@ -153,7 +155,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 					Sophie.log.error("Unable to suggest fields", e);
 					suggestions = ArrayUtils.EMPTY_STRING_ARRAY;
 				}
-				CComboDialog dialog = new CComboDialog(composite.getShell(), "Add new field", "Field name:", suggestions);
+				CComboDialog dialog = new CComboDialog(composite.getShell(), "Add new field", "Field name:", suggestions, new FieldValidator(suggestions));
 				dialog.open();
 				if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
 					return;
@@ -268,7 +270,6 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 					return;
 				}
 				String backupName = dialog.getValue();
-				// TODO notify user name/place of backup
 				ModifiableSolrParams params = new ModifiableSolrParams();
 				params.set("command", "backup");
 				params.set("name", backupName);

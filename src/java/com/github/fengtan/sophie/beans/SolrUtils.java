@@ -57,7 +57,7 @@ public class SolrUtils {
 		}
 		return fields;
 	}
-
+	
 	// TODO could merge with getRemoteFields() to make less queries.
 	public static String getRemoteUniqueField() throws SophieException {
 		SchemaRequest.UniqueKey request = new SchemaRequest.UniqueKey();
