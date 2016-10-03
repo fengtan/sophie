@@ -27,7 +27,7 @@ public abstract class EditValueDialog extends Dialog {
 		// TODO NPE when editing unstored field
 		// TODO cannot edit empty values (window closes)
 		if (buttonId == IDialogConstants.OK_ID) {
-			value = getValue();
+			value = fetchValue();
 		}
 		super.buttonPressed(buttonId);
 	}

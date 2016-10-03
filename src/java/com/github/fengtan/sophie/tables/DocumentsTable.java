@@ -249,7 +249,6 @@ public class DocumentsTable { // TODO extend Composite ?
 	    				Object value = dialog.getValue();
 	    				if (!Objects.equals(defaultValue, value)) {
 	    					updateDocument(item, i, value);
-	    					// TODO table cell not updated
 	    				}
 		    		}
 		    	}
@@ -501,14 +500,15 @@ public class DocumentsTable { // TODO extend Composite ?
 		refresh();
 	}
 
-	public void updateDocument(TableItem item, int columnIndex, Object newValue) {
+	private void updateDocument(TableItem item, int columnIndex, Object newValue) {
 		SolrDocument document = (SolrDocument) item.getData("document");
 		// The row may not contain any document (e.g. the first row, which contains the filters).
 		if (document == null) {
 			return;
 		}
+		String fieldName = (String) table.getColumn(columnIndex).getData("fieldName");
 		// We reduce by 1 since the first column is used for row ID.
-		document.setField(fields.get(columnIndex-1).getName(), newValue);
+		document.setField(fieldName, newValue);
 		item.setText(columnIndex, Objects.toString(newValue, StringUtils.EMPTY));
 		// TODO if new record, then leave green
 		if (!documentsUpdated.contains(document)) {
@@ -691,5 +691,7 @@ public class DocumentsTable { // TODO extend Composite ?
 	public void addField(String fieldName) {
 		addColumn(fieldName, false);
 	}
+	
+	// TODO sorting removes unsortable signifiers
 	
 }
