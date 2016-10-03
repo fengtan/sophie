@@ -156,6 +156,10 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 				// Remove universal pattern which is not useful and will match any field name.
 				// TODO test
 				fields.remove("*");
+				// Remove fields already displayed in the table.
+				for (String existingFieldName:table.getFieldNames()) {
+					fields.remove(existingFieldName);
+				}
 				// Extract and sort field names.
 				Set<String> fieldNames = fields.keySet();
 				String[] fieldNamesArray = new String[fieldNames.size()];
@@ -163,6 +167,7 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 				Arrays.sort(fieldNamesArray);
 				// Prompt user for new field name.
 				FieldValidator validator = new FieldValidator(fields);
+				// TODO validator ensure user does not add a fields already displayed in table.
 				CComboDialog dialog = new CComboDialog(composite.getShell(), "Add new field", "Field name:", fieldNamesArray, validator);
 				dialog.open();
 				if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
@@ -171,8 +176,6 @@ public class DocumentsToolbar implements SelectionListener,ChangeListener {
 				// Add new field.
 				String fieldName = dialog.getValue();
 				table.addField(fieldName, validator.getMatchingField(fieldName));
-				// TODO do not allow to add field if already in table
-				// TODO scroll right so user sees the new field
 			}
 		});
         

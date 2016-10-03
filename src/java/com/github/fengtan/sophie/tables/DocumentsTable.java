@@ -256,6 +256,17 @@ public class DocumentsTable { // TODO extend Composite ?
 		});
 	}
 	
+	public List<String> getFieldNames() {
+		List<String> fieldNames = new ArrayList<String>();
+		for (int i=0; i<table.getColumnCount(); i++) {
+			String fieldName = (String) table.getColumn(i).getData("fieldName");
+			if (StringUtils.isNoneEmpty(fieldName)) {
+				fieldNames.add(fieldName);	
+			}
+		}
+		return fieldNames;
+	}
+	
 	/**
 	 * Add/remove a filter depending on the combo value
 	 */
