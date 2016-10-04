@@ -29,11 +29,29 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Shell;
 
+/**
+ * Datepicker Dialog to prompt user for a date / time.
+ */
 public class EditDateValueDialog extends EditValueDialog {
 
+    /**
+     * Default date/time presented by the datepicker.
+     */
     private Date defaultValue;
+
+    /**
+     * Calendar.
+     */
     private Calendar calendar = Calendar.getInstance();
 
+    /**
+     * Create a new datepicker dialog to prompt the user for a date / time.
+     * 
+     * @param shell
+     *            Shell.
+     * @param defaultValue
+     *            Default date/time presented by the datepicker.
+     */
     public EditDateValueDialog(Shell shell, Date defaultValue) {
         super(shell);
         this.defaultValue = defaultValue;
@@ -44,6 +62,7 @@ public class EditDateValueDialog extends EditValueDialog {
         Composite composite = (Composite) super.createDialogArea(parent);
         calendar.setTime(defaultValue);
 
+        // Create datepicker.
         final DateTime datePicker = new DateTime(composite, SWT.CALENDAR);
         datePicker.setYear(calendar.get(Calendar.YEAR));
         datePicker.setMonth(calendar.get(Calendar.MONTH));
@@ -56,6 +75,7 @@ public class EditDateValueDialog extends EditValueDialog {
             }
         });
 
+        // Create timepicker.
         final DateTime timePicker = new DateTime(composite, SWT.TIME);
         timePicker.setHours(calendar.get(Calendar.HOUR_OF_DAY));
         timePicker.setMinutes(calendar.get(Calendar.MINUTE));

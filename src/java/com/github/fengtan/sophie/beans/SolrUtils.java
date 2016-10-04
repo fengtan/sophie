@@ -39,11 +39,40 @@ import org.apache.solr.common.util.NamedList;
 
 import com.github.fengtan.sophie.Sophie;
 
+/**
+ * Common operations on Solr.
+ */
 public class SolrUtils {
 
     /**
-     * Helper to get remote fields TODO what if new fields get created ? refresh
-     * ? should update tables accordingly when refresh
+     * Extract flags from a Solr field.
+     *
+     * Because of a bug in SolrJ, FieldInfo.getFlags() may return null if the
+     * request was made by calling LukeRequest.setSchema(false). This method
+     * extracts the flags in all cases.
+     * 
+     * @param field
+     *            Solr field.
+     * @return List of flags.
+     * @see SOLR-9205
+     */
+    public static EnumSet<FieldFlag> getFlags(FieldInfo field) {
+        EnumSet<FieldFlag> flags = field.getFlags();
+        if (flags == null) {
+            flags = FieldInfo.parseFlags(field.getSchema());
+        }
+        return flags;
+    }
+
+    /**
+     * Get list of instantiated fields from the remote Solr server.
+     * 
+     * Dynamic fields are named according to how they are instantiated (e.g.
+     * dynamic_foobar).
+     * 
+     * @return List of fields defined on the remote Solr server.
+     * @throws SophieException
+     *             If the remote fields cannot be fetched.
      */
     public static List<FieldInfo> getRemoteFields() throws SophieException {
         LukeRequest request = new LukeRequest();
@@ -55,52 +84,56 @@ public class SolrUtils {
         }
     }
 
-    public static EnumSet<FieldFlag> getFlags(FieldInfo field) {
-        EnumSet<FieldFlag> flags = field.getFlags();
-        // field.getFlags() may not be populated if lukeRequest.setSchema(false)
-        // so we parse flags ourselves based on field.getSchema()
-        // See SOLR-9205.
-        if (flags == null) {
-            flags = FieldInfo.parseFlags(field.getSchema());
-        }
-        return flags;
-    }
-
     /**
-     * Get fields defined in the schema (regular + dynamic). TODO contrib
-     * LukeResponse.getDynamicFieldInfo() - similar to
-     * LukeResponse.getFieldInfo() - see LukeResponse.setResponse()
+     * Get a list of declared fields from the remote Solr server.
      * 
-     * @return Map<field name, field info>
+     * Dynamic fields are named according to how they are declared (e.g.
+     * dynamic_*).
+     * 
+     * @return Map of fields keyed by field name.
+     * @throws SophieException
+     *             If the remote fields cannot be fetched.
      */
+    @SuppressWarnings("unchecked")
     public static Map<String, FieldInfo> getRemoteSchemaFields() throws SophieException {
-        Map<String, FieldInfo> fields = new HashMap<String, FieldInfo>();
+        // Send request.
         LukeRequest request = new LukeRequest();
         request.setShowSchema(true);
+        LukeResponse response;
         try {
-            LukeResponse response = request.process(Sophie.client);
-            // Get regular fields.
-            fields.putAll(response.getFieldInfo());
-            // Get dynamic fields.
-            NamedList<Object> schema = (NamedList<Object>) response.getResponse().get("schema");
-            if (schema != null) {
-                NamedList<Object> dynamicFields = (NamedList<Object>) schema.get("dynamicFields");
-                if (dynamicFields != null) {
-                    for (Map.Entry<String, Object> dynamicField : dynamicFields) {
-                        FieldInfo fieldInfo = new FieldInfo(dynamicField.getKey());
-                        fieldInfo.read((NamedList<Object>) dynamicField.getValue());
-                        fields.put(dynamicField.getKey(), fieldInfo);
-                    }
-                }
-            }
+            response = request.process(Sophie.client);
         } catch (SolrServerException | IOException | SolrException e) {
             throw new SophieException("Unable to fetch list of Solr fields", e);
+        }
+        // Extract regular fields.
+        Map<String, FieldInfo> fields = new HashMap<String, FieldInfo>();
+        fields.putAll(response.getFieldInfo());
+        // Extract dynamic fields.
+        NamedList<Object> schema = (NamedList<Object>) response.getResponse().get("schema");
+        if (schema != null) {
+            NamedList<Object> dynamicFields = (NamedList<Object>) schema.get("dynamicFields");
+            if (dynamicFields != null) {
+                for (Map.Entry<String, Object> dynamicField : dynamicFields) {
+                    FieldInfo fieldInfo = new FieldInfo(dynamicField.getKey());
+                    fieldInfo.read((NamedList<Object>) dynamicField.getValue());
+                    fields.put(dynamicField.getKey(), fieldInfo);
+                }
+            }
         }
         return fields;
     }
 
-    // TODO could merge with getRemoteFields() to make less queries.
-    // TODO could use admin/luke?show=schema
+    /**
+     * Get unique key field from the remote Solr server.
+     * 
+     * TODO could merge with getRemoteFields() to make less queries
+     * 
+     * TODO could use admin/luke?show=schema
+     * 
+     * @return Unique key field name.
+     * @throws SophieException
+     *             If the unique key field cannot be fetched.
+     */
     public static String getRemoteUniqueField() throws SophieException {
         SchemaRequest.UniqueKey request = new SchemaRequest.UniqueKey();
         try {
@@ -110,10 +143,14 @@ public class SolrUtils {
         }
     }
 
-    // TODO cache result until new connection or refresh ?
     /**
-     * @return Map <core name, attributes>
+     * Get list of cores from the remote Solr server.
+     * 
+     * @return Map of cores attributes keyed by core name.
+     * @throws SophieException
+     *             If the list of cores cannot be fetched.
      */
+    @SuppressWarnings("unchecked")
     public static Map<String, NamedList<Object>> getCores() throws SophieException {
         CoreAdminRequest request = new CoreAdminRequest();
         request.setAction(CoreAdminAction.STATUS);

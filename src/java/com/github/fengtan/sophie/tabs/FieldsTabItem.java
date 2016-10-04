@@ -32,7 +32,6 @@ public class FieldsTabItem extends CTabItem {
     private FieldsToolbar toolbar;
     private FieldsTable table;
 
-    // TODO add filter to get only indexed/stored fields
     public FieldsTabItem(CTabFolder tabFolder) {
         super(tabFolder, SWT.NONE, tabFolder.getItemCount());
 

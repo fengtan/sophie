@@ -28,20 +28,72 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * Dialog to collect two values.
+ */
 public class DoubleInputDialog extends Dialog {
 
+    /**
+     * Title of the dialog.
+     */
     private String title;
+
+    /**
+     * Label of the first widget.
+     */
     private String text1;
+
+    /**
+     * Label of the second widget.
+     */
     private String text2;
+
+    /**
+     * Default value of the first widget.
+     */
     private String defaultValue1;
+
+    /**
+     * Default value of the second widget.
+     */
     private String defaultValue2;
 
+    /**
+     * First widget.
+     */
     private Text input1;
+
+    /**
+     * Second widget.
+     */
     private Text input2;
 
+    /**
+     * Value of the first widget.
+     */
     private String value1 = null;
+
+    /**
+     * Value of the second widget.
+     */
     private String value2 = null;
 
+    /**
+     * Create a new dialog to collect two values.
+     * 
+     * @param shell
+     *            Shell.
+     * @param title
+     *            Title of the dialog.
+     * @param text1
+     *            Label of the first widget.
+     * @param defaultValue1
+     *            Default value of the first widget.
+     * @param text2
+     *            Label of the second widget.
+     * @param defaultValue2
+     *            Default value of the second widget.
+     */
     public DoubleInputDialog(Shell shell, String title, String text1, String defaultValue1, String text2, String defaultValue2) {
         super(shell);
         this.title = title;
@@ -51,25 +103,34 @@ public class DoubleInputDialog extends Dialog {
         this.defaultValue2 = defaultValue2;
     }
 
-    /**
-     * Set title of the custom dialog.
-     */
     @Override
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
         newShell.setText(title);
     }
 
+    /**
+     * Get value of the first widget.
+     * 
+     * @return Value of the first widget.
+     */
     public String getValue1() {
         return value1;
     }
 
+    /**
+     * Get value of the second widget.
+     * 
+     * @return Value of the second widget.
+     */
     public String getValue2() {
         return value2;
     }
 
+    @Override
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
+            // Populate dialog values with what the user entered.
             value1 = input1.getText();
             value2 = input2.getText();
         }
@@ -80,9 +141,11 @@ public class DoubleInputDialog extends Dialog {
     protected Control createDialogArea(Composite parent) {
         Composite composite = (Composite) super.createDialogArea(parent);
 
+        // Create grid.
         GridData grid = new GridData(GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL | GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_CENTER);
         grid.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
 
+        // Create first widget.
         Label label1 = new Label(composite, SWT.WRAP);
         label1.setText(text1);
         label1.setLayoutData(grid);
@@ -91,6 +154,7 @@ public class DoubleInputDialog extends Dialog {
         input1.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
         input1.setText(defaultValue1);
 
+        // Create second widget.
         Label label2 = new Label(composite, SWT.WRAP);
         label2.setText(text2);
         label2.setLayoutData(grid);

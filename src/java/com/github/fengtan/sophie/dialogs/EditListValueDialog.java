@@ -38,12 +38,29 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+/**
+ * Dialog to prompt user for multiple values.
+ */
 public class EditListValueDialog extends EditValueDialog {
 
+    /**
+     * Default values presented in the list.
+     */
     private AbstractList<?> defaultValue;
+
+    /**
+     * List widget.
+     */
     private ListViewer listViewer;
 
-    // List is not iterable - we need to use AbstractList.
+    /**
+     * Create a new dialog to prompt the user for multiple values.
+     * 
+     * @param shell
+     *            Shell.
+     * @param defaultValue
+     *            Default values presented in the list.
+     */
     public EditListValueDialog(Shell shell, AbstractList<?> defaultValue) {
         super(shell);
         this.defaultValue = (defaultValue == null) ? new ArrayList<Object>() : defaultValue;
@@ -54,12 +71,14 @@ public class EditListValueDialog extends EditValueDialog {
         Composite composite = (Composite) super.createDialogArea(parent);
         composite.setLayout(new RowLayout());
 
+        // Create list widget.
         // TODO seems to be buggy when many values.
         listViewer = new ListViewer(composite, SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER);
         for (Object value : defaultValue) {
             listViewer.add(Objects.toString(value, StringUtils.EMPTY));
         }
 
+        // Create add/remove buttons.
         Composite buttonsComposite = new Composite(composite, SWT.NULL);
         buttonsComposite.setLayout(new FillLayout(SWT.VERTICAL));
 

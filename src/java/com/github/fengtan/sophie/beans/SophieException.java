@@ -18,14 +18,31 @@
  */
 package com.github.fengtan.sophie.beans;
 
+/**
+ * Exception specific to Sophie.
+ */
 public class SophieException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Create an exception and specify a message.
+     * 
+     * @param msg
+     *            Message.
+     */
     public SophieException(String msg) {
         super(msg);
     }
 
+    /**
+     * Create an exception caused by a Throwable and specify a message.
+     * 
+     * @param msg
+     *            Message.
+     * @param cause
+     *            Cause of the exception.
+     */
     public SophieException(String msg, Throwable cause) {
         super(msg, cause);
     }

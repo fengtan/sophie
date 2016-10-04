@@ -30,17 +30,60 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
+/**
+ * Dialog with a drop-down list.
+ */
 public class CComboDialog extends Dialog {
 
+    /**
+     * Shell.
+     */
     private Shell shell;
+
+    /**
+     * Title of the dialog.
+     */
     private String title;
+
+    /**
+     * Label displayed in the dialog.
+     */
     private String text;
+
+    /**
+     * Items listed in the drop-down list.
+     */
     private String[] items;
+
+    /**
+     * Validates the value provided by the user.
+     */
     private IInputValidator validator;
 
+    /**
+     * Drop-down list.
+     */
     private Combo combo;
+
+    /**
+     * Value provided by the user.
+     */
     private String value = null;
 
+    /**
+     * Create a new dialog with a drop-down list.
+     * 
+     * @param shell
+     *            Shell.
+     * @param title
+     *            Title of the dialog.
+     * @param text
+     *            Label displayed in the dialog.
+     * @param items
+     *            Items listed in the drop-down list.
+     * @param validator
+     *            Validates the value provided by the user.
+     */
     public CComboDialog(Shell shell, String title, String text, String[] items, IInputValidator validator) {
         super(shell);
         this.shell = shell;
@@ -54,6 +97,7 @@ public class CComboDialog extends Dialog {
     protected Control createDialogArea(Composite parent) {
         Composite composite = (Composite) super.createDialogArea(parent);
 
+        // Create label.
         Label label = new Label(composite, SWT.WRAP);
         GridData grid = new GridData(GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL | GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_CENTER);
         grid.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
@@ -61,8 +105,9 @@ public class CComboDialog extends Dialog {
         label.setLayoutData(grid);
         label.setFont(parent.getFont());
 
-        combo = new Combo(parent, SWT.SINGLE | SWT.BORDER); // TODO add some
-                                                            // spacing
+        // Create drop-down list.
+        // TODO add some spacing
+        combo = new Combo(parent, SWT.SINGLE | SWT.BORDER);
         combo.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
         combo.setItems(items);
 
@@ -70,9 +115,6 @@ public class CComboDialog extends Dialog {
         return composite;
     }
 
-    /**
-     * Set title of the custom dialog.
-     */
     @Override
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
@@ -82,6 +124,7 @@ public class CComboDialog extends Dialog {
     @Override
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
+            // Validate user-provided value.
             if (validator != null) {
                 String errorMessage = validator.isValid(combo.getText());
                 if (errorMessage != null) {
@@ -92,11 +135,17 @@ public class CComboDialog extends Dialog {
                     return;
                 }
             }
+            // Set dialog value from user-provided value.
             value = combo.getText();
         }
         super.buttonPressed(buttonId);
     }
 
+    /**
+     * Get user-provided value.
+     * 
+     * @return User-provided value.
+     */
     public String getValue() {
         return value;
     }

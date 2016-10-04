@@ -25,11 +25,27 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * Dialog to prompt user for a text value.
+ */
 public class EditTextValueDialog extends EditValueDialog {
 
+    /**
+     * Default value.
+     */
     private String defaultValue;
+
+    /**
+     * Text widget.
+     */
     private Text text;
 
+    /**
+     * Create a new dialog to prompt the user for a text value.
+     * 
+     * @param shell Shell.
+     * @param defaultValue Default value.
+     */
     public EditTextValueDialog(Shell shell, String defaultValue) {
         super(shell);
         this.defaultValue = defaultValue;
@@ -38,6 +54,8 @@ public class EditTextValueDialog extends EditValueDialog {
     @Override
     protected Control createDialogArea(Composite parent) {
         Composite composite = (Composite) super.createDialogArea(parent);
+
+        // Create text widget.
         text = new Text(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
         text.setText(defaultValue);
         GridData grid = new GridData();
@@ -48,6 +66,7 @@ public class EditTextValueDialog extends EditValueDialog {
         grid.grabExcessHorizontalSpace = true;
         grid.grabExcessVerticalSpace = true;
         text.setLayoutData(grid);
+        
         return composite;
     }
 

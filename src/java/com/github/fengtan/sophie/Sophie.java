@@ -32,21 +32,47 @@ import com.github.fengtan.sophie.dialogs.ConnectDialog;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.tabs.TabFolder;
 
+/**
+ * Application launcher.
+ */
 public class Sophie {
 
+    /**
+     * Character for columns sorted in ascending order.
+     */
     public static final char SIGNIFIER_SORTED_ASC = '\u25B4';
+
+    /**
+     * Character for columns sorted in descending order.
+     */
     public static final char SIGNIFIER_SORTED_DESC = '\u25BE';
+
+    /**
+     * Character for unsortable columns.
+     */
     public static final char SIGNIFIER_UNSORTABLE = '\u2205';
 
+    /**
+     * Unique Solr client used by all classes.
+     */
     public static SolrClient client;
+
+    /**
+     * Unique logger used by all classes.
+     */
     public static Log log = LogFactory.getLog(Sophie.class);
-    
-    public static void main(String[] args) {
+
+    /**
+     * Prompt user for Solr connection string and instantiate Solr client / SWT
+     * display accordingly.
+     */
+    public static void main() {
         // Create shell.
         Shell shell = new Shell();
         shell.setMaximized(true);
         shell.setLayout(new GridLayout());
 
+        // Prompt user for Solr credentials.
         ConnectDialog dialog = new ConnectDialog(shell);
         dialog.open();
         if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
@@ -71,6 +97,8 @@ public class Sophie {
                 ExceptionDialog.open(shell, e);
             }
         }
+
+        // Free resources.
         if (client != null) {
             try {
                 client.close();
@@ -88,9 +116,10 @@ public class Sophie {
     // TODO test retest everything
 
     // TODO meta document all methods
-    // TODO meta wording server/index/collection/core - update class comments
-    // accordingly
-
+    
+    // TODO contrib solrutils.getRemoteSchemaFields() -> LukeResponse.getDynamicFieldInfo() - similar to LukeResponse.getFieldInfo() - see LukeResponse.setResponse()
+    // TODO contrib replication handler solrj
+    
     // TODO doc screenshot 0.5 + move screenshots/ to gh-pages
     // TODO doc gh-pages
     // TODO doc measure memory footprint
@@ -123,6 +152,8 @@ public class Sophie {
     // TODO doc admin/luke, admin/ping, admin/cores must be available
     // TODO doc datepicker if field type contains "date"
     // TODO doc gh-pages slogan consistant
+    // TODO doc wording server/index/collection/core - update class comments
+    // accordingly
 
     // TODO obs trayitem - not supported by ubuntu
     // https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217

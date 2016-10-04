@@ -23,17 +23,28 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
+/**
+ * Dialog to collect a value.
+ */
 public abstract class EditValueDialog extends Dialog {
 
+    /**
+     * Value to be collected.
+     */
     private Object value = null;
 
-    public EditValueDialog(Shell parentShell) {
-        super(parentShell);
+    /**
+     * Create a new dialog to collect a value.
+     * 
+     * @param shell
+     *            Shell.
+     */
+    public EditValueDialog(Shell shell) {
+        super(shell);
         // Allow user to resize the dialog window.
         setShellStyle(getShellStyle() | SWT.RESIZE);
     }
 
-    // Set title of the custom dialog.
     @Override
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
@@ -45,15 +56,26 @@ public abstract class EditValueDialog extends Dialog {
         // TODO NPE when editing unstored field
         // TODO cannot edit empty values (window closes)
         if (buttonId == IDialogConstants.OK_ID) {
+            // Populate value with what the user provided.
             value = fetchValue();
         }
         super.buttonPressed(buttonId);
     }
 
+    /**
+     * Collect value.
+     * 
+     * @return Value to be collected.
+     */
     public Object getValue() {
         return value;
     }
 
+    /**
+     * Get value provided by the user.
+     * 
+     * @return Value provided by the user.
+     */
     protected abstract Object fetchValue();
 
 }

@@ -26,23 +26,32 @@ import org.apache.solr.client.solrj.response.LukeResponse.FieldInfo;
 import org.eclipse.jface.dialogs.IInputValidator;
 
 /**
- * Validates a field name against a list of regular/dynamic fields.
- * 
- * @see org.apache.solr.schema.Schema
+ * Validates a field name against a list of field globs.
  */
 public class FieldValidator implements IInputValidator {
 
+    /**
+     * Map of fields keyed by field name.
+     */
     private Map<String, FieldInfo> fields;
 
+    /**
+     * Create a new field validator.
+     * 
+     * @param fields
+     *            Solr fields. Field names may be globs (e.g. ss_*).
+     */
     public FieldValidator(Map<String, FieldInfo> fields) {
         this.fields = fields;
     }
 
     @Override
     public String isValid(String fieldNameCondidate) {
+        // A glob itself is not a valid field name.
         if (StringUtils.contains(fieldNameCondidate, "*")) {
             return "Field name should not contain any asterisk (\"*\")";
         }
+        // The value entered by the user should match one of the fields.
         if (getMatchingField(fieldNameCondidate) == null) {
             return "\"" + fieldNameCondidate + "\" matches no field defined in schema.xml.";
         }
@@ -50,12 +59,15 @@ public class FieldValidator implements IInputValidator {
     }
 
     /**
-     * @return Schema field matching the candidate (e.g. "ss_*" if candidate is
-     *         "ss_foobar"). null if the candidate matches no schema field.
+     * Get field matching a candidate field name.
+     * 
+     * @return Field matching the candidate (e.g. ss_* if the candidate is
+     *         ss_foobar), or null if the candidate matches no field.
+     * @see org.apache.solr.schema.Schema
      */
     public FieldInfo getMatchingField(String fieldNameCondidate) {
         for (Map.Entry<String, FieldInfo> field : fields.entrySet()) {
-            // Glob -> Regex.
+            // Glob (e.g. ss_*) -> Regex (e.g. ss_.*).
             Pattern pattern = Pattern.compile(field.getKey().replace("*", ".*"));
             if (pattern.matcher(fieldNameCondidate).matches()) {
                 return field.getValue();

@@ -18,28 +18,67 @@
  */
 package com.github.fengtan.sophie.beans;
 
+/**
+ * Different ways to connect to Solr: either Direct HTTP or SolrCloud.
+ */
 public enum SolrConnectionType {
 
     DIRECT_HTTP("Direct HTTP", "Solr URL:", "http://localhost:8983/solr/gettingstarted"), SOLR_CLOUD("SolrCloud", "ZooKeeper host:", "localhost:9983");
 
+    /**
+     * Name of connection type.
+     */
+    private String typeName;
+
+    /**
+     * Label of connection string.
+     */
+    private String valueLabel;
+
+    /**
+     * Default value of connection string.
+     */
+    private String valueDefault;
+
+    /**
+     * Create a new connection type.
+     * 
+     * @param typeName
+     *            Name of connection type.
+     * @param valueLabel
+     *            Label of connection string.
+     * @param valueDefault
+     *            Default value of connection string.
+     */
     private SolrConnectionType(String typeName, String valueLabel, String valueDefault) {
         this.typeName = typeName;
         this.valueLabel = valueLabel;
         this.valueDefault = valueDefault;
     }
 
-    private String typeName;
-    private String valueLabel;
-    private String valueDefault;
-
+    /**
+     * Get name of connection type.
+     * 
+     * @return Name of connection type.
+     */
     public String getTypeName() {
         return typeName;
     }
 
+    /**
+     * Get label of connection string.
+     * 
+     * @return Label of connection string.
+     */
     public String getValueLabel() {
         return valueLabel;
     }
 
+    /**
+     * Get default value of connection string.
+     * 
+     * @return Default value of connection string.
+     */
     public String getValueDefault() {
         return valueDefault;
     }

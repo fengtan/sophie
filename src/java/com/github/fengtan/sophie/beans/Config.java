@@ -29,18 +29,44 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.github.fengtan.sophie.Sophie;
 
+/**
+ * Save and load configuration from a properties file located in the user's home
+ * directory.
+ */
 public class Config {
 
-    // TODO make sure hidden file works on windows
+    /**
+     * Name of the properties file.
+     * 
+     * TODO make sure hidden file works on windows
+     */
     private static final String filename = ".sophie.properties";
 
-    // By default, fetch 50 documents at a time when viewing the documents
-    // table.
+    /**
+     * Default value if documents.page.size is not listed in the properties
+     * file. By default, we fetch 50 documents at a time when browsing the
+     * documents table.
+     * 
+     * @see getDocumentsPageSize
+     */
     private static final int DEFAULT_DOCUMENTS_PAGE_SIZE = 50;
 
-    // By default, show at most 50 facet values in the filters.
+    /**
+     * Default value if documents.facets.limit is not listed in the properties
+     * file. By default, each filter in the documents table may display at most
+     * 50 values.
+     * 
+     * @see getDocumentsFacetsLimit
+     */
     private static final int DEFAULT_DOCUMENTS_FACETS_LIMIT = 50;
 
+    /**
+     * Read properties file and load it in a configuration object.
+     * 
+     * @return Configuration object.
+     * @throws ConfigurationException
+     *             If the configuration could not be loaded.
+     */
     private static Configuration getConfiguration() throws ConfigurationException {
         String filepath = System.getProperty("user.home") + File.separator + filename;
         File file = new File(filepath);
@@ -49,6 +75,11 @@ public class Config {
         return configuration;
     }
 
+    /**
+     * Get Solr servers listed as favorites in the properties file.
+     * 
+     * @return Array of Solr servers (either Solr URL's or ZooKeeper hosts).
+     */
     public static String[] getFavorites() {
         try {
             String[] favorites = getConfiguration().getStringArray("favorites");
@@ -62,12 +93,17 @@ public class Config {
     }
 
     /**
-     * If favorite does not exist in the configuration, then add it.
+     * Add a Solr server to favorites listed in the properties file.
+     * 
+     * @param favorite
+     *            The new favorite (either a Solr URL or a ZooKeeper host).
      */
     public static void addFavorite(String favorite) {
         try {
             Configuration configuration = getConfiguration();
             List<Object> favorites = configuration.getList("favorites");
+            // If the server is already listed in the favorites, then do
+            // nothing.
             if (!favorites.contains(favorite)) {
                 configuration.addProperty("favorites", favorite);
             }
@@ -77,6 +113,12 @@ public class Config {
         }
     }
 
+    /**
+     * Get page size from the properties file. If no value is listed in the
+     * properties file, return DEFAULT_DOCUMENTS_PAGE_SIZE
+     * 
+     * @return Page size used in the documents table.
+     */
     public static int getDocumentsPageSize() {
         try {
             return getConfiguration().getInt("documents.page.size", DEFAULT_DOCUMENTS_PAGE_SIZE);
@@ -87,6 +129,12 @@ public class Config {
         }
     }
 
+    /**
+     * Get facets limit from the properties file. If no value is listed in the
+     * properties file, return DEFAULT_DOCUMENTS_FACETS_LIMIT.
+     * 
+     * @return Facets limit used in the documents table.
+     */
     public static int getDocumentsFacetsLimit() {
         try {
             return getConfiguration().getInt("documents.facets.limit", DEFAULT_DOCUMENTS_FACETS_LIMIT);
