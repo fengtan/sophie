@@ -89,8 +89,8 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
     public void setTable(DocumentsTable table) {
         this.table = table;
     }
-
-    protected void initToolbar(final Composite composite) {
+    
+    private void initToolbar(final Composite composite) {
         Display display = composite.getDisplay();
         ClassLoader loader = getClass().getClassLoader();
         imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));

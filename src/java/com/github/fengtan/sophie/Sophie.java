@@ -40,7 +40,7 @@ public class Sophie {
 
     public static SolrClient client;
     public static Log log = LogFactory.getLog(Sophie.class);
-
+    
     public static void main(String[] args) {
         // Create shell.
         Shell shell = new Shell();
@@ -85,14 +85,11 @@ public class Sophie {
     // TODO test exotic Solr versions
     // TODO test modifying 2 documents and then commiting
     // TODO test what if server works and then goes down
+    // TODO test retest everything
 
+    // TODO meta document all methods
     // TODO meta wording server/index/collection/core - update class comments
     // accordingly
-    // TODO meta code formatter
-
-    // TODO clean look for unused/obsolete methods
-    // TODO clean retest everything
-    // TODO clean document all methods
 
     // TODO doc screenshot 0.5 + move screenshots/ to gh-pages
     // TODO doc gh-pages
@@ -104,18 +101,17 @@ public class Sophie {
     // TODO doc assume luke handler + select + admin/cores is available
     // TODO doc https://issues.apache.org/jira/browse/SOLR-20
     // TODO doc log4j.prop can set level to info not to trace http calls
-    // TODO doc mvn generate:doc
     // TODO doc "(not stored)"
     // TODO doc unsortable fields
     // TODO doc sort by clicking on header
     // TODO doc backup stored on *server*
-    // TODO dov mvn
+    // TODO dov mvn clean install
     // TODO doc import into eclipse
     // TODO doc typing 'Suppr' deletes a row.
     // TODO doc
     // "virtual i.e. remote documents are fetched as they are displayed for best perf"
     // TODO doc similar luke + javasoze/clue + solarium + projectblacklight.org
-    // TODO doc publish javadoc
+    // TODO doc publish javadoc (mvn generate:doc)
     // TODO doc
     // "if need to use http auth, then http://user:pass@localhost:8983/solr/collection1"
     // TODO doc

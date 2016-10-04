@@ -735,7 +735,7 @@ public class DocumentsTable { // TODO extend Composite ?
 
     // TODO test add ss_foo and ss_bar - does this create 2 entries or 1 in
     // this.fields ?
-    public void addField(String fieldName, FieldInfo field, FacetField facet, int index) {
+    private void addField(String fieldName, FieldInfo field, FacetField facet, int index) {
         addColumn(fieldName, field);
         // If field or facet is null then we cannot filter on this field (e.g.
         // the field is not indexed).
@@ -745,7 +745,7 @@ public class DocumentsTable { // TODO extend Composite ?
         // TODO allow sorting
     }
 
-    public void addField(FieldInfo field, FacetField facet, int index) {
+    private void addField(FieldInfo field, FacetField facet, int index) {
         addField(field.getName(), field, facet, index);
     }
 

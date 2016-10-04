@@ -88,7 +88,7 @@ public class ExceptionDialog extends Dialog {
         return composite;
     }
 
-    protected List createDropDownList(Composite parent) {
+    private List createDropDownList(Composite parent) {
         list = new List(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 
         for (String line : ExceptionUtils.getFullStackTrace(throwable).split("\n")) {

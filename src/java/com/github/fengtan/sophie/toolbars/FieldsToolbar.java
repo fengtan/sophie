@@ -47,7 +47,7 @@ public class FieldsToolbar {
         this.table = table;
     }
 
-    protected void initToolbar(final Composite composite) {
+    private void initToolbar(final Composite composite) {
         Display display = composite.getDisplay();
         ClassLoader loader = getClass().getClassLoader();
 
