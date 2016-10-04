@@ -31,30 +31,61 @@ import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.tables.FieldsTable;
 
+/**
+ * Toolbar to make operations on fields.
+ */
 public class FieldsToolbar {
 
+    /**
+     * Refresh operation - image.
+     */
     private Image imgRefresh;
 
+    /**
+     * Refresh operation - buton.
+     */
     private ToolItem itemRefresh;
 
+    /**
+     * Table listing the fields.
+     */
     private FieldsTable table;
 
+    /**
+     * Create a new toolbar to make operations on fields.
+     * 
+     * @param composite
+     *            Parent composite.
+     */
     public FieldsToolbar(Composite composite) {
         initToolbar(composite);
     }
 
+    /**
+     * Set table.
+     * 
+     * @param table
+     *            Table.
+     */
     public void setTable(FieldsTable table) {
         this.table = table;
     }
 
+    /**
+     * Populate toolbar with buttons.
+     * 
+     * @param composite
+     *            Parent composite.
+     */
     private void initToolbar(final Composite composite) {
         Display display = composite.getDisplay();
         ClassLoader loader = getClass().getClassLoader();
 
-        imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
-
+        // Instantiate toolbar.
         ToolBar toolBar = new ToolBar(composite, SWT.BORDER);
 
+        // Add button.
+        imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
         itemRefresh = new ToolItem(toolBar, SWT.PUSH);
         itemRefresh.setImage(imgRefresh);
         itemRefresh.setText("Refresh");
@@ -69,6 +100,7 @@ public class FieldsToolbar {
             }
         });
 
+        // Pack.
         toolBar.pack();
     }
 

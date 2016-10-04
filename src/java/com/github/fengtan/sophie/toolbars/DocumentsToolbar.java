@@ -52,47 +52,170 @@ import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.tables.DocumentsTable;
 import com.github.fengtan.sophie.validators.FieldValidator;
 
+/**
+ * Toolbar to make operations on documents.
+ */
 public class DocumentsToolbar implements SelectionListener, ChangeListener {
 
+    /**
+     * Refresh operation - image.
+     */
     private Image imgRefresh;
+
+    /**
+     * Add document operation - image.
+     */
     private Image imgAdd;
+
+    /**
+     * Delete document operation - image.
+     */
     private Image imgDelete;
+
+    /**
+     * Clone document operation - image.
+     */
     private Image imgClone;
+
+    /**
+     * Add field operation - image.
+     */
     private Image imgAddField;
+
+    /**
+     * Upload local modifications operation - image.
+     */
     private Image imgUpload;
+
+    /**
+     * Clear index operation - image.
+     */
     private Image imgClear;
+
+    /**
+     * Commit index operation - image.
+     */
     private Image imgCommit;
+
+    /**
+     * Optimize index operation - image.
+     */
     private Image imgOptimize;
+
+    /**
+     * Export operation - image.
+     */
     private Image imgExport;
+
+    /**
+     * Backup operation - image.
+     */
     private Image imgBackup;
+
+    /**
+     * Restore operation - image.
+     */
     private Image imgRestore;
 
+    /**
+     * Refresh operation - button.
+     */
     private ToolItem itemRefresh;
+
+    /**
+     * Add document operation - button.
+     */
     private ToolItem itemAdd;
+
+    /**
+     * Delete document operation - button.
+     */
     private ToolItem itemDelete;
+
+    /**
+     * Clone document operation - button.
+     */
     private ToolItem itemClone;
+
+    /**
+     * Add field operation - button.
+     */
     private ToolItem itemAddField;
+
+    /**
+     * Upload local modifications operation - button.
+     */
     private ToolItem itemUpload;
+
+    /**
+     * Clear index operation - button.
+     */
     private ToolItem itemClear;
+
+    /**
+     * Commit index operation - button.
+     */
     private ToolItem itemCommit;
+
+    /**
+     * Optimize index operation - button.
+     */
     private ToolItem itemOptimize;
+
+    /**
+     * Export operation - button.
+     */
     private ToolItem itemExport;
+
+    /**
+     * Backup operation - button.
+     */
     private ToolItem itemBackup;
+
+    /**
+     * Restore operation - button.
+     */
     private ToolItem itemRestore;
 
+    /**
+     * Table listing the documents.
+     */
     private DocumentsTable table;
 
+    /**
+     * Create a new toolbar to make operations on documents.
+     * 
+     * @param composite
+     *            Parent composite.
+     */
     public DocumentsToolbar(Composite composite) {
         initToolbar(composite);
     }
 
+    /**
+     * Set table.
+     * 
+     * @param table
+     *            Table.
+     */
     public void setTable(DocumentsTable table) {
         this.table = table;
     }
-    
+
+    /**
+     * Populate toolbar with buttons.
+     * 
+     * @param composite
+     *            Parent composite.
+     */
     private void initToolbar(final Composite composite) {
         Display display = composite.getDisplay();
         ClassLoader loader = getClass().getClassLoader();
+
+        // Instantiate toolbar.
+        ToolBar toolBar = new ToolBar(composite, SWT.BORDER);
+
+        // Instantiate images.
         imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
         imgAdd = new Image(display, loader.getResourceAsStream("toolbar/add.png"));
         imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
@@ -111,8 +234,7 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
         // TODO find better icon
         imgRestore = new Image(display, loader.getResourceAsStream("toolbar/restore.png"));
 
-        ToolBar toolBar = new ToolBar(composite, SWT.BORDER);
-
+        // Instantiate buttons.
         itemRefresh = new ToolItem(toolBar, SWT.PUSH);
         itemRefresh.setImage(imgRefresh);
         itemRefresh.setText("Refresh");
@@ -353,6 +475,7 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
             }
         });
 
+        // Pack.
         toolBar.pack();
     }
 
@@ -377,29 +500,24 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
         // Do nothing.
     }
 
-    /**
-     * Toggle buttons that require a document to be selected.
-     */
     @Override
     public void widgetSelected(SelectionEvent e) {
+        // These buttons require a document to be selected.
         itemDelete.setEnabled(true);
         itemClone.setEnabled(true);
     }
 
-    /**
-     * Enable 'Upload' button if there is at least one modification to send to
-     * Solr.
-     */
     @Override
     public void changed() {
+        // Enable the 'Upload' button if there is at least one local
+        // modification to send to Solr.
         itemUpload.setEnabled(true);
     }
 
-    /**
-     * Disable 'Upload' button if there is no modification to send to Solr.
-     */
     @Override
     public void unchanged() {
+        // Disable the 'Upload' button if there is no local modification to send
+        // to Solr.
         itemUpload.setEnabled(false);
     }
 

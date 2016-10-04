@@ -152,8 +152,6 @@ public class Sophie {
     // TODO doc admin/luke, admin/ping, admin/cores must be available
     // TODO doc datepicker if field type contains "date"
     // TODO doc gh-pages slogan consistant
-    // TODO doc wording server/index/collection/core - update class comments
-    // accordingly
 
     // TODO obs trayitem - not supported by ubuntu
     // https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217

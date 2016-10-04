@@ -49,38 +49,120 @@ import com.github.fengtan.sophie.dialogs.DoubleInputDialog;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.tables.CoresTable;
 
+/**
+ * Toolbar to make operations on cores.
+ */
 public class CoresToolbar implements SelectionListener {
 
+    /**
+     * Refresh operation - image.
+     */
     private Image imgRefresh;
+
+    /**
+     * Add core operation - image.
+     */
     private Image imgAdd;
+
+    /**
+     * Delete core operation - image.
+     */
     private Image imgDelete;
+
+    /**
+     * Rename core operation - image.
+     */
     private Image imgRename;
+
+    /**
+     * Swap cores operation - image.
+     */
     private Image imgSwap;
+
+    /**
+     * Reload core operation - image.
+     */
     private Image imgReload;
+
+    /**
+     * Reload all cores operation - image.
+     */
     private Image imgReloadAll;
 
+    /**
+     * Refresh operation - button.
+     */
     private ToolItem itemRefresh;
+
+    /**
+     * Add core operation - button.
+     */
     private ToolItem itemAdd;
+
+    /**
+     * Delete core operation - button.
+     */
     private ToolItem itemDelete;
+
+    /**
+     * Rename core operation - button.
+     */
     private ToolItem itemRename;
+
+    /**
+     * Swap cores operation - button.
+     */
     private ToolItem itemSwap;
+
+    /**
+     * Reload core operation - button.
+     */
     private ToolItem itemReload;
+
+    /**
+     * Reload all cores operation - button.
+     */
     private ToolItem itemReloadAll;
 
+    /**
+     * Table listing the cores.
+     */
     private CoresTable table;
 
+    /**
+     * Create a new toolbar to make operations on cores.
+     * 
+     * @param composite
+     *            Parent composite.
+     */
     public CoresToolbar(Composite composite) {
         initToolbar(composite);
     }
 
+    /**
+     * Set table.
+     * 
+     * @param table
+     *            Table.
+     */
     public void setTable(CoresTable table) {
         this.table = table;
     }
 
+    /**
+     * Populate toolbar with buttons.
+     * 
+     * @param composite
+     *            Parent composite.
+     */
     private void initToolbar(final Composite composite) {
         Display display = composite.getDisplay();
         ClassLoader loader = getClass().getClassLoader();
 
+        // Instantiate toolbar.
+        ToolBar toolBar = new ToolBar(composite, SWT.BORDER);
+        
+        // Instantiate images.
         imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
         imgAdd = new Image(display, loader.getResourceAsStream("toolbar/add.png"));
         imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
@@ -93,8 +175,7 @@ public class CoresToolbar implements SelectionListener {
         // TODO find a better icon?
         imgReloadAll = new Image(display, loader.getResourceAsStream("toolbar/restore.png"));
 
-        ToolBar toolBar = new ToolBar(composite, SWT.BORDER);
-
+        // Instantiate buttons.
         itemRefresh = new ToolItem(toolBar, SWT.PUSH);
         itemRefresh.setImage(imgRefresh);
         itemRefresh.setText("Refresh");
@@ -215,15 +296,11 @@ public class CoresToolbar implements SelectionListener {
         });
         itemSwap.setEnabled(false);
 
+        // TODO disable when no core selected
         itemReload = new ToolItem(toolBar, SWT.PUSH);
         itemReload.setImage(imgReload);
         itemReload.setText("Reload");
-        itemReload.setToolTipText("Reload core - this will reload any configuration changes you may have made to solrconfig.xml or schema.xml"); // TODO
-                                                                                                                                                 // disable
-                                                                                                                                                 // when
-                                                                                                                                                 // no
-                                                                                                                                                 // core
-                                                                                                                                                 // selected
+        itemReload.setToolTipText("Reload core - this will reload any configuration changes you may have made to solrconfig.xml or schema.xml");
         itemReload.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
                 String coreName = table.getSelectedCore();
@@ -273,11 +350,9 @@ public class CoresToolbar implements SelectionListener {
         // Do nothing.
     }
 
-    /**
-     * Toggle buttons that require a core to be selected.
-     */
     @Override
     public void widgetSelected(SelectionEvent e) {
+        // These buttons require a core to be selected.
         itemDelete.setEnabled(true);
         itemRename.setEnabled(true);
         itemSwap.setEnabled(true);

@@ -20,10 +20,19 @@ package com.github.fengtan.sophie.toolbars;
 
 import org.eclipse.swt.internal.SWTEventListener;
 
+/**
+ * Listener invoked content has changed locally.
+ */
 public interface ChangeListener extends SWTEventListener {
 
+    /**
+     * Content has changed (local modification).
+     */
     void changed();
 
+    /**
+     * Content has not changed (no local modification).
+     */
     void unchanged();
 
 }
