@@ -1,3 +1,20 @@
+/**
+ * Sophie - A Solr browser and administration tool
+ * Copyright (C) 2016 fengtan<https://github.com/fengtan>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.github.fengtan.sophie;
 
 import java.io.IOException;
@@ -63,17 +80,12 @@ public class Sophie {
 		display.dispose();
 		shell.dispose();
 	}
-	
+
 	// TODO test exotic Solr versions
 	// TODO test modifying 2 documents and then commiting
 	// TODO test what if server works and then goes down
 
-	// TODO meta license (depends on swt, solrj, icons, other dependencies)
 	// TODO meta wording server/index/collection/core - update class comments accordingly
-
-	// TODO contrib convenience methods for replication handler (backup/restore/polling) https://issues.apache.org/jira/browse/SOLR-5640
-
-	// TODO feat button populate dummy data
 
 	// TODO clean look for unused/obsolete methods ; lint
 	// TODO clean retest everything
@@ -109,6 +121,7 @@ public class Sophie {
 	// TODO doc filters facet values show up only if < FACETS_LIMIT
 	// TODO doc admin/luke, admin/ping, admin/cores must be available
 	// TODO doc datepicker if field type contains "date"
+	// TODO doc gh-pages slogan consistant
 	
 	// TODO obs trayitem - not supported by ubuntu https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
 	// TODO obs allow to select multiple values for each filter
