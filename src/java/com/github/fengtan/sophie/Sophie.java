@@ -65,8 +65,11 @@ public class Sophie {
     /**
      * Prompt user for Solr connection string and instantiate Solr client / SWT
      * display accordingly.
+     * 
+     * @param args
+     *            Arguments.
      */
-    public static void main() {
+    public static void main(String[] args) {
         // Create shell.
         Shell shell = new Shell();
         shell.setMaximized(true);
@@ -115,11 +118,11 @@ public class Sophie {
     // TODO test what if server works and then goes down
     // TODO test retest everything
 
-    // TODO meta document all methods
-    
-    // TODO contrib solrutils.getRemoteSchemaFields() -> LukeResponse.getDynamicFieldInfo() - similar to LukeResponse.getFieldInfo() - see LukeResponse.setResponse()
+    // TODO contrib solrutils.getRemoteSchemaFields() ->
+    // LukeResponse.getDynamicFieldInfo() - similar to
+    // LukeResponse.getFieldInfo() - see LukeResponse.setResponse()
     // TODO contrib replication handler solrj
-    
+
     // TODO doc screenshot 0.5 + move screenshots/ to gh-pages
     // TODO doc gh-pages
     // TODO doc measure memory footprint
