@@ -27,13 +27,27 @@ import org.eclipse.swt.widgets.Composite;
 import com.github.fengtan.sophie.tables.CoresTable;
 import com.github.fengtan.sophie.toolbars.CoresToolbar;
 
+/**
+ * Tab displaying a cores toolbar and a cores table.
+ */
 public class CoresTabItem extends CTabItem {
 
+    /**
+     * Cores toolbar.
+     */
     private CoresToolbar toolbar;
+
+    /**
+     * Cores table.
+     */
     private CoresTable table;
 
-    // TODO what if admin/cores is not available ? what if available on a
-    // different path ?
+    /**
+     * Create a new tab displaying a cores toolbar and a cores table.
+     * 
+     * @param tabFolder
+     *            Parent tab folder.
+     */
     public CoresTabItem(CTabFolder tabFolder) {
         super(tabFolder, SWT.NONE, tabFolder.getItemCount());
         setText("Cores");

@@ -27,14 +27,29 @@ import org.eclipse.swt.widgets.Composite;
 import com.github.fengtan.sophie.tables.FieldsTable;
 import com.github.fengtan.sophie.toolbars.FieldsToolbar;
 
+/**
+ * Tab displaying a fields toolbar and a fields table.
+ */
 public class FieldsTabItem extends CTabItem {
 
+    /**
+     * Fields toolbar.
+     */
     private FieldsToolbar toolbar;
+    
+    /**
+     * Fields core.
+     */
     private FieldsTable table;
 
+    /**
+     * Create a new tab displaying a fields toolbar and a fields table.
+     * 
+     * @param tabFolder
+     *            Parent tab folder.
+     */
     public FieldsTabItem(CTabFolder tabFolder) {
         super(tabFolder, SWT.NONE, tabFolder.getItemCount());
-
         setText("Fields");
 
         // Prepare layout.

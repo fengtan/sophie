@@ -29,11 +29,27 @@ import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.tables.DocumentsTable;
 import com.github.fengtan.sophie.toolbars.DocumentsToolbar;
 
+/**
+ * Tab displaying a documents toolbar and a documents table.
+ */
 public class DocumentsTabItem extends CTabItem {
 
+    /**
+     * Documents toolbar.
+     */
     private DocumentsToolbar toolbar;
+
+    /**
+     * Documents table.
+     */
     private DocumentsTable table;
 
+    /**
+     * Create a new tab displaying a documents toolbar and a documents table.
+     * 
+     * @param tabFolder
+     *            Parent tab folder.
+     */
     public DocumentsTabItem(CTabFolder tabFolder) {
         super(tabFolder, SWT.NONE, tabFolder.getItemCount());
 
@@ -53,6 +69,7 @@ public class DocumentsTabItem extends CTabItem {
             ExceptionDialog.open(composite.getShell(), new SophieException("Unable to initialize documents table", e));
         }
 
+        // Pack.
         composite.pack();
     }
 

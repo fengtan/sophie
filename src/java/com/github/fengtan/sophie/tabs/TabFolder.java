@@ -27,14 +27,38 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+/**
+ * Tab folder containing a documents tab item, a fields tab item and a cores tab
+ * item.
+ */
 public class TabFolder extends CTabFolder {
 
+    /**
+     * Documents tab item.
+     */
     private DocumentsTabItem documentsTabItem;
+
+    /**
+     * Fields tab item.
+     */
     private FieldsTabItem fieldsTabItem;
+
+    /**
+     * Cores tab item.
+     */
     private CoresTabItem coresTabItem;
 
-    public TabFolder(Shell shell, String connectionString) {
-        // Create the tabs.
+    /**
+     * Create a new tab folder containing a documents tab item, a fields tab
+     * item and a cores tab item.
+     * 
+     * @param shell
+     *            Shell.
+     * @param title
+     *            Title displayed on the top right corner of the tab folder.
+     */
+    public TabFolder(Shell shell, String title) {
+        // Create tabs.
         super(shell, SWT.TOP | SWT.BORDER);
 
         // Configure tab folder.
@@ -60,22 +84,37 @@ public class TabFolder extends CTabFolder {
         setSelectionForeground(titleForeColor);
         setSelectionBackground(new Color[] { titleBackColor1, titleBackColor2 }, new int[] { 100 }, true);
 
-        // Add Solr URL.
+        // Add title.
         ToolBar toolbar = new ToolBar(this, SWT.NULL);
         ToolItem item = new ToolItem(toolbar, SWT.NULL);
-        item.setText(connectionString);
+        item.setText(title);
         item.setEnabled(false);
         setTopRight(toolbar);
     }
 
+    /**
+     * Get documents tab item.
+     * 
+     * @return Documents tab item.
+     */
     public DocumentsTabItem getDocumentsTabItem() {
         return documentsTabItem;
     }
 
+    /**
+     * Get fields tab item.
+     * 
+     * @return Fields tab item.
+     */
     public FieldsTabItem getFieldsTabItem() {
         return fieldsTabItem;
     }
 
+    /**
+     * Get cores tab item.
+     * 
+     * @return Cores tab item.
+     */
     public CoresTabItem getCoresTabItem() {
         return coresTabItem;
     }
