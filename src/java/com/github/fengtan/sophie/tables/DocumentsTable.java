@@ -219,7 +219,6 @@ public class DocumentsTable {
         // Add first column (row #).
         TableColumn columnNumber = new TableColumn(table, SWT.LEFT);
         columnNumber.setText("#");
-        // TODO needed ? might be worth to setLayout() to get rid of this
         columnNumber.pack();
 
         // Add subsequent columns (fields).
@@ -292,7 +291,6 @@ public class DocumentsTable {
                 } else {
                     // Use rowIndex - 1 since the first line is used for
                     // filters.
-                    // TODO make sure the last document gets displayed.
                     try {
                         document = getRemoteDocument(rowIndex - 1);
                     } catch (SophieException e) {
@@ -310,9 +308,6 @@ public class DocumentsTable {
                     String fieldName = (String) column.getData("fieldName");
                     FieldInfo field = (FieldInfo) column.getData("field");
                     // If field is not stored, display message.
-                    // TODO disable doubleclick on unstored fields ?
-                    // TODO verify "(not stored)" is not sent to Solr when
-                    // updating/creating a new document
                     if (!SolrUtils.getFlags(field).contains(FieldFlag.STORED)) {
                         item.setText(index, LABEL_NOT_STORED);
                     } else {
@@ -594,23 +589,32 @@ public class DocumentsTable {
         dialog.setFileName("documents_" + date + ".csv");
         String path = dialog.open();
 
+        // User did not selected any location.
+        if (path == null) {
+            return;
+        }
+
         // Send Solr query and write result into file.
-        // TODO what if the file already exists ?
-        // TODO NPE if user does not select any folder
         SolrQuery query = getBaseQuery(0, table.getItemCount());
         QueryRequest request = new QueryRequest(query);
         request.setResponseParser(new NoOpResponseParser("csv"));
         // TODO notify user export success (export may take time).
+        NamedList<Object> response;
         try {
-            NamedList<Object> response = Sophie.client.request(request);
-            // TODO 1M lines into a String will fill the ram - is there a way to
-            // buffer solr's response ?
-            String csv = (String) response.get("response");
+            response = Sophie.client.request(request);
+        } catch (SolrServerException | IOException | SolrException e) {
+            throw new SophieException("Unable to get CSV documents from Solr", e);
+        }
+
+        // TODO 1M lines into a String will fill the ram - is there a way to
+        // buffer solr's response ?
+        String csv = (String) response.get("response");
+        try {
             Writer writer = new PrintWriter(path, "UTF-8");
             writer.write(csv);
             writer.close();
-        } catch (SolrServerException | IOException | SolrException e) {
-            throw new SophieException("Unable to export documents to CSV file", e);
+        } catch (IOException e) {
+            throw new SophieException("Unable to write into file " + path, e);
         }
     }
 
@@ -623,7 +627,6 @@ public class DocumentsTable {
      */
     public void upload() throws SophieException {
         // Upload local updates.
-        // TODO does not seem to be possible to update multiple documents.
         for (SolrDocument document : documentsUpdated) {
             SolrInputDocument input = new SolrInputDocument();
             for (String name : document.getFieldNames()) {
@@ -650,7 +653,6 @@ public class DocumentsTable {
         for (SolrDocument document : documentsAdded) {
             SolrInputDocument input = new SolrInputDocument();
             for (String name : document.getFieldNames()) {
-                // TODO setField() instead of addField() ?
                 input.addField(name, document.getFieldValue(name), BOOST);
             }
             try {
@@ -808,14 +810,13 @@ public class DocumentsTable {
                 // column.
                 char signifier = ORDER.asc.equals(sortOrder) ? Sophie.SIGNIFIER_SORTED_ASC : Sophie.SIGNIFIER_SORTED_DESC;
                 for (TableColumn c : table.getColumns()) {
-                    String fieldName = (String) c.getData("fieldName");
-                    if (fieldName != null) {
-                        if (!isFieldSortable) {
-                            // TODO probably messed up the column title for
-                            // dynamic fields
-                            c.setText(fieldName + " " + Sophie.SIGNIFIER_UNSORTABLE);
+                    String columnFieldName = (String) c.getData("fieldName");
+                    FieldInfo columnField = (FieldInfo) c.getData("field");
+                    if (columnFieldName != null && columnField != null) {
+                        if (!SolrUtils.isFieldSortable(columnField)) {
+                            c.setText(columnFieldName + " " + Sophie.SIGNIFIER_UNSORTABLE);
                         } else {
-                            c.setText(fieldName + ((column == c) ? " " + signifier : StringUtils.EMPTY));
+                            c.setText(columnFieldName + ((column == c) ? " " + signifier : StringUtils.EMPTY));
                         }
                     }
 
@@ -828,8 +829,7 @@ public class DocumentsTable {
                 }
             }
         });
-        column.pack(); // TODO needed ? might be worth to setLayout() to get rid
-                       // of this
+        column.pack();
     }
 
     /**
@@ -862,10 +862,14 @@ public class DocumentsTable {
                     // (e.g. "Foobar (3)")
                     Pattern pattern = Pattern.compile("^(.*) \\([0-9]+\\)$");
                     Matcher matcher = pattern.matcher(combo.getText());
-                    // TODO if cannot find pattern, then should log WARNING
-                    String filterValue = matcher.find() ? matcher.group(1) : StringUtils.EMPTY;
-                    // Populate combo with original value.
-                    combo.setText(filterValue);
+                    // If we found the original value, then populate the combo.
+                    // Otherwise, log a warning message.
+                    if (matcher.find()) {
+                        combo.setText(matcher.group(1));
+                    } else {
+                        Sophie.log.warn("Unable to extract original value from \""+combo.getText()+"\"");
+                    }
+
                 };
             });
         } else {
@@ -938,7 +942,6 @@ public class DocumentsTable {
         if (fieldName != null && field != null && facet != null) {
             addCombo(fieldName, field, facet, index);
         }
-        // TODO allow sorting
     }
 
     /**
