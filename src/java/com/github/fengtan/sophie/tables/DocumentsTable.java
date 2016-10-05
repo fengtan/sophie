@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -147,7 +148,7 @@ public class DocumentsTable {
     /**
      * Name of the column currently sorted.
      */
-    private String sortField = null;
+    private String sortField;
 
     /**
      * Whether the table is currently sorted in ascending or descending order.
@@ -208,6 +209,10 @@ public class DocumentsTable {
         // Instantiate table.
         this.composite = composite;
         this.uniqueField = SolrUtils.getRemoteUniqueField();
+        // Rows always need to be sorted so locally updated documents do not end
+        // up at the end of the list after the user upload them. We sort by
+        // unique field by default.
+        this.sortField = uniqueField;
         createTable();
         this.editor = new TableEditor(table);
         this.changeListener = changeListener;
@@ -218,7 +223,7 @@ public class DocumentsTable {
         columnNumber.setText("#");
         columnNumber.pack();
 
-        // Add subsequent columns (fields).
+        // Get facet values.
         List<FieldInfo> fields = SolrUtils.getRemoteFields();
         Map<String, FacetField> facets;
         try {
@@ -227,13 +232,22 @@ public class DocumentsTable {
             Sophie.log.warn("Unable to refresh filters", e);
             facets = Collections.emptyMap();
         }
+
+        // Sort fields by field names.
+        Collections.sort(fields, new Comparator<FieldInfo>() {
+            @Override
+            public int compare(FieldInfo field1, FieldInfo field2) {
+                return (field1 == null) ? -1 : field1.getName().compareTo(field2.getName());
+            }
+        });
+
+        // Add subsequent columns (fields).
         for (int i = 0; i < fields.size(); i++) {
             FieldInfo field = fields.get(i);
             FacetField facet = facets.get(field.getName());
             addField(field, facet, i + 1); // First row is used for row #.
         }
 
-        // TODO sort fields/columns by field name
         // Initialize cache + row count.
         refresh();
     }
@@ -275,20 +289,22 @@ public class DocumentsTable {
             public void handleEvent(Event event) {
                 TableItem item = (TableItem) event.item;
                 int rowIndex = table.indexOf(item);
+
                 // The first line is populated by filters.
                 if (rowIndex == 0) {
                     // TODO might need to populate if existing filters
                     return;
                 }
+
                 SolrDocument document;
                 // The last lines are populated by local additions.
                 if (rowIndex >= table.getItemCount() - documentsAdded.size()) {
                     document = documentsAdded.get(documentsAdded.size() - table.getItemCount() + rowIndex);
                     item.setBackground(GREEN);
                 } else {
-                    // Use rowIndex - 1 since the first line is used for
-                    // filters.
                     try {
+                        // rowIndex - 1 since the first line is used for
+                        // filters.
                         document = getRemoteDocument(rowIndex - 1);
                     } catch (SophieException e) {
                         ExceptionDialog.open(composite.getShell(), new SophieException("Unable to populate table", e));
@@ -475,9 +491,7 @@ public class DocumentsTable {
         // cache.
         if (!pages.containsKey(page)) {
             SolrQuery query = getBaseQuery(page * PAGE_SIZE, PAGE_SIZE);
-            if (sortField != null) {
-                query.setSort(sortField, sortOrder);   
-            }
+            query.setSort(sortField, sortOrder);
             try {
                 pages.put(page, Sophie.client.query(query).getResults());
             } catch (SolrServerException | IOException | SolrException e) {
@@ -715,9 +729,11 @@ public class DocumentsTable {
     /**
      * Delete the selected document locally.
      * 
-     * TODO what if update and then delete a document - does it get updated or deleted ?
+     * TODO what if update and then delete a document - does it get updated or
+     * deleted ?
      * 
-     * TODO what if delete and then update a document - does it get updated or deleted ?
+     * TODO what if delete and then update a document - does it get updated or
+     * deleted ?
      * 
      * @param item
      *            Row containing the document to delete.
@@ -729,12 +745,12 @@ public class DocumentsTable {
         if (document == null) {
             return;
         }
-        
+
         // If document is already deleted locally, then do nothing.
         if (documentsDeleted.contains(document)) {
             return;
         }
-        
+
         int rowIndex = table.getSelectionIndex();
         // If document was locally added, then just remove it from local
         // additions.
@@ -744,7 +760,7 @@ public class DocumentsTable {
             changeListener.changed();
             return;
         }
-        
+
         // Remove document.
         documentsDeleted.add(document);
         table.getItem(rowIndex).setBackground(RED);
