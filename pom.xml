@@ -4,7 +4,20 @@
   <artifactId>sophie</artifactId>
   <version>0.5</version>
   <name>sophie</name>
-  <description></description>
+  <description>A Solr browser and administration tool</description>
+  <developers>
+    <developer>
+      <id>fengtan</id>
+      <name>fengtan</name>
+      <url>https://github.com/fengtan</url>
+    </developer>
+  </developers>
+  <licenses>
+    <license>
+      <name>GNU General Public License Version 3</name>
+      <url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+    </license>
+  </licenses>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -56,6 +69,14 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.10.4</version>
+        <configuration>
+          <sourcepath>src/java</sourcepath>
+        </configuration>
       </plugin>
     </plugins>
   </build>
