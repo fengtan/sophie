@@ -134,7 +134,8 @@ public class Sophie {
     // TODO doc unsortable fields
     // TODO doc sort by clicking on header
     // TODO doc backup stored on *server*
-    // TODO dov mvn clean install
+    // TODO doc mvn clean install
+    // TODO doc javadoc gh-pages
     // TODO doc import into eclipse
     // TODO doc typing 'Suppr' deletes a row.
     // TODO doc

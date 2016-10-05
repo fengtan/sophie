@@ -279,7 +279,15 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
         itemClone.setToolTipText("Clone document");
         itemClone.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent e) {
-                table.cloneSelectedDocument();
+                SolrDocument document = table.getSelectedDocument();
+                if (document == null) {
+                    return;
+                }
+                // Unset the unique key field so we don't have two rows describing the
+                // same Solr document.
+                // TODO what if field "id" does not exist ?+ should use uniqueKey
+                document.removeFields("id");
+                table.addDocument(document);
             }
         });
         itemClone.setEnabled(false);

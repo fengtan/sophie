@@ -519,13 +519,16 @@ public class DocumentsTable {
     }
 
     /**
-     * Get the currently selected row.
+     * Get the currently selected document.
      * 
-     * @return Currently selected row.
+     * @return Currently selected document, or null if not row is selected.
      */
-    private TableItem getSelection() {
+    public SolrDocument getSelectedDocument() {
         TableItem[] items = table.getSelection();
-        return (items.length > 0) ? items[0] : null;
+        if (items.length == 0) {
+            return null;
+        }
+        return (SolrDocument) items[0].getData("document");
     }
 
     /**
@@ -557,25 +560,18 @@ public class DocumentsTable {
     }
 
     /**
-     * Delete currently selected document.
+     * Delete selected document.
      */
     public void deleteSelectedDocument() {
         // If a document is selected, then delete it.
-        TableItem item = getSelection();
-        if (item != null) {
-            deleteDocument(item);
+        TableItem[] items = table.getSelection();
+        if (items.length == 0) {
+            return;
         }
-    }
-
-    /**
-     * Clone currently selected document.
-     */
-    public void cloneSelectedDocument() {
-        // If a document is selected, then clone it.
-        TableItem item = getSelection();
-        if (item != null) {
-            cloneDocument(item);
+        if (items[0] == null) {
+            return;
         }
+        deleteDocument(items[0]);
     }
 
     /**
@@ -730,9 +726,6 @@ public class DocumentsTable {
     /**
      * Delete a document locally.
      * 
-     * TODO should be deleteDocument(SolrDocument document) - same for
-     * addDocument/updateDocument.
-     * 
      * TODO deleting a local document should decrease setItemCount + drop from
      * this.documentsAdded.
      * 
@@ -742,7 +735,7 @@ public class DocumentsTable {
     private void deleteDocument(TableItem item) {
         // TODO if local item (i.e. does not exist on server), then just drop
         // the row + update rowcount.
-        SolrDocument document = (SolrDocument) item.getData("document");
+        SolrDocument document = getSelectedDocument();
         // The row may not contain any document (e.g. the first row, which
         // contains the filters).
         if (document == null) {
@@ -767,22 +760,6 @@ public class DocumentsTable {
         // Scroll to the bottom of the table so we reveal the new document.
         table.setTopIndex(table.getItemCount() - 1);
         changeListener.changed();
-    }
-
-    /**
-     * Clone a document locally.
-     * 
-     * The unique key field is unset so we don't have two rows describing the
-     * same Solr document.
-     * 
-     * @param item
-     *            Row containing the document to clone.
-     */
-    private void cloneDocument(TableItem item) {
-        SolrDocument document = (SolrDocument) item.getData("document");
-        // TODO what if field "id" does not exist ?+ should use uniqueKey
-        document.removeFields("id");
-        addDocument(document);
     }
 
     /**
