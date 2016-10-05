@@ -161,7 +161,7 @@ public class CoresToolbar implements SelectionListener {
 
         // Instantiate toolbar.
         ToolBar toolBar = new ToolBar(composite, SWT.BORDER);
-        
+
         // Instantiate images.
         imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
         imgAdd = new Image(display, loader.getResourceAsStream("toolbar/add.png"));
@@ -200,7 +200,7 @@ public class CoresToolbar implements SelectionListener {
                     return;
                 }
                 try {
-                    // TODO createCore is overloaded with additional params
+                    // TODO CreateCore is overloaded with additional params
                     // (schema file etc).
                     CoreAdminRequest.createCore(dialog.getValue1(), dialog.getValue2(), Sophie.client);
                     table.refresh();
@@ -256,7 +256,7 @@ public class CoresToolbar implements SelectionListener {
         itemRename.setEnabled(false);
 
         new ToolItem(toolBar, SWT.SEPARATOR);
-        
+
         itemSwap = new ToolItem(toolBar, SWT.PUSH);
         itemSwap.setImage(imgSwap);
         itemSwap.setText("Swap");
@@ -292,7 +292,6 @@ public class CoresToolbar implements SelectionListener {
         });
         itemSwap.setEnabled(false);
 
-        // TODO disable when no core selected
         itemReload = new ToolItem(toolBar, SWT.PUSH);
         itemReload.setImage(imgReload);
         itemReload.setText("Reload");
@@ -343,18 +342,26 @@ public class CoresToolbar implements SelectionListener {
 
     @Override
     public void widgetDefaultSelected(SelectionEvent e) {
-        // Do nothing.
+        toggleButtonsRequiringSelection(false);
     }
 
     @Override
     public void widgetSelected(SelectionEvent e) {
-        // These buttons require a core to be selected.
-        itemDelete.setEnabled(true);
-        itemRename.setEnabled(true);
-        itemSwap.setEnabled(true);
-        itemReload.setEnabled(true);
-        // TODO click 'Reload' then no row selected but buttons are still
-        // enabled
+        toggleButtonsRequiringSelection(true);
+    }
+
+    /**
+     * Toggle buttons that require a core to be selected.
+     * 
+     * @param enabled
+     *            True if those buttons should be enabled ; false if they should
+     *            be disabled.
+     */
+    private void toggleButtonsRequiringSelection(boolean enabled) {
+        itemDelete.setEnabled(enabled);
+        itemRename.setEnabled(enabled);
+        itemSwap.setEnabled(enabled);
+        itemReload.setEnabled(enabled);
     }
 
 }

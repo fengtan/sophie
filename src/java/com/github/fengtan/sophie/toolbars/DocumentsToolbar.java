@@ -246,7 +246,6 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
 
         new ToolItem(toolBar, SWT.SEPARATOR);
 
-        // TODO allow to create documents with new fields
         itemAdd = new ToolItem(toolBar, SWT.PUSH);
         itemAdd.setImage(imgAdd);
         itemAdd.setText("Add");
@@ -320,7 +319,6 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
                 }
                 // Remove universal pattern which is not useful and will match
                 // any field name.
-                // TODO test
                 fields.remove("*");
                 // Remove fields already displayed in the table.
                 for (String existingFieldName : table.getFieldNames()) {

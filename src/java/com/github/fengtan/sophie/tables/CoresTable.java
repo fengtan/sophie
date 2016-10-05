@@ -46,7 +46,6 @@ public class CoresTable extends AbstractSortableTable {
      */
     public CoresTable(Composite composite, SelectionListener listener) {
         super(composite, listener);
-
         try {
             populate();
         } catch (SophieException e) {

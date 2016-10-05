@@ -31,6 +31,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -226,6 +227,14 @@ public abstract class AbstractSortableTable {
         setSortSignifier();
         table.removeAll();
         populate();
+        // Let selection listeners know that no row is now selected.
+        // This allows toolbar buttons that require a row to be selected to
+        // become disabled.
+        Event event = new Event();
+        event.widget = table;
+        event.display = table.getDisplay();
+        event.type = SWT.DefaultSelection;
+        table.notifyListeners(SWT.DefaultSelection, event);
     }
 
     /**
