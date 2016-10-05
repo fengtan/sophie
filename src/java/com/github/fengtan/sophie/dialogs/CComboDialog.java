@@ -106,8 +106,7 @@ public class CComboDialog extends Dialog {
         label.setFont(parent.getFont());
 
         // Create drop-down list.
-        // TODO add some spacing
-        combo = new Combo(parent, SWT.SINGLE | SWT.BORDER);
+        combo = new Combo(composite, SWT.SINGLE | SWT.BORDER);
         combo.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
         combo.setItems(items);
 

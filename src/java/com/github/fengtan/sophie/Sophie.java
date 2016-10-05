@@ -114,7 +114,8 @@ public class Sophie {
     }
 
     // TODO test retest everything
-    // TODO test backup/restore
+    // TODO test export 1M lines into a String will fill the ram - is there a
+    // way to buffer solr's response ?
 
     // TODO contrib solrutils.getRemoteSchemaFields() ->
     // LukeResponse.getDynamicFieldInfo() - similar to

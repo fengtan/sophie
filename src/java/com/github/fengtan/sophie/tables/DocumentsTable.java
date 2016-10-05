@@ -606,8 +606,6 @@ public class DocumentsTable {
             throw new SophieException("Unable to get CSV documents from Solr", e);
         }
 
-        // TODO 1M lines into a String will fill the ram - is there a way to
-        // buffer solr's response ?
         String csv = (String) response.get("response");
         try {
             Writer writer = new PrintWriter(path, "UTF-8");
