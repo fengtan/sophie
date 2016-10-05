@@ -125,6 +125,11 @@ public class DocumentsTable {
     private static final int FACET_LIMIT = Config.getDocumentsFacetsLimit();
 
     /**
+     * Boost assigned to new field values.
+     */
+    private static final float BOOST = 1.0f;
+
+    /**
      * Cached documents fetched from the server, keyed by page ID.
      */
     private Map<Integer, SolrDocumentList> pages;
@@ -645,8 +650,8 @@ public class DocumentsTable {
         for (SolrDocument document : documentsAdded) {
             SolrInputDocument input = new SolrInputDocument();
             for (String name : document.getFieldNames()) {
-                // TODO 1.0f move to constant
-                input.addField(name, document.getFieldValue(name), 1.0f);
+                // TODO setField() instead of addField() ?
+                input.addField(name, document.getFieldValue(name), BOOST);
             }
             try {
                 // Returned object seems to have no relevant information.
