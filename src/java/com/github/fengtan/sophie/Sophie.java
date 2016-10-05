@@ -186,5 +186,7 @@ public class Sophie {
     // TODO obs support sort on multiple fields
     // TODO obs progressbar for export()/restore()/backup() using asynchronous
     // calls /replication?command=restorestatus
+    // TODO obs EditListValueDialog list does not seem to expand when resize
+    // dialog
 
 }

@@ -40,8 +40,6 @@ import org.eclipse.swt.widgets.Shell;
 
 /**
  * Dialog to prompt user for multiple values.
- * 
- * TODO list does not seem to expand when resize dialog
  */
 public class EditListValueDialog extends EditValueDialog {
 

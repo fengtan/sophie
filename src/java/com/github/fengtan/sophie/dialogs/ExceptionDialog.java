@@ -22,6 +22,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -43,8 +44,6 @@ public class ExceptionDialog extends Dialog {
      * Dialog title.
      */
     private static final String TITLE = "An error happened";
-
-    // TODO add image
 
     /**
      * Button to let the user display the stack trace.
@@ -119,13 +118,18 @@ public class ExceptionDialog extends Dialog {
     protected Control createDialogArea(Composite parent) {
         Composite composite = (Composite) super.createDialogArea(parent);
         ((GridLayout) composite.getLayout()).numColumns = 2;
+        
+        // Create image.
+        Image image = parent.getDisplay().getSystemImage(SWT.ICON_ERROR);
+        Label labelImg = new Label(composite, SWT.WRAP);
+        labelImg.setImage(image);
 
         // Create label with the exception's message.
-        Label label = new Label(composite, SWT.WRAP);
-        label.setText(throwable.getMessage());
+        Label labelTxt = new Label(composite, SWT.WRAP);
+        labelTxt.setText(throwable.getMessage());
         GridData data = new GridData(GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL | GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_CENTER);
         data.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
-        label.setLayoutData(data);
+        labelTxt.setLayoutData(data);
 
         return composite;
     }
