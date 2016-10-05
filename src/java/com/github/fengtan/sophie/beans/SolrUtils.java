@@ -130,6 +130,8 @@ public class SolrUtils {
      * 
      * TODO could use admin/luke?show=schema
      * 
+     * TODO cache uniqueKey - 2 identical requests (fields+tables)
+     * 
      * @return Unique key field name.
      * @throws SophieException
      *             If the unique key field cannot be fetched.
@@ -160,6 +162,23 @@ public class SolrUtils {
         } catch (SolrServerException | IOException | SolrException e) {
             throw new SophieException("Unable to fetch list of Solr cores", e);
         }
+    }
+    
+
+    /**
+     * Whether Solr can sort a field.
+     * 
+     * @param field
+     *            Field.
+     * @return True if Solr can sort the field, false otherwise.
+     */
+    public static boolean isFieldSortable(FieldInfo field) {
+        // A field is sortable if
+        // 1) it is indexed
+        // 2) it is not multivalued
+        // 3) it does not have docValues
+        EnumSet<FieldFlag> flags = SolrUtils.getFlags(field);
+        return (flags.contains(FieldFlag.INDEXED) && !flags.contains(FieldFlag.DOC_VALUES) && !flags.contains(FieldFlag.MULTI_VALUED));
     }
 
 }

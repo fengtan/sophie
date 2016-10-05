@@ -31,34 +31,51 @@ import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 
+/**
+ * Table listing Solr cores.
+ */
 public class CoresTable extends AbstractSortableTable {
 
-    public CoresTable(Composite parent, SelectionListener listener) {
-        super(parent, listener);
+    /**
+     * Create a new table listing Solr cores.
+     * 
+     * @param composite
+     *            Parent composite.
+     * @param listener
+     *            Selection listener to attach to the table.
+     */
+    public CoresTable(Composite composite, SelectionListener listener) {
+        super(composite, listener);
 
         try {
             populate();
         } catch (SophieException e) {
-            ExceptionDialog.open(parent.getShell(), new SophieException("Unable to initialize cores table", e));
+            ExceptionDialog.open(composite.getShell(), new SophieException("Unable to initialize cores table", e));
         }
     }
 
+    /**
+     * Get the currently selected core.
+     * 
+     * @return Currently selected core.
+     */
     public String getSelectedCore() {
         TableItem[] items = getTableSelection();
         // Core name is in the first column
         return (items.length > 0) ? items[0].getText(0) : StringUtils.EMPTY;
     }
 
-    /**
-     * Populate columns + rows.
-     */
+    @Override
     protected void populate() throws SophieException {
+        // Get remote cores.
         Map<String, NamedList<Object>> cores;
         try {
             cores = SolrUtils.getCores();
         } catch (SophieException e) {
             throw new SophieException("Unable to populate cores table", e);
         }
+
+        // Populate table.
         for (NamedList<Object> core : cores.values()) {
             Map<String, String> values = linearizeNamedList(core, new HashMap<String, String>());
             addRow(values);
@@ -66,24 +83,32 @@ public class CoresTable extends AbstractSortableTable {
     }
 
     /**
-     * Recursively convert a NamedList into a linear Map.
+     * Recursively convert a hierarchical NamedList into a linear Map.
+     * 
+     * @param namedList
+     *            Hierarchical NamedList.
+     * @param map
+     *            Map to be populated.
+     * @return Linear Map populated with values in the NamedList.
      */
     private Map<String, String> linearizeNamedList(NamedList<?> namedList, Map<String, String> map) {
+        // Inspect all elements in the NamedList.
         for (int idx = 0; idx < namedList.size(); idx++) {
             Object object = namedList.getVal(idx);
             if (object instanceof NamedList) {
-                // NamedList: go through all elements recursively.
+                // Element is a NamedList: populate the map recursively.
                 linearizeNamedList((NamedList<?>) object, map);
             } else {
-                // Not a NamedList: add element to the map.
+                // Element is not a NamedList: add it to the map.
                 String name = namedList.getName(idx);
+                map.put(name, object.toString());
                 // Create column if it does not exist yet.
                 if (!hasColumn(name)) {
                     addColumn(name);
                 }
-                map.put(name, object.toString());
             }
         }
+        // Return populated map.
         return map;
     }
 

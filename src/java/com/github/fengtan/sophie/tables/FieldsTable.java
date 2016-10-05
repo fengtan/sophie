@@ -32,14 +32,26 @@ import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 
+/**
+ * Table listing Solr fields.
+ */
 public class FieldsTable extends AbstractSortableTable {
 
+    /**
+     * Static column names.
+     */
     private static final String[] columnNames = new String[] { "Name", "Type", "Unique", "Distinct", "Schema" };
 
-    public FieldsTable(Composite parent) {
-        super(parent);
+    /**
+     * Create a new table listing Solr fields.
+     * 
+     * @param composite
+     *            Parent composite.
+     */
+    public FieldsTable(Composite composite) {
+        super(composite);
 
-        // Add columns
+        // Add columns (static + flags).
         for (String columnName : columnNames) {
             addColumn(columnName);
         }
@@ -51,15 +63,17 @@ public class FieldsTable extends AbstractSortableTable {
         try {
             populate();
         } catch (SophieException e) {
-            ExceptionDialog.open(parent.getShell(), new SophieException("Unable to populate fields table", e));
+            ExceptionDialog.open(composite.getShell(), new SophieException("Unable to populate fields table", e));
         }
     }
 
+    @Override
     protected void populate() throws SophieException {
-        // TODO cache uniqueKey ? 2 identical requests (fields+tables), should
-        // remove 1 of the 2 and invalidate when hit refresh
+        // Get remote fields + unique key.
         String uniqueField = SolrUtils.getRemoteUniqueField();
         List<FieldInfo> fields = SolrUtils.getRemoteFields();
+        
+        // Populate table.
         for (FieldInfo field : fields) {
             Map<String, String> values = new HashMap<String, String>();
             values.put("Name", field.getName());

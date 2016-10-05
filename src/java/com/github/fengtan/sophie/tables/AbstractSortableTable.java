@@ -38,42 +38,100 @@ import org.eclipse.swt.widgets.TableItem;
 import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SophieException;
 
+/**
+ * Instantiate a non-virtual table and provide a sortable behavior. Subclasses
+ * are expected to use the protected methods in this class to add columns/rows.
+ */
 public abstract class AbstractSortableTable {
 
+    /**
+     * Table.
+     */
     private Table table;
+
+    /**
+     * List of column names.
+     */
     private List<String> columnNames = new ArrayList<String>();
+
+    /**
+     * List of rows, each row being represented by a map of values keyed by
+     * column name.
+     */
     private List<Map<String, String>> rowValues = new ArrayList<Map<String, String>>();
 
+    /**
+     * Whether the table is currently sorted in ascending order or not.
+     */
     private boolean sortAsc = true;
+
+    /**
+     * Name of the column currently sorted (null if the table is not sorted).
+     */
     private String sortColumnName;
 
-    public AbstractSortableTable(Composite parent, SelectionListener listener) {
+    /**
+     * Instantiate a non-virtual table and provide a sortable behavior.
+     * 
+     * @param composite
+     *            Parent composite.
+     * @param listener
+     *            Selection listener to attach to the table, or null.
+     */
+    public AbstractSortableTable(Composite composite, SelectionListener listener) {
+        // Instantiate table.
         int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
+        table = new Table(composite, style);
 
-        table = new Table(parent, style);
-
+        // Set layout.
         GridData gridData = new GridData(GridData.FILL_BOTH);
         gridData.grabExcessVerticalSpace = true;
         table.setLayoutData(gridData);
 
+        // Set style.
         table.setLinesVisible(true);
         table.setHeaderVisible(true);
 
+        // Attach selection listener, if one was provided.
         if (listener != null) {
             table.addSelectionListener(listener);
         }
     }
 
-    public AbstractSortableTable(Composite parent) {
-        this(parent, null);
+    /**
+     * Instantiate a non-virtual table and provide a sortable behavior.
+     * 
+     * @param composite
+     *            Parent composite.
+     */
+    public AbstractSortableTable(Composite composite) {
+        this(composite, null);
     }
 
+    /**
+     * Whether the table already contains a column with a specific name.
+     * 
+     * @param columnName
+     *            Column name.
+     * @return True if the table already contains a column with this name, false
+     *         otherwise.
+     */
     protected boolean hasColumn(String columnName) {
         return columnNames.contains(columnName);
     }
 
+    /**
+     * Add a new column to the table.
+     * 
+     * @param columnName
+     *            Column name.
+     * @return The newly created column.
+     */
     protected TableColumn addColumn(final String columnName) {
+        // Add column name to our internal list.
         columnNames.add(columnName);
+
+        // Instantiate column.
         final TableColumn column = new TableColumn(table, SWT.LEFT);
         column.setData("columnName", columnName);
         column.setText(columnName + "     ");
@@ -107,13 +165,16 @@ public abstract class AbstractSortableTable {
                 setSortSignifier();
             }
         });
-        column.pack();// TODO needed ? might be worth to setLayout() to get rid
-                      // of this
+
+        // Pack.
+        // TODO needed ? might be worth to setLayout() to get rid of this
+        column.pack();
         return column;
     }
 
     /**
-     * Set sort signifier on sorted column.
+     * Set sort signifier on the sorted column. Clear sort signifier on the
+     * other columns.
      */
     private void setSortSignifier() {
         for (TableColumn column : table.getColumns()) {
@@ -124,15 +185,27 @@ public abstract class AbstractSortableTable {
     }
 
     /**
+     * Add a new row to the table.
      * 
      * @param values
-     *            Map<columnName, value>
+     *            Row values keyed by column name.
+     * @return The newly created row.
      */
     protected TableItem addRow(Map<String, String> values) {
+        // Add row to our internal list.
         rowValues.add(values);
+
+        // Instantiate row.
         return createRow(values);
     }
 
+    /**
+     * Instantiate a new row.
+     * 
+     * @param values
+     *            Row values keyed by column name.
+     * @return The newly created row.
+     */
     private TableItem createRow(Map<String, String> values) {
         TableItem item = new TableItem(table, SWT.NULL);
         for (Map.Entry<String, String> value : values.entrySet()) {
@@ -141,6 +214,12 @@ public abstract class AbstractSortableTable {
         return item;
     }
 
+    /**
+     * Clear the table and re-populate it.
+     * 
+     * @throws SophieException
+     *             If the table could not be populated.
+     */
     public void refresh() throws SophieException {
         rowValues = new ArrayList<Map<String, String>>();
         sortAsc = true;
@@ -150,8 +229,19 @@ public abstract class AbstractSortableTable {
         populate();
     }
 
+    /**
+     * Populate the table with columns/rows.
+     * 
+     * @throws SophieException
+     *             If the table could not be populated.
+     */
     protected abstract void populate() throws SophieException;
 
+    /**
+     * Get the currently selected row.
+     * 
+     * @return Currently selected row.
+     */
     protected TableItem[] getTableSelection() {
         return table.getSelection();
     }

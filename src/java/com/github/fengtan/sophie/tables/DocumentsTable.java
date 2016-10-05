@@ -26,7 +26,6 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,47 +83,129 @@ import com.github.fengtan.sophie.dialogs.EditValueDialog;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.toolbars.ChangeListener;
 
-public class DocumentsTable { // TODO extend Composite ?
+/**
+ * Table listing Solr documents.
+ */
+public class DocumentsTable {
 
+    /**
+     * Yellow - color of modified documents.
+     */
     private static final Color YELLOW = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
+
+    /**
+     * Red - color of deleted documents.
+     */
     private static final Color RED = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+
+    /**
+     * Green - color of added documents.
+     */
     private static final Color GREEN = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 
+    /**
+     * Label displayed in lieu of the value when the field is not stored.
+     */
     private static final String LABEL_NOT_STORED = "(not stored)";
+
+    /**
+     * Label displayed then the document has no value for a specific field.
+     */
     private static final String LABEL_EMPTY = "(empty)";
 
-    // How many documents do we fetch from Solr at a time.
+    /**
+     * Page size - how many documents do we fetch from Solr at a time.
+     */
     private static final int PAGE_SIZE = Config.getDocumentsPageSize();
 
-    // How many facets values do we display at most.
+    /**
+     * Facet limit - how many facets values do we display at most in each
+     * filter.
+     */
     private static final int FACET_LIMIT = Config.getDocumentsFacetsLimit();
 
+    /**
+     * Cached documents fetched from the server, keyed by page ID.
+     */
     private Map<Integer, SolrDocumentList> pages;
+
+    /**
+     * Current active filters (filter values keyed by filter name).
+     */
     private Map<String, String> filters = new HashMap<String, String>();
+
+    /**
+     * Unique key field name.
+     */
     private String uniqueField; // TODO update when refresh ?()
+
+    /**
+     * Name of the column currently sorted.
+     */
     private String sortField;
+
+    /**
+     * Whether the table is currently sorted in ascending or descending order.
+     */
     private ORDER sortOrder = ORDER.asc;
 
-    // List of documents locally updated/deleted/added.
+    /**
+     * List of documents locally updated.
+     */
     private List<SolrDocument> documentsUpdated;
+
+    /**
+     * List of documents locally deleted.
+     */
     private List<SolrDocument> documentsDeleted;
+
+    /**
+     * List of documents locally added.
+     */
     private List<SolrDocument> documentsAdded;
 
-    // Change listener, allows the 'Upload' button to detect whether there are
-    // changes to send to Solr.
+    /**
+     * Change listener - allows the 'Upload' button to detect whether there are
+     * local changes to send to Solr.
+     */
     private ChangeListener changeListener;
 
+    /**
+     * Table.
+     */
     private Table table;
+
+    /**
+     * Table editor.
+     */
     private TableEditor editor;
 
-    private Composite parent;
+    /**
+     * Parent composite.
+     */
+    private Composite composite;
 
-    public DocumentsTable(Composite parent, SelectionListener selectionListener, ChangeListener changeListener) throws SophieException {
-        this.parent = parent;
+    /**
+     * Create a new table listing Solr documents.
+     * 
+     * @param composite
+     *            Parent composite.
+     * @param selectionListener
+     *            Selection listener - allows certain buttons to be enabled only
+     *            when a document is selected.
+     * @param changeListener
+     *            Change listener - allows the 'Upload' button to detect whether
+     *            there are local changes to send to Solr.
+     * @throws SophieException
+     *             If the table could not be created.
+     */
+    public DocumentsTable(Composite composite, SelectionListener selectionListener, ChangeListener changeListener) throws SophieException {
+        // Instantiate table.
+        this.composite = composite;
         this.uniqueField = SolrUtils.getRemoteUniqueField();
-        this.sortField = uniqueField; // By default we sort documents by
-                                      // uniqueKey TODO what if uniqueKey is not
-                                      // sortable ?
+        // By default we sort documents by uniqueKey
+        // TODO what if uniqueKey is not sortable ?
+        this.sortField = uniqueField;
         createTable();
         this.editor = new TableEditor(table);
         this.changeListener = changeListener;
@@ -133,8 +214,8 @@ public class DocumentsTable { // TODO extend Composite ?
         // Add first column (row #).
         TableColumn columnNumber = new TableColumn(table, SWT.LEFT);
         columnNumber.setText("#");
-        columnNumber.pack(); // TODO needed ? might be worth to setLayout() to
-                             // get rid of this
+        // TODO needed ? might be worth to setLayout() to get rid of this
+        columnNumber.pack();
 
         // Add subsequent columns (fields).
         List<FieldInfo> fields = SolrUtils.getRemoteFields();
@@ -152,23 +233,24 @@ public class DocumentsTable { // TODO extend Composite ?
         }
 
         // TODO sort fields/columns by field name
-        // TODO do we need to setData("field") ?
         // Initialize cache + row count.
         refresh();
     }
 
     /**
-     * Create the Table
+     * Create the Table.
      */
-    private void createTable() throws SophieException {
+    private void createTable() {
+        // Instantiate the table.
         int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
+        table = new Table(composite, style);
 
-        table = new Table(parent, style);
-
+        // Set layout.
         GridData gridData = new GridData(GridData.FILL_BOTH);
         gridData.grabExcessVerticalSpace = true;
         table.setLayoutData(gridData);
 
+        // Set styles.
         table.setLinesVisible(true);
         table.setHeaderVisible(true);
 
@@ -185,6 +267,8 @@ public class DocumentsTable { // TODO extend Composite ?
         // Initialize item count to 1 so we can populate the first row with
         // filters.
         table.setItemCount(1);
+
+        // Populate subsequent rows with remote documents (virtual table).
         table.addListener(SWT.SetData, new Listener() {
             @Override
             public void handleEvent(Event event) {
@@ -207,7 +291,7 @@ public class DocumentsTable { // TODO extend Composite ?
                     try {
                         document = getRemoteDocument(rowIndex - 1);
                     } catch (SophieException e) {
-                        ExceptionDialog.open(parent.getShell(), new SophieException("Unable to populate table", e));
+                        ExceptionDialog.open(composite.getShell(), new SophieException("Unable to populate table", e));
                         return;
                     }
                 }
@@ -237,6 +321,7 @@ public class DocumentsTable { // TODO extend Composite ?
             }
         });
 
+        // Add doubleclick listener to edit values.
         table.addListener(SWT.MouseDoubleClick, new Listener() {
             public void handleEvent(Event event) {
                 Point point = new Point(event.x, event.y);
@@ -263,12 +348,12 @@ public class DocumentsTable { // TODO extend Composite ?
                         // - text if we are dealing with any other field type.
                         EditValueDialog dialog;
                         if (SolrUtils.getFlags(field).contains(FieldFlag.MULTI_VALUED)) {
-                            dialog = new EditListValueDialog(parent.getShell(), (AbstractList<?>) defaultValue);
+                            dialog = new EditListValueDialog(composite.getShell(), (AbstractList<?>) defaultValue);
                         } else if (StringUtils.containsIgnoreCase(field.getType(), "date")) {
-                            dialog = new EditDateValueDialog(parent.getShell(), (Date) defaultValue);
+                            dialog = new EditDateValueDialog(composite.getShell(), (Date) defaultValue);
                         } else {
                             String oldValueString = Objects.toString(defaultValue, StringUtils.EMPTY);
-                            dialog = new EditTextValueDialog(parent.getShell(), oldValueString);
+                            dialog = new EditTextValueDialog(composite.getShell(), oldValueString);
                         }
                         dialog.open();
                         if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
@@ -284,11 +369,17 @@ public class DocumentsTable { // TODO extend Composite ?
         });
     }
 
+    /**
+     * Get field names.
+     * 
+     * @return List of field names.
+     */
     public List<String> getFieldNames() {
         List<String> fieldNames = new ArrayList<String>();
         for (int i = 0; i < table.getColumnCount(); i++) {
             String fieldName = (String) table.getColumn(i).getData("fieldName");
-            if (StringUtils.isNoneEmpty(fieldName)) {
+            // Field name is empty in the first column (row #).
+            if (StringUtils.isNotEmpty(fieldName)) {
                 fieldNames.add(fieldName);
             }
         }
@@ -296,25 +387,28 @@ public class DocumentsTable { // TODO extend Composite ?
     }
 
     /**
-     * Add/remove a filter depending on the combo value
+     * Add (if value is not empty) or remove (if value is empty) a filter.
+     * 
+     * @param fieldName
+     *            Field name.
+     * @param value
+     *            Filter value.
      */
-    private void updateFilters(String filterName, String filterValue) {
-        if (StringUtils.isEmpty(filterValue)) {
-            filters.remove(filterName);
+    private void updateFilters(String fieldName, String value) {
+        if (StringUtils.isEmpty(value)) {
+            filters.remove(fieldName);
         } else {
-            filters.put(filterName, filterValue);
+            filters.put(fieldName, value);
         }
     }
 
     /**
-     * A field is sortable if: - it is indexed - it is not multivalued - it does
-     * not have docvalues
+     * Get how many documents are in the remote index.
+     * 
+     * @return How many documents are in the remote index.
+     * @throws SophieException
+     *             If the number of documents could not be determined.
      */
-    private static boolean isFieldSortable(FieldInfo field) {
-        EnumSet<FieldFlag> flags = SolrUtils.getFlags(field);
-        return (flags.contains(FieldFlag.INDEXED) && !flags.contains(FieldFlag.DOC_VALUES) && !flags.contains(FieldFlag.MULTI_VALUED));
-    }
-
     private int getRemoteCount() throws SophieException {
         SolrQuery query = getBaseQuery(0, 0);
         try {
@@ -326,21 +420,32 @@ public class DocumentsTable { // TODO extend Composite ?
         }
     }
 
-    /*
-     * Map facet name => facet field
+    /**
+     * Get a list of remote facets keyed by field name.
+     * 
+     * @param fields
+     *            Fields.
+     * @return List of facets keyed by field name.
+     * @throws SophieException
+     *             If facets could not be fetched.
      */
     private Map<String, FacetField> getRemoteFacets(List<FieldInfo> fields) throws SophieException {
+        // Prepare query.
         SolrQuery query = getBaseQuery(0, 0);
         query.setFacet(true);
         query.setFacetSort("index");
         query.setFacetLimit(FACET_LIMIT);
         query.setFacetMissing(true);
+
+        // For each field, determine whether Solr can generate a facet (fq works
+        // only on indexed fields). If yes, then list that field in the query.
         for (FieldInfo field : fields) {
-            // fq works only on indexed fields.
             if (SolrUtils.getFlags(field).contains(FieldFlag.INDEXED)) {
                 query.addFacetField(field.getName());
             }
         }
+
+        // Send query.
         Map<String, FacetField> facets = new HashMap<String, FacetField>();
         try {
             for (FacetField facet : Sophie.client.query(query).getFacetFields()) {
@@ -349,18 +454,30 @@ public class DocumentsTable { // TODO extend Composite ?
         } catch (SolrServerException | IOException | SolrException e) {
             throw new SophieException("Unable to fetch remote facets", e);
         }
+
+        // Return facets keyed by field name.
         return facets;
     }
 
     /**
-     * Not null-safe
+     * Get document to display at a specific row index. The document is
+     * retrieved from the cache. If it is not in the cache, then we fetch a new
+     * page of results and we populate the cache.
+     * 
+     * @param rowIndex
+     *            Row index.
+     * @return Solr document.
+     * @throws SophieException
+     *             If the document could not be fetched from Solr.
      */
     private SolrDocument getRemoteDocument(int rowIndex) throws SophieException {
+        // Compute page ID.
         int page = rowIndex / PAGE_SIZE;
-        // If page has not be fetched yet, then fetch it.
+
+        // If page is not in the cache, then fetch it from Solr and populate the
+        // cache.
         if (!pages.containsKey(page)) {
             SolrQuery query = getBaseQuery(page * PAGE_SIZE, PAGE_SIZE);
-            // TODO user should be able to change sort column.
             // TODO what if sortField is not valid anymore
             query.setSort(sortField, sortOrder);
             try {
@@ -369,9 +486,20 @@ public class DocumentsTable { // TODO extend Composite ?
                 throw new SophieException("Unable to fetch remote document " + rowIndex, e);
             }
         }
+
+        // Return Solr document from the cache.
         return pages.get(page).get(rowIndex % PAGE_SIZE);
     }
 
+    /**
+     * Get select query and populate the start/rows/fq parameters.
+     * 
+     * @param start
+     *            Offset at which Solr should being returning documents.
+     * @param rows
+     *            How many rows Solr should return.
+     * @return Solr query.
+     */
     private SolrQuery getBaseQuery(int start, int rows) {
         SolrQuery query = new SolrQuery("*:*");
         query.setStart(start);
@@ -391,17 +519,21 @@ public class DocumentsTable { // TODO extend Composite ?
     }
 
     /**
-     * Get first selected document
+     * Get the currently selected row.
      * 
-     * TODO support multiple selections?
+     * @return Currently selected row.
      */
     private TableItem getSelection() {
         TableItem[] items = table.getSelection();
         return (items.length > 0) ? items[0] : null;
     }
 
-    /*
-     * Re-populate table with remote data.
+    /**
+     * Clear table and flush internal cache. This causes the table to be
+     * re-populated with remote documents.
+     * 
+     * @throws SophieException
+     *             If the documents could not be fetched from Solr.
      */
     public void refresh() throws SophieException {
         // TODO re-populate columns/filters ?
@@ -424,6 +556,9 @@ public class DocumentsTable { // TODO extend Composite ?
         }
     }
 
+    /**
+     * Delete currently selected document.
+     */
     public void deleteSelectedDocument() {
         // If a document is selected, then delete it.
         TableItem item = getSelection();
@@ -432,6 +567,9 @@ public class DocumentsTable { // TODO extend Composite ?
         }
     }
 
+    /**
+     * Clone currently selected document.
+     */
     public void cloneSelectedDocument() {
         // If a document is selected, then clone it.
         TableItem item = getSelection();
@@ -440,16 +578,22 @@ public class DocumentsTable { // TODO extend Composite ?
         }
     }
 
-    /*
+    /**
      * Export documents into CSV file.
+     * 
+     * @throws SophieException
+     *             If the documents could not be exported into a CSV file.
      */
     public void export() throws SophieException {
+        // Open dialog to let the user select where the file will be dumped.
         FileDialog dialog = new FileDialog(table.getShell(), SWT.SAVE);
         dialog.setFilterNames(new String[] { "CSV Files (*.csv)", "All Files (*.*)" });
         dialog.setFilterExtensions(new String[] { "*.csv", "*.*" });
         String date = new SimpleDateFormat("yyyy-MM-dd-HH:mm").format(new Date());
         dialog.setFileName("documents_" + date + ".csv");
         String path = dialog.open();
+
+        // Send Solr query and write result into file.
         // TODO what if the file already exists ?
         // TODO NPE if user does not select any folder
         SolrQuery query = getBaseQuery(0, table.getItemCount());
@@ -458,12 +602,9 @@ public class DocumentsTable { // TODO extend Composite ?
         // TODO notify user export success (export may take time).
         try {
             NamedList<Object> response = Sophie.client.request(request);
-            String csv = (String) response.get("response"); // TODO 1M lines
-                                                            // into a String
-                                                            // will fill the ram
-                                                            // - is there a way
-                                                            // to buffer solr's
-                                                            // response ?
+            // TODO 1M lines into a String will fill the ram - is there a way to
+            // buffer solr's response ?
+            String csv = (String) response.get("response");
             Writer writer = new PrintWriter(path, "UTF-8");
             writer.write(csv);
             writer.close();
@@ -473,10 +614,14 @@ public class DocumentsTable { // TODO extend Composite ?
     }
 
     /**
-     * Commit local changes to the Solr server.
+     * Upload local changes to the Solr server.
+     * 
+     * @throws SophieException
+     *             If the local changes could not be uploaded to the Solr
+     *             server.
      */
     public void upload() throws SophieException {
-        // Commit local updates.
+        // Upload local updates.
         // TODO does not seem to be possible to update multiple documents.
         for (SolrDocument document : documentsUpdated) {
             SolrInputDocument input = new SolrInputDocument();
@@ -490,7 +635,7 @@ public class DocumentsTable { // TODO extend Composite ?
                 throw new SophieException("Unable to update document in index: " + input.toString(), e);
             }
         }
-        // Commit local deletions.
+        // Upload local deletions.
         for (SolrDocument document : documentsDeleted) {
             // TODO what if no uniquekey
             String id = document.getFieldValue(uniqueField).toString();
@@ -500,7 +645,7 @@ public class DocumentsTable { // TODO extend Composite ?
                 throw new SophieException("Unable to delete document from index: " + id, e);
             }
         }
-        // Commit local additions.
+        // Upload local additions.
         for (SolrDocument document : documentsAdded) {
             SolrInputDocument input = new SolrInputDocument();
             for (String name : document.getFieldNames()) {
@@ -514,26 +659,31 @@ public class DocumentsTable { // TODO extend Composite ?
                 throw new SophieException("Unable to add document to index: " + input.toString(), e);
             }
         }
-        // Commit on server.
+        // Commit the index.
         try {
             Sophie.client.commit();
-            // TODO allow to revert a specific document
         } catch (SolrServerException | IOException | SolrException e) {
             throw new SophieException("Unable to commit index", e);
         }
-        // Refresh so user can see what the new state of the server.
+
+        // Refresh so user can see the new state of the server.
         refresh();
     }
 
-    /*
+    /**
      * Restore index from a backup
+     * 
+     * @param backupName
+     *            Backup file name.
+     * @throws SophieException
+     *             If the backup could not be restored.
      */
     public void restore(String backupName) throws SophieException {
         ModifiableSolrParams params = new ModifiableSolrParams();
         params.set("command", "restore");
         params.set("name", backupName);
         QueryRequest request = new QueryRequest(params);
-        request.setPath("/replication");
+        request.setPath("/replication"); // TODO replication ?
         try {
             Sophie.client.request(request);
             // TODO work only for solr >= 5.2 (mention) => disable button if
@@ -548,6 +698,16 @@ public class DocumentsTable { // TODO extend Composite ?
         refresh();
     }
 
+    /**
+     * Update a document locally.
+     * 
+     * @param item
+     *            Row containing the document to update.
+     * @param columnIndex
+     *            Column index of the field to update.
+     * @param newValue
+     *            New value.
+     */
     private void updateDocument(TableItem item, int columnIndex, Object newValue) {
         SolrDocument document = (SolrDocument) item.getData("document");
         // The row may not contain any document (e.g. the first row, which
@@ -567,6 +727,18 @@ public class DocumentsTable { // TODO extend Composite ?
         changeListener.changed();
     }
 
+    /**
+     * Delete a document locally.
+     * 
+     * TODO should be deleteDocument(SolrDocument document) - same for
+     * addDocument/updateDocument.
+     * 
+     * TODO deleting a local document should decrease setItemCount + drop from
+     * this.documentsAdded.
+     * 
+     * @param item
+     *            Row containing the document to delete.
+     */
     private void deleteDocument(TableItem item) {
         // TODO if local item (i.e. does not exist on server), then just drop
         // the row + update rowcount.
@@ -583,8 +755,12 @@ public class DocumentsTable { // TODO extend Composite ?
         changeListener.changed(); // Handle this in DocumentsToolbar ?
     }
 
-    // TODO deleting a local document should decrease setItemCount + drop from
-    // this.documentsAdded.
+    /**
+     * Add a document locally.
+     * 
+     * @param document
+     *            The new document.
+     */
     public void addDocument(SolrDocument document) {
         documentsAdded.add(document);
         table.setItemCount(table.getItemCount() + 1);
@@ -594,27 +770,38 @@ public class DocumentsTable { // TODO extend Composite ?
     }
 
     /**
-     * If a document is selected, then clone it.
+     * Clone a document locally.
      * 
-     * The ID field is unset so we don't have 2 rows describing the same Solr
-     * document. TODO "ID" field could be labeled something else
+     * The unique key field is unset so we don't have two rows describing the
+     * same Solr document.
+     * 
+     * @param item
+     *            Row containing the document to clone.
      */
     private void cloneDocument(TableItem item) {
         SolrDocument document = (SolrDocument) item.getData("document");
-        document.removeFields("id"); // TODO what if field "id" does not exist
+        // TODO what if field "id" does not exist ?+ should use uniqueKey
+        document.removeFields("id");
         addDocument(document);
     }
 
     /**
-     * Use custom name as column name. Used for dynamic fields, where field name
-     * may be "ss_*" but we want the column name to be "ss_foobar".
+     * Add a new (custom) column to the table.
+     * 
+     * This is used for dynamic fields, where field name may be "ss_*" but we
+     * want the column name to be "ss_foobar".
+     * 
+     * @param fieldName
+     *            New field name.
+     * @param fieldInfo
+     *            New field definition.
      */
     private void addColumn(final String fieldName, FieldInfo fieldInfo) {
         final TableColumn column = new TableColumn(table, SWT.LEFT);
         // Add space padding so we can see the sort signifier.
         // TODO set sort signifier on uniqueKey by default ?
         // TODO refactor with selection listener
-        final boolean isFieldSortable = isFieldSortable(fieldInfo);
+        final boolean isFieldSortable = SolrUtils.isFieldSortable(fieldInfo);
         column.setText(fieldName + (isFieldSortable ? "     " : " " + Sophie.SIGNIFIER_UNSORTABLE));
         column.setData("field", fieldInfo);
         column.setData("fieldName", fieldName);
@@ -655,7 +842,7 @@ public class DocumentsTable { // TODO extend Composite ?
                 try {
                     refresh();
                 } catch (SophieException e) {
-                    ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+                    ExceptionDialog.open(composite.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
                 }
             }
         });
@@ -663,6 +850,19 @@ public class DocumentsTable { // TODO extend Composite ?
                        // of this
     }
 
+    /**
+     * Add a filter (combo).
+     * 
+     * @param fieldName
+     *            Field name.
+     * @param field
+     *            Field definition.
+     * @param facet
+     *            Facet - the values will be used to populate the values of the
+     *            combo.
+     * @param index
+     *            Column index.
+     */
     private void addCombo(String fieldName, FieldInfo field, final FacetField facet, int index) {
         final CCombo combo = new CCombo(table, SWT.BORDER);
         combo.add(StringUtils.EMPTY);
@@ -706,7 +906,7 @@ public class DocumentsTable { // TODO extend Composite ?
                 try {
                     refresh();
                 } catch (SophieException e) {
-                    ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+                    ExceptionDialog.open(composite.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
                 }
             }
         });
@@ -721,7 +921,7 @@ public class DocumentsTable { // TODO extend Composite ?
                     try {
                         refresh();
                     } catch (SophieException e) {
-                        ExceptionDialog.open(parent.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
+                        ExceptionDialog.open(composite.getShell(), new SophieException("Unable to refresh documents from Solr server", e));
                     }
                 }
             }
@@ -735,6 +935,20 @@ public class DocumentsTable { // TODO extend Composite ?
 
     // TODO test add ss_foo and ss_bar - does this create 2 entries or 1 in
     // this.fields ?
+
+    /**
+     * Add a new field to the table.
+     * 
+     * @param fieldName
+     *            Field name.
+     * @param field
+     *            Field definition.
+     * @param facet
+     *            Facet - the values will be used to populate the values of the
+     *            combo.
+     * @param index
+     *            Column index.
+     */
     private void addField(String fieldName, FieldInfo field, FacetField facet, int index) {
         addColumn(fieldName, field);
         // If field or facet is null then we cannot filter on this field (e.g.
@@ -745,10 +959,30 @@ public class DocumentsTable { // TODO extend Composite ?
         // TODO allow sorting
     }
 
+    /**
+     * Add a new field to the table. The field name is deduced from the field
+     * definition.
+     * 
+     * @param field
+     *            Field definition.
+     * @param facet
+     *            Facet - the values will be used to populate the values of the
+     *            combo.
+     * @param index
+     *            Column index.
+     */
     private void addField(FieldInfo field, FacetField facet, int index) {
         addField(field.getName(), field, facet, index);
     }
 
+    /**
+     * Add new field to the table. No values are provided to the filter.
+     * 
+     * @param fieldName
+     *            Field name.
+     * @param field
+     *            Field definition.
+     */
     public void addField(String fieldName, FieldInfo field) {
         FacetField facet = new FacetField(fieldName);
         int index = table.getColumnCount();
