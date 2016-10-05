@@ -113,8 +113,8 @@ public class Sophie {
         shell.dispose();
     }
 
-    // TODO test modifying 2 documents and then commiting
     // TODO test retest everything
+    // TODO test backup/restore
 
     // TODO contrib solrutils.getRemoteSchemaFields() ->
     // LukeResponse.getDynamicFieldInfo() - similar to

@@ -153,7 +153,7 @@ public class DocumentsTable {
     /**
      * Whether the table is currently sorted in ascending or descending order.
      */
-    private ORDER sortOrder = ORDER.asc;
+    private ORDER sortOrder;
 
     /**
      * List of documents locally updated.
@@ -208,11 +208,6 @@ public class DocumentsTable {
     public DocumentsTable(Composite composite, SelectionListener selectionListener, ChangeListener changeListener) throws SophieException {
         // Instantiate table.
         this.composite = composite;
-        this.uniqueField = SolrUtils.getRemoteUniqueField();
-        // Rows always need to be sorted so locally updated documents do not end
-        // up at the end of the list after the user upload them. We sort by
-        // unique field by default.
-        this.sortField = uniqueField;
         createTable();
         this.editor = new TableEditor(table);
         this.changeListener = changeListener;
@@ -516,8 +511,7 @@ public class DocumentsTable {
         SolrQuery query = new SolrQuery("*:*");
         query.setStart(start);
         query.setRows(rows);
-        // Add filters. TODO move filters outside of this function ? no need to
-        // set fq for facets
+        // Add filters.
         for (Entry<String, String> filter : filters.entrySet()) {
             if (StringUtils.equals(filter.getValue(), LABEL_EMPTY)) {
                 // Empty value needs a special syntax.
@@ -546,18 +540,29 @@ public class DocumentsTable {
     /**
      * Clear table and flush internal cache. This causes the table to be
      * re-populated with remote documents.
+     *
+     * TODO re-populate columns/filters ?
      * 
      * @throws SophieException
      *             If the documents could not be fetched from Solr.
      */
     public void refresh() throws SophieException {
-        // TODO re-populate columns/filters ?
-        // TODO re-populate unique field / sort field ?
+        // Reset unique key, sort field and sort order
+        // Rows always need to be sorted so locally updated documents do not end
+        // up at the end of the list after the user upload them. We sort by
+        // unique field by default.
+        uniqueField = SolrUtils.getRemoteUniqueField();
+        sortField = uniqueField;
+        sortOrder = ORDER.asc;
+
+        // Flush cache.
         documentsUpdated = new ArrayList<SolrDocument>();
         documentsDeleted = new ArrayList<SolrDocument>();
         documentsAdded = new ArrayList<SolrDocument>();
         pages = new HashMap<Integer, SolrDocumentList>();
         changeListener.unchanged();
+
+        // Clear table.
         try {
             // First row is for filters, the rest is for documents (remote +
             // locally added - though no local addition since we have just
@@ -689,7 +694,6 @@ public class DocumentsTable {
             // solr < 5.2 https://issues.apache.org/jira/browse/SOLR-6637
             // TODO get /replication?command=restorestatus and provide feedback
             // to user (asynchronous call), possibly with a progress bar
-            // TODO test backup/restore
             refresh();
         } catch (SolrServerException | IOException | SolrException e) {
             throw new SophieException("Unable to restore backup \"" + backupName + "\"", e);
@@ -714,26 +718,34 @@ public class DocumentsTable {
         if (document == null) {
             return;
         }
+
         String fieldName = (String) table.getColumn(columnIndex).getData("fieldName");
         // We reduce by 1 since the first column is used for row ID.
         document.setField(fieldName, newValue);
         item.setText(columnIndex, Objects.toString(newValue, StringUtils.EMPTY));
-        // TODO if new record, then leave green
+        changeListener.changed();
+
+        // If document was locally added, then leave it in documentsAdded and
+        // return so it remains green.
+        if (documentsAdded.contains(document)) {
+            return;
+        }
+
+        // If document was locally deleted, then remove it from documentsDeleted
+        // and let it go into documentsUpdated.
+        if (documentsDeleted.contains(document)) {
+            documentsDeleted.remove(document);
+        }
+
+        // Add document to documentsUpdated if it is not already there.
         if (!documentsUpdated.contains(document)) {
             documentsUpdated.add(document);
         }
         item.setBackground(YELLOW);
-        changeListener.changed();
     }
 
     /**
      * Delete the selected document locally.
-     * 
-     * TODO what if update and then delete a document - does it get updated or
-     * deleted ?
-     * 
-     * TODO what if delete and then update a document - does it get updated or
-     * deleted ?
      * 
      * @param item
      *            Row containing the document to delete.
@@ -759,6 +771,12 @@ public class DocumentsTable {
             table.remove(rowIndex);
             changeListener.changed();
             return;
+        }
+
+        // If document was locally updated, then remove it from documentsUpdated
+        // and let it go into documentsDeleted.
+        if (documentsUpdated.contains(document)) {
+            documentsUpdated.remove(document);
         }
 
         // Remove document.
