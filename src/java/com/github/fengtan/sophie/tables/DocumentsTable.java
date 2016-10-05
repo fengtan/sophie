@@ -142,12 +142,12 @@ public class DocumentsTable {
     /**
      * Unique key field name.
      */
-    private String uniqueField; // TODO update when refresh ?()
+    private String uniqueField;
 
     /**
      * Name of the column currently sorted.
      */
-    private String sortField;
+    private String sortField = null;
 
     /**
      * Whether the table is currently sorted in ascending or descending order.
@@ -208,9 +208,6 @@ public class DocumentsTable {
         // Instantiate table.
         this.composite = composite;
         this.uniqueField = SolrUtils.getRemoteUniqueField();
-        // By default we sort documents by uniqueKey
-        // TODO what if uniqueKey is not sortable ?
-        this.sortField = uniqueField;
         createTable();
         this.editor = new TableEditor(table);
         this.changeListener = changeListener;
@@ -478,8 +475,9 @@ public class DocumentsTable {
         // cache.
         if (!pages.containsKey(page)) {
             SolrQuery query = getBaseQuery(page * PAGE_SIZE, PAGE_SIZE);
-            // TODO what if sortField is not valid anymore
-            query.setSort(sortField, sortOrder);
+            if (sortField != null) {
+                query.setSort(sortField, sortOrder);   
+            }
             try {
                 pages.put(page, Sophie.client.query(query).getResults());
             } catch (SolrServerException | IOException | SolrException e) {
