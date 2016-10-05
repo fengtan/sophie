@@ -78,15 +78,15 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
     private Image imgClone;
 
     /**
-     * Add field operation - image.
-     */
-    private Image imgAddField;
-
-    /**
      * Upload local modifications operation - image.
      */
     private Image imgUpload;
 
+    /**
+     * Add field operation - image.
+     */
+    private Image imgAddField;
+    
     /**
      * Clear index operation - image.
      */
@@ -138,15 +138,15 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
     private ToolItem itemClone;
 
     /**
-     * Add field operation - button.
-     */
-    private ToolItem itemAddField;
-
-    /**
      * Upload local modifications operation - button.
      */
     private ToolItem itemUpload;
 
+    /**
+     * Add field operation - button.
+     */
+    private ToolItem itemAddField;
+    
     /**
      * Clear index operation - button.
      */
@@ -220,18 +220,13 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
         imgAdd = new Image(display, loader.getResourceAsStream("toolbar/add.png"));
         imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
         imgClone = new Image(display, loader.getResourceAsStream("toolbar/clone.png"));
-        // TODO find a better icon ?
-        imgAddField = new Image(display, loader.getResourceAsStream("toolbar/add.png"));
-        // TODO find a better icon ?
         imgUpload = new Image(display, loader.getResourceAsStream("toolbar/upload.png"));
+        imgAddField = new Image(display, loader.getResourceAsStream("toolbar/add_field.png"));
         imgClear = new Image(display, loader.getResourceAsStream("toolbar/clear.png"));
         imgCommit = new Image(display, loader.getResourceAsStream("toolbar/commit.png"));
         imgOptimize = new Image(display, loader.getResourceAsStream("toolbar/optimize.png"));
-        // TODO find better icon ?
         imgExport = new Image(display, loader.getResourceAsStream("toolbar/export.png"));
-        // TODO find better icon
         imgBackup = new Image(display, loader.getResourceAsStream("toolbar/backup.png"));
-        // TODO find better icon
         imgRestore = new Image(display, loader.getResourceAsStream("toolbar/restore.png"));
 
         // Instantiate buttons.
@@ -292,6 +287,23 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
         });
         itemClone.setEnabled(false);
 
+        itemUpload = new ToolItem(toolBar, SWT.PUSH);
+        itemUpload.setImage(imgUpload);
+        itemUpload.setText("Upload");
+        itemUpload.setToolTipText("Upload local modifications to Solr");
+        itemUpload.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent event) {
+                try {
+                    table.upload();
+                } catch (SophieException e) {
+                    ExceptionDialog.open(composite.getShell(), new SophieException("Unable to upload local modifications to Solr", e));
+                }
+            }
+        });
+        itemUpload.setEnabled(false);
+
+        new ToolItem(toolBar, SWT.SEPARATOR);
+
         itemAddField = new ToolItem(toolBar, SWT.PUSH);
         itemAddField.setImage(imgAddField);
         itemAddField.setText("Add field");
@@ -334,24 +346,7 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
                 table.addField(fieldName, field);
             }
         });
-
-        itemUpload = new ToolItem(toolBar, SWT.PUSH);
-        itemUpload.setImage(imgUpload);
-        itemUpload.setText("Upload");
-        itemUpload.setToolTipText("Upload local modifications to Solr");
-        itemUpload.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
-                try {
-                    table.upload();
-                } catch (SophieException e) {
-                    ExceptionDialog.open(composite.getShell(), new SophieException("Unable to upload local modifications to Solr", e));
-                }
-            }
-        });
-        itemUpload.setEnabled(false);
-
-        new ToolItem(toolBar, SWT.SEPARATOR);
-
+        
         itemClear = new ToolItem(toolBar, SWT.PUSH);
         itemClear.setImage(imgClear);
         itemClear.setText("Clear");
@@ -493,8 +488,8 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
         imgAdd.dispose();
         imgDelete.dispose();
         imgClone.dispose();
-        imgAddField.dispose();
         imgUpload.dispose();
+        imgAddField.dispose();
         imgClear.dispose();
         imgCommit.dispose();
         imgOptimize.dispose();

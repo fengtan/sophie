@@ -45,7 +45,6 @@ public class ExceptionDialog extends Dialog {
     private static final String TITLE = "An error happened";
 
     // TODO add image
-    // TODO do we need everything in this class ?
 
     /**
      * Button to let the user display the stack trace.

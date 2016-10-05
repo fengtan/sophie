@@ -166,13 +166,9 @@ public class CoresToolbar implements SelectionListener {
         imgRefresh = new Image(display, loader.getResourceAsStream("toolbar/refresh.png"));
         imgAdd = new Image(display, loader.getResourceAsStream("toolbar/add.png"));
         imgDelete = new Image(display, loader.getResourceAsStream("toolbar/delete.png"));
-        // TODO find a better icon?
-        imgRename = new Image(display, loader.getResourceAsStream("toolbar/clone.png"));
-        // TODO find a better icon?
-        imgSwap = new Image(display, loader.getResourceAsStream("toolbar/upload.png"));
-        // TODO find a better icon?
+        imgRename = new Image(display, loader.getResourceAsStream("toolbar/rename.png"));
+        imgSwap = new Image(display, loader.getResourceAsStream("toolbar/swap.png"));
         imgReload = new Image(display, loader.getResourceAsStream("toolbar/restore.png"));
-        // TODO find a better icon?
         imgReloadAll = new Image(display, loader.getResourceAsStream("toolbar/restore.png"));
 
         // Instantiate buttons.
@@ -259,6 +255,8 @@ public class CoresToolbar implements SelectionListener {
         });
         itemRename.setEnabled(false);
 
+        new ToolItem(toolBar, SWT.SEPARATOR);
+        
         itemSwap = new ToolItem(toolBar, SWT.PUSH);
         itemSwap.setImage(imgSwap);
         itemSwap.setText("Swap");
@@ -280,8 +278,6 @@ public class CoresToolbar implements SelectionListener {
                 if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
                     return;
                 }
-                // TODO contrib CoreAdminRequest.swapCores() - similar to
-                // CoreAdminRequest.renameCore().
                 CoreAdminRequest request = new CoreAdminRequest();
                 request.setCoreName(coreName);
                 request.setOtherCoreName(dialog.getValue());

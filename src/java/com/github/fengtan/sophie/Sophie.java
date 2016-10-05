@@ -113,19 +113,18 @@ public class Sophie {
         shell.dispose();
     }
 
-    // TODO test exotic Solr versions
     // TODO test modifying 2 documents and then commiting
-    // TODO test what if server works and then goes down
     // TODO test retest everything
 
     // TODO contrib solrutils.getRemoteSchemaFields() ->
     // LukeResponse.getDynamicFieldInfo() - similar to
     // LukeResponse.getFieldInfo() - see LukeResponse.setResponse()
+    // TODO contrib CoreAdminRequest.swapCores() - similar to
+    // CoreAdminRequest.renameCore() - see itemSwap.addSelectionListener()
     // TODO contrib replication handler solrj
 
     // TODO doc screenshot 0.5 + move screenshots/ to gh-pages
     // TODO doc gh-pages
-    // TODO doc measure memory footprint
     // TODO doc gif (licecap/silentcast/byzanz)
     // TODO doc how to delete favorites (edit ~/.sophie)
     // TODO doc cannot filter on unindexed fields
@@ -144,7 +143,6 @@ public class Sophie {
     // TODO doc
     // "virtual i.e. remote documents are fetched as they are displayed for best perf"
     // TODO doc similar luke + javasoze/clue + solarium + projectblacklight.org
-    // TODO doc publish javadoc (mvn generate:doc)
     // TODO doc
     // "if need to use http auth, then http://user:pass@localhost:8983/solr/collection1"
     // TODO doc
@@ -155,7 +153,7 @@ public class Sophie {
     // TODO doc filters facet values show up only if < FACETS_LIMIT
     // TODO doc admin/luke, admin/ping, admin/cores must be available
     // TODO doc datepicker if field type contains "date"
-    // TODO doc gh-pages slogan consistant
+    // TODO doc gh-pages slogan consistent
 
     // TODO obs trayitem - not supported by ubuntu
     // https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217

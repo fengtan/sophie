@@ -49,11 +49,11 @@ public class FieldValidator implements IInputValidator {
     public String isValid(String fieldNameCondidate) {
         // A glob itself is not a valid field name.
         if (StringUtils.contains(fieldNameCondidate, "*")) {
-            return "Field name should not contain any asterisk (\"*\")";
+            return "Field name should not contain any asterisk (\"*\").";
         }
         // The value entered by the user should match one of the fields.
         if (getMatchingField(fieldNameCondidate) == null) {
-            return "\"" + fieldNameCondidate + "\" matches no field defined in schema.xml.";
+            return "\"" + fieldNameCondidate + "\" is not a valid field or is already listed in the table.";
         }
         return null;
     }

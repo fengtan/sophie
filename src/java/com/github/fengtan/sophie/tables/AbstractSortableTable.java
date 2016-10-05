@@ -167,7 +167,6 @@ public abstract class AbstractSortableTable {
         });
 
         // Pack.
-        // TODO needed ? might be worth to setLayout() to get rid of this
         column.pack();
         return column;
     }
