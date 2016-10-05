@@ -688,8 +688,6 @@ public class DocumentsTable {
         request.setPath("/replication");
         try {
             Sophie.client.request(request);
-            // TODO work only for solr >= 5.2 (mention) => disable button if
-            // solr < 5.2 https://issues.apache.org/jira/browse/SOLR-6637
             refresh();
         } catch (SolrServerException | IOException | SolrException e) {
             throw new SophieException("Unable to restore backup \"" + backupName + "\"", e);

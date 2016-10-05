@@ -272,17 +272,22 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
         itemClone.setText("Clone");
         itemClone.setToolTipText("Clone document");
         itemClone.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
+            public void widgetSelected(SelectionEvent event) {
                 SolrDocument document = table.getSelectedDocument();
                 if (document == null) {
                     return;
                 }
+
                 // Unset the unique key field so we don't have two rows
-                // describing the
-                // same Solr document.
-                // TODO what if field "id" does not exist ?+ should use
-                // uniqueKey
-                document.removeFields("id");
+                // describing the same Solr document.
+                try {
+                    String uniqueKey = SolrUtils.getRemoteUniqueField();
+                    document.removeFields(uniqueKey);
+                } catch (SophieException e) {
+                    Sophie.log.warn("Unable to unset unique key on cloned document");
+                }
+
+                // Add cloned document.
                 table.addDocument(document);
             }
         });
@@ -467,9 +472,9 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
         itemRestore.setToolTipText("Restore index from a backup");
         itemRestore.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
-                // TODO "Available backup names"
-                // TODO "leave empty for xxx"
-                InputDialog dialog = new InputDialog(composite.getShell(), "Restore index from a backup", "Backup name:", null, null);
+                // Restoring a backup requires Solr >=5.2
+                // @see SOLR-6637
+                InputDialog dialog = new InputDialog(composite.getShell(), "Restore index from a backup", "Note: backup restoration requires Solr >= 5.2.\n\nBackup name (leave empty to pick the latest backup available):", null, null);
                 dialog.open();
                 if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
                     return;
