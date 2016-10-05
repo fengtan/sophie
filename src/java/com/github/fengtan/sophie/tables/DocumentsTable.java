@@ -560,21 +560,6 @@ public class DocumentsTable {
     }
 
     /**
-     * Delete selected document.
-     */
-    public void deleteSelectedDocument() {
-        // If a document is selected, then delete it.
-        TableItem[] items = table.getSelection();
-        if (items.length == 0) {
-            return;
-        }
-        if (items[0] == null) {
-            return;
-        }
-        deleteDocument(items[0]);
-    }
-
-    /**
      * Export documents into CSV file.
      * 
      * @throws SophieException
@@ -641,8 +626,7 @@ public class DocumentsTable {
         }
         // Upload local deletions.
         for (SolrDocument document : documentsDeleted) {
-            // TODO what if no uniquekey
-            String id = document.getFieldValue(uniqueField).toString();
+            String id = Objects.toString(document.getFieldValue(uniqueField), StringUtils.EMPTY);
             try {
                 Sophie.client.deleteById(id);
             } catch (SolrServerException | IOException | SolrException e) {
@@ -731,28 +715,42 @@ public class DocumentsTable {
     }
 
     /**
-     * Delete a document locally.
+     * Delete the selected document locally.
      * 
-     * TODO deleting a local document should decrease setItemCount + drop from
-     * this.documentsAdded.
+     * TODO what if update and then delete a document - does it get updated or deleted ?
+     * 
+     * TODO what if delete and then update a document - does it get updated or deleted ?
      * 
      * @param item
      *            Row containing the document to delete.
      */
-    private void deleteDocument(TableItem item) {
-        // TODO if local item (i.e. does not exist on server), then just drop
-        // the row + update rowcount.
+    public void deleteSelectedDocument() {
         SolrDocument document = getSelectedDocument();
         // The row may not contain any document (e.g. the first row, which
         // contains the filters).
         if (document == null) {
             return;
         }
-        if (!documentsDeleted.contains(document)) {
-            documentsDeleted.add(document);
+        
+        // If document is already deleted locally, then do nothing.
+        if (documentsDeleted.contains(document)) {
+            return;
         }
-        item.setBackground(RED);
-        changeListener.changed(); // Handle this in DocumentsToolbar ?
+        
+        int rowIndex = table.getSelectionIndex();
+        // If document was locally added, then just remove it from local
+        // additions.
+        if (documentsAdded.contains(document)) {
+            documentsAdded.remove(document);
+            table.remove(rowIndex);
+            changeListener.changed();
+            return;
+        }
+        
+        // Remove document.
+        documentsDeleted.add(document);
+        table.getItem(rowIndex).setBackground(RED);
+        changeListener.changed();
     }
 
     /**
@@ -783,8 +781,6 @@ public class DocumentsTable {
     private void addColumn(final String fieldName, FieldInfo fieldInfo) {
         final TableColumn column = new TableColumn(table, SWT.LEFT);
         // Add space padding so we can see the sort signifier.
-        // TODO set sort signifier on uniqueKey by default ?
-        // TODO refactor with selection listener
         final boolean isFieldSortable = SolrUtils.isFieldSortable(fieldInfo);
         column.setText(fieldName + (isFieldSortable ? "     " : " " + Sophie.SIGNIFIER_UNSORTABLE));
         column.setData("field", fieldInfo);
@@ -867,7 +863,7 @@ public class DocumentsTable {
                     if (matcher.find()) {
                         combo.setText(matcher.group(1));
                     } else {
-                        Sophie.log.warn("Unable to extract original value from \""+combo.getText()+"\"");
+                        Sophie.log.warn("Unable to extract original value from \"" + combo.getText() + "\"");
                     }
 
                 };
@@ -918,9 +914,6 @@ public class DocumentsTable {
             editor = new TableEditor(table);
         }
     }
-
-    // TODO test add ss_foo and ss_bar - does this create 2 entries or 1 in
-    // this.fields ?
 
     /**
      * Add a new field to the table.
@@ -973,7 +966,5 @@ public class DocumentsTable {
         int index = table.getColumnCount();
         addField(fieldName, field, facet, index);
     }
-
-    // TODO sorting removes unsortable signifiers
 
 }

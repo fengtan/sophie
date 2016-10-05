@@ -154,6 +154,7 @@ public class Sophie {
     // TODO doc admin/luke, admin/ping, admin/cores must be available
     // TODO doc datepicker if field type contains "date"
     // TODO doc gh-pages slogan consistent
+    // TODO filtering/sorting refresh documents from Solr and thus drops local modifications
 
     // TODO obs trayitem - not supported by ubuntu
     // https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
@@ -181,4 +182,5 @@ public class Sophie {
     // TODO obs schema API (e.g. add/delete fields) + SchemaRequest (provides
     // list of copyField's etc)
     // TODO obs support sort on multiple fields
+    
 }
