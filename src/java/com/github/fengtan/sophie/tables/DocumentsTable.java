@@ -287,7 +287,6 @@ public class DocumentsTable {
 
                 // The first line is populated by filters.
                 if (rowIndex == 0) {
-                    // TODO might need to populate if existing filters
                     return;
                 }
 
@@ -600,7 +599,6 @@ public class DocumentsTable {
         SolrQuery query = getBaseQuery(0, table.getItemCount());
         QueryRequest request = new QueryRequest(query);
         request.setResponseParser(new NoOpResponseParser("csv"));
-        // TODO notify user export success (export may take time).
         NamedList<Object> response;
         try {
             response = Sophie.client.request(request);
@@ -687,13 +685,11 @@ public class DocumentsTable {
         params.set("command", "restore");
         params.set("name", backupName);
         QueryRequest request = new QueryRequest(params);
-        request.setPath("/replication"); // TODO replication ?
+        request.setPath("/replication");
         try {
             Sophie.client.request(request);
             // TODO work only for solr >= 5.2 (mention) => disable button if
             // solr < 5.2 https://issues.apache.org/jira/browse/SOLR-6637
-            // TODO get /replication?command=restorestatus and provide feedback
-            // to user (asynchronous call), possibly with a progress bar
             refresh();
         } catch (SolrServerException | IOException | SolrException e) {
             throw new SophieException("Unable to restore backup \"" + backupName + "\"", e);

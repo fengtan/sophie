@@ -53,8 +53,6 @@ public abstract class EditValueDialog extends Dialog {
 
     @Override
     protected void buttonPressed(int buttonId) {
-        // TODO NPE when editing unstored field
-        // TODO cannot edit empty values (window closes)
         if (buttonId == IDialogConstants.OK_ID) {
             // Populate value with what the user provided.
             value = fetchValue();

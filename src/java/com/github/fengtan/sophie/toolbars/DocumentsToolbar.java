@@ -86,7 +86,7 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
      * Add field operation - image.
      */
     private Image imgAddField;
-    
+
     /**
      * Clear index operation - image.
      */
@@ -146,7 +146,7 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
      * Add field operation - button.
      */
     private ToolItem itemAddField;
-    
+
     /**
      * Clear index operation - button.
      */
@@ -277,9 +277,11 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
                 if (document == null) {
                     return;
                 }
-                // Unset the unique key field so we don't have two rows describing the
+                // Unset the unique key field so we don't have two rows
+                // describing the
                 // same Solr document.
-                // TODO what if field "id" does not exist ?+ should use uniqueKey
+                // TODO what if field "id" does not exist ?+ should use
+                // uniqueKey
                 document.removeFields("id");
                 table.addDocument(document);
             }
@@ -344,7 +346,7 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
                 table.addField(fieldName, field);
             }
         });
-        
+
         itemClear = new ToolItem(toolBar, SWT.PUSH);
         itemClear.setImage(imgClear);
         itemClear.setText("Clear");
@@ -427,9 +429,7 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
         itemBackup.setToolTipText("Make a backup of the index");
         itemBackup.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
-                // TODO
-                // "Leave empty to use the default format (yyyyMMddHHmmssSSS)."
-                InputDialog dialog = new InputDialog(composite.getShell(), "Make a backup of the index", "Backup name:", null, null);
+                InputDialog dialog = new InputDialog(composite.getShell(), "Make a backup of the index", "Backup name (leave empty to use a timestamp):", null, null);
                 dialog.open();
                 if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
                     return;
@@ -442,12 +442,18 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
                 request.setPath("/replication");
                 try {
                     NamedList<Object> response = Sophie.client.request(request);
-                    // TODO progress bar with /replication?command=details ?
-                    // TODO "OK" solrj constant ?
+                    // org.apache.solr.handler.ReplicationHandler.OK_STATUS is
+                    // "OK".
                     if (StringUtils.equals(response.get("status").toString(), "OK")) {
-                        // TODO notify user OK + name/place of backup file
+                        MessageBox messageBox = new MessageBox(composite.getShell(), SWT.ICON_INFORMATION | SWT.OK);
+                        messageBox.setText("Backup started");
+                        messageBox.setMessage("Backup started and will be saved into Solr data directory under the name \"snapshot." + (StringUtils.isEmpty(backupName) ? "<timestamp>" : backupName) + "\".");
+                        messageBox.open();
                     } else {
-                        // TODO notify user NOK + exception details
+                        MessageBox messageBox = new MessageBox(composite.getShell(), SWT.ICON_ERROR | SWT.OK);
+                        messageBox.setText("Backup error");
+                        messageBox.setMessage("Unable to backup the index.");
+                        messageBox.open();
                     }
                 } catch (SolrServerException | IOException | SolrException e) {
                     ExceptionDialog.open(composite.getShell(), new SophieException("Unable to create backup \"" + backupName + "\"", e));

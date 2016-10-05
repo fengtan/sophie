@@ -40,6 +40,8 @@ import org.eclipse.swt.widgets.Shell;
 
 /**
  * Dialog to prompt user for multiple values.
+ * 
+ * TODO list does not seem to expand when resize dialog
  */
 public class EditListValueDialog extends EditValueDialog {
 
@@ -72,7 +74,6 @@ public class EditListValueDialog extends EditValueDialog {
         composite.setLayout(new RowLayout());
 
         // Create list widget.
-        // TODO seems to be buggy when many values.
         listViewer = new ListViewer(composite, SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER);
         for (Object value : defaultValue) {
             listViewer.add(Objects.toString(value, StringUtils.EMPTY));
@@ -90,12 +91,10 @@ public class EditListValueDialog extends EditValueDialog {
                 input.open();
                 if (input.getReturnCode() == IDialogConstants.OK_ID) {
                     listViewer.add(input.getValue());
-                    // TODO update Text
                 }
             }
         });
 
-        // TODO disable remove when no value selected.
         Button buttonRemove = new Button(buttonsComposite, SWT.PUSH);
         buttonRemove.setText("Remove");
         buttonRemove.addSelectionListener(new SelectionAdapter() {
@@ -103,7 +102,6 @@ public class EditListValueDialog extends EditValueDialog {
                 IStructuredSelection selection = (IStructuredSelection) listViewer.getSelection();
                 if (!selection.isEmpty()) {
                     listViewer.remove(selection.toArray());
-                    // TODO update Text
                 }
             }
         });
