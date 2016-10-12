@@ -18,6 +18,7 @@
  */
 package com.github.fengtan.sophie.validators;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -36,24 +37,34 @@ public class FieldValidator implements IInputValidator {
     private Map<String, FieldInfo> fields;
 
     /**
+     * Collection of excluded fields (already displayed in the table).
+     */
+    private Collection<String> excludedFieldNames;
+
+    /**
      * Create a new field validator.
      * 
      * @param fields
      *            Solr fields. Field names may be globs (e.g. ss_*).
      */
-    public FieldValidator(Map<String, FieldInfo> fields) {
+    public FieldValidator(Map<String, FieldInfo> fields, Collection<String> excludedFieldNames) {
         this.fields = fields;
+        this.excludedFieldNames = excludedFieldNames;
     }
 
     @Override
-    public String isValid(String fieldNameCondidate) {
+    public String isValid(String fieldNameCandidate) {
         // A glob itself is not a valid field name.
-        if (StringUtils.contains(fieldNameCondidate, "*")) {
+        if (StringUtils.contains(fieldNameCandidate, "*")) {
             return "Field name should not contain any asterisk (\"*\").";
         }
+        // User should not be able to add a field already listed in the table.
+        if (excludedFieldNames.contains(fieldNameCandidate)) {
+            return "Field \"" + fieldNameCandidate + "\" already exists.";
+        }
         // The value entered by the user should match one of the fields.
-        if (getMatchingField(fieldNameCondidate) == null) {
-            return "\"" + fieldNameCondidate + "\" is not a valid field or is already listed in the table.";
+        if (getMatchingField(fieldNameCandidate) == null) {
+            return "\"" + fieldNameCandidate + "\" is not a valid field name.";
         }
         return null;
     }

@@ -20,6 +20,7 @@ package com.github.fengtan.sophie.toolbars;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -328,7 +329,8 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
                 // any field name.
                 fields.remove("*");
                 // Remove fields already displayed in the table.
-                for (String existingFieldName : table.getFieldNames()) {
+                Collection<String> excludedFieldNames = table.getFieldNames();
+                for (String existingFieldName : excludedFieldNames) {
                     fields.remove(existingFieldName);
                 }
                 // Extract and sort field names.
@@ -337,9 +339,7 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
                 fieldNames.toArray(fieldNamesArray);
                 Arrays.sort(fieldNamesArray);
                 // Prompt user for new field name.
-                FieldValidator validator = new FieldValidator(fields);
-                // TODO validator ensure user does not add a fields already
-                // displayed in table.
+                FieldValidator validator = new FieldValidator(fields, excludedFieldNames);
                 CComboDialog dialog = new CComboDialog(composite.getShell(), "Add new field", "Field name:", fieldNamesArray, validator);
                 dialog.open();
                 if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
