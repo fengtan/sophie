@@ -117,6 +117,9 @@ public class Sophie {
     // TODO test export 1M lines into a String will fill the ram - is there a
     // way to buffer solr's response ?
 
+    // TODO contrib SolrUtils.getRemoteUniqueField() -> should use LukeResponse
+    // with showschema=true but getUniqueField() not provided - could provide it
+    // + merge with getRemoteSchemaFields()
     // TODO contrib solrutils.getRemoteSchemaFields() ->
     // LukeResponse.getDynamicFieldInfo() - similar to
     // LukeResponse.getFieldInfo() - see LukeResponse.setResponse()

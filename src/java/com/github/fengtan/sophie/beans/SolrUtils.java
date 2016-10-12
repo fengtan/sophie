@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.apache.solr.client.solrj.request.LukeRequest;
@@ -43,6 +44,11 @@ import com.github.fengtan.sophie.Sophie;
  * Common operations on Solr.
  */
 public class SolrUtils {
+
+    /**
+     * Cached unique key field.
+     */
+    private static String cachedUniqueField = null;
 
     /**
      * Extract flags from a Solr field.
@@ -87,8 +93,8 @@ public class SolrUtils {
     /**
      * Get a list of declared fields from the remote Solr server.
      * 
-     * Dynamic fields are named according to how they are declared (e.g.
-     * dynamic_*).
+     * Dynamic fields are named according to how they are declared so may be
+     * globs (e.g. dynamic_*).
      * 
      * @return Map of fields keyed by field name.
      * @throws SophieException
@@ -126,23 +132,37 @@ public class SolrUtils {
     /**
      * Get unique key field from the remote Solr server.
      * 
-     * TODO could merge with getRemoteFields() to make less queries
-     * 
-     * TODO could use admin/luke?show=schema
-     * 
-     * TODO cache uniqueKey - 2 identical requests (fields+tables)
+     * @param cached
+     *            If false, the value will be retrieved from Solr. If true, the
+     *            value may be retrieved from a local cache.
+     * @return Unique key field name.
+     * @throws SophieException
+     *             If the unique key field cannot be fetched.
+     */
+    public static String getRemoteUniqueField(boolean cached) throws SophieException {
+        // If cache is empty, or if client method explicitely wants uncached
+        // value, then warm the cache.
+        if (!cached || !StringUtils.isNoneEmpty(cachedUniqueField)) {
+            SchemaRequest.UniqueKey request = new SchemaRequest.UniqueKey();
+            try {
+                cachedUniqueField = request.process(Sophie.client).getUniqueKey();
+            } catch (SolrServerException | IOException | SolrException e) {
+                throw new SophieException("Unable to fetch name of unique field", e);
+            }
+        }
+        // Return cache.
+        return cachedUniqueField;
+    }
+
+    /**
+     * Get unique key field (possibly cached) from the remote Solr server.
      * 
      * @return Unique key field name.
      * @throws SophieException
      *             If the unique key field cannot be fetched.
      */
     public static String getRemoteUniqueField() throws SophieException {
-        SchemaRequest.UniqueKey request = new SchemaRequest.UniqueKey();
-        try {
-            return request.process(Sophie.client).getUniqueKey();
-        } catch (SolrServerException | IOException | SolrException e) {
-            throw new SophieException("Unable to fetch name of unique field", e);
-        }
+        return getRemoteUniqueField(true);
     }
 
     /**
@@ -163,7 +183,6 @@ public class SolrUtils {
             throw new SophieException("Unable to fetch list of Solr cores", e);
         }
     }
-    
 
     /**
      * Whether Solr can sort a field.

@@ -550,7 +550,7 @@ public class DocumentsTable {
         // Rows always need to be sorted so locally updated documents do not end
         // up at the end of the list after the user upload them. We sort by
         // unique field by default.
-        uniqueField = SolrUtils.getRemoteUniqueField();
+        uniqueField = SolrUtils.getRemoteUniqueField(false);
         sortField = uniqueField;
         sortOrder = ORDER.asc;
 
