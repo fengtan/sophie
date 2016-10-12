@@ -2,18 +2,22 @@
 
 [![Build Status](https://travis-ci.org/fengtan/sophie.svg?branch=master)](https://travis-ci.org/fengtan/sophie)
 
-TODO Short description ; docs/fields/cores
-
-TODO Screenshot
+A [Solr](http://lucene.apache.org/solr/) browser and administration tool.
 
 ## Getting started
 
-TODO mvn cmd
-- clean install
-- -P win/osx/linux (gtk)
-- target/
-- hyperlink dl
+`git clone https://github.com/fengtan/sophie`
+`cd sophie`
+`# If on Linux:`
+`mvn clean install -P linux`
+`# If on Windows:`
+`mvn clean install -P win32`
+`# If on Mac OS X:`
+`mvn clean install -P macosx`
+`java -jar target/sophie-*-with-dependencies.jar`
+
+Precompiled jar archives may be downloaded from the [releases page](https://github.com/fengtan/sophie/releases).
 
 ## License
 
-TODO
+GNU General Public License, Version 3.

@@ -142,6 +142,8 @@ public class Sophie {
     // TODO doc backup stored on *server*
     // TODO doc mvn clean install
     // TODO doc javadoc gh-pages
+    // TODO doc readme include screenshot
+    // TODO doc readme docs/fields/cores
     // TODO doc import into eclipse
     // TODO doc typing 'Suppr' deletes a row.
     // TODO doc
