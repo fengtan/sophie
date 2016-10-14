@@ -61,7 +61,7 @@ public class ConnectDialog extends Dialog {
     /**
      * Value (connection string) entered by the user.
      */
-    private String value = null; // TODO redundant with combo ?
+    private String value = null;
     
     /**
      * Connection type selected by default in the radio buttons.

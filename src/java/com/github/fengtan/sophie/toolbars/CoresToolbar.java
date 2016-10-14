@@ -45,7 +45,7 @@ import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.CComboDialog;
-import com.github.fengtan.sophie.dialogs.DoubleInputDialog;
+import com.github.fengtan.sophie.dialogs.MultipleInputDialog;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.tables.CoresTable;
 
@@ -194,7 +194,9 @@ public class CoresToolbar implements SelectionListener {
         itemAdd.setToolTipText("Add new core");
         itemAdd.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
-                DoubleInputDialog dialog = new DoubleInputDialog(composite.getShell(), "Add new core", "Name:", "collectionX", "Instance Directory:", "/path/to/solr/collectionX");
+                String[] labels = new String[] { "Name:", "Instance Directory:" };
+                String[] defaultValues = new String[] { "collectionX", "/path/to/solr/collectionX" };
+                MultipleInputDialog dialog = new MultipleInputDialog(composite.getShell(), "Add new core", labels, defaultValues);
                 dialog.open();
                 if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
                     return;
@@ -202,10 +204,10 @@ public class CoresToolbar implements SelectionListener {
                 try {
                     // TODO CreateCore is overloaded with additional params
                     // (schema file etc).
-                    CoreAdminRequest.createCore(dialog.getValue1(), dialog.getValue2(), Sophie.client);
+                    CoreAdminRequest.createCore(dialog.getValue(0), dialog.getValue(1), Sophie.client);
                     table.refresh();
                 } catch (SolrServerException | IOException | SolrException | SophieException e) {
-                    ExceptionDialog.open(composite.getShell(), new SophieException("Unable to add new core \"" + dialog.getValue1() + "\" with instance dir \"" + dialog.getValue2() + "\"", e));
+                    ExceptionDialog.open(composite.getShell(), new SophieException("Unable to add new core \"" + dialog.getValue(0) + "\" with instance dir \"" + dialog.getValue(1) + "\"", e));
                 }
             }
         });
