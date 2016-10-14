@@ -209,5 +209,6 @@ public class Sophie {
     // calls /replication?command=restorestatus
     // TODO obs EditListValueDialog list does not seem to expand when resize
     // dialog
+    // TODO obs could cache SolrUtils.getRemoteFields() and SolrUtils.getRemoteCores().
 
 }

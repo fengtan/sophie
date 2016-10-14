@@ -79,24 +79,18 @@ public class TabFolder extends CTabFolder {
         setSimple(false);
         setTabHeight(25);
 
-        // Add tab items, if the associated data can be fetched from Solr.
+        // Add tabs if the associated endpoints are available.
         Exception exception = null;
         try {
-            SolrUtils.getRemoteFields(); // TODO cache result.
+            SolrUtils.getRemoteFields();
             documentsTabItem = new DocumentsTabItem(this);
-        } catch (SophieException e) {
-            Sophie.log.info("Documents tab will not be displayed", e);
-            exception = e;
-        }
-        try {
-            SolrUtils.getRemoteFields(); // TODO cache result.
             fieldsTabItem = new FieldsTabItem(this);
         } catch (SophieException e) {
-            Sophie.log.info("Fields tab will not be displayed", e);
+            Sophie.log.info("Documents and fields tabs will not be displayed", e);
             exception = e;
         }
         try {
-            SolrUtils.getCores(); // TODO cache result
+            SolrUtils.getCores();
             coresTabItem = new CoresTabItem(this);
         } catch (SophieException e) {
             Sophie.log.info("Cores tab will not be displayed", e);
