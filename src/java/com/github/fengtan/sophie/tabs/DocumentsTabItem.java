@@ -25,7 +25,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.github.fengtan.sophie.beans.SophieException;
-import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.tables.DocumentsTable;
 import com.github.fengtan.sophie.toolbars.DocumentsToolbar;
 
@@ -49,8 +48,10 @@ public class DocumentsTabItem extends CTabItem {
      * 
      * @param tabFolder
      *            Parent tab folder.
+     * @throws SophieException
+     *             If the tab could not be initialized.
      */
-    public DocumentsTabItem(CTabFolder tabFolder) {
+    public DocumentsTabItem(CTabFolder tabFolder) throws SophieException {
         super(tabFolder, SWT.NONE, tabFolder.getItemCount());
 
         setText("Documents");
@@ -62,12 +63,8 @@ public class DocumentsTabItem extends CTabItem {
 
         // Add toolbar and table.
         toolbar = new DocumentsToolbar(composite);
-        try {
-            table = new DocumentsTable(composite, toolbar, toolbar);
-            toolbar.setTable(table);
-        } catch (SophieException e) {
-            ExceptionDialog.open(composite.getShell(), new SophieException("Unable to initialize documents table", e));
-        }
+        table = new DocumentsTable(composite, toolbar, toolbar);
+        toolbar.setTable(table);
 
         // Pack.
         composite.pack();

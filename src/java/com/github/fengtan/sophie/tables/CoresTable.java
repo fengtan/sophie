@@ -29,7 +29,6 @@ import org.eclipse.swt.widgets.TableItem;
 
 import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
-import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 
 /**
  * Table listing Solr cores.
@@ -43,14 +42,12 @@ public class CoresTable extends AbstractSortableTable {
      *            Parent composite.
      * @param listener
      *            Selection listener to attach to the table.
+     * @throws SophieException
+     *             If the table could not be initialized.
      */
-    public CoresTable(Composite composite, SelectionListener listener) {
+    public CoresTable(Composite composite, SelectionListener listener) throws SophieException {
         super(composite, listener);
-        try {
-            populate();
-        } catch (SophieException e) {
-            ExceptionDialog.open(composite.getShell(), new SophieException("Unable to initialize cores table", e));
-        }
+        populate();
     }
 
     /**

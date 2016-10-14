@@ -24,6 +24,7 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.tables.CoresTable;
 import com.github.fengtan.sophie.toolbars.CoresToolbar;
 
@@ -47,8 +48,10 @@ public class CoresTabItem extends CTabItem {
      * 
      * @param tabFolder
      *            Parent tab folder.
+     * @throws SophieException
+     *             If the tab could not be initialized
      */
-    public CoresTabItem(CTabFolder tabFolder) {
+    public CoresTabItem(CTabFolder tabFolder) throws SophieException {
         super(tabFolder, SWT.NONE, tabFolder.getItemCount());
         setText("Cores");
 

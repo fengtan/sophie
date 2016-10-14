@@ -28,6 +28,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import com.github.fengtan.sophie.beans.Config;
+import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.ConnectDialog;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 import com.github.fengtan.sophie.tabs.TabFolder;
@@ -75,18 +77,30 @@ public class Sophie {
         shell.setMaximized(true);
         shell.setLayout(new GridLayout());
 
-        // Prompt user for Solr credentials.
         ConnectDialog dialog = new ConnectDialog(shell);
-        dialog.open();
-        if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
-            return;
-        }
-        client = dialog.getSolrClient();
-        String connectionLabel = dialog.getConnectionLabel();
+        boolean validClient = false;
+        String connectionString;
+        do {
+            // Prompt user for Solr credentials.
+            dialog.open();
+            if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
+                return;
+            }
 
-        // Initialize Solr client and UI.
-        shell.setText("Sophie - " + connectionLabel);
-        new TabFolder(shell, connectionLabel);
+            // Initialize Solr client and UI.
+            client = dialog.getSolrClient();
+            connectionString = dialog.getValue();
+            try {
+                new TabFolder(shell, connectionString, dialog.getConnectionType());
+                validClient = true;
+            } catch (SophieException e) {
+                ExceptionDialog.open(shell, e);
+            }
+        } while (!validClient);
+
+        // If we have a valid client, then add it to the favorites.
+        Config.addFavorite(connectionString);
+        shell.setText("Sophie - " + connectionString + " (" + dialog.getConnectionType().getTypeName() + ")");
 
         // Make the shell display its content.
         shell.open();
@@ -162,6 +176,8 @@ public class Sophie {
     // TODO doc gh-pages slogan consistent
     // TODO filtering/sorting refresh documents from Solr and thus drops local
     // modifications
+    // TODO doc tabs documents/fields/cores show up depending on what is
+    // reachable
 
     // TODO obs trayitem - not supported by ubuntu
     // https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217

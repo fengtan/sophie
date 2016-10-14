@@ -24,6 +24,7 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.tables.FieldsTable;
 import com.github.fengtan.sophie.toolbars.FieldsToolbar;
 
@@ -36,7 +37,7 @@ public class FieldsTabItem extends CTabItem {
      * Fields toolbar.
      */
     private FieldsToolbar toolbar;
-    
+
     /**
      * Fields core.
      */
@@ -47,8 +48,10 @@ public class FieldsTabItem extends CTabItem {
      * 
      * @param tabFolder
      *            Parent tab folder.
+     * @throws SophieException
+     *             If the tab could not be initalized.
      */
-    public FieldsTabItem(CTabFolder tabFolder) {
+    public FieldsTabItem(CTabFolder tabFolder) throws SophieException {
         super(tabFolder, SWT.NONE, tabFolder.getItemCount());
         setText("Fields");
 

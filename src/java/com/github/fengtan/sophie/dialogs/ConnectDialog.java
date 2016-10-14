@@ -18,14 +18,10 @@
  */
 package com.github.fengtan.sophie.dialogs;
 
-import java.io.IOException;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.apache.solr.client.solrj.response.SolrPingResponse;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -41,7 +37,6 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.github.fengtan.sophie.beans.Config;
 import com.github.fengtan.sophie.beans.SolrConnectionType;
-import com.github.fengtan.sophie.beans.SophieException;
 
 /**
  * Dialog to collect a Solr connection string / connection type.
@@ -61,8 +56,13 @@ public class ConnectDialog extends Dialog {
     /**
      * Combo to let the user enter the Solr connection string.
      */
-    private Combo value;
+    private Combo combo;
 
+    /**
+     * Value (connection string) entered by the user.
+     */
+    private String value = null; // TODO redundant with combo ?
+    
     /**
      * Connection type selected by default in the radio buttons.
      */
@@ -73,12 +73,6 @@ public class ConnectDialog extends Dialog {
      * connection string.
      */
     private SolrClient client = null;
-
-    /**
-     * Connection label (concatenation of the connection string and the
-     * connection type). Used in the window title and the tab folder title.
-     */
-    private String connectionLabel = null;
 
     /**
      * Create a new dialog to collect a Solr connection string / connection
@@ -99,13 +93,16 @@ public class ConnectDialog extends Dialog {
     }
 
     /**
-     * Return the connection label (concatenation of the connection string and
-     * the connection type).
+     * Return the value (connection string) entered by the user.
      * 
-     * @return Connection label.
+     * @return Value (connection string) entered by the user.
      */
-    public String getConnectionLabel() {
-        return connectionLabel;
+    public String getValue() {
+        return value;
+    }
+    
+    public SolrConnectionType getConnectionType() {
+        return selectedType;
     }
 
     @Override
@@ -122,52 +119,20 @@ public class ConnectDialog extends Dialog {
         }
         
         // Populate connection label.
-        connectionLabel = value.getText() + " (" + selectedType.getTypeName() + ")";
+        value = combo.getText();
         
         // Instantiate Solr client based on what the user provided.
         switch (selectedType) {
         case DIRECT_HTTP:
         default:
-            client = new HttpSolrClient(value.getText());
+            client = new HttpSolrClient(combo.getText());
             break;
         case SOLR_CLOUD:
-            client = new CloudSolrClient(value.getText());
+            client = new CloudSolrClient(combo.getText());
             break;
         }
-        
-        // Test if we have a valid client.
-        // If we do, then add it to the favorites.
-        // If we do not, then open a dialog box and let the user enter a new
-        // value.
-        try {
-            testConnection(client);
-            Config.addFavorite(value.getText());
-            super.buttonPressed(buttonId);
-        } catch (SophieException e) {
-            ExceptionDialog.open(getShell(), e);
-        }
-    }
 
-    /**
-     * Test if the remote Solr server can be reached.
-     * 
-     * TODO what if admin/ping does not exist
-     * 
-     * @param client
-     *            Solr client.
-     * @throws SophieException
-     *             If the remote Solr server cannot be reached.
-     */
-    private static void testConnection(SolrClient client) throws SophieException {
-        SolrPingResponse ping = null;
-        try {
-            ping = client.ping();
-        } catch (SolrServerException | IOException | RuntimeException e) {
-            throw new SophieException("Unable to connect to Solr", e);
-        }
-        if (ping != null && ping.getStatus() != 0) {
-            throw new SophieException("Unable to connect to Solr");
-        }
+        super.buttonPressed(buttonId);
     }
 
     @Override
@@ -183,7 +148,7 @@ public class ConnectDialog extends Dialog {
                 public void widgetSelected(SelectionEvent e) {
                     selectedType = type;
                     label.setText(selectedType.getValueLabel());
-                    value.setText(selectedType.getValueDefault());
+                    combo.setText(selectedType.getValueDefault());
                     super.widgetSelected(e);
                 }
             });
@@ -202,12 +167,12 @@ public class ConnectDialog extends Dialog {
         label.setFont(parent.getFont());
 
         // Create combo. 
-        value = new Combo(composite, SWT.SINGLE | SWT.BORDER);
-        value.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+        combo = new Combo(composite, SWT.SINGLE | SWT.BORDER);
+        combo.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
         String[] favorites = Config.getFavorites();
         String[] items = ArrayUtils.isNotEmpty(favorites) ? favorites : new String[] { selectedType.getValueDefault() };
-        value.setItems(items);
-        value.setText(items[0]);
+        combo.setItems(items);
+        combo.setText(items[0]);
 
         applyDialogFont(composite);
         return composite;

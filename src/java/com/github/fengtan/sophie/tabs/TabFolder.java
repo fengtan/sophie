@@ -27,6 +27,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.beans.SolrConnectionType;
+import com.github.fengtan.sophie.beans.SolrUtils;
+import com.github.fengtan.sophie.beans.SophieException;
+
 /**
  * Tab folder containing a documents tab item, a fields tab item and a cores tab
  * item.
@@ -54,10 +59,17 @@ public class TabFolder extends CTabFolder {
      * 
      * @param shell
      *            Shell.
-     * @param title
-     *            Title displayed on the top right corner of the tab folder.
+     * @param connectionString
+     *            Connection string displayed on the top right corner of the tab
+     *            folder.
+     * @param connectionType
+     *            Connection type displayed on the top right corner of the tab
+     *            folder.
+     * @throws SophieException
+     *             If no documents, fields or core could not retrieved from
+     *             Solr.
      */
-    public TabFolder(Shell shell, String title) {
+    public TabFolder(Shell shell, String connectionString, SolrConnectionType connectionType) throws SophieException {
         // Create tabs.
         super(shell, SWT.TOP | SWT.BORDER);
 
@@ -67,13 +79,38 @@ public class TabFolder extends CTabFolder {
         setSimple(false);
         setTabHeight(25);
 
-        // Add tab items.
-        documentsTabItem = new DocumentsTabItem(this);
-        fieldsTabItem = new FieldsTabItem(this);
-        coresTabItem = new CoresTabItem(this);
+        // Add tab items, if the associated data can be fetched from Solr.
+        Exception exception = null;
+        try {
+            SolrUtils.getRemoteFields(); // TODO cache result.
+            documentsTabItem = new DocumentsTabItem(this);
+        } catch (SophieException e) {
+            Sophie.log.info("Documents tab will not be displayed", e);
+            exception = e;
+        }
+        try {
+            SolrUtils.getRemoteFields(); // TODO cache result.
+            fieldsTabItem = new FieldsTabItem(this);
+        } catch (SophieException e) {
+            Sophie.log.info("Fields tab will not be displayed", e);
+            exception = e;
+        }
+        try {
+            SolrUtils.getCores(); // TODO cache result
+            coresTabItem = new CoresTabItem(this);
+        } catch (SophieException e) {
+            Sophie.log.info("Cores tab will not be displayed", e);
+            exception = e;
+        }
 
-        // Set focus on documents tab.
-        setSelection(documentsTabItem);
+        // If the Solr client allows to display no tab, then we have an invalid
+        // client and we need to notify the user.
+        if (documentsTabItem == null && fieldsTabItem == null && coresTabItem == null) {
+            throw new SophieException("Invalid connection \"" + connectionString + "\".", exception);
+        }
+
+        // Set focus on first tab.
+        setSelection(getItem(0));
         setFocus();
 
         // Set up a gradient background for the selected tab
@@ -87,7 +124,7 @@ public class TabFolder extends CTabFolder {
         // Add title.
         ToolBar toolbar = new ToolBar(this, SWT.NULL);
         ToolItem item = new ToolItem(toolbar, SWT.NULL);
-        item.setText(title);
+        item.setText(connectionString + " (" + connectionType.getTypeName() + ")");
         item.setEnabled(false);
         setTopRight(toolbar);
     }

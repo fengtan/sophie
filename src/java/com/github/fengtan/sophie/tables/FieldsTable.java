@@ -30,7 +30,6 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
-import com.github.fengtan.sophie.dialogs.ExceptionDialog;
 
 /**
  * Table listing Solr fields.
@@ -47,8 +46,10 @@ public class FieldsTable extends AbstractSortableTable {
      * 
      * @param composite
      *            Parent composite.
+     * @throws SophieException
+     *             If the table could not be initialized.
      */
-    public FieldsTable(Composite composite) {
+    public FieldsTable(Composite composite) throws SophieException {
         super(composite);
 
         // Add columns (static + flags).
@@ -60,11 +61,7 @@ public class FieldsTable extends AbstractSortableTable {
         }
 
         // Add rows.
-        try {
-            populate();
-        } catch (SophieException e) {
-            ExceptionDialog.open(composite.getShell(), new SophieException("Unable to populate fields table", e));
-        }
+        populate();
     }
 
     @Override
@@ -72,7 +69,7 @@ public class FieldsTable extends AbstractSortableTable {
         // Get remote fields + unique key.
         String uniqueField = SolrUtils.getRemoteUniqueField();
         List<FieldInfo> fields = SolrUtils.getRemoteFields();
-        
+
         // Populate table.
         for (FieldInfo field : fields) {
             Map<String, String> values = new HashMap<String, String>();
