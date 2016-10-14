@@ -194,20 +194,18 @@ public class CoresToolbar implements SelectionListener {
         itemAdd.setToolTipText("Add new core");
         itemAdd.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
-                String[] labels = new String[] { "Name:", "Instance Directory:" };
-                String[] defaultValues = new String[] { "collectionX", "/path/to/solr/collectionX" };
+                String[] labels = new String[] { "Name:", "Instance Directory:", "Config file:", "Schema file:", "Data Directory:", "Transaction log directory:" };
+                String[] defaultValues = new String[] { "collectionX", "/path/to/solr/collectionX", "solrconfig.xml", "schema.xml", "/path/to/solr/collectionX/data", "/path/to/solr/collectionX/tlog" };
                 MultipleInputDialog dialog = new MultipleInputDialog(composite.getShell(), "Add new core", labels, defaultValues);
                 dialog.open();
                 if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
                     return;
                 }
                 try {
-                    // TODO CreateCore is overloaded with additional params
-                    // (schema file etc).
-                    CoreAdminRequest.createCore(dialog.getValue(0), dialog.getValue(1), Sophie.client);
+                    CoreAdminRequest.createCore(dialog.getValue(0), dialog.getValue(1), Sophie.client, dialog.getValue(2), dialog.getValue(3), dialog.getValue(4), dialog.getValue(5));
                     table.refresh();
                 } catch (SolrServerException | IOException | SolrException | SophieException e) {
-                    ExceptionDialog.open(composite.getShell(), new SophieException("Unable to add new core \"" + dialog.getValue(0) + "\" with instance dir \"" + dialog.getValue(1) + "\"", e));
+                    ExceptionDialog.open(composite.getShell(), new SophieException("Unable to add new core \"" + dialog.getValue(0) + "\"", e));
                 }
             }
         });
