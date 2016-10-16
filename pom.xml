@@ -2,10 +2,10 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.fengtan</groupId>
   <artifactId>sophie</artifactId>
-  <version>0.5</version>
-  <name>sophie</name>
+  <version>1.0.0</version>
+  <name>Sophie</name>
   <description>A Solr browser and administration tool</description>
-  <url>https://github.com/fengtan/sophie</url>
+  <url>http://fengtan.github.io/sophie/</url>
   <developers>
     <developer>
       <id>fengtan</id>
@@ -22,6 +22,10 @@
   <properties>
     <mainClass>com.github.fengtan.sophie.Sophie</mainClass>
   </properties>
+  <scm>
+    <url>https://github.com/fengtan/sophie</url>
+    <connection>scm:git:git://github.com/fengtan/sophie.git</connection>
+  </scm>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
