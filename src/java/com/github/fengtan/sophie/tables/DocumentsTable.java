@@ -214,7 +214,7 @@ public class DocumentsTable {
         // Rows always need to be sorted so locally updated documents do not end
         // up at the end of the list after the user upload them. We sort by
         // unique field by default.
-        uniqueField = SolrUtils.getRemoteUniqueField(false);
+        uniqueField = SolrUtils.getRemoteUniqueField();
         sortField = uniqueField;
 
         // Instantiate table.
@@ -551,7 +551,7 @@ public class DocumentsTable {
      * Clear table and flush internal cache. This causes the table to be
      * re-populated with remote documents.
      *
-     * TODO re-populate columns/filters ?
+     * TODO re-populate filters ?
      * 
      * @throws SophieException
      *             If the documents could not be fetched from Solr.

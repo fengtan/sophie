@@ -220,5 +220,6 @@ public class Sophie {
     // TODO obs tab for collections
     // TODO obs allow exporting only the first N rows to limit load on Solr
     // TODO obs make sure hidden file works on windows
+    // TODO repopulate columns upon refresh (if another thread added new fields)
 
 }
