@@ -178,6 +178,7 @@ public class Sophie {
     // modifications
     // TODO doc tabs documents/fields/cores show up depending on what is
     // reachable
+    // TODO doc how to download from mvn central
 
     // TODO obs trayitem - not supported by ubuntu
     // https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
@@ -210,5 +211,6 @@ public class Sophie {
     // TODO obs EditListValueDialog list does not seem to expand when resize
     // dialog
     // TODO obs could cache SolrUtils.getRemoteFields() and SolrUtils.getRemoteCores().
+    // TODO tab for collections
 
 }

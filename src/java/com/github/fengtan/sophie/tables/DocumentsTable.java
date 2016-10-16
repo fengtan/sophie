@@ -153,7 +153,7 @@ public class DocumentsTable {
     /**
      * Whether the table is currently sorted in ascending or descending order.
      */
-    private ORDER sortOrder;
+    private ORDER sortOrder = ORDER.asc;
 
     /**
      * List of documents locally updated.
@@ -206,6 +206,13 @@ public class DocumentsTable {
      *             If the table could not be created.
      */
     public DocumentsTable(Composite composite, SelectionListener selectionListener, ChangeListener changeListener) throws SophieException {
+        // Initialize unique key and sort field.
+        // Rows always need to be sorted so locally updated documents do not end
+        // up at the end of the list after the user upload them. We sort by
+        // unique field by default.
+        uniqueField = SolrUtils.getRemoteUniqueField(false);
+        sortField = uniqueField;
+
         // Instantiate table.
         this.composite = composite;
         createTable();
@@ -546,14 +553,6 @@ public class DocumentsTable {
      *             If the documents could not be fetched from Solr.
      */
     public void refresh() throws SophieException {
-        // Reset unique key, sort field and sort order
-        // Rows always need to be sorted so locally updated documents do not end
-        // up at the end of the list after the user upload them. We sort by
-        // unique field by default.
-        uniqueField = SolrUtils.getRemoteUniqueField(false);
-        sortField = uniqueField;
-        sortOrder = ORDER.asc;
-
         // Flush cache.
         documentsUpdated = new ArrayList<SolrDocument>();
         documentsDeleted = new ArrayList<SolrDocument>();
