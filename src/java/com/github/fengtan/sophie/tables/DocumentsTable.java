@@ -581,8 +581,6 @@ public class DocumentsTable {
     /**
      * Export documents into CSV file.
      * 
-     * TODO prompt user "output XXX first rows"
-     * 
      * @throws SophieException
      *             If the documents could not be exported into a CSV file.
      */

@@ -37,8 +37,6 @@ public class Config {
 
     /**
      * Name of the properties file.
-     * 
-     * TODO make sure hidden file works on windows
      */
     private static final String filename = ".sophie.properties";
 

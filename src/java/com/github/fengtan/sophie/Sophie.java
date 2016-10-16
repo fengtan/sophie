@@ -217,6 +217,8 @@ public class Sophie {
     // dialog
     // TODO obs could cache SolrUtils.getRemoteFields() and
     // SolrUtils.getRemoteCores().
-    // TODO tab for collections
+    // TODO obs tab for collections
+    // TODO obs allow exporting only the first N rows to limit load on Solr
+    // TODO obs make sure hidden file works on windows
 
 }
