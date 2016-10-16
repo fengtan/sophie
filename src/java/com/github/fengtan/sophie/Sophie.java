@@ -128,8 +128,8 @@ public class Sophie {
     }
 
     // TODO test retest everything
-    // TODO test export 1M lines into a String will fill the ram - is there a
-    // way to buffer solr's response ?
+    // TODO test buffer export
+    // TODO cores sort null/empty values - where is NPE ?
 
     // TODO contrib SolrUtils.getRemoteUniqueField() -> should use LukeResponse
     // with showschema=true but getUniqueField() not provided - could provide it
@@ -179,6 +179,11 @@ public class Sophie {
     // TODO doc tabs documents/fields/cores show up depending on what is
     // reachable
     // TODO doc how to download from mvn central
+    // TODO create badges like
+    // https://github.com/nuvoleweb/drupal-behat/blob/1.0.x/README.md
+    // see possibly using https://github.com/jirutka/maven-badges
+    // may need to host on maven central
+    // https://maven.apache.org/guides/mini/guide-central-repository-upload.html
 
     // TODO obs trayitem - not supported by ubuntu
     // https://bugs.eclipse.org/bugs/show_bug.cgi?id=410217
@@ -210,7 +215,8 @@ public class Sophie {
     // calls /replication?command=restorestatus
     // TODO obs EditListValueDialog list does not seem to expand when resize
     // dialog
-    // TODO obs could cache SolrUtils.getRemoteFields() and SolrUtils.getRemoteCores().
+    // TODO obs could cache SolrUtils.getRemoteFields() and
+    // SolrUtils.getRemoteCores().
     // TODO tab for collections
 
 }

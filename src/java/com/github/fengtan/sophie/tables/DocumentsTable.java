@@ -18,8 +18,10 @@
  */
 package com.github.fengtan.sophie.tables;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.AbstractList;
@@ -35,11 +37,13 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.NoOpResponseParser;
+import org.apache.solr.client.solrj.impl.HttpSolrClient.RemoteSolrException;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
@@ -577,6 +581,8 @@ public class DocumentsTable {
     /**
      * Export documents into CSV file.
      * 
+     * TODO prompt user "output XXX first rows"
+     * 
      * @throws SophieException
      *             If the documents could not be exported into a CSV file.
      */
@@ -594,24 +600,44 @@ public class DocumentsTable {
             return;
         }
 
-        // Send Solr query and write result into file.
-        SolrQuery query = getBaseQuery(0, table.getItemCount());
-        QueryRequest request = new QueryRequest(query);
-        request.setResponseParser(new NoOpResponseParser("csv"));
-        NamedList<Object> response;
+        // Open file for writing.
+        Writer writer = null;
         try {
-            response = Sophie.client.request(request);
-        } catch (SolrServerException | IOException | SolrException e) {
-            throw new SophieException("Unable to get CSV documents from Solr", e);
+            writer = new PrintWriter(path, "UTF-8");
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
+            IOUtils.closeQuietly(writer);
+            throw new SophieException("Unable to open file for writing: " + path, e);
         }
 
-        String csv = (String) response.get("response");
+        // We buffer rows using pages to avoid filling up the RAM.
+        for (int page = 0; page <= table.getItemCount() / PAGE_SIZE; page++) {
+            // Get page from Solr.
+            SolrQuery query = getBaseQuery(page * PAGE_SIZE, PAGE_SIZE);
+            QueryRequest request = new QueryRequest(query);
+            request.setResponseParser(new NoOpResponseParser("csv"));
+            NamedList<Object> response;
+            try {
+                response = Sophie.client.request(request);
+            } catch (SolrServerException | IOException | RemoteSolrException e) {
+                IOUtils.closeQuietly(writer);
+                throw new SophieException("Unable to get CSV documents from Solr", e);
+            }
+
+            // Write page into file.
+            String csv = (String) response.get("response");
+            try {
+                IOUtils.write(csv, writer);
+            } catch (IOException e) {
+                IOUtils.closeQuietly(writer);
+                throw new SophieException("Unable to write into file " + path, e);
+            }
+        }
+
+        // Close file.
         try {
-            Writer writer = new PrintWriter(path, "UTF-8");
-            writer.write(csv);
             writer.close();
         } catch (IOException e) {
-            throw new SophieException("Unable to write into file " + path, e);
+            throw new SophieException("Unable to close file " + path, e);
         }
     }
 
