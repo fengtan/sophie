@@ -552,8 +552,6 @@ public class DocumentsTable {
     /**
      * Clear table and flush internal cache. This causes the table to be
      * re-populated with remote documents.
-     *
-     * TODO re-populate filters ?
      * 
      * @throws SophieException
      *             If the documents could not be fetched from Solr.
@@ -960,6 +958,7 @@ public class DocumentsTable {
         if (combo != null) {
             editor.grabHorizontal = true;
             editor.setEditor(combo, table.getItem(0), index);
+            editor.dispose();
             editor = new TableEditor(table);
         }
     }

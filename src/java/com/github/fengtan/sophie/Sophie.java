@@ -129,7 +129,6 @@ public class Sophie {
 
     // TODO test retest everything
     // TODO test buffer export
-    // TODO cores sort null/empty values - where is NPE ?
 
     // TODO contrib SolrUtils.getRemoteUniqueField() -> should use LukeResponse
     // with showschema=true but getUniqueField() not provided - could provide it
@@ -220,6 +219,7 @@ public class Sophie {
     // TODO obs tab for collections
     // TODO obs allow exporting only the first N rows to limit load on Solr
     // TODO obs make sure hidden file works on windows
-    // TODO repopulate columns upon refresh (if another thread added new fields)
+    // TODO obs repopulate columns upon refresh (if another thread added new fields)
+    // TODO obs re-populate filters when refresh/upload
 
 }

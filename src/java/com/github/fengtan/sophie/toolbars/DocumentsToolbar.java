@@ -397,7 +397,7 @@ public class DocumentsToolbar implements SelectionListener, ChangeListener {
             public void widgetSelected(SelectionEvent event) {
                 MessageBox messageBox = new MessageBox(composite.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
                 messageBox.setText("Optimize index");
-                messageBox.setMessage("Do you really want to optimize the index? If the index is highly segmented, this may take several hours and will slow down requests.");
+                messageBox.setMessage("Do you really want to optimize the index? If the index is highly segmented, this may take a long time and will slow down requests.");
                 int response = messageBox.open();
                 if (response == SWT.YES) {
                     try {
