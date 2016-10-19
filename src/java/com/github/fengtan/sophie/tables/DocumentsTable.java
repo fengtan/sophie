@@ -243,7 +243,9 @@ public class DocumentsTable {
         Collections.sort(fields, new Comparator<FieldInfo>() {
             @Override
             public int compare(FieldInfo field1, FieldInfo field2) {
-                return (field1 == null) ? -1 : field1.getName().compareTo(field2.getName());
+                String name1 = (field1 == null) ? StringUtils.EMPTY : field1.getName();
+                String name2 = (field2 == null) ? StringUtils.EMPTY : field2.getName();
+                return name1.compareTo(name2);
             }
         });
 

@@ -151,10 +151,16 @@ public abstract class AbstractSortableTable {
                     public int compare(Map<String, String> rowValues1, Map<String, String> rowValues2) {
                         String value1 = rowValues1.get(columnName);
                         String value2 = rowValues2.get(columnName);
+                        if (value1 == null) {
+                            value1 = StringUtils.EMPTY;
+                        }
+                        if (value2 == null) {
+                            value2 = StringUtils.EMPTY;
+                        }
                         if (sortAsc) {
-                            return (value1 == null) ? -1 : value1.compareTo(value2);
+                            return value1.compareTo(value2);
                         } else {
-                            return (value2 == null) ? -1 : value2.compareTo(value1);
+                            return value2.compareTo(value1);
                         }
                     }
                 };
