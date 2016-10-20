@@ -60,9 +60,9 @@ public class SolrUtils {
      * @param field
      *            Solr field.
      * @return List of flags.
-     * @see SOLR-9205
      */
     public static EnumSet<FieldFlag> getFlags(FieldInfo field) {
+        // TODO Remove when SOLR-9205 is closed.
         EnumSet<FieldFlag> flags = field.getFlags();
         if (flags == null) {
             flags = FieldInfo.parseFlags(field.getSchema());
@@ -115,6 +115,8 @@ public class SolrUtils {
         Map<String, FieldInfo> fields = new HashMap<String, FieldInfo>();
         fields.putAll(response.getFieldInfo());
         // Extract dynamic fields.
+        // SolrJ does not extract them by itself.
+        // TODO Refactor when SOLR-9666 is closed.
         NamedList<Object> schema = (NamedList<Object>) response.getResponse().get("schema");
         if (schema != null) {
             NamedList<Object> dynamicFields = (NamedList<Object>) schema.get("dynamicFields");

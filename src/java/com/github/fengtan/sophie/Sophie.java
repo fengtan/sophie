@@ -130,16 +130,6 @@ public class Sophie {
     // TODO test retest everything
     // TODO test buffer export
 
-    // TODO contrib SolrUtils.getRemoteUniqueField() -> should use LukeResponse
-    // with showschema=true but getUniqueField() not provided - could provide it
-    // + merge with getRemoteSchemaFields()
-    // TODO contrib solrutils.getRemoteSchemaFields() ->
-    // LukeResponse.getDynamicFieldInfo() - similar to
-    // LukeResponse.getFieldInfo() - see LukeResponse.setResponse()
-    // TODO contrib CoreAdminRequest.swapCores() - similar to
-    // CoreAdminRequest.renameCore() - see itemSwap.addSelectionListener()
-    // TODO contrib replication handler solrj
-
     // TODO doc screenshot 0.5 + move screenshots/ to gh-pages
     // TODO doc gh-pages
     // TODO doc gif (licecap/silentcast/byzanz)
@@ -221,5 +211,9 @@ public class Sophie {
     // TODO obs make sure hidden file works on windows
     // TODO obs repopulate columns upon refresh (if another thread added new fields)
     // TODO obs re-populate filters when refresh/upload
+    // TODO obs replication handler solrj SOLR-5640
+    // TODO obs SolrUtils.getRemoteUniqueField() -> should use LukeResponse
+    // with showschema=true but getUniqueField() not provided - could provide it
+    // + merge with getRemoteSchemaFields()
 
 }

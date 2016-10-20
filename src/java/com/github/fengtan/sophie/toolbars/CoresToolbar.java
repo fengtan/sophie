@@ -278,6 +278,7 @@ public class CoresToolbar implements SelectionListener {
                 if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
                     return;
                 }
+                // TODO Refactor when SOLR-9667 is closed.
                 CoreAdminRequest request = new CoreAdminRequest();
                 request.setCoreName(coreName);
                 request.setOtherCoreName(dialog.getValue());
