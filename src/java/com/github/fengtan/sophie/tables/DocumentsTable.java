@@ -958,7 +958,6 @@ public class DocumentsTable {
         if (combo != null) {
             editor.grabHorizontal = true;
             editor.setEditor(combo, table.getItem(0), index);
-            editor.dispose();
             editor = new TableEditor(table);
         }
     }
