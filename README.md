@@ -19,7 +19,7 @@ Precompiled jar archives may also be downloaded from the [releases page](https:/
 
 - [Issues](https://github.com/fengtan/sophie/issues)
 - [Javadoc](http://fengtan.github.io/sophie/javadoc/)
-- [Releases](https://github.com/fengtan/sophie/releases)
+- [Releases](https://github.com/fengtan/sophie/releases) ([Feed](https://github.com/fengtan/sophie/releases.atom)
 - [Website](http://fengtan.github.io/sophie/)
 - [Wiki](https://github.com/fengtan/sophie/wiki)
 
