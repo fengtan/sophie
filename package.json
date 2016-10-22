@@ -1,28 +1,30 @@
 {
-  "name": "solr-gui",
+  "name": "sophie",
   "version": "1.0.0",
-  "description": "An admin GUI for Apache Solr, based on Electron",
+  "description": "A Solr browser and administration tool",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fengtan/solr-gui.git"
+    "url": "git+https://github.com/fengtan/sophie.git"
   },
   "keywords": [
+    "sophie",
     "admin",
     "gui",
     "apache",
     "solr",
+    "browser",
     "electron"
   ],
   "author": "fengtan",
-  "license": "CC0-1.0",
+  "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/fengtan/solr-gui/issues"
+    "url": "https://github.com/fengtan/sophie/issues"
   },
-  "homepage": "https://github.com/fengtan/solr-gui",
+  "homepage": "https://github.com/fengtan/sophie",
   "devDependencies": {
     "electron-prebuilt": "^1.2.6",
     "solr-client": "^0.6.0",
