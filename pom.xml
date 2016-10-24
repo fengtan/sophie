@@ -21,6 +21,8 @@
   </licenses>
   <properties>
     <mainClass>com.github.fengtan.sophie.Sophie</mainClass>
+    <debVersion>1</debVersion>
+    <assemblyName>${project.artifactId}-${project.version}-${project.activeProfiles[0].id}-with-dependencies</assemblyName>
   </properties>
   <scm>
     <url>https://github.com/fengtan/sophie</url>
@@ -30,7 +32,7 @@
     <sourceDirectory>src</sourceDirectory>
     <resources>
       <resource>
-        <directory>src/resources</directory>
+        <directory>src/main/resources</directory>
       </resource>
     </resources>
     <plugins>
@@ -67,13 +69,13 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
-          <finalName>${project.artifactId}-${project.version}-${project.activeProfiles[0].id}-with-dependencies</finalName>
+          <finalName>${assemblyName}</finalName>
           <appendAssemblyId>false</appendAssemblyId>
         </configuration>
         <executions>
           <execution>
-            <id>make-assembly</id> <!-- this is used for inheritance merges -->
-            <phase>package</phase> <!-- bind to the packaging phase -->
+            <id>make-assembly</id>
+            <phase>package</phase>
             <goals>
               <goal>single</goal>
             </goals>
@@ -85,8 +87,102 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.10.4</version>
         <configuration>
-          <sourcepath>src/java</sourcepath>
+          <sourcepath>src/main/java</sourcepath>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <version>1.5.3</version>
+        <executions>
+          <execution>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>replace</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <file>src/debian/control/control</file>
+          <replacements>
+            <replacement>
+              <token>%package</token>
+              <value>${project.name}</value>
+            </replacement>
+            <replacement>
+              <token>%version</token>
+              <value>${project.version}-${debVersion}</value>
+            </replacement>
+            <replacement>
+              <token>%description</token>
+              <value>${project.description}</value>
+            </replacement>
+            <replacement>
+              <token>%maintainer</token>
+              <value>${project.developers[0].name}</value>
+            </replacement>
+          </replacements>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>jdeb</artifactId>
+        <groupId>org.vafer</groupId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jdeb</goal>
+            </goals>
+            <configuration>
+              <verbose>true</verbose>
+              <deb>${project.build.directory}/${project.artifactId}_${project.version}-${debVersion}_all.deb</deb>
+              <controlDir>src/debian/control</controlDir>
+              <dataSet>
+                <data>
+                  <src>${project.build.directory}/${assemblyName}.jar</src>
+                  <type>file</type>
+                  <mapper>
+                    <type>perm</type>
+                    <prefix>/usr/share/java</prefix>
+                  </mapper>
+                </data>
+                <data>
+                  <type>link</type>
+                  <symlink>true</symlink>
+                  <linkName>/usr/share/java/sophie.jar</linkName>
+                  <linkTarget>/usr/share/java/${assemblyName}.jar</linkTarget>
+                </data>
+                <data>
+                  <src>src/debian/etc/log4j.properties</src>
+                  <type>file</type>
+                  <mapper>
+                    <type>perm</type>
+                    <prefix>/etc/sophie</prefix>
+                  </mapper>
+                </data>
+                <data>
+                  <src>src/debian/bin/sophie</src>
+                  <type>file</type>
+                  <mapper>
+                    <type>perm</type>
+                    <prefix>/usr/bin</prefix>
+                    <filemode>755</filemode>
+                  </mapper>
+                </data>
+                <data>
+                  <src>src/debian/man/sophie.1</src>
+                  <type>file</type>
+                  <paths></paths>
+                  <mapper>
+                    <type>perm</type>
+                    <prefix>/usr/share/man/man1</prefix>
+                  </mapper>
+                </data>
+              </dataSet>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

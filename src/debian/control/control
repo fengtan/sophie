@@ -1,0 +1,8 @@
+Package: %package
+Version: %version
+Section: utils
+Priority: optional
+Architecture: all
+Description: %description
+Maintainer: %maintainer
+Depends: default-jre

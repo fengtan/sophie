@@ -25,10 +25,11 @@ Precompiled jar archives may also be downloaded from the [releases page](https:/
 
 ## Similar tools
 
-- [Solr Admin UI](https://cwiki.apache.org/confluence/display/solr/Overview+of+the+Solr+Admin+UI) is the default administration interface provided by Solr
+- [Solr Admin UI](https://cwiki.apache.org/confluence/display/solr/Overview+of+the+Solr+Admin+UI) is the administration interface embedded Solr - manipulating documents requires some knowledge of the [query parameters](https://cwiki.apache.org/confluence/display/solr/Common+Query+Parameters)
 - [Luke](https://github.com/DmitryKey/luke) is a GUI tool to inspect a Lucene index
 - [Clue](https://github.com/javasoze/clue) is a CLI tool to inspect a Lucene index
 - [Blacklight](https://github.com/projectblacklight/blacklight) discovers the structure of a Solr index and builds a web search interface accordingly
+- [Solr Explorer](https://github.com/cominvent/solr-explorer) acts as a proxy and offers a web interface to explore Solr
 
 ## License
 
