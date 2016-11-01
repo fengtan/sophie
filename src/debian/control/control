@@ -1,8 +1,7 @@
-Package: %package
-Version: %version
+Package: sophie
+Version: 1.0.0
 Section: utils
 Priority: optional
 Architecture: all
-Description: %description
-Maintainer: %maintainer
+Description: A Solr browser and administration tool
 Depends: default-jre

@@ -21,7 +21,6 @@
   </licenses>
   <properties>
     <mainClass>com.github.fengtan.sophie.Sophie</mainClass>
-    <debVersion>1</debVersion>
     <assemblyName>${project.artifactId}-${project.version}-${project.activeProfiles[0].id}-with-dependencies</assemblyName>
   </properties>
   <scm>
@@ -91,40 +90,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>com.google.code.maven-replacer-plugin</groupId>
-        <artifactId>replacer</artifactId>
-        <version>1.5.3</version>
-        <executions>
-          <execution>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>replace</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <file>src/debian/control/control</file>
-          <replacements>
-            <replacement>
-              <token>%package</token>
-              <value>${project.name}</value>
-            </replacement>
-            <replacement>
-              <token>%version</token>
-              <value>${project.version}-${debVersion}</value>
-            </replacement>
-            <replacement>
-              <token>%description</token>
-              <value>${project.description}</value>
-            </replacement>
-            <replacement>
-              <token>%maintainer</token>
-              <value>${project.developers[0].name}</value>
-            </replacement>
-          </replacements>
-        </configuration>
-      </plugin>
-      <plugin>
         <artifactId>jdeb</artifactId>
         <groupId>org.vafer</groupId>
         <version>1.5</version>
@@ -136,8 +101,11 @@
             </goals>
             <configuration>
               <verbose>true</verbose>
-              <deb>${project.build.directory}/${project.artifactId}_${project.version}-${debVersion}_all.deb</deb>
+              <deb>${project.build.directory}/${project.artifactId}_${project.version}_all.deb</deb>
               <controlDir>src/debian/control</controlDir>
+              <signPackage>true</signPackage>
+              <signMethod>dpkg-sig</signMethod>
+              <signRole>builder</signRole>
               <dataSet>
                 <data>
                   <src>${project.build.directory}/${assemblyName}.jar</src>
@@ -156,6 +124,7 @@
                 <data>
                   <src>src/debian/etc/log4j.properties</src>
                   <type>file</type>
+                  <conffile>true</conffile>
                   <mapper>
                     <type>perm</type>
                     <prefix>/etc/sophie</prefix>
