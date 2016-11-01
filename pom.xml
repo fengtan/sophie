@@ -103,9 +103,9 @@
               <verbose>true</verbose>
               <deb>${project.build.directory}/${project.artifactId}_${project.version}_all.deb</deb>
               <controlDir>src/debian/control</controlDir>
-              <signPackage>true</signPackage>
+              <!--signPackage>true</signPackage>
               <signMethod>dpkg-sig</signMethod>
-              <signRole>builder</signRole>
+              <signRole>builder</signRole-->
               <dataSet>
                 <data>
                   <src>${project.build.directory}/${assemblyName}.jar</src>
