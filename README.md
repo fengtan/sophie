@@ -15,7 +15,6 @@ Either download a precompiled jar archive from the [releases page](https://githu
 Or install the .deb package if you are on Debian/Ubuntu:
 
     sudo dpkg -i sophie_1.0.0_all.deb
-    man sophie
     sophie &
 
 More details can be found on the [wiki](https://github.com/fengtan/sophie/wiki/).
