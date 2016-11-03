@@ -122,15 +122,6 @@
                   <linkTarget>/usr/share/java/${assemblyName}.jar</linkTarget>
                 </data>
                 <data>
-                  <src>src/debian/etc/log4j.properties</src>
-                  <type>file</type>
-                  <conffile>true</conffile>
-                  <mapper>
-                    <type>perm</type>
-                    <prefix>/etc/sophie</prefix>
-                  </mapper>
-                </data>
-                <data>
                   <src>src/debian/bin/sophie</src>
                   <type>file</type>
                   <mapper>

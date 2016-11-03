@@ -30,7 +30,6 @@
 #   JAVACMD      - full path of the Java executable
 #   SOPHIE_JAR   - location of Sophie's installed jar archive
 #   SOPHIE_OPTS  - parameters passed to the JVM when running Sophie
-#   SOPHIE_LOG4J - full path of a log4j config file
 # ----------------------------------------------------------------------------
 
 if [ -f /etc/sophierc ] ; then
@@ -43,10 +42,6 @@ fi
 
 if [ -z "$SOPHIE_JAR" ] ; then
   SOPHIE_JAR="/usr/share/java/sophie.jar"
-fi
-
-if [ -z "$SOPHIE_LOG4J" ] ; then
-  SOPHIE_LOG4J="/etc/sophie/log4j.properties"
 fi
 
 if [ -z "$JAVACMD" ] ; then
@@ -71,5 +66,5 @@ if [ -z "$JAVA_HOME" ] ; then
   echo "Warning: JAVA_HOME environment variable is not set."
 fi
 
-exec "$JAVACMD" $SOPHIE_OPTS -Dlog4j.configuration=file:"$SOPHIE_LOG4J" -jar "$SOPHIE_JAR"
+exec "$JAVACMD" $SOPHIE_OPTS -jar "$SOPHIE_JAR"
 
