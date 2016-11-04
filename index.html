@@ -31,7 +31,7 @@
         <h3>
 <a id="browse-solr-documents-with-minimal-effort" class="anchor" href="#browse-solr-documents-with-minimal-effort" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Browse Solr documents with minimal effort.</h3>
 
-<p>No need to learn Solr's <a href="https://cwiki.apache.org/confluence/display/solr/Query+Syntax+and+Parsing">query syntax</a>: as soon as you launch Sophie, you will be presented with a list of indexed documents. Filters and sorters allow you to quickly find a specific document and inspect its content. Sophie leverages SWT's <a href="https://eclipse.org/articles/Article-SWT-Virtual/Virtual-in-SWT.html">virtual tables</a> to scale well with large indexes and keep a low memory footprint on your workstation. An internal caching mechanism limits the amount of client/server interactions so browsing the index does not generate a significant load on Solr. All HTTP requests are logged using <a href="http://www.slf4j.org/">slf4j</a> so you see exactly what requests (and what load) Sophie sends to Solr.</p>
+<p>Sophie allows to browse Solr documents, fields and cores without learning the <a href="https://cwiki.apache.org/confluence/display/solr/Query+Syntax+and+Parsing">query syntax</a>. As soon as you launch it, you will be presented with a list of indexed documents. Filters and sorters allow you to quickly find a specific document and inspect its content. Sophie leverages SWT's <a href="https://eclipse.org/articles/Article-SWT-Virtual/Virtual-in-SWT.html">virtual tables</a> to scale with large indexes and keep a low memory footprint on your workstation. An internal caching mechanism limits the amount of client/server interactions so browsing the index does not generate a significant load on Solr. All HTTP requests are logged using <a href="http://www.slf4j.org/">SLF4J</a> so you see exactly what requests (and what load) Sophie sends to Solr.</p>
 
 <h3>
 <a id="create-update-delete-solr-documents" class="anchor" href="#create-update-delete-solr-documents" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Create, update, delete Solr documents</h3>
@@ -41,7 +41,7 @@
 <h3>
 <a id="perform-common-administration-tasks" class="anchor" href="#perform-common-administration-tasks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Perform common administration tasks</h3>
 
-<p>A variety of operations can be done in no time: export documents into a CSV file for further analysis ; create, rename and delete cores ; swap two cores, for instance to swap new content into production ; reload cores to apply changes you have made to the configuration on disk without restarting Solr ; commit or optimize the index to speed up recently made modifications ; clear the index ; etc.</p>
+<p>A variety of operations can be done: export documents into a CSV file for further analysis ; create, rename and delete cores ; swap two cores, for instance to swap new content into production ; reload cores to apply changes you have made on disk without restarting Solr ; commit or optimize the index ; clear the index ; etc.</p>
 
 <h3>
 <a id="sophie-works-everywhere" class="anchor" href="#sophie-works-everywhere" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sophie works everywhere</h3>
@@ -51,7 +51,7 @@
 <h3>
 <a id="support" class="anchor" href="#support" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support</h3>
 
-<p>Quick start instructions can be found on the <a href="https://github.com/fengtan/sophie">project page</a>. Detailed information can be found on the <a href="https://github.com/fengtan/sophie/wiki">wiki</a>. Problems are listed on the <a href="https://github.com/fengtan/sophie/issues">issues page</a>. <a href="https://github.com/fengtan/sophie/pulls">Pull requests</a> are welcome and bring good karma. You may find the <a href="http://fengtan.github.io/sophie/javadoc">javadoc</a> to be helpful.</p>
+<p>Quick start instructions can be found on the <a href="https://github.com/fengtan/sophie">project page</a>. Detailed information can be found on the <a href="https://github.com/fengtan/sophie/wiki">wiki</a>. Problems are listed on the <a href="https://github.com/fengtan/sophie/issues">issues page</a>. You may find the <a href="http://fengtan.github.io/sophie/javadoc">javadoc</a> to be helpful.</p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/fengtan">fengtan</a></p>
