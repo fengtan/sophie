@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.sophie.beans.SophieException;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
-import com.github.fengtan.sophie.tables.SystemTable;
+import com.github.fengtan.sophie.trees.SystemTree;
 
 /**
  * Toolbar to make operations on system.
@@ -42,14 +42,14 @@ public class SystemToolbar {
     private Image imgRefresh;
 
     /**
-     * Refresh operation - buton.
+     * Refresh operation - button.
      */
     private ToolItem itemRefresh;
 
     /**
      * Table listing the fields.
      */
-    private SystemTable table;
+    private SystemTree tree;
 
     /**
      * Create a new toolbar to make operations on system.
@@ -67,8 +67,8 @@ public class SystemToolbar {
      * @param table
      *            Table.
      */
-    public void setTable(SystemTable table) {
-        this.table = table;
+    public void setTable(SystemTree table) {
+        this.tree = table;
     }
 
     /**
@@ -93,7 +93,7 @@ public class SystemToolbar {
         itemRefresh.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
                 try {
-                    table.refresh();
+                    tree.refresh();
                 } catch (SophieException e) {
                     ExceptionDialog.open(composite.getShell(), new SophieException("Unable to refresh system table", e));
                 }

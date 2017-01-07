@@ -42,7 +42,7 @@ public class FieldsToolbar {
     private Image imgRefresh;
 
     /**
-     * Refresh operation - buton.
+     * Refresh operation - button.
      */
     private ToolItem itemRefresh;
 

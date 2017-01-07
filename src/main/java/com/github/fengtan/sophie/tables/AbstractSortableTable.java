@@ -81,7 +81,7 @@ public abstract class AbstractSortableTable {
      */
     public AbstractSortableTable(Composite composite, SelectionListener listener) {
         // Instantiate table.
-        int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION | SWT.VIRTUAL;
+        int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
         table = new Table(composite, style);
 
         // Set layout.

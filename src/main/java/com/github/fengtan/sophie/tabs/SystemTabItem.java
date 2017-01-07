@@ -25,8 +25,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.github.fengtan.sophie.beans.SophieException;
-import com.github.fengtan.sophie.tables.SystemTable;
 import com.github.fengtan.sophie.toolbars.SystemToolbar;
+import com.github.fengtan.sophie.trees.SystemTree;
 
 /**
  * Tab displaying a system toolbar and a system table.
@@ -41,7 +41,7 @@ public class SystemTabItem extends CTabItem {
     /**
      * System table.
      */
-    private SystemTable table;
+    private SystemTree table;
 
     /**
      * Create a new tab displaying a system toolbar and a system table.
@@ -62,7 +62,7 @@ public class SystemTabItem extends CTabItem {
 
         // Add toolbar and table.
         toolbar = new SystemToolbar(composite);
-        table = new SystemTable(composite);
+        table = new SystemTree(composite);
         toolbar.setTable(table);
 
         // Pack.
