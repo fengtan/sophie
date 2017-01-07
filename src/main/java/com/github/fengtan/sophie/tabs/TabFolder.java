@@ -54,6 +54,11 @@ public class TabFolder extends CTabFolder {
     private CoresTabItem coresTabItem;
 
     /**
+     * System tab item
+     */
+    private SystemTabItem systemTabItem;
+
+    /**
      * Create a new tab folder containing a documents tab item, a fields tab
      * item and a cores tab item.
      * 
@@ -97,9 +102,12 @@ public class TabFolder extends CTabFolder {
             exception = e;
         }
 
+        // TODO Add tab only if endpoint is available
+        systemTabItem = new SystemTabItem(this);
+
         // If the Solr client allows to display no tab, then we have an invalid
         // client and we need to notify the user.
-        if (documentsTabItem == null && fieldsTabItem == null && coresTabItem == null) {
+        if (documentsTabItem == null && fieldsTabItem == null && coresTabItem == null && systemTabItem == null) {
             throw new SophieException("Invalid connection \"" + connectionString + "\".", exception);
         }
 

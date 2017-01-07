@@ -25,35 +25,35 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.github.fengtan.sophie.beans.SophieException;
-import com.github.fengtan.sophie.tables.FieldsTable;
-import com.github.fengtan.sophie.toolbars.FieldsToolbar;
+import com.github.fengtan.sophie.tables.SystemTable;
+import com.github.fengtan.sophie.toolbars.SystemToolbar;
 
 /**
- * Tab displaying a fields toolbar and a fields table.
+ * Tab displaying a system toolbar and a system table.
  */
-public class FieldsTabItem extends CTabItem {
+public class SystemTabItem extends CTabItem {
 
     /**
-     * Fields toolbar.
+     * System toolbar.
      */
-    private FieldsToolbar toolbar;
+    private SystemToolbar toolbar;
 
     /**
-     * Fields table.
+     * System table.
      */
-    private FieldsTable table;
+    private SystemTable table;
 
     /**
-     * Create a new tab displaying a fields toolbar and a fields table.
+     * Create a new tab displaying a system toolbar and a system table.
      * 
      * @param tabFolder
      *            Parent tab folder.
      * @throws SophieException
      *             If the tab could not be initalized.
      */
-    public FieldsTabItem(CTabFolder tabFolder) throws SophieException {
+    public SystemTabItem(CTabFolder tabFolder) throws SophieException {
         super(tabFolder, SWT.NONE, tabFolder.getItemCount());
-        setText("Fields");
+        setText("System");
 
         // Prepare layout.
         Composite composite = new Composite(getParent(), SWT.NULL);
@@ -61,8 +61,8 @@ public class FieldsTabItem extends CTabItem {
         setControl(composite);
 
         // Add toolbar and table.
-        toolbar = new FieldsToolbar(composite);
-        table = new FieldsTable(composite);
+        toolbar = new SystemToolbar(composite);
+        table = new SystemTable(composite);
         toolbar.setTable(table);
 
         // Pack.
