@@ -18,15 +18,10 @@
  */
 package com.github.fengtan.sophie.trees;
 
-import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.request.QueryRequest;
-import org.apache.solr.common.SolrException;
 import org.apache.solr.common.util.NamedList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -35,7 +30,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 
-import com.github.fengtan.sophie.Sophie;
+import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
 
 /**
@@ -103,24 +98,11 @@ public class SystemTree {
 	 */
 	private void populate() throws SophieException {
 		// Get system info from Solr and populate table.
-		QueryRequest requestInfo = new QueryRequest();
-		requestInfo.setPath("/admin/system");
-		try {
-			NamedList<Object> namedListInfo = Sophie.client.request(requestInfo);
-			populate(namedListInfo, null);
-		} catch (SolrServerException | IOException | SolrException e) {
-			throw new SophieException("Unable to populate system table with system info", e);
-		}
-
+		NamedList<Object> namedListInfo = SolrUtils.getSystemInfo();
+		populate(namedListInfo, null);
 		// Get system properties from Solr and populate table.
-		QueryRequest requestProperties = new QueryRequest();
-		requestProperties.setPath("/admin/properties");
-		try {
-			NamedList<Object> namedListInfo = Sophie.client.request(requestProperties);
-			populate(namedListInfo, null);
-		} catch (SolrServerException | IOException | SolrException e) {
-			throw new SophieException("Unable to populate system table with system properties", e);
-		}
+		NamedList<Object> namedListProperties = SolrUtils.getSystemProperties();
+		populate(namedListProperties, null);
 	}
 
 	/**
@@ -133,6 +115,7 @@ public class SystemTree {
 	 * @throws SophieException
 	 *             If the tree could not be populated.
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void populate(Iterable<Map.Entry<String, Object>> iterable, TreeItem parent) {
 		for (Map.Entry<String, Object> entry : iterable) {
 			// No need to display header information.

@@ -101,9 +101,13 @@ public class TabFolder extends CTabFolder {
 			Sophie.log.info("Cores tab will not be displayed", e);
 			exception = e;
 		}
-
-		// TODO Add tab only if endpoint is available
-		systemTabItem = new SystemTabItem(this);
+		try {
+			SolrUtils.getSystemInfo();
+			systemTabItem = new SystemTabItem(this);
+		} catch (SophieException e) {
+			Sophie.log.info("System tab will not be displayed", e);
+			exception = e;
+		}
 
 		// If the Solr client allows to display no tab, then we have an invalid
 		// client and we need to notify the user.
