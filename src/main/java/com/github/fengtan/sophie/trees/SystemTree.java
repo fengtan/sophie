@@ -19,13 +19,17 @@
 package com.github.fengtan.sophie.trees;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.common.SolrException;
 import org.apache.solr.common.util.NamedList;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
@@ -60,57 +64,97 @@ public class SystemTree {
 	 * @param composite
 	 *            Parent composite.
 	 */
-	public SystemTree(Composite composite) {
-
-		composite.setLayout(new FillLayout());
-		// TODO expand window's width
-		int style = SWT.BORDER;
-		tree = new Tree(composite, style);
+	public SystemTree(Composite composite) throws SophieException {
+		// Instantiate Tree.
+		tree = new Tree(composite, SWT.BORDER);
 		tree.setHeaderVisible(true);
+		tree.setLayoutData(new GridData(GridData.FILL_BOTH));
 
+		// Create name/value columns.
 		columnName = new TreeColumn(tree, SWT.LEFT);
 		columnName.setText("Name");
-
 		columnValue = new TreeColumn(tree, SWT.LEFT);
 		columnValue.setText("Value");
 
-		// TODO comments
+		// Populate tree with data from Solr.
+		populate();
 
-		QueryRequest request = new QueryRequest();
-		request.setPath("/admin/system");
-		try {
-			NamedList<Object> namedList = Sophie.client.request(request);
-			populate(namedList, tree.getTopItem());
-		} catch (SolrServerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		// Pack columns.
 		columnName.pack();
 		columnValue.pack();
 	}
 
-	private void populate(NamedList<?> namedList, TreeItem parent) {
-		for (int idx = 0; idx < namedList.size(); idx++) {
-			TreeItem item = (parent == null) ? new TreeItem(tree, SWT.NONE) : new TreeItem(parent, SWT.NONE);
-			String name = namedList.getName(idx);
-			Object object = namedList.getVal(idx);
-			if (object instanceof NamedList) {
-				item.setText(new String[] { name, "" });
-				populate((NamedList<?>) object, item);
-			} else {
-				String value = Objects.toString(object, "");
-				item.setText(new String[] { name, value });
-			}
+	/**
+	 * Clear the tree and re-populate it.
+	 * 
+	 * @throws SophieException
+	 *             If the tree could not be populated.
+	 */
+	public void refresh() throws SophieException {
+		tree.removeAll();
+		populate();
+	}
+
+	/**
+	 * Populate the tree.
+	 * 
+	 * @throws SophieException
+	 *             If the tree could not be populated.
+	 */
+	private void populate() throws SophieException {
+		// Get system info from Solr and populate table.
+		QueryRequest requestInfo = new QueryRequest();
+		requestInfo.setPath("/admin/system");
+		try {
+			NamedList<Object> namedListInfo = Sophie.client.request(requestInfo);
+			populate(namedListInfo, null);
+		} catch (SolrServerException | IOException | SolrException e) {
+			throw new SophieException("Unable to populate system table with system info", e);
+		}
+
+		// Get system properties from Solr and populate table.
+		QueryRequest requestProperties = new QueryRequest();
+		requestProperties.setPath("/admin/properties");
+		try {
+			NamedList<Object> namedListInfo = Sophie.client.request(requestProperties);
+			populate(namedListInfo, null);
+		} catch (SolrServerException | IOException | SolrException e) {
+			throw new SophieException("Unable to populate system table with system properties", e);
 		}
 	}
 
-	public void refresh() throws SophieException {
-		// TODO implement
-		// TODO throw SophieException ?
+	/**
+	 * Add a set of values to a TreeItem.
+	 * 
+	 * @param parent
+	 *            Parent TreeItem, or null if values should be added to the top
+	 *            of the Tree.
+	 * 
+	 * @throws SophieException
+	 *             If the tree could not be populated.
+	 */
+	private void populate(Iterable<Map.Entry<String, Object>> iterable, TreeItem parent) {
+		for (Map.Entry<String, Object> entry : iterable) {
+			// No need to display header information.
+			if (StringUtils.equals(entry.getKey(), "responseHeader")) {
+				continue;
+			}
+			// If value is a map, use iterable entry set.
+			Object value = entry.getValue();
+			if (value instanceof Map) {
+				value = ((Map) value).entrySet();
+			}
+			// Create TreeItem for each entry.
+			TreeItem item = (parent == null) ? new TreeItem(tree, SWT.NONE) : new TreeItem(parent, SWT.NONE);
+			if (value instanceof Iterable) {
+				// Value is iterable: iterate over its entries.
+				item.setText(new String[] { entry.getKey(), "" });
+				populate((Iterable) value, item);
+			} else {
+				// Value is not iterable: add regular TreeItem with value.
+				item.setText(new String[] { entry.getKey(), Objects.toString(value, "") });
+			}
+		}
 	}
 
 }
