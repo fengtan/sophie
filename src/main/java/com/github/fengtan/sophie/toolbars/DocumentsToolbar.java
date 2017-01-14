@@ -48,9 +48,9 @@ import org.eclipse.swt.widgets.ToolItem;
 import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
+import com.github.fengtan.sophie.composites.DocumentsTable;
 import com.github.fengtan.sophie.dialogs.CComboDialog;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
-import com.github.fengtan.sophie.tables.DocumentsTable;
 import com.github.fengtan.sophie.validators.FieldValidator;
 
 /**

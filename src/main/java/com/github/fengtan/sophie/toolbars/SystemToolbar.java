@@ -28,8 +28,8 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.sophie.beans.SophieException;
+import com.github.fengtan.sophie.composites.SystemTree;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
-import com.github.fengtan.sophie.trees.SystemTree;
 
 /**
  * Toolbar to make operations on system.

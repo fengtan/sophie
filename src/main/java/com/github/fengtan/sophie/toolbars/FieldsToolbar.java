@@ -28,8 +28,8 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
 import com.github.fengtan.sophie.beans.SophieException;
+import com.github.fengtan.sophie.composites.FieldsTable;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
-import com.github.fengtan.sophie.tables.FieldsTable;
 
 /**
  * Toolbar to make operations on fields.

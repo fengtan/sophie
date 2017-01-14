@@ -25,7 +25,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.github.fengtan.sophie.beans.SophieException;
-import com.github.fengtan.sophie.tables.DocumentsTable;
+import com.github.fengtan.sophie.composites.DocumentsTable;
 import com.github.fengtan.sophie.toolbars.DocumentsToolbar;
 
 /**

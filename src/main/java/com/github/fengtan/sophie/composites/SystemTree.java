@@ -16,9 +16,10 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.fengtan.sophie.trees;
+package com.github.fengtan.sophie.composites;
 
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
@@ -108,6 +109,8 @@ public class SystemTree {
 	/**
 	 * Add a set of values to a TreeItem.
 	 * 
+	 * @param namedList
+	 *            Named list containing the values to populate.
 	 * @param parent
 	 *            Parent TreeItem, or null if values should be added to the top
 	 *            of the Tree.
@@ -116,26 +119,34 @@ public class SystemTree {
 	 *             If the tree could not be populated.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void populate(Iterable<Map.Entry<String, Object>> iterable, TreeItem parent) {
-		for (Map.Entry<String, Object> entry : iterable) {
+	private void populate(NamedList<Object> namedList, TreeItem parent) {
+		for (Map.Entry<String, Object> entry : namedList) {
+			String name = entry.getKey();
+			Object value = entry.getValue();
 			// No need to display header information.
-			if (StringUtils.equals(entry.getKey(), "responseHeader")) {
+			if (StringUtils.equals(name, "responseHeader")) {
 				continue;
 			}
-			// If value is a map, use iterable entry set.
-			Object value = entry.getValue();
+			// Value is a Map: iterate.
 			if (value instanceof Map) {
-				value = ((Map) value).entrySet();
-			}
-			// Create TreeItem for each entry.
-			TreeItem item = (parent == null) ? new TreeItem(tree, SWT.NONE) : new TreeItem(parent, SWT.NONE);
-			if (value instanceof Iterable) {
-				// Value is iterable: iterate over its entries.
-				item.setText(new String[] { entry.getKey(), "" });
-				populate((Iterable) value, item);
+				Map<String, Object> map = (Map) value;
+				TreeItem itemParent = (parent == null) ? new TreeItem(tree, SWT.NONE) : new TreeItem(parent, SWT.NONE);
+				itemParent.setText(name);
+				for (Entry<String, Object> mapEntry : map.entrySet()) {
+					String mapEntryName = mapEntry.getKey();
+					Object mapEntryValue = mapEntry.getValue();
+					TreeItem item = new TreeItem(itemParent, SWT.NONE);
+					item.setText(new String[] { mapEntryName, Objects.toString(mapEntryValue, "") });
+				}
+			} else if (value instanceof NamedList) {
+				// Value is a NamedList: iterate.
+				TreeItem item = (parent == null) ? new TreeItem(tree, SWT.NONE) : new TreeItem(parent, SWT.NONE);
+				item.setText(new String[] { name, "" });
+				populate((NamedList) value, item);
 			} else {
-				// Value is not iterable: add regular TreeItem with value.
-				item.setText(new String[] { entry.getKey(), Objects.toString(value, "") });
+				// Value is not a NamedList or Map: add a regular TreeItem.
+				TreeItem item = (parent == null) ? new TreeItem(tree, SWT.NONE) : new TreeItem(parent, SWT.NONE);
+				item.setText(new String[] { name, Objects.toString(value, "") });
 			}
 		}
 	}

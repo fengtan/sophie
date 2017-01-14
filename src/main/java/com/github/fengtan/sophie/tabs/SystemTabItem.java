@@ -25,8 +25,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.github.fengtan.sophie.beans.SophieException;
+import com.github.fengtan.sophie.composites.SystemTree;
 import com.github.fengtan.sophie.toolbars.SystemToolbar;
-import com.github.fengtan.sophie.trees.SystemTree;
 
 /**
  * Tab displaying a system toolbar and a system table.

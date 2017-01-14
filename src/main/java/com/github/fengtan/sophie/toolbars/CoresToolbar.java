@@ -44,10 +44,10 @@ import org.eclipse.swt.widgets.ToolItem;
 import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
+import com.github.fengtan.sophie.composites.CoresTable;
 import com.github.fengtan.sophie.dialogs.CComboDialog;
-import com.github.fengtan.sophie.dialogs.MultipleInputDialog;
 import com.github.fengtan.sophie.dialogs.ExceptionDialog;
-import com.github.fengtan.sophie.tables.CoresTable;
+import com.github.fengtan.sophie.dialogs.MultipleInputDialog;
 
 /**
  * Toolbar to make operations on cores.
