@@ -47,7 +47,7 @@ public class SystemToolbar {
     private ToolItem itemRefresh;
 
     /**
-     * Table listing the fields.
+     * Tree listing the values.
      */
     private SystemTree tree;
 
@@ -62,13 +62,13 @@ public class SystemToolbar {
     }
 
     /**
-     * Set table.
+     * Set tree.
      * 
-     * @param table
-     *            Table.
+     * @param tree
+     *            Tree.
      */
-    public void setTable(SystemTree table) {
-        this.tree = table;
+    public void setTree(SystemTree tree) {
+        this.tree = tree;
     }
 
     /**
@@ -95,7 +95,7 @@ public class SystemToolbar {
                 try {
                     tree.refresh();
                 } catch (SophieException e) {
-                    ExceptionDialog.open(composite.getShell(), new SophieException("Unable to refresh system table", e));
+                    ExceptionDialog.open(composite.getShell(), new SophieException("Unable to refresh system tree", e));
                 }
             }
         });

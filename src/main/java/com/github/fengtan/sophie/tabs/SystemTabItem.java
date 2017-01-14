@@ -29,7 +29,7 @@ import com.github.fengtan.sophie.composites.SystemTree;
 import com.github.fengtan.sophie.toolbars.SystemToolbar;
 
 /**
- * Tab displaying a system toolbar and a system table.
+ * Tab displaying a system toolbar and a system tree.
  */
 public class SystemTabItem extends CTabItem {
 
@@ -41,7 +41,7 @@ public class SystemTabItem extends CTabItem {
     /**
      * System table.
      */
-    private SystemTree table;
+    private SystemTree tree;
 
     /**
      * Create a new tab displaying a system toolbar and a system table.
@@ -62,8 +62,8 @@ public class SystemTabItem extends CTabItem {
 
         // Add toolbar and table.
         toolbar = new SystemToolbar(composite);
-        table = new SystemTree(composite);
-        toolbar.setTable(table);
+        tree = new SystemTree(composite);
+        toolbar.setTree(tree);
 
         // Pack.
         composite.pack();
