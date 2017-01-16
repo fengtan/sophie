@@ -25,35 +25,35 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.github.fengtan.sophie.beans.SophieException;
-import com.github.fengtan.sophie.composites.SystemTree;
-import com.github.fengtan.sophie.toolbars.SystemToolbar;
+import com.github.fengtan.sophie.composites.FilesTree;
+import com.github.fengtan.sophie.toolbars.FilesToolbar;
 
 /**
- * Tab displaying a system toolbar and a system tree.
+ * Tab displaying a files toolbar and a files tree.
  */
-public class SystemTabItem extends CTabItem {
+public class FilesTabItem extends CTabItem {
 
     /**
-     * System toolbar.
+     * Files toolbar.
      */
-    private SystemToolbar toolbar;
+    private FilesToolbar toolbar;
 
     /**
-     * System table.
+     * Files tree.
      */
-    private SystemTree tree;
+    private FilesTree tree;
 
     /**
-     * Create a new tab displaying a system toolbar and a system tree.
+     * Create a new tab displaying a files toolbar and a files tree.
      * 
      * @param tabFolder
      *            Parent tab folder.
      * @throws SophieException
      *             If the tab could not be initalized.
      */
-    public SystemTabItem(CTabFolder tabFolder) throws SophieException {
+    public FilesTabItem(CTabFolder tabFolder) throws SophieException {
         super(tabFolder, SWT.NONE, tabFolder.getItemCount());
-        setText("System");
+        setText("Files");
 
         // Prepare layout.
         Composite composite = new Composite(getParent(), SWT.NULL);
@@ -61,8 +61,8 @@ public class SystemTabItem extends CTabItem {
         setControl(composite);
 
         // Add toolbar and tree.
-        toolbar = new SystemToolbar(composite);
-        tree = new SystemTree(composite);
+        toolbar = new FilesToolbar(composite);
+        tree = new FilesTree(composite);
         toolbar.setTree(tree);
 
         // Pack.

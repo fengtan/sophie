@@ -66,7 +66,7 @@ public class CoresTable extends AbstractSortableTable {
         // Get remote cores.
         Map<String, NamedList<Object>> cores;
         try {
-            cores = SolrUtils.getCores();
+            cores = SolrUtils.getRemoteCores();
         } catch (SophieException e) {
             throw new SophieException("Unable to populate cores table", e);
         }

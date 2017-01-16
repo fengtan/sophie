@@ -266,7 +266,7 @@ public class CoresToolbar implements SelectionListener {
                 String coreName = table.getSelectedCore();
                 Map<String, NamedList<Object>> cores;
                 try {
-                    cores = SolrUtils.getCores();
+                    cores = SolrUtils.getRemoteCores();
                 } catch (SophieException e) {
                     Sophie.log.error("Unable to suggest list of cores", e);
                     cores = Collections.emptyMap();
@@ -317,7 +317,7 @@ public class CoresToolbar implements SelectionListener {
         itemReloadAll.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
                 try {
-                    for (String coreName : SolrUtils.getCores().keySet()) {
+                    for (String coreName : SolrUtils.getRemoteCores().keySet()) {
                         CoreAdminRequest.reloadCore(coreName, Sophie.client);
                     }
                     table.refresh();

@@ -33,133 +33,143 @@ import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
 
 /**
- * Tab folder containing a documents tab item, a fields tab item and a cores tab
- * item.
+ * Tab folder containing the tab items.
  */
 public class TabFolder extends CTabFolder {
 
-	/**
-	 * Documents tab item.
-	 */
-	private DocumentsTabItem documentsTabItem;
+    /**
+     * Documents tab item.
+     */
+    private DocumentsTabItem documentsTabItem;
 
-	/**
-	 * Fields tab item.
-	 */
-	private FieldsTabItem fieldsTabItem;
+    /**
+     * Fields tab item.
+     */
+    private FieldsTabItem fieldsTabItem;
 
-	/**
-	 * Cores tab item.
-	 */
-	private CoresTabItem coresTabItem;
+    /**
+     * Cores tab item.
+     */
+    private CoresTabItem coresTabItem;
 
-	/**
-	 * System tab item
-	 */
-	private SystemTabItem systemTabItem;
+    /**
+     * System tab item.
+     */
+    private SystemTabItem systemTabItem;
 
-	/**
-	 * Create a new tab folder containing a documents tab item, a fields tab
-	 * item, a cores tab item and a system tab item.
-	 *
-	 * @param shell
-	 *            Shell.
-	 * @param connectionString
-	 *            Connection string displayed on the top right corner of the tab
-	 *            folder.
-	 * @param connectionType
-	 *            Connection type displayed on the top right corner of the tab
-	 *            folder.
-	 * @throws SophieException
-	 *             If no documents, fields or core could not retrieved from
-	 *             Solr.
-	 */
-	public TabFolder(Shell shell, String connectionString, SolrConnectionType connectionType) throws SophieException {
-		// Create tabs.
-		super(shell, SWT.TOP | SWT.BORDER);
+    /**
+     * Files tab item.
+     */
+    private FilesTabItem filesTabItem;
 
-		// Configure tab folder.
-		setBorderVisible(true);
-		setLayoutData(new GridData(GridData.FILL_BOTH));
-		setSimple(false);
-		setTabHeight(25);
+    /**
+     * Create a new tab folder containing tab items.
+     *
+     * @param shell
+     *            Shell.
+     * @param connectionString
+     *            Connection string displayed on the top right corner of the tab
+     *            folder.
+     * @param connectionType
+     *            Connection type displayed on the top right corner of the tab
+     *            folder.
+     * @throws SophieException
+     *             If no documents, fields or core could not retrieved from
+     *             Solr.
+     */
+    public TabFolder(Shell shell, String connectionString, SolrConnectionType connectionType) throws SophieException {
+        // Create tabs.
+        super(shell, SWT.TOP | SWT.BORDER);
 
-		// Add tabs if the associated endpoints are available.
-		Exception exception = null;
-		try {
-			SolrUtils.getRemoteFields();
-			documentsTabItem = new DocumentsTabItem(this);
-			fieldsTabItem = new FieldsTabItem(this);
-		} catch (SophieException e) {
-			Sophie.log.info("Documents and fields tabs will not be displayed", e);
-			exception = e;
-		}
-		try {
-			SolrUtils.getCores();
-			coresTabItem = new CoresTabItem(this);
-		} catch (SophieException e) {
-			Sophie.log.info("Cores tab will not be displayed", e);
-			exception = e;
-		}
-		try {
-			SolrUtils.getSystemInfo();
-			systemTabItem = new SystemTabItem(this);
-		} catch (SophieException e) {
-			Sophie.log.info("System tab will not be displayed", e);
-			exception = e;
-		}
+        // Configure tab folder.
+        setBorderVisible(true);
+        setLayoutData(new GridData(GridData.FILL_BOTH));
+        setSimple(false);
+        setTabHeight(25);
 
-		// If the Solr client allows to display no tab, then we have an invalid
-		// client and we need to notify the user.
-		if (documentsTabItem == null && fieldsTabItem == null && coresTabItem == null && systemTabItem == null) {
-			throw new SophieException("Invalid connection \"" + connectionString + "\".", exception);
-		}
+        // Add tabs if the associated endpoints are available.
+        Exception exception = null;
+        try {
+            SolrUtils.getRemoteFields();
+            documentsTabItem = new DocumentsTabItem(this);
+            fieldsTabItem = new FieldsTabItem(this);
+        } catch (SophieException e) {
+            Sophie.log.info("Documents and fields tabs will not be displayed", e);
+            exception = e;
+        }
+        try {
+            SolrUtils.getRemoteCores();
+            coresTabItem = new CoresTabItem(this);
+        } catch (SophieException e) {
+            Sophie.log.info("Cores tab will not be displayed", e);
+            exception = e;
+        }
+        try {
+            SolrUtils.getSystemInfo();
+            systemTabItem = new SystemTabItem(this);
+        } catch (SophieException e) {
+            Sophie.log.info("System tab will not be displayed", e);
+            exception = e;
+        }
+        try {
+            SolrUtils.getFiles(null);
+            filesTabItem = new FilesTabItem(this);
+        } catch(SophieException e) {
+            Sophie.log.info("Files tab will not be displayed", e);
+            exception = e;
+        }
 
-		// Set focus on first tab.
-		setSelection(getItem(0));
-		setFocus();
+        // If the Solr client allows to display no tab, then we have an invalid
+        // client and we need to notify the user.
+        if (documentsTabItem == null && fieldsTabItem == null && coresTabItem == null && systemTabItem == null && filesTabItem == null) {
+            throw new SophieException("Invalid connection \"" + connectionString + "\".", exception);
+        }
 
-		// Set up a gradient background for the selected tab
-		Display display = shell.getDisplay();
-		Color titleForeColor = display.getSystemColor(SWT.COLOR_TITLE_FOREGROUND);
-		Color titleBackColor1 = display.getSystemColor(SWT.COLOR_TITLE_BACKGROUND);
-		Color titleBackColor2 = display.getSystemColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT);
-		setSelectionForeground(titleForeColor);
-		setSelectionBackground(new Color[] { titleBackColor1, titleBackColor2 }, new int[] { 100 }, true);
+        // Set focus on first tab.
+        setSelection(getItem(0));
+        setFocus();
 
-		// Add title.
-		ToolBar toolbar = new ToolBar(this, SWT.NULL);
-		ToolItem item = new ToolItem(toolbar, SWT.NULL);
-		item.setText(connectionString + " (" + connectionType.getTypeName() + ")");
-		item.setEnabled(false);
-		setTopRight(toolbar);
-	}
+        // Set up a gradient background for the selected tab
+        Display display = shell.getDisplay();
+        Color titleForeColor = display.getSystemColor(SWT.COLOR_TITLE_FOREGROUND);
+        Color titleBackColor1 = display.getSystemColor(SWT.COLOR_TITLE_BACKGROUND);
+        Color titleBackColor2 = display.getSystemColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT);
+        setSelectionForeground(titleForeColor);
+        setSelectionBackground(new Color[] { titleBackColor1, titleBackColor2 }, new int[] { 100 }, true);
 
-	/**
-	 * Get documents tab item.
-	 * 
-	 * @return Documents tab item.
-	 */
-	public DocumentsTabItem getDocumentsTabItem() {
-		return documentsTabItem;
-	}
+        // Add title.
+        ToolBar toolbar = new ToolBar(this, SWT.NULL);
+        ToolItem item = new ToolItem(toolbar, SWT.NULL);
+        item.setText(connectionString + " (" + connectionType.getTypeName() + ")");
+        item.setEnabled(false);
+        setTopRight(toolbar);
+    }
 
-	/**
-	 * Get fields tab item.
-	 * 
-	 * @return Fields tab item.
-	 */
-	public FieldsTabItem getFieldsTabItem() {
-		return fieldsTabItem;
-	}
+    /**
+     * Get documents tab item.
+     * 
+     * @return Documents tab item.
+     */
+    public DocumentsTabItem getDocumentsTabItem() {
+        return documentsTabItem;
+    }
 
-	/**
-	 * Get cores tab item.
-	 * 
-	 * @return Cores tab item.
-	 */
-	public CoresTabItem getCoresTabItem() {
-		return coresTabItem;
-	}
+    /**
+     * Get fields tab item.
+     * 
+     * @return Fields tab item.
+     */
+    public FieldsTabItem getFieldsTabItem() {
+        return fieldsTabItem;
+    }
+
+    /**
+     * Get cores tab item.
+     * 
+     * @return Cores tab item.
+     */
+    public CoresTabItem getCoresTabItem() {
+        return coresTabItem;
+    }
 
 }

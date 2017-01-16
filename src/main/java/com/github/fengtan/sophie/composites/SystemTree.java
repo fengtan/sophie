@@ -98,10 +98,10 @@ public class SystemTree {
 	 *             If the tree could not be populated.
 	 */
 	private void populate() throws SophieException {
-		// Get system info from Solr and populate table.
+		// Get system info from Solr and populate tree.
 		NamedList<Object> namedListInfo = SolrUtils.getSystemInfo();
 		populate(namedListInfo, null);
-		// Get system properties from Solr and populate table.
+		// Get system properties from Solr and populate tree.
 		NamedList<Object> namedListProperties = SolrUtils.getSystemProperties();
 		populate(namedListProperties, null);
 	}
@@ -114,9 +114,6 @@ public class SystemTree {
 	 * @param parent
 	 *            Parent TreeItem, or null if values should be added to the top
 	 *            of the Tree.
-	 * 
-	 * @throws SophieException
-	 *             If the tree could not be populated.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void populate(NamedList<Object> namedList, TreeItem parent) {
