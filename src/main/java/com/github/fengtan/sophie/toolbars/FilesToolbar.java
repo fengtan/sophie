@@ -89,7 +89,7 @@ public class FilesToolbar {
         itemRefresh = new ToolItem(toolBar, SWT.PUSH);
         itemRefresh.setImage(imgRefresh);
         itemRefresh.setText("Refresh");
-        itemRefresh.setToolTipText("Refresh files from Solr");
+        itemRefresh.setToolTipText("Refresh list of files from Solr");
         itemRefresh.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
                 try {

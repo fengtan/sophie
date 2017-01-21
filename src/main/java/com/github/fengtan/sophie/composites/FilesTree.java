@@ -130,6 +130,7 @@ public class FilesTree {
      */
     public void refresh() throws SophieException {
         tree.removeAll();
+        styledText.setText("No file selected.");
         populate();
     }
 
