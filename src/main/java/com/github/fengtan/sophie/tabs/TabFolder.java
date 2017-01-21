@@ -112,7 +112,7 @@ public class TabFolder extends CTabFolder {
             exception = e;
         }
         try {
-            SolrUtils.getFiles(null);
+            SolrUtils.getFilesList(null);
             filesTabItem = new FilesTabItem(this);
         } catch(SophieException e) {
             Sophie.log.info("Files tab will not be displayed", e);

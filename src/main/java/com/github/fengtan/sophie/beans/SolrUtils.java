@@ -24,11 +24,13 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrRequest.METHOD;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.NoOpResponseParser;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.apache.solr.client.solrj.request.GenericSolrRequest;
 import org.apache.solr.client.solrj.request.LukeRequest;
@@ -242,20 +244,20 @@ public class SolrUtils {
     }
 
     /**
-     * Get config files from the remote Solr server.
+     * Get list of files from the remote Solr server.
      * 
-     * @param filename
-     *            Name of the config file to fetch, or null to fetch a list of
-     *            files.
-     * @return Solr config files.
+     * @param directoryName
+     *            Name of the directory containing the files, or null to fetch a
+     *            list of files in top-level directory.
+     * @return Map of Solr config files.
      * @throws SophieException
-     *             If Solr system properties cannot be fetched.
+     *             If files cannot be fetched from Solr.
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> getFiles(String filename) throws SophieException {
+    public static Map<String, Object> getFilesList(String directoryName) throws SophieException {
         ModifiableSolrParams params = new ModifiableSolrParams();
-        if (StringUtils.isNotEmpty(filename)) {
-            params.set("file", filename);
+        if (StringUtils.isNotEmpty(directoryName)) {
+            params.set("file", directoryName);
         }
         GenericSolrRequest request = new GenericSolrRequest(METHOD.GET, "/admin/file", params);
         try {
@@ -264,7 +266,29 @@ public class SolrUtils {
             // Wrap in TreeMap so files are sorted by name.
             return new TreeMap<String, Object>(files.asMap(-1));
         } catch (SolrServerException | IOException | SolrException e) {
-            throw new SophieException("Unable to fetch files", e);
+            throw new SophieException("Unable to fetch list of files in directory " + directoryName, e);
+        }
+    }
+
+    /**
+     * Get content of a file from the remote Solr server.
+     *
+     * @param fileName
+     *            Name of the file to fetch.
+     * @return Content of the file.
+     * @throws SophieException
+     *             If file cannot be fetched from Solr.
+     */
+    public static String getFileContent(String fileName) throws SophieException {
+        ModifiableSolrParams params = new ModifiableSolrParams();
+        params.set("file", fileName);
+        GenericSolrRequest request = new GenericSolrRequest(METHOD.GET, "/admin/file", params);
+        request.setResponseParser(new NoOpResponseParser());
+        try {
+            NamedList<Object> response = Sophie.client.request(request);
+            return Objects.toString(response.get("response", 0), "");
+        } catch (SolrServerException | IOException | SolrException e) {
+            throw new SophieException("Unable to fetch content of file " + fileName, e);
         }
     }
 

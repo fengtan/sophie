@@ -19,16 +19,25 @@
 package com.github.fengtan.sophie.composites;
 
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.util.NamedList;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 
+import com.github.fengtan.sophie.Sophie;
 import com.github.fengtan.sophie.beans.SolrUtils;
 import com.github.fengtan.sophie.beans.SophieException;
 
@@ -48,20 +57,63 @@ public class FilesTree {
     private TreeColumn columnName;
 
     /**
+     * Viewer.
+     */
+    private StyledText styledText;
+
+    /**
      * Create a new tree listing Solr config files.
      * 
      * @param composite
      *            Parent composite.
      */
     public FilesTree(Composite composite) throws SophieException {
+        Composite parent = new Composite(composite, SWT.NULL);
+        parent.setLayout(new GridLayout(2, true));
+        parent.setLayoutData(new GridData(GridData.FILL_BOTH));
+
         // Instantiate Tree.
-        tree = new Tree(composite, SWT.BORDER);
+        tree = new Tree(parent, SWT.BORDER);
         tree.setHeaderVisible(true);
         tree.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+        // Display file in viewer when user double clicks tree item.
+        tree.addListener(SWT.MouseDoubleClick, new Listener() {
+            @Override
+            public void handleEvent(Event event) {
+                Point point = new Point(event.x, event.y);
+                TreeItem item = tree.getItem(point);
+                if (item != null) {
+                    String fullPath = Objects.toString(item.getData(), "");
+                    String content;
+                    if (StringUtils.isEmpty(fullPath)) {
+                        content = "This is a directory.";
+                    } else {
+                        try {
+                            content = SolrUtils.getFileContent(fullPath);
+                        } catch (SophieException e) {
+                            content = "Unable to fetch content for " + fullPath + ": " + e.getMessage();
+                            Sophie.log.error("Unable to fetch content for " + fullPath, e);
+                        }
+                    }
+                    styledText.setText(content);
+                }
+            }
+        });
 
         // Create column.
         columnName = new TreeColumn(tree, SWT.LEFT);
         columnName.setText("File Name");
+
+        // Instantiate viewer.
+        styledText = new StyledText(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+        styledText.setText("No file selected.");
+        styledText.setEditable(false);
+        styledText.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+        // Config files are easier to read with a monospaced font.
+        Font monospaced = JFaceResources.getFont(JFaceResources.TEXT_FONT);
+        styledText.setFont(monospaced);
 
         // Populate tree with data from Solr.
         populate();
@@ -89,7 +141,7 @@ public class FilesTree {
      */
     private void populate() throws SophieException {
         // Get system info from Solr and populate tree.
-        Map<String, Object> files = SolrUtils.getFiles(null);
+        Map<String, Object> files = SolrUtils.getFilesList(null);
         populate(files, null, StringUtils.EMPTY);
     }
 
@@ -111,14 +163,20 @@ public class FilesTree {
     private void populate(Map<String, Object> files, TreeItem parentItem, String parentPath) throws SophieException {
         for (Map.Entry<String, Object> file : files.entrySet()) {
             String name = file.getKey();
+            final NamedList<Object> properties = (NamedList<Object>) file.getValue();
+            // Add tree item.
             TreeItem item = (parentItem == null) ? new TreeItem(tree, SWT.NONE) : new TreeItem(parentItem, SWT.NONE);
             item.setText(name);
-            NamedList<Object> properties = (NamedList<Object>) file.getValue();
+            // If directory, then get the list of files it contains.
+            // Otherwise, store full path so MouseDoubleClickListener knows
+            // which file to retrieve.
+            String fullPath = StringUtils.isEmpty(parentPath) ? name : (parentPath + "/" + name);
             Boolean isDirectory = properties.getBooleanArg("directory");
             if (Boolean.TRUE.equals(isDirectory)) {
-                String fullPath = StringUtils.isEmpty(parentPath) ? name : (parentPath + "/" + name);
-                Map<String, Object> filesChild = SolrUtils.getFiles(fullPath);
+                Map<String, Object> filesChild = SolrUtils.getFilesList(fullPath);
                 populate(filesChild, item, fullPath);
+            } else {
+                item.setData(fullPath);
             }
         }
     }
