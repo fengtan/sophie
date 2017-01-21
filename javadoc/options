@@ -1,0 +1,24 @@
+-classpath
+'/home/workuser/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar:/home/workuser/.m2/repository/org/slf4j/slf4j-log4j12/1.7.5/slf4j-log4j12-1.7.5.jar:/home/workuser/.m2/repository/org/noggit/noggit/0.6/noggit-0.6.jar:/home/workuser/.m2/repository/org/apache/commons/commons-lang3/3.3.2/commons-lang3-3.3.2.jar:/home/workuser/.m2/repository/swt/jface/3.0.1/jface-3.0.1.jar:/home/workuser/.m2/repository/commons-io/commons-io/2.4/commons-io-2.4.jar:/home/workuser/.m2/repository/commons-configuration/commons-configuration/1.10/commons-configuration-1.10.jar:/home/workuser/.m2/repository/org/codehaus/woodstox/woodstox-core-asl/4.4.1/woodstox-core-asl-4.4.1.jar:/home/workuser/.m2/repository/org/apache/httpcomponents/httpmime/4.4.1/httpmime-4.4.1.jar:/home/workuser/.m2/repository/log4j/log4j/1.2.17/log4j-1.2.17.jar:/home/workuser/.m2/repository/org/slf4j/jcl-over-slf4j/1.7.7/jcl-over-slf4j-1.7.7.jar:/home/workuser/.m2/repository/org/codehaus/woodstox/stax2-api/3.1.4/stax2-api-3.1.4.jar:/home/workuser/.m2/repository/org/apache/httpcomponents/httpcore/4.4.1/httpcore-4.4.1.jar:/home/workuser/.m2/repository/org/apache/zookeeper/zookeeper/3.4.6/zookeeper-3.4.6.jar:/home/workuser/.m2/repository/org/eclipse/swt/gtk/linux/x86_64/3.3.0-v3346/x86_64-3.3.0-v3346.jar:/home/workuser/.m2/repository/org/apache/solr/solr-solrj/5.5.3/solr-solrj-5.5.3.jar:/home/workuser/.m2/repository/org/apache/httpcomponents/httpclient/4.4.1/httpclient-4.4.1.jar:/home/workuser/.m2/repository/org/slf4j/slf4j-api/1.7.7/slf4j-api-1.7.7.jar:/home/workuser/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/home/workuser/sophie/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2017. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/home/workuser/sophie/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Sophie 1.2.0 API'
+-linkoffline
+'http://docs.oracle.com/javase/7/docs/api' '/home/workuser/sophie/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'Sophie 1.2.0 API'

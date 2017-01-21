@@ -1,8 +1,7 @@
 com.github.fengtan.sophie
 com.github.fengtan.sophie.beans
+com.github.fengtan.sophie.composites
 com.github.fengtan.sophie.dialogs
-com.github.fengtan.sophie.tables
 com.github.fengtan.sophie.tabs
 com.github.fengtan.sophie.toolbars
-com.github.fengtan.sophie.trees
 com.github.fengtan.sophie.validators
