@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.CoreAdminRequest;
@@ -316,13 +317,24 @@ public class CoresToolbar implements SelectionListener {
         itemReloadAll.setToolTipText("Reload all cores");
         itemReloadAll.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
+                Set<String> coreNames;
                 try {
-                    for (String coreName : SolrUtils.getRemoteCores().keySet()) {
+                    coreNames = SolrUtils.getRemoteCores().keySet();
+                } catch (SophieException e) {
+                    coreNames = Collections.emptySet();
+                    ExceptionDialog.open(composite.getShell(), new SophieException("Unable to list cores", e));
+                }
+                for (String coreName : coreNames) {
+                    try {
                         CoreAdminRequest.reloadCore(coreName, Sophie.client);
+                    } catch (SolrServerException | IOException | SolrException e) {
+                        ExceptionDialog.open(composite.getShell(), new SophieException("Unable to reload core \"" + coreName + "\"", e));
                     }
+                }
+                try {
                     table.refresh();
-                } catch (SolrServerException | IOException | SolrException | SophieException e) {
-                    ExceptionDialog.open(composite.getShell(), new SophieException("Unable to reload all cores", e));
+                } catch (SophieException e) {
+                    ExceptionDialog.open(composite.getShell(), new SophieException("Unable to refresh cores table", e));
                 }
             }
         });
