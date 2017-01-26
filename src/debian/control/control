@@ -1,6 +1,6 @@
 Package: sophie
 Maintainer: fengtan
-Version: 1.2.0
+Version: 1.2.1
 Section: utils
 Priority: optional
 Architecture: all
