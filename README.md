@@ -18,7 +18,7 @@ Or install the .deb package if you are on Debian/Ubuntu:
     sudo dpkg -i sophie_1.2.1_all.deb
     sophie &
 
-Or compile the sources yourself:
+Or compile the sources yourself and run the script:
 
     git clone https://github.com/fengtan/sophie
     cd sophie
