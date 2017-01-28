@@ -43,6 +43,7 @@ More details can be found on the [wiki](https://github.com/fengtan/sophie/wiki/)
 - [Blacklight](https://github.com/projectblacklight/blacklight) discovers the structure of a Solr index and builds a web search interface accordingly
 - [Solr Explorer](https://github.com/cominvent/solr-explorer) acts as a proxy and offers a web interface to explore Solr
 - [Ajax Solr](https://github.com/evolvingweb/ajax-solr) is a Javascript framework for creating user interfaces to Solr
+- [Marple](https://github.com/flaxsearch/marple) offers a web interface and a REST API to browse a Lucene index
 
 ## License
 
