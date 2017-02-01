@@ -8,15 +8,15 @@ A [Solr](http://lucene.apache.org/solr/) browser and administration tool.
 
 ## What is included
 
-- Document browser: list, filter and sort documents stored in a Solr index and inspect their contents
-- Operations on documents: create, update, delete, clone Solr documents
-- Operations on the index: clear, commit and optimize the index
-- Administration tools: export index into a CSV file, backup and restore the index
-- Field browser: list all fields configued on Solr and inspect their attributes
-- Core browser: list all cores hosted on a Solr instance and inspect their attributes
-- Operations on cores: create, delete, rename, swap, reload cores
-- System browser: view all system properties
-- Config files browser: list all Solr config files and view their contents
+- **Document browser**: list, filter and sort documents stored in a Solr index and inspect their contents
+- **Operations on documents**: create, update, delete, clone Solr documents
+- **Operations on the index**: clear, commit and optimize the index
+- **Administration tools**: export index into a CSV file, backup and restore the index
+- **Field browser**: list all fields configued on Solr and inspect their attributes
+- **Core browser**: list all cores hosted on a Solr instance and inspect their attributes
+- **Operations on cores**: create, delete, rename, swap, reload cores
+- **System browser**: view all system properties
+- **Config files browser**: list all Solr config files and view their contents
 
 ## Getting started
 
