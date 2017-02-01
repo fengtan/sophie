@@ -8,17 +8,17 @@ A [Solr](http://lucene.apache.org/solr/) browser and administration tool.
 
 ## Getting started
 
-Either download a precompiled jar archive from the [releases page](https://github.com/fengtan/sophie/releases) and run it:
+Either download a [jar archive](https://github.com/fengtan/sophie/releases):
 
     java -jar sophie-1.2.1-linux-with-dependencies.jar # Linux, Windows
     java -XstartOnFirstThread -jar sophie-1.2.1-linux-with-dependencies.jar # Mac OS
 
-Or install the .deb package if you are on Debian/Ubuntu:
+Or download a [.deb package](https://github.com/fengtan/sophie/releases) if you are on Debian/Ubuntu:
 
     sudo dpkg -i sophie_1.2.1_all.deb
     sophie &
 
-Or compile the sources yourself and run the script:
+Or install from the sources:
 
     git clone https://github.com/fengtan/sophie
     cd sophie
