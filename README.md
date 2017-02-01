@@ -22,8 +22,9 @@ A [Solr](http://lucene.apache.org/solr/) browser and administration tool.
 
 Either download and run a [jar archive](https://github.com/fengtan/sophie/releases):
 
-    java -jar sophie-1.2.1-linux-with-dependencies.jar # Linux, Windows
-    java -XstartOnFirstThread -jar sophie-1.2.1-linux-with-dependencies.jar # Mac OS
+    java -jar sophie-1.2.1-*-with-dependencies.jar
+    # Mac OS requires the -XstartOnFirstThread option to be set:
+    java -XstartOnFirstThread -jar sophie-1.2.1-macosx-with-dependencies.jar
 
 Or download and install a [.deb package](https://github.com/fengtan/sophie/releases) if you are on Debian/Ubuntu:
 
