@@ -42,11 +42,11 @@ More details can be found on the [wiki](https://github.com/fengtan/sophie/wiki/)
 
 ## Resources
 
-- [Issues](https://github.com/fengtan/sophie/issues)
+- [Wiki](https://github.com/fengtan/sophie/wiki)
+- [Website](http://fengtan.github.io/sophie/)
 - [Javadoc](http://fengtan.github.io/sophie/javadoc/)
 - [Releases](https://github.com/fengtan/sophie/releases) ([Feed](https://github.com/fengtan/sophie/releases.atom))
-- [Website](http://fengtan.github.io/sophie/)
-- [Wiki](https://github.com/fengtan/sophie/wiki)
+- [Issues](https://github.com/fengtan/sophie/issues)
 
 ## Similar tools
 
